@@ -1,0 +1,30 @@
+
+
+
+
+
+
+
+
+
+
+
+.stack
+stack: single 100
+
+.const
+KILO: double 123
+
+.data
+i: single
+a: single 10
+aa: single 10
+sa: double
+ga: QUaD
+ea: single 2
+
+.code
+start:
+loads 100 aa
+adds
+callc start
