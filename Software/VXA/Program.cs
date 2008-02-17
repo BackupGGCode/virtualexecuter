@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using VXToolChain;
-using coma;
+using Coma;
 
 namespace VXA
 {
@@ -15,15 +15,29 @@ namespace VXA
 			Console.WriteLine("Assembler version: " + VXAAssembler.AssemblerVersion + " - " + VXAAssembler.BuildDate);
 			Console.WriteLine("Highest VX core version supported: " + VXAAssembler.HighestCoreVersion);
 
+			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
+
 			try
 			{
-				VXAAssembler.Run(CommandLineParser.Run(args));
+				VXAAssembler.Run(options);
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);// + "\n\n" + ex.StackTrace);
+				if (options.ContainsKey("@"))
+				{
+					Console.WriteLine(ex.Message + "\n\n" + ex.StackTrace);
+				}
+				else
+				{
+					Console.WriteLine(ex.Message);
+				}
 			}
 
+			if(options.ContainsKey("!"))
+			{
+				Console.WriteLine("Press any key to continue");
+				Console.ReadKey();
+			}
 		}
 	}
 }
