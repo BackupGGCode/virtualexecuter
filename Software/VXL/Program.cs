@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using VXToolChain;
+using coma;
 
 namespace VXL
 {
@@ -8,13 +10,13 @@ namespace VXL
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Virtual eXecuter Assembler");
-			//Console.WriteLine("Linker version: " + VXAAssembler.AssemblerVersion + " - " + VXAAssembler.BuildDate);
-			//Console.WriteLine("Highest VX core version supported: " + VXAAssembler.HighestCoreVersion);
+			Console.WriteLine("Virtual eXecuter Linker");
+			Console.WriteLine("Linker version: " + VXLLinker.AssemblerVersion + " - " + VXLLinker.BuildDate);
+			Console.WriteLine("Highest VX core version supported: " + VXLLinker.HighestCoreVersion);
 
 			try
 			{
-				//VXAAssembler.Run(CommandLineParser.Run(args));
+				VXLLinker.Run(CommandLineParser.Run(args));
 			}
 			catch (Exception ex)
 			{
