@@ -11,8 +11,7 @@ namespace VXToolChain
 		public static string AssemblerVersion = "1.0.0";
 		public const int HighestCoreVersion = 1;
 
-
-		public static void Run(Dictionary<string, string> options)
+		public static void Run(Dictionary<string, List<string>> options)
 		{
 			int targetCoreVersion = HighestCoreVersion;
 
@@ -23,16 +22,17 @@ namespace VXToolChain
 
 			if (options.ContainsKey("v"))
 			{
-				if (int.TryParse(options["v"], out targetCoreVersion) == false)
+				if (int.TryParse(options["v"][0], out targetCoreVersion) == false)
 				{
 					throw new Exception("Invalid target core version");
 				}
 			}
 
-			string filename = GetPathAndFilenameWithoutExtension(options["s"]);
+			string fullFileName = options["s"][0];
+			string fileNameWithoutExtension = GetPathAndFilenameWithoutExtension(fullFileName);
 
 			Console.WriteLine("Running pre processor...");
-			FileStream sourceFile = File.OpenRead(options["s"]);
+			FileStream sourceFile = File.OpenRead(fullFileName);
 			MemoryStream preProcessed = VXAPreprocessor.Run(sourceFile);
 			sourceFile.Close();
 			preProcessed.Seek(0, SeekOrigin.Begin);
@@ -41,7 +41,7 @@ namespace VXToolChain
 			if (options.ContainsKey("p"))
 			{
 				Console.WriteLine("Writing pre processor output to file...");
-				FileStream preProcessorFile = File.Create(filename + ".pre");
+				FileStream preProcessorFile = File.Create(fileNameWithoutExtension + ".pre");
 				preProcessed.WriteTo(preProcessorFile);
 				preProcessorFile.Close();
 				preProcessed.Seek(0, SeekOrigin.Begin);
@@ -50,13 +50,13 @@ namespace VXToolChain
 
 			Console.WriteLine("Mapping labels...");
 			VXAProgram program = FindAllLabels(preProcessed);
-			
+
 
 			#region Generate map file
 			if (options.ContainsKey("m"))
 			{
 				Console.WriteLine("Writing map file...");
-				FileStream mapFile = File.Create(filename + ".map");
+				FileStream mapFile = File.Create(fileNameWithoutExtension + ".map");
 				StreamWriter mapWriter = new StreamWriter(mapFile);
 				foreach (VXASection section in program.Sections)
 				{
@@ -88,7 +88,7 @@ namespace VXToolChain
 
 			#region Generate executable file
 			Console.WriteLine("Writing executable file...");
-			FileStream exeFile = File.Create(filename + ".vxx");
+			FileStream exeFile = File.Create(fileNameWithoutExtension + ".vxx");
 
 			exeFile.WriteByte((byte)'V');		// Tag
 			exeFile.WriteByte((byte)'X');
