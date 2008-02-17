@@ -2,46 +2,42 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace VXA
+namespace coma
 {
 	class CommandLineParser
 	{
-		public static Dictionary<string, string> Run(string[] arguments)
+		public static Dictionary<string, List<string>> Run(string[] arguments)
 		{
-			Dictionary<string, string> options = new Dictionary<string, string>();
+			Dictionary<string, List<string>> options = new Dictionary<string, List<string>>();
 
 			int i = 0;
 			while (i < arguments.Length)
 			{
-				if (arguments[i].StartsWith("-") == false)
+				string option = arguments[i];
+
+				if (option.StartsWith("-") == false)
 				{
 					throw new Exception("Command line options must start with '-'");
 				}
-				if (arguments[i].Length != 2)
+				if (option.Length != 2)
 				{
 					throw new Exception("Command line options must be on the form '-x' where the x represents the option letter");
 				}
 
-				if ((i + 1) < arguments.Length)
+				List<string> list = new List<string>();
+
+				i++;
+				if (i < arguments.Length)
 				{
-					if (arguments[i + 1].StartsWith("-") == false)
+					while (i < arguments.Length && arguments[i].StartsWith("-") == false)
 					{
-						options.Add(arguments[i].Substring(1), arguments[i + 1]);
-						i += 2;
+						list.Add(arguments[i++]);
 					}
-					else
-					{
-						options.Add(arguments[i].Substring(1), "");
-						i += 1;
-					}
-				}
-				else
-				{
-					options.Add(arguments[i].Substring(1), "");
-					i += 1;
 				}
 
+				options.Add(option.Substring(1), list);
 			}
+
 			return options;
 		}
 	}
