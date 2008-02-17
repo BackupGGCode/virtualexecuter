@@ -11,6 +11,7 @@ namespace VXToolChain
 		public static string AssemblerVersion = "1.0.0";
 		public const int HighestCoreVersion = 1;
 
+
 		public static void Run(Dictionary<string, List<string>> options)
 		{
 			int targetCoreVersion = HighestCoreVersion;
@@ -50,7 +51,7 @@ namespace VXToolChain
 
 			Console.WriteLine("Mapping labels...");
 			VXAProgram program = FindAllLabels(preProcessed);
-
+			
 
 			#region Generate map file
 			if (options.ContainsKey("m"))
