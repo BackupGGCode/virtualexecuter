@@ -26,5 +26,7 @@ ea: single 2
 .code
 start:
 	loads 100 aa
+	pushcs 100
+	pushcs 10
 	adds
 	callc start
