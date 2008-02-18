@@ -1,0 +1,4 @@
+// just a test
+float method(ssingle arg1, uquad arg2, squad arg4);
+// this is good
+ssingle variable;
