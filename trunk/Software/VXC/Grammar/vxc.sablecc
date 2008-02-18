@@ -34,13 +34,17 @@ Tokens
    uquad = 'uquad';
    float = 'float';
    string = 'string';
-
+   const = 'const';
+   volatile = 'volatile';
+   return = 'return';
    identifier = letter (letter | digit)*;
    comment = '//' (letter | sp)* line_terminator?;
    whitespace = (sp | ht | ff | line_terminator)*;
   
    l_par = '(';
    r_par = ')';
+   l_curly = '{';
+   r_curly = '}';
    semicolon = ';';
    comma = ',';
 
@@ -57,95 +61,137 @@ Ignored Tokens
  *******************************************************************/
 Productions
 
-src_file {-> src_file} = 
-    decl*
-    {-> New src_file([decl])}
-;
+	/* source file */
+	source_file {-> source_file} = 
+		declaration+
+		{-> New source_file([declaration.declaration])}
+	;
 
-decl =      
-     {method_decl} method_decl
-     {-> New decl.method_decl(method_decl.method_decl)}  
-  |  {global_decl} global_decl
-     {-> New decl.global_decl(global_decl.global_decl)}  
-; 
+	/* declaration */
+	declaration {-> declaration} =      
+		  {variable} variable_definition
+			{-> New declaration.variable(variable_definition.variable_definition)}
+		| {function} function_definition
+			 {-> New declaration.function(function_definition.function_definition)}
+	; 
 
-method_decl {-> method_decl} =
-    type identifier method_params semicolon 
-    {-> New method_decl(type,identifier,[method_params.local_decl])}
-;
+	/* function definition */
+	function_definition {-> function_definition} =
+	    type_specifier identifier function_params function_body 
+		 {-> New function_definition(type_specifier.type_specifier,identifier,
+					New formals_and_body([function_params.local_decl], 
+										 [function_body.variable_definition],
+										 [function_body.statement],
+										 function_body.return_statement))}
+	;	
 
-global_decl {-> global_decl} =
-    type identifier semicolon
-    {-> New global_decl(type, identifier)}
-;
+	/* function body */
+	function_body {-> variable_definition* statement* return_statement} =
+		l_curly variable_definition* statement* return_statement r_curly
+			{-> [variable_definition.variable_definition]
+				[statement.statement]
+				return_statement.return_statement}
+	;
+	
+	/* function parameters */
+	function_params {-> local_decl*} =
+	    l_par formal_parameter_list r_par
+		 {-> [formal_parameter_list.local_decl]}
+	  ;
+	
+	/* parameter list*/
+	formal_parameter_list {-> local_decl*} =
+	    {none} {-> []}
+	  | {void} void {-> []}
+	  | {parm_list} formal_parameter_list_nonempty
+		 {-> [formal_parameter_list_nonempty.local_decl]}
+	  ;
 
-method_params {-> local_decl*} =
-    l_par formal_parameter_list r_par
-    {-> [formal_parameter_list.local_decl]}
-  ;
+	formal_parameter_list_nonempty {-> local_decl*} =
+	    {formal_parameter} formal_parameter
+		 {-> [formal_parameter.local_decl]}
+	  | {formal_parameter_list} formal_parameter_list comma formal_parameter
+		 {-> [formal_parameter_list.local_decl, formal_parameter.local_decl]}
+	  ;
 
-formal_parameter_list {-> local_decl*} =
-    {none} {-> []}
-  | {void} void {-> []}
-  | {parm_list} formal_parameter_list_nonempty
-    {-> [formal_parameter_list_nonempty.local_decl]}
-  ;
-
-formal_parameter_list_nonempty {-> local_decl*} =
-    {formal_parameter} formal_parameter
-    {-> [formal_parameter.local_decl]}
-  | {formal_parameter_list} formal_parameter_list comma formal_parameter
-    {-> [formal_parameter_list.local_decl, formal_parameter.local_decl]}
-  ;
-
-formal_parameter {-> local_decl} =
-    {param} type identifier
-    {-> New local_decl(type.type, identifier)}
-  ;
-
-type {-> type} =
-    {ssingle} ssingle
-    {-> New type.ssingle()}
-  | {usingle} usingle
-    {-> New type.usingle()}
-  | {sdouble} sdouble
-    {-> New type.sdouble()}
-  | {udouble} udouble
-    {-> New type.udouble()}
-  | {squad} squad
-    {-> New type.squad()}
-  | {uquad} uquad
-    {-> New type.uquad()}
-  | {float} float
-    {-> New type.float()}
-  | {string} string
-    {-> New type.string()}
-  | {void} void
-    {-> New type.void()}
-  ;
+	formal_parameter {-> local_decl} =
+	    {param} type_specifier identifier
+		   {-> New local_decl(type_specifier.type_specifier, identifier)}
+	  ;
+	
+	statement {-> statement} =
+		 {empty} semicolon
+			{-> New statement.empty()}	   
+	;
+	
+	return_statement {-> return_statement} =
+		 return semicolon
+			{-> New return_statement.void(return)}	   
+	;
+	
+	/* variable definition */
+	variable_definition {-> variable_definition} =
+	    type_qualifier? type_specifier identifier semicolon
+		 {-> New variable_definition(type_specifier, type_qualifier, identifier)}
+	;
+		
+	/* type qualifier */
+	type_qualifier {-> type_qualifier} = 
+		  {const} const
+			{-> New type_qualifier.const()}
+		| {volatile} volatile
+			{-> New type_qualifier.volatile()}
+	;
+	
+	/* type specifier */
+	type_specifier {-> type_specifier} =
+	    {ssingle} ssingle
+		 {-> New type_specifier.ssingle()}
+	  | {usingle} usingle
+		 {-> New type_specifier.usingle()}
+	  | {sdouble} sdouble
+		 {-> New type_specifier.sdouble()}
+	  | {udouble} udouble
+		{-> New type_specifier.udouble()}
+	  | {squad} squad
+		{-> New type_specifier.squad()}
+	  | {uquad} uquad
+		 {-> New type_specifier.uquad()}
+	  | {float} float
+		{-> New type_specifier.float()}
+	  | {string} string
+		{-> New type_specifier.string()}
+	  | {void} void
+		 {-> New type_specifier.void()}
+	  ;
 
 /*******************************************************************
  * Abstract Syntax Tree *
  *******************************************************************/
 Abstract Syntax Tree
 
-    src_file = [declarations]:decl*;
-    decl = {method_decl} [decl]:method_decl
-         | {global_decl} [decl]:global_decl;
-    method_decl = [type]:type [name]:identifier [args]:local_decl*;
-    local_decl = [type]:type [name]:identifier;
-    global_decl = [type]:type [name]:identifier;
+    source_file= [declaration]:declaration+;
 
-type = {void}
-     | {ssingle}
-     | {usingle}    
-     | {sdouble}
-     | {udouble}
-     | {squad}
-     | {uquad}
-     | {float}
-     | {string}
-     ;
+    declaration =  {variable} [declaration]:variable_definition
+	         | {function} [declaration]:function_definition;
+
+    function_definition = [type_specifier]:type_specifier [name]:identifier [formals_and_body]:formals_and_body;
+
+    local_decl = [type]:type_specifier [name]:identifier;
+
+    variable_definition = [type_specifier]:type_specifier [type_qualifier]:type_qualifier? [name]:identifier;
+
+	type_qualifier = {const} | {volatile};
 	
+    type_specifier = {void} | {ssingle} | {usingle} | {sdouble} | {udouble} | {squad} | {uquad} | {float} | {string};
+	
+	statement = {empty};
+	
+	return_statement = {void} [token]:return;
+	
+	formals_and_body = [formals]:local_decl*
+					   [locals]:variable_definition*
+                       [statements]:statement*
+                       [return]:return_statement;
 
 

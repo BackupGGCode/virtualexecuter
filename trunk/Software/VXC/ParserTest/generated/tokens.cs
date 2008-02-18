@@ -234,6 +234,81 @@ public sealed class TString : Token
     }
 }
 
+public sealed class TConst : Token
+{
+    public TConst(string text)
+    {
+        Text = text;
+    }
+
+    public TConst(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TConst(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTConst(this);
+    }
+}
+
+public sealed class TVolatile : Token
+{
+    public TVolatile(string text)
+    {
+        Text = text;
+    }
+
+    public TVolatile(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TVolatile(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTVolatile(this);
+    }
+}
+
+public sealed class TReturn : Token
+{
+    public TReturn(string text)
+    {
+        Text = text;
+    }
+
+    public TReturn(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TReturn(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTReturn(this);
+    }
+}
+
 public sealed class TIdentifier : Token
 {
     public TIdentifier(string text)
@@ -356,6 +431,56 @@ public sealed class TRPar : Token
     public override void Apply(Switch sw)
     {
         ((Analysis) sw).CaseTRPar(this);
+    }
+}
+
+public sealed class TLCurly : Token
+{
+    public TLCurly(string text)
+    {
+        Text = text;
+    }
+
+    public TLCurly(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TLCurly(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTLCurly(this);
+    }
+}
+
+public sealed class TRCurly : Token
+{
+    public TRCurly(string text)
+    {
+        Text = text;
+    }
+
+    public TRCurly(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TRCurly(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTRCurly(this);
     }
 }
 
