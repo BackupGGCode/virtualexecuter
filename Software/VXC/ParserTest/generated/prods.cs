@@ -8,15 +8,15 @@ using  VXC.analysis;
 
 namespace VXC.node {
 
-public abstract class PSrcFile : Node
+public abstract class PSourceFile : Node
 {
 }
 
-public abstract class PDecl : Node
+public abstract class PDeclaration : Node
 {
 }
 
-public abstract class PMethodDecl : Node
+public abstract class PFunctionDefinition : Node
 {
 }
 
@@ -24,105 +24,121 @@ public abstract class PLocalDecl : Node
 {
 }
 
-public abstract class PGlobalDecl : Node
+public abstract class PVariableDefinition : Node
 {
 }
 
-public abstract class PType : Node
+public abstract class PTypeQualifier : Node
+{
+}
+
+public abstract class PTypeSpecifier : Node
+{
+}
+
+public abstract class PStatement : Node
+{
+}
+
+public abstract class PReturnStatement : Node
+{
+}
+
+public abstract class PFormalsAndBody : Node
 {
 }
 
 
-public sealed class ASrcFile : PSrcFile
+public sealed class ASourceFile : PSourceFile
 {
-    private TypedList _declarations_;
+    private TypedList _declaration_;
 
-    public ASrcFile ()
+    public ASourceFile ()
     {
-        this._declarations_ = new TypedList(new Declarations_Cast(this));
+        this._declaration_ = new TypedList(new Declaration_Cast(this));
     }
 
-    public ASrcFile (
-            IList _declarations_
+    public ASourceFile (
+            IList _declaration_
     )
     {
-        this._declarations_ = new TypedList(new Declarations_Cast(this));
-        this._declarations_.Clear();
-        this._declarations_.AddAll(_declarations_);
+        this._declaration_ = new TypedList(new Declaration_Cast(this));
+        this._declaration_.Clear();
+        this._declaration_.AddAll(_declaration_);
     }
 
     public override Object Clone()
     {
-        return new ASrcFile (
-            CloneList (_declarations_)
+        return new ASourceFile (
+            CloneList (_declaration_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseASrcFile(this);
+        ((Analysis) sw).CaseASourceFile(this);
     }
 
-    public IList GetDeclarations ()
+    public IList GetDeclaration ()
     {
-        return _declarations_;
+        return _declaration_;
     }
 
-    public void setDeclarations (IList list)
+    public void setDeclaration (IList list)
     {
-        _declarations_.Clear();
-        _declarations_.AddAll(list);
+        _declaration_.Clear();
+        _declaration_.AddAll(list);
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_declarations_)
+            + ToString (_declaration_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _declarations_.Contains(child) )
+        if ( _declaration_.Contains(child) )
         {
-            _declarations_.Remove(child);
+            _declaration_.Remove(child);
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        for ( int i = 0; i < _declarations_.Count; i++ )
+        for ( int i = 0; i < _declaration_.Count; i++ )
         {
-            Node n = (Node)_declarations_[i];
+            Node n = (Node)_declaration_[i];
             if(n == oldChild)
             {
                 if(newChild != null)
                 {
-                    _declarations_[i] = newChild;
+                    _declaration_[i] = newChild;
                     oldChild.Parent(null);
                     return;
                 }
 
-                _declarations_.RemoveAt(i);
+                _declaration_.RemoveAt(i);
                 oldChild.Parent(null);
                 return;
             }
         }
     }
 
-    private class Declarations_Cast : Cast
+    private class Declaration_Cast : Cast
     {
-        ASrcFile obj;
+        ASourceFile obj;
 
-        internal Declarations_Cast (ASrcFile obj)
+        internal Declaration_Cast (ASourceFile obj)
         {
           this.obj = obj;
         }
 
         public Object Cast(Object o)
         {
-            PDecl node = (PDecl) o;
+            PDeclaration node = (PDeclaration) o;
 
             if((node.Parent() != null) &&
                 (node.Parent() != obj))
@@ -141,49 +157,49 @@ public sealed class ASrcFile : PSrcFile
 
         public Object UnCast(Object o)
         {
-            PDecl node = (PDecl) o;
+            PDeclaration node = (PDeclaration) o;
             node.Parent(null);
             return node;
         }
     }
 }
-public sealed class AMethodDeclDecl : PDecl
+public sealed class AVariableDeclaration : PDeclaration
 {
-    private PMethodDecl _decl_;
+    private PVariableDefinition _declaration_;
 
-    public AMethodDeclDecl ()
+    public AVariableDeclaration ()
     {
     }
 
-    public AMethodDeclDecl (
-            PMethodDecl _decl_
+    public AVariableDeclaration (
+            PVariableDefinition _declaration_
     )
     {
-        SetDecl (_decl_);
+        SetDeclaration (_declaration_);
     }
 
     public override Object Clone()
     {
-        return new AMethodDeclDecl (
-            (PMethodDecl)CloneNode (_decl_)
+        return new AVariableDeclaration (
+            (PVariableDefinition)CloneNode (_declaration_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAMethodDeclDecl(this);
+        ((Analysis) sw).CaseAVariableDeclaration(this);
     }
 
-    public PMethodDecl GetDecl ()
+    public PVariableDefinition GetDeclaration ()
     {
-        return _decl_;
+        return _declaration_;
     }
 
-    public void SetDecl (PMethodDecl node)
+    public void SetDeclaration (PVariableDefinition node)
     {
-        if(_decl_ != null)
+        if(_declaration_ != null)
         {
-            _decl_.Parent(null);
+            _declaration_.Parent(null);
         }
 
         if(node != null)
@@ -196,72 +212,72 @@ public sealed class AMethodDeclDecl : PDecl
             node.Parent(this);
         }
 
-        _decl_ = node;
+        _declaration_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_decl_)
+            + ToString (_declaration_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _decl_ == child )
+        if ( _declaration_ == child )
         {
-            _decl_ = null;
+            _declaration_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _decl_ == oldChild )
+        if ( _declaration_ == oldChild )
         {
-            SetDecl ((PMethodDecl) newChild);
+            SetDeclaration ((PVariableDefinition) newChild);
             return;
         }
     }
 
 }
-public sealed class AGlobalDeclDecl : PDecl
+public sealed class AFunctionDeclaration : PDeclaration
 {
-    private PGlobalDecl _decl_;
+    private PFunctionDefinition _declaration_;
 
-    public AGlobalDeclDecl ()
+    public AFunctionDeclaration ()
     {
     }
 
-    public AGlobalDeclDecl (
-            PGlobalDecl _decl_
+    public AFunctionDeclaration (
+            PFunctionDefinition _declaration_
     )
     {
-        SetDecl (_decl_);
+        SetDeclaration (_declaration_);
     }
 
     public override Object Clone()
     {
-        return new AGlobalDeclDecl (
-            (PGlobalDecl)CloneNode (_decl_)
+        return new AFunctionDeclaration (
+            (PFunctionDefinition)CloneNode (_declaration_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAGlobalDeclDecl(this);
+        ((Analysis) sw).CaseAFunctionDeclaration(this);
     }
 
-    public PGlobalDecl GetDecl ()
+    public PFunctionDefinition GetDeclaration ()
     {
-        return _decl_;
+        return _declaration_;
     }
 
-    public void SetDecl (PGlobalDecl node)
+    public void SetDeclaration (PFunctionDefinition node)
     {
-        if(_decl_ != null)
+        if(_declaration_ != null)
         {
-            _decl_.Parent(null);
+            _declaration_.Parent(null);
         }
 
         if(node != null)
@@ -274,83 +290,80 @@ public sealed class AGlobalDeclDecl : PDecl
             node.Parent(this);
         }
 
-        _decl_ = node;
+        _declaration_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_decl_)
+            + ToString (_declaration_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _decl_ == child )
+        if ( _declaration_ == child )
         {
-            _decl_ = null;
+            _declaration_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _decl_ == oldChild )
+        if ( _declaration_ == oldChild )
         {
-            SetDecl ((PGlobalDecl) newChild);
+            SetDeclaration ((PFunctionDefinition) newChild);
             return;
         }
     }
 
 }
-public sealed class AMethodDecl : PMethodDecl
+public sealed class AFunctionDefinition : PFunctionDefinition
 {
-    private PType _type_;
+    private PTypeSpecifier _type_specifier_;
     private TIdentifier _name_;
-    private TypedList _args_;
+    private PFormalsAndBody _formals_and_body_;
 
-    public AMethodDecl ()
+    public AFunctionDefinition ()
     {
-        this._args_ = new TypedList(new Args_Cast(this));
     }
 
-    public AMethodDecl (
-            PType _type_,
+    public AFunctionDefinition (
+            PTypeSpecifier _type_specifier_,
             TIdentifier _name_,
-            IList _args_
+            PFormalsAndBody _formals_and_body_
     )
     {
-        SetType (_type_);
+        SetTypeSpecifier (_type_specifier_);
         SetName (_name_);
-        this._args_ = new TypedList(new Args_Cast(this));
-        this._args_.Clear();
-        this._args_.AddAll(_args_);
+        SetFormalsAndBody (_formals_and_body_);
     }
 
     public override Object Clone()
     {
-        return new AMethodDecl (
-            (PType)CloneNode (_type_),
+        return new AFunctionDefinition (
+            (PTypeSpecifier)CloneNode (_type_specifier_),
             (TIdentifier)CloneNode (_name_),
-            CloneList (_args_)
+            (PFormalsAndBody)CloneNode (_formals_and_body_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAMethodDecl(this);
+        ((Analysis) sw).CaseAFunctionDefinition(this);
     }
 
-    public PType GetType ()
+    public PTypeSpecifier GetTypeSpecifier ()
     {
-        return _type_;
+        return _type_specifier_;
     }
 
-    public void SetType (PType node)
+    public void SetTypeSpecifier (PTypeSpecifier node)
     {
-        if(_type_ != null)
+        if(_type_specifier_ != null)
         {
-            _type_.Parent(null);
+            _type_specifier_.Parent(null);
         }
 
         if(node != null)
@@ -363,7 +376,7 @@ public sealed class AMethodDecl : PMethodDecl
             node.Parent(this);
         }
 
-        _type_ = node;
+        _type_specifier_ = node;
     }
     public TIdentifier GetName ()
     {
@@ -389,31 +402,45 @@ public sealed class AMethodDecl : PMethodDecl
 
         _name_ = node;
     }
-    public IList GetArgs ()
+    public PFormalsAndBody GetFormalsAndBody ()
     {
-        return _args_;
+        return _formals_and_body_;
     }
 
-    public void setArgs (IList list)
+    public void SetFormalsAndBody (PFormalsAndBody node)
     {
-        _args_.Clear();
-        _args_.AddAll(list);
+        if(_formals_and_body_ != null)
+        {
+            _formals_and_body_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _formals_and_body_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_type_)
+            + ToString (_type_specifier_)
             + ToString (_name_)
-            + ToString (_args_)
+            + ToString (_formals_and_body_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _type_ == child )
+        if ( _type_specifier_ == child )
         {
-            _type_ = null;
+            _type_specifier_ = null;
             return;
         }
         if ( _name_ == child )
@@ -421,18 +448,18 @@ public sealed class AMethodDecl : PMethodDecl
             _name_ = null;
             return;
         }
-        if ( _args_.Contains(child) )
+        if ( _formals_and_body_ == child )
         {
-            _args_.Remove(child);
+            _formals_and_body_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _type_ == oldChild )
+        if ( _type_specifier_ == oldChild )
         {
-            SetType ((PType) newChild);
+            SetTypeSpecifier ((PTypeSpecifier) newChild);
             return;
         }
         if ( _name_ == oldChild )
@@ -440,64 +467,17 @@ public sealed class AMethodDecl : PMethodDecl
             SetName ((TIdentifier) newChild);
             return;
         }
-        for ( int i = 0; i < _args_.Count; i++ )
+        if ( _formals_and_body_ == oldChild )
         {
-            Node n = (Node)_args_[i];
-            if(n == oldChild)
-            {
-                if(newChild != null)
-                {
-                    _args_[i] = newChild;
-                    oldChild.Parent(null);
-                    return;
-                }
-
-                _args_.RemoveAt(i);
-                oldChild.Parent(null);
-                return;
-            }
+            SetFormalsAndBody ((PFormalsAndBody) newChild);
+            return;
         }
     }
 
-    private class Args_Cast : Cast
-    {
-        AMethodDecl obj;
-
-        internal Args_Cast (AMethodDecl obj)
-        {
-          this.obj = obj;
-        }
-
-        public Object Cast(Object o)
-        {
-            PLocalDecl node = (PLocalDecl) o;
-
-            if((node.Parent() != null) &&
-                (node.Parent() != obj))
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            if((node.Parent() == null) ||
-                (node.Parent() != obj))
-            {
-                node.Parent(obj);
-            }
-
-            return node;
-        }
-
-        public Object UnCast(Object o)
-        {
-            PLocalDecl node = (PLocalDecl) o;
-            node.Parent(null);
-            return node;
-        }
-    }
 }
 public sealed class ALocalDecl : PLocalDecl
 {
-    private PType _type_;
+    private PTypeSpecifier _type_;
     private TIdentifier _name_;
 
     public ALocalDecl ()
@@ -505,7 +485,7 @@ public sealed class ALocalDecl : PLocalDecl
     }
 
     public ALocalDecl (
-            PType _type_,
+            PTypeSpecifier _type_,
             TIdentifier _name_
     )
     {
@@ -516,7 +496,7 @@ public sealed class ALocalDecl : PLocalDecl
     public override Object Clone()
     {
         return new ALocalDecl (
-            (PType)CloneNode (_type_),
+            (PTypeSpecifier)CloneNode (_type_),
             (TIdentifier)CloneNode (_name_)
         );
     }
@@ -526,12 +506,12 @@ public sealed class ALocalDecl : PLocalDecl
         ((Analysis) sw).CaseALocalDecl(this);
     }
 
-    public PType GetType ()
+    public PTypeSpecifier GetType ()
     {
         return _type_;
     }
 
-    public void SetType (PType node)
+    public void SetType (PTypeSpecifier node)
     {
         if(_type_ != null)
         {
@@ -601,7 +581,7 @@ public sealed class ALocalDecl : PLocalDecl
     {
         if ( _type_ == oldChild )
         {
-            SetType ((PType) newChild);
+            SetType ((PTypeSpecifier) newChild);
             return;
         }
         if ( _name_ == oldChild )
@@ -612,47 +592,51 @@ public sealed class ALocalDecl : PLocalDecl
     }
 
 }
-public sealed class AGlobalDecl : PGlobalDecl
+public sealed class AVariableDefinition : PVariableDefinition
 {
-    private PType _type_;
+    private PTypeSpecifier _type_specifier_;
+    private PTypeQualifier _type_qualifier_;
     private TIdentifier _name_;
 
-    public AGlobalDecl ()
+    public AVariableDefinition ()
     {
     }
 
-    public AGlobalDecl (
-            PType _type_,
+    public AVariableDefinition (
+            PTypeSpecifier _type_specifier_,
+            PTypeQualifier _type_qualifier_,
             TIdentifier _name_
     )
     {
-        SetType (_type_);
+        SetTypeSpecifier (_type_specifier_);
+        SetTypeQualifier (_type_qualifier_);
         SetName (_name_);
     }
 
     public override Object Clone()
     {
-        return new AGlobalDecl (
-            (PType)CloneNode (_type_),
+        return new AVariableDefinition (
+            (PTypeSpecifier)CloneNode (_type_specifier_),
+            (PTypeQualifier)CloneNode (_type_qualifier_),
             (TIdentifier)CloneNode (_name_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAGlobalDecl(this);
+        ((Analysis) sw).CaseAVariableDefinition(this);
     }
 
-    public PType GetType ()
+    public PTypeSpecifier GetTypeSpecifier ()
     {
-        return _type_;
+        return _type_specifier_;
     }
 
-    public void SetType (PType node)
+    public void SetTypeSpecifier (PTypeSpecifier node)
     {
-        if(_type_ != null)
+        if(_type_specifier_ != null)
         {
-            _type_.Parent(null);
+            _type_specifier_.Parent(null);
         }
 
         if(node != null)
@@ -665,7 +649,31 @@ public sealed class AGlobalDecl : PGlobalDecl
             node.Parent(this);
         }
 
-        _type_ = node;
+        _type_specifier_ = node;
+    }
+    public PTypeQualifier GetTypeQualifier ()
+    {
+        return _type_qualifier_;
+    }
+
+    public void SetTypeQualifier (PTypeQualifier node)
+    {
+        if(_type_qualifier_ != null)
+        {
+            _type_qualifier_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_qualifier_ = node;
     }
     public TIdentifier GetName ()
     {
@@ -695,16 +703,22 @@ public sealed class AGlobalDecl : PGlobalDecl
     public override string ToString()
     {
         return ""
-            + ToString (_type_)
+            + ToString (_type_specifier_)
+            + ToString (_type_qualifier_)
             + ToString (_name_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _type_ == child )
+        if ( _type_specifier_ == child )
         {
-            _type_ = null;
+            _type_specifier_ = null;
+            return;
+        }
+        if ( _type_qualifier_ == child )
+        {
+            _type_qualifier_ = null;
             return;
         }
         if ( _name_ == child )
@@ -716,9 +730,14 @@ public sealed class AGlobalDecl : PGlobalDecl
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _type_ == oldChild )
+        if ( _type_specifier_ == oldChild )
         {
-            SetType ((PType) newChild);
+            SetTypeSpecifier ((PTypeSpecifier) newChild);
+            return;
+        }
+        if ( _type_qualifier_ == oldChild )
+        {
+            SetTypeQualifier ((PTypeQualifier) newChild);
             return;
         }
         if ( _name_ == oldChild )
@@ -729,24 +748,24 @@ public sealed class AGlobalDecl : PGlobalDecl
     }
 
 }
-public sealed class AVoidType : PType
+public sealed class AConstTypeQualifier : PTypeQualifier
 {
 
 
-    public AVoidType (
+    public AConstTypeQualifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new AVoidType (
+        return new AConstTypeQualifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAVoidType(this);
+        ((Analysis) sw).CaseAConstTypeQualifier(this);
     }
 
 
@@ -765,24 +784,24 @@ public sealed class AVoidType : PType
     }
 
 }
-public sealed class ASsingleType : PType
+public sealed class AVolatileTypeQualifier : PTypeQualifier
 {
 
 
-    public ASsingleType (
+    public AVolatileTypeQualifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new ASsingleType (
+        return new AVolatileTypeQualifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseASsingleType(this);
+        ((Analysis) sw).CaseAVolatileTypeQualifier(this);
     }
 
 
@@ -801,24 +820,24 @@ public sealed class ASsingleType : PType
     }
 
 }
-public sealed class AUsingleType : PType
+public sealed class AVoidTypeSpecifier : PTypeSpecifier
 {
 
 
-    public AUsingleType (
+    public AVoidTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new AUsingleType (
+        return new AVoidTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAUsingleType(this);
+        ((Analysis) sw).CaseAVoidTypeSpecifier(this);
     }
 
 
@@ -837,24 +856,24 @@ public sealed class AUsingleType : PType
     }
 
 }
-public sealed class ASdoubleType : PType
+public sealed class ASsingleTypeSpecifier : PTypeSpecifier
 {
 
 
-    public ASdoubleType (
+    public ASsingleTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new ASdoubleType (
+        return new ASsingleTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseASdoubleType(this);
+        ((Analysis) sw).CaseASsingleTypeSpecifier(this);
     }
 
 
@@ -873,24 +892,24 @@ public sealed class ASdoubleType : PType
     }
 
 }
-public sealed class AUdoubleType : PType
+public sealed class AUsingleTypeSpecifier : PTypeSpecifier
 {
 
 
-    public AUdoubleType (
+    public AUsingleTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new AUdoubleType (
+        return new AUsingleTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAUdoubleType(this);
+        ((Analysis) sw).CaseAUsingleTypeSpecifier(this);
     }
 
 
@@ -909,24 +928,24 @@ public sealed class AUdoubleType : PType
     }
 
 }
-public sealed class ASquadType : PType
+public sealed class ASdoubleTypeSpecifier : PTypeSpecifier
 {
 
 
-    public ASquadType (
+    public ASdoubleTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new ASquadType (
+        return new ASdoubleTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseASquadType(this);
+        ((Analysis) sw).CaseASdoubleTypeSpecifier(this);
     }
 
 
@@ -945,24 +964,24 @@ public sealed class ASquadType : PType
     }
 
 }
-public sealed class AUquadType : PType
+public sealed class AUdoubleTypeSpecifier : PTypeSpecifier
 {
 
 
-    public AUquadType (
+    public AUdoubleTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new AUquadType (
+        return new AUdoubleTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAUquadType(this);
+        ((Analysis) sw).CaseAUdoubleTypeSpecifier(this);
     }
 
 
@@ -981,24 +1000,24 @@ public sealed class AUquadType : PType
     }
 
 }
-public sealed class AFloatType : PType
+public sealed class ASquadTypeSpecifier : PTypeSpecifier
 {
 
 
-    public AFloatType (
+    public ASquadTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new AFloatType (
+        return new ASquadTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAFloatType(this);
+        ((Analysis) sw).CaseASquadTypeSpecifier(this);
     }
 
 
@@ -1017,24 +1036,24 @@ public sealed class AFloatType : PType
     }
 
 }
-public sealed class AStringType : PType
+public sealed class AUquadTypeSpecifier : PTypeSpecifier
 {
 
 
-    public AStringType (
+    public AUquadTypeSpecifier (
     )
     {
     }
 
     public override Object Clone()
     {
-        return new AStringType (
+        return new AUquadTypeSpecifier (
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAStringType(this);
+        ((Analysis) sw).CaseAUquadTypeSpecifier(this);
     }
 
 
@@ -1052,11 +1071,500 @@ public sealed class AStringType : PType
     {
     }
 
+}
+public sealed class AFloatTypeSpecifier : PTypeSpecifier
+{
+
+
+    public AFloatTypeSpecifier (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AFloatTypeSpecifier (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFloatTypeSpecifier(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AStringTypeSpecifier : PTypeSpecifier
+{
+
+
+    public AStringTypeSpecifier (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AStringTypeSpecifier (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAStringTypeSpecifier(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AEmptyStatement : PStatement
+{
+
+
+    public AEmptyStatement (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AEmptyStatement (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAEmptyStatement(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AVoidReturnStatement : PReturnStatement
+{
+    private TReturn _token_;
+
+    public AVoidReturnStatement ()
+    {
+    }
+
+    public AVoidReturnStatement (
+            TReturn _token_
+    )
+    {
+        SetToken (_token_);
+    }
+
+    public override Object Clone()
+    {
+        return new AVoidReturnStatement (
+            (TReturn)CloneNode (_token_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAVoidReturnStatement(this);
+    }
+
+    public TReturn GetToken ()
+    {
+        return _token_;
+    }
+
+    public void SetToken (TReturn node)
+    {
+        if(_token_ != null)
+        {
+            _token_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _token_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_token_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _token_ == child )
+        {
+            _token_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _token_ == oldChild )
+        {
+            SetToken ((TReturn) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AFormalsAndBody : PFormalsAndBody
+{
+    private TypedList _formals_;
+    private TypedList _locals_;
+    private TypedList _statements_;
+    private PReturnStatement _return_;
+
+    public AFormalsAndBody ()
+    {
+        this._formals_ = new TypedList(new Formals_Cast(this));
+        this._locals_ = new TypedList(new Locals_Cast(this));
+        this._statements_ = new TypedList(new Statements_Cast(this));
+    }
+
+    public AFormalsAndBody (
+            IList _formals_,
+            IList _locals_,
+            IList _statements_,
+            PReturnStatement _return_
+    )
+    {
+        this._formals_ = new TypedList(new Formals_Cast(this));
+        this._formals_.Clear();
+        this._formals_.AddAll(_formals_);
+        this._locals_ = new TypedList(new Locals_Cast(this));
+        this._locals_.Clear();
+        this._locals_.AddAll(_locals_);
+        this._statements_ = new TypedList(new Statements_Cast(this));
+        this._statements_.Clear();
+        this._statements_.AddAll(_statements_);
+        SetReturn (_return_);
+    }
+
+    public override Object Clone()
+    {
+        return new AFormalsAndBody (
+            CloneList (_formals_),
+            CloneList (_locals_),
+            CloneList (_statements_),
+            (PReturnStatement)CloneNode (_return_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFormalsAndBody(this);
+    }
+
+    public IList GetFormals ()
+    {
+        return _formals_;
+    }
+
+    public void setFormals (IList list)
+    {
+        _formals_.Clear();
+        _formals_.AddAll(list);
+    }
+    public IList GetLocals ()
+    {
+        return _locals_;
+    }
+
+    public void setLocals (IList list)
+    {
+        _locals_.Clear();
+        _locals_.AddAll(list);
+    }
+    public IList GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void setStatements (IList list)
+    {
+        _statements_.Clear();
+        _statements_.AddAll(list);
+    }
+    public PReturnStatement GetReturn ()
+    {
+        return _return_;
+    }
+
+    public void SetReturn (PReturnStatement node)
+    {
+        if(_return_ != null)
+        {
+            _return_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _return_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_formals_)
+            + ToString (_locals_)
+            + ToString (_statements_)
+            + ToString (_return_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _formals_.Contains(child) )
+        {
+            _formals_.Remove(child);
+            return;
+        }
+        if ( _locals_.Contains(child) )
+        {
+            _locals_.Remove(child);
+            return;
+        }
+        if ( _statements_.Contains(child) )
+        {
+            _statements_.Remove(child);
+            return;
+        }
+        if ( _return_ == child )
+        {
+            _return_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        for ( int i = 0; i < _formals_.Count; i++ )
+        {
+            Node n = (Node)_formals_[i];
+            if(n == oldChild)
+            {
+                if(newChild != null)
+                {
+                    _formals_[i] = newChild;
+                    oldChild.Parent(null);
+                    return;
+                }
+
+                _formals_.RemoveAt(i);
+                oldChild.Parent(null);
+                return;
+            }
+        }
+        for ( int i = 0; i < _locals_.Count; i++ )
+        {
+            Node n = (Node)_locals_[i];
+            if(n == oldChild)
+            {
+                if(newChild != null)
+                {
+                    _locals_[i] = newChild;
+                    oldChild.Parent(null);
+                    return;
+                }
+
+                _locals_.RemoveAt(i);
+                oldChild.Parent(null);
+                return;
+            }
+        }
+        for ( int i = 0; i < _statements_.Count; i++ )
+        {
+            Node n = (Node)_statements_[i];
+            if(n == oldChild)
+            {
+                if(newChild != null)
+                {
+                    _statements_[i] = newChild;
+                    oldChild.Parent(null);
+                    return;
+                }
+
+                _statements_.RemoveAt(i);
+                oldChild.Parent(null);
+                return;
+            }
+        }
+        if ( _return_ == oldChild )
+        {
+            SetReturn ((PReturnStatement) newChild);
+            return;
+        }
+    }
+
+    private class Formals_Cast : Cast
+    {
+        AFormalsAndBody obj;
+
+        internal Formals_Cast (AFormalsAndBody obj)
+        {
+          this.obj = obj;
+        }
+
+        public Object Cast(Object o)
+        {
+            PLocalDecl node = (PLocalDecl) o;
+
+            if((node.Parent() != null) &&
+                (node.Parent() != obj))
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            if((node.Parent() == null) ||
+                (node.Parent() != obj))
+            {
+                node.Parent(obj);
+            }
+
+            return node;
+        }
+
+        public Object UnCast(Object o)
+        {
+            PLocalDecl node = (PLocalDecl) o;
+            node.Parent(null);
+            return node;
+        }
+    }
+    private class Locals_Cast : Cast
+    {
+        AFormalsAndBody obj;
+
+        internal Locals_Cast (AFormalsAndBody obj)
+        {
+          this.obj = obj;
+        }
+
+        public Object Cast(Object o)
+        {
+            PVariableDefinition node = (PVariableDefinition) o;
+
+            if((node.Parent() != null) &&
+                (node.Parent() != obj))
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            if((node.Parent() == null) ||
+                (node.Parent() != obj))
+            {
+                node.Parent(obj);
+            }
+
+            return node;
+        }
+
+        public Object UnCast(Object o)
+        {
+            PVariableDefinition node = (PVariableDefinition) o;
+            node.Parent(null);
+            return node;
+        }
+    }
+    private class Statements_Cast : Cast
+    {
+        AFormalsAndBody obj;
+
+        internal Statements_Cast (AFormalsAndBody obj)
+        {
+          this.obj = obj;
+        }
+
+        public Object Cast(Object o)
+        {
+            PStatement node = (PStatement) o;
+
+            if((node.Parent() != null) &&
+                (node.Parent() != obj))
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            if((node.Parent() == null) ||
+                (node.Parent() != obj))
+            {
+                node.Parent(obj);
+            }
+
+            return node;
+        }
+
+        public Object UnCast(Object o)
+        {
+            PStatement node = (PStatement) o;
+            node.Parent(null);
+            return node;
+        }
+    }
 }
 
 public sealed class Start : Node
 {
-    private PSrcFile _base_;
+    private PSourceFile _base_;
     private EOF _eof_;
 
     public Start()
@@ -1064,17 +1572,17 @@ public sealed class Start : Node
     }
 
     public Start(
-        PSrcFile _base_,
+        PSourceFile _base_,
         EOF _eof_)
     {
-        SetPSrcFile(_base_);
+        SetPSourceFile(_base_);
         SetEOF(_eof_);
     }
 
     public override Object Clone()
     {
         return new Start(
-            (PSrcFile) CloneNode(_base_),
+            (PSourceFile) CloneNode(_base_),
             (EOF) CloneNode(_eof_));
     }
 
@@ -1083,11 +1591,11 @@ public sealed class Start : Node
         ((Analysis) sw).CaseStart(this);
     }
 
-    public PSrcFile GetPSrcFile()
+    public PSourceFile GetPSourceFile()
     {
         return _base_;
     }
-    public void SetPSrcFile(PSrcFile node)
+    public void SetPSourceFile(PSourceFile node)
     {
         if(_base_ != null)
         {
@@ -1149,7 +1657,7 @@ public sealed class Start : Node
     {
         if(_base_ == oldChild)
         {
-            SetPSrcFile((PSrcFile) newChild);
+            SetPSourceFile((PSourceFile) newChild);
             return;
         }
 

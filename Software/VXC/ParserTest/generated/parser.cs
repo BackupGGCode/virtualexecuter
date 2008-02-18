@@ -86,34 +86,59 @@ internal class TokenIndex : AnalysisAdapter
         index = 8;
     }
 
-    public override void CaseTIdentifier(TIdentifier node)
+    public override void CaseTConst(TConst node)
     {
         index = 9;
     }
 
-    public override void CaseTLPar(TLPar node)
+    public override void CaseTVolatile(TVolatile node)
     {
         index = 10;
     }
 
-    public override void CaseTRPar(TRPar node)
+    public override void CaseTReturn(TReturn node)
     {
         index = 11;
     }
 
-    public override void CaseTSemicolon(TSemicolon node)
+    public override void CaseTIdentifier(TIdentifier node)
     {
         index = 12;
     }
 
-    public override void CaseTComma(TComma node)
+    public override void CaseTLPar(TLPar node)
     {
         index = 13;
     }
 
-    public override void CaseEOF(EOF node)
+    public override void CaseTRPar(TRPar node)
     {
         index = 14;
+    }
+
+    public override void CaseTLCurly(TLCurly node)
+    {
+        index = 15;
+    }
+
+    public override void CaseTRCurly(TRCurly node)
+    {
+        index = 16;
+    }
+
+    public override void CaseTSemicolon(TSemicolon node)
+    {
+        index = 17;
+    }
+
+    public override void CaseTComma(TComma node)
+    {
+        index = 18;
+    }
+
+    public override void CaseEOF(EOF node)
+    {
+        index = 19;
     }
 }
 
@@ -276,7 +301,7 @@ public class Parser
                     case 1:
         {
       ArrayList list = New1();
-      Push(GoTo(0), list);
+      Push(GoTo(1), list);
         }
         break;
                     case 2:
@@ -288,13 +313,13 @@ public class Parser
                     case 3:
         {
       ArrayList list = New3();
-      Push(GoTo(1), list);
+      Push(GoTo(2), list);
         }
         break;
                     case 4:
         {
       ArrayList list = New4();
-      Push(GoTo(2), list);
+      Push(GoTo(3), list);
         }
         break;
                     case 5:
@@ -306,19 +331,19 @@ public class Parser
                     case 6:
         {
       ArrayList list = New6();
-      Push(GoTo(4), list);
+      Push(GoTo(3), list);
         }
         break;
                     case 7:
         {
       ArrayList list = New7();
-      Push(GoTo(5), list);
+      Push(GoTo(3), list);
         }
         break;
                     case 8:
         {
       ArrayList list = New8();
-      Push(GoTo(5), list);
+      Push(GoTo(4), list);
         }
         break;
                     case 9:
@@ -330,31 +355,31 @@ public class Parser
                     case 10:
         {
       ArrayList list = New10();
-      Push(GoTo(6), list);
+      Push(GoTo(5), list);
         }
         break;
                     case 11:
         {
       ArrayList list = New11();
-      Push(GoTo(6), list);
+      Push(GoTo(5), list);
         }
         break;
                     case 12:
         {
       ArrayList list = New12();
-      Push(GoTo(7), list);
+      Push(GoTo(6), list);
         }
         break;
                     case 13:
         {
       ArrayList list = New13();
-      Push(GoTo(8), list);
+      Push(GoTo(6), list);
         }
         break;
                     case 14:
         {
       ArrayList list = New14();
-      Push(GoTo(8), list);
+      Push(GoTo(7), list);
         }
         break;
                     case 15:
@@ -366,49 +391,121 @@ public class Parser
                     case 16:
         {
       ArrayList list = New16();
-      Push(GoTo(8), list);
+      Push(GoTo(9), list);
         }
         break;
                     case 17:
         {
       ArrayList list = New17();
-      Push(GoTo(8), list);
+      Push(GoTo(10), list);
         }
         break;
                     case 18:
         {
       ArrayList list = New18();
-      Push(GoTo(8), list);
+      Push(GoTo(10), list);
         }
         break;
                     case 19:
         {
       ArrayList list = New19();
-      Push(GoTo(8), list);
+      Push(GoTo(11), list);
         }
         break;
                     case 20:
         {
       ArrayList list = New20();
-      Push(GoTo(8), list);
+      Push(GoTo(11), list);
         }
         break;
                     case 21:
         {
       ArrayList list = New21();
-      Push(GoTo(8), list);
+      Push(GoTo(12), list);
         }
         break;
                     case 22:
         {
       ArrayList list = New22();
-      Push(GoTo(9), list);
+      Push(GoTo(12), list);
         }
         break;
                     case 23:
         {
       ArrayList list = New23();
-      Push(GoTo(9), list);
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 24:
+        {
+      ArrayList list = New24();
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 25:
+        {
+      ArrayList list = New25();
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 26:
+        {
+      ArrayList list = New26();
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 27:
+        {
+      ArrayList list = New27();
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 28:
+        {
+      ArrayList list = New28();
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 29:
+        {
+      ArrayList list = New29();
+      Push(GoTo(12), list);
+        }
+        break;
+                    case 30:
+        {
+      ArrayList list = New30();
+      Push(GoTo(13), list);
+        }
+        break;
+                    case 31:
+        {
+      ArrayList list = New31();
+      Push(GoTo(13), list);
+        }
+        break;
+                    case 32:
+        {
+      ArrayList list = New32();
+      Push(GoTo(14), list);
+        }
+        break;
+                    case 33:
+        {
+      ArrayList list = New33();
+      Push(GoTo(14), list);
+        }
+        break;
+                    case 34:
+        {
+      ArrayList list = New34();
+      Push(GoTo(15), list);
+        }
+        break;
+                    case 35:
+        {
+      ArrayList list = New35();
+      Push(GoTo(15), list);
         }
         break;
                     }
@@ -416,7 +513,7 @@ public class Parser
                 case ACCEPT:
                     {
                         EOF node2 = (EOF) lexer.Next();
-                        PSrcFile node1 = (PSrcFile) ((ArrayList)Pop())[0];
+                        PSourceFile node1 = (PSourceFile) ((ArrayList)Pop())[0];
                         Start node = new Start(node1, node2);
                         return node;
                     }
@@ -431,16 +528,6 @@ public class Parser
     ArrayList New0()
     {
         ArrayList nodeList = new ArrayList();
-        TypedList listNode2 = new TypedList();
-        ASrcFile psrcfileNode1 = new ASrcFile (
-              listNode2
-        );
-        nodeList.Add(psrcfileNode1);
-        return nodeList;
-    }
-    ArrayList New1()
-    {
-        ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
         TypedList listNode3 = new TypedList();
         TypedList listNode2 = (TypedList)nodeArrayList1[0];
@@ -448,73 +535,157 @@ public class Parser
         {
             listNode3.AddAll(listNode2);
         }
-        ASrcFile psrcfileNode1 = new ASrcFile (
+        ASourceFile psourcefileNode1 = new ASourceFile (
               listNode3
         );
-        nodeList.Add(psrcfileNode1);
+        nodeList.Add(psourcefileNode1);
+        return nodeList;
+    }
+    ArrayList New1()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        PVariableDefinition pvariabledefinitionNode2 = (PVariableDefinition)nodeArrayList1[0];
+        AVariableDeclaration pdeclarationNode1 = new AVariableDeclaration (
+              pvariabledefinitionNode2
+        );
+        nodeList.Add(pdeclarationNode1);
         return nodeList;
     }
     ArrayList New2()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        PMethodDecl pmethoddeclNode2 = (PMethodDecl)nodeArrayList1[0];
-        AMethodDeclDecl pdeclNode1 = new AMethodDeclDecl (
-              pmethoddeclNode2
+        PFunctionDefinition pfunctiondefinitionNode2 = (PFunctionDefinition)nodeArrayList1[0];
+        AFunctionDeclaration pdeclarationNode1 = new AFunctionDeclaration (
+              pfunctiondefinitionNode2
         );
-        nodeList.Add(pdeclNode1);
+        nodeList.Add(pdeclarationNode1);
         return nodeList;
     }
     ArrayList New3()
-    {
-        ArrayList nodeList = new ArrayList();
-        ArrayList nodeArrayList1 = (ArrayList) Pop();
-        PGlobalDecl pglobaldeclNode2 = (PGlobalDecl)nodeArrayList1[0];
-        AGlobalDeclDecl pdeclNode1 = new AGlobalDeclDecl (
-              pglobaldeclNode2
-        );
-        nodeList.Add(pdeclNode1);
-        return nodeList;
-    }
-    ArrayList New4()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList4 = (ArrayList) Pop();
         ArrayList nodeArrayList3 = (ArrayList) Pop();
         ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        TypedList listNode5 = new TypedList();
-        PType ptypeNode2 = (PType)nodeArrayList1[0];
+        PTypeSpecifier ptypespecifierNode2 = (PTypeSpecifier)nodeArrayList1[0];
         TIdentifier tidentifierNode3 = (TIdentifier)nodeArrayList2[0];
-        TypedList listNode4 = (TypedList)nodeArrayList3[0];
-        if ( listNode4 != null )
+        TypedList listNode6 = new TypedList();
+        TypedList listNode8 = new TypedList();
+        TypedList listNode10 = new TypedList();
+        TypedList listNode5 = (TypedList)nodeArrayList3[0];
+        if ( listNode5 != null )
         {
-            listNode5.AddAll(listNode4);
+            listNode6.AddAll(listNode5);
         }
-        AMethodDecl pmethoddeclNode1 = new AMethodDecl (
-              ptypeNode2,
-              tidentifierNode3,
-              listNode5
+        TypedList listNode7 = (TypedList)nodeArrayList4[0];
+        if ( listNode7 != null )
+        {
+            listNode8.AddAll(listNode7);
+        }
+        TypedList listNode9 = (TypedList)nodeArrayList4[1];
+        if ( listNode9 != null )
+        {
+            listNode10.AddAll(listNode9);
+        }
+        PReturnStatement preturnstatementNode11 = (PReturnStatement)nodeArrayList4[2];
+        AFormalsAndBody pformalsandbodyNode4 = new AFormalsAndBody (
+              listNode6,
+              listNode8,
+              listNode10,
+              preturnstatementNode11
         );
-        nodeList.Add(pmethoddeclNode1);
+        AFunctionDefinition pfunctiondefinitionNode1 = new AFunctionDefinition (
+              ptypespecifierNode2,
+              tidentifierNode3,
+              pformalsandbodyNode4
+        );
+        nodeList.Add(pfunctiondefinitionNode1);
         return nodeList;
     }
-    ArrayList New5()
+    ArrayList New4()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList3 = (ArrayList) Pop();
         ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        PType ptypeNode2 = (PType)nodeArrayList1[0];
-        TIdentifier tidentifierNode3 = (TIdentifier)nodeArrayList2[0];
-        AGlobalDecl pglobaldeclNode1 = new AGlobalDecl (
-              ptypeNode2,
-              tidentifierNode3
-        );
-        nodeList.Add(pglobaldeclNode1);
+        TypedList listNode1 = new TypedList();
+        TypedList listNode2 = new TypedList();
+        PReturnStatement preturnstatementNode3 = (PReturnStatement)nodeArrayList2[0];
+        nodeList.Add(listNode1);
+        nodeList.Add(listNode2);
+        nodeList.Add(preturnstatementNode3);
+        return nodeList;
+    }
+    ArrayList New5()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList4 = (ArrayList) Pop();
+        ArrayList nodeArrayList3 = (ArrayList) Pop();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode2 = new TypedList();
+        TypedList listNode3 = new TypedList();
+        TypedList listNode1 = (TypedList)nodeArrayList2[0];
+        if ( listNode1 != null )
+        {
+            listNode2.AddAll(listNode1);
+        }
+        PReturnStatement preturnstatementNode4 = (PReturnStatement)nodeArrayList3[0];
+        nodeList.Add(listNode2);
+        nodeList.Add(listNode3);
+        nodeList.Add(preturnstatementNode4);
         return nodeList;
     }
     ArrayList New6()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList4 = (ArrayList) Pop();
+        ArrayList nodeArrayList3 = (ArrayList) Pop();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode1 = new TypedList();
+        TypedList listNode3 = new TypedList();
+        TypedList listNode2 = (TypedList)nodeArrayList2[0];
+        if ( listNode2 != null )
+        {
+            listNode3.AddAll(listNode2);
+        }
+        PReturnStatement preturnstatementNode4 = (PReturnStatement)nodeArrayList3[0];
+        nodeList.Add(listNode1);
+        nodeList.Add(listNode3);
+        nodeList.Add(preturnstatementNode4);
+        return nodeList;
+    }
+    ArrayList New7()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList5 = (ArrayList) Pop();
+        ArrayList nodeArrayList4 = (ArrayList) Pop();
+        ArrayList nodeArrayList3 = (ArrayList) Pop();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode2 = new TypedList();
+        TypedList listNode4 = new TypedList();
+        TypedList listNode1 = (TypedList)nodeArrayList2[0];
+        if ( listNode1 != null )
+        {
+            listNode2.AddAll(listNode1);
+        }
+        TypedList listNode3 = (TypedList)nodeArrayList3[0];
+        if ( listNode3 != null )
+        {
+            listNode4.AddAll(listNode3);
+        }
+        PReturnStatement preturnstatementNode5 = (PReturnStatement)nodeArrayList4[0];
+        nodeList.Add(listNode2);
+        nodeList.Add(listNode4);
+        nodeList.Add(preturnstatementNode5);
+        return nodeList;
+    }
+    ArrayList New8()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList3 = (ArrayList) Pop();
@@ -529,14 +700,14 @@ public class Parser
         nodeList.Add(listNode2);
         return nodeList;
     }
-    ArrayList New7()
+    ArrayList New9()
     {
         ArrayList nodeList = new ArrayList();
         TypedList listNode1 = new TypedList();
         nodeList.Add(listNode1);
         return nodeList;
     }
-    ArrayList New8()
+    ArrayList New10()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
@@ -544,7 +715,7 @@ public class Parser
         nodeList.Add(listNode1);
         return nodeList;
     }
-    ArrayList New9()
+    ArrayList New11()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
@@ -557,7 +728,7 @@ public class Parser
         nodeList.Add(listNode2);
         return nodeList;
     }
-    ArrayList New10()
+    ArrayList New12()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
@@ -570,7 +741,7 @@ public class Parser
         nodeList.Add(listNode2);
         return nodeList;
     }
-    ArrayList New11()
+    ArrayList New13()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList3 = (ArrayList) Pop();
@@ -590,135 +761,348 @@ public class Parser
         nodeList.Add(listNode3);
         return nodeList;
     }
-    ArrayList New12()
+    ArrayList New14()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        PType ptypeNode2 = (PType)nodeArrayList1[0];
+        PTypeSpecifier ptypespecifierNode2 = (PTypeSpecifier)nodeArrayList1[0];
         TIdentifier tidentifierNode3 = (TIdentifier)nodeArrayList2[0];
         ALocalDecl plocaldeclNode1 = new ALocalDecl (
-              ptypeNode2,
+              ptypespecifierNode2,
               tidentifierNode3
         );
         nodeList.Add(plocaldeclNode1);
-        return nodeList;
-    }
-    ArrayList New13()
-    {
-        ArrayList nodeList = new ArrayList();
-        ArrayList nodeArrayList1 = (ArrayList) Pop();
-        ASsingleType ptypeNode1 = new ASsingleType (
-        );
-        nodeList.Add(ptypeNode1);
-        return nodeList;
-    }
-    ArrayList New14()
-    {
-        ArrayList nodeList = new ArrayList();
-        ArrayList nodeArrayList1 = (ArrayList) Pop();
-        AUsingleType ptypeNode1 = new AUsingleType (
-        );
-        nodeList.Add(ptypeNode1);
         return nodeList;
     }
     ArrayList New15()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        ASdoubleType ptypeNode1 = new ASdoubleType (
+        AEmptyStatement pstatementNode1 = new AEmptyStatement (
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(pstatementNode1);
         return nodeList;
     }
     ArrayList New16()
     {
         ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        AUdoubleType ptypeNode1 = new AUdoubleType (
+        TReturn treturnNode2 = (TReturn)nodeArrayList1[0];
+        AVoidReturnStatement preturnstatementNode1 = new AVoidReturnStatement (
+              treturnNode2
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(preturnstatementNode1);
         return nodeList;
     }
     ArrayList New17()
     {
         ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList3 = (ArrayList) Pop();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        ASquadType ptypeNode1 = new ASquadType (
+        PTypeSpecifier ptypespecifierNode2 = (PTypeSpecifier)nodeArrayList1[0];
+        TIdentifier tidentifierNode4 = (TIdentifier)nodeArrayList2[0];
+        AVariableDefinition pvariabledefinitionNode1 = new AVariableDefinition (
+              ptypespecifierNode2,
+              null,
+              tidentifierNode4
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(pvariabledefinitionNode1);
         return nodeList;
     }
     ArrayList New18()
     {
         ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList4 = (ArrayList) Pop();
+        ArrayList nodeArrayList3 = (ArrayList) Pop();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        AUquadType ptypeNode1 = new AUquadType (
+        PTypeSpecifier ptypespecifierNode2 = (PTypeSpecifier)nodeArrayList2[0];
+        PTypeQualifier ptypequalifierNode3 = (PTypeQualifier)nodeArrayList1[0];
+        TIdentifier tidentifierNode4 = (TIdentifier)nodeArrayList3[0];
+        AVariableDefinition pvariabledefinitionNode1 = new AVariableDefinition (
+              ptypespecifierNode2,
+              ptypequalifierNode3,
+              tidentifierNode4
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(pvariabledefinitionNode1);
         return nodeList;
     }
     ArrayList New19()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        AFloatType ptypeNode1 = new AFloatType (
+        AConstTypeQualifier ptypequalifierNode1 = new AConstTypeQualifier (
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(ptypequalifierNode1);
         return nodeList;
     }
     ArrayList New20()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        AStringType ptypeNode1 = new AStringType (
+        AVolatileTypeQualifier ptypequalifierNode1 = new AVolatileTypeQualifier (
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(ptypequalifierNode1);
         return nodeList;
     }
     ArrayList New21()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
-        AVoidType ptypeNode1 = new AVoidType (
+        ASsingleTypeSpecifier ptypespecifierNode1 = new ASsingleTypeSpecifier (
         );
-        nodeList.Add(ptypeNode1);
+        nodeList.Add(ptypespecifierNode1);
         return nodeList;
     }
     ArrayList New22()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
+        AUsingleTypeSpecifier ptypespecifierNode1 = new AUsingleTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New23()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        ASdoubleTypeSpecifier ptypespecifierNode1 = new ASdoubleTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New24()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        AUdoubleTypeSpecifier ptypespecifierNode1 = new AUdoubleTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New25()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        ASquadTypeSpecifier ptypespecifierNode1 = new ASquadTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New26()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        AUquadTypeSpecifier ptypespecifierNode1 = new AUquadTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New27()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        AFloatTypeSpecifier ptypespecifierNode1 = new AFloatTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New28()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        AStringTypeSpecifier ptypespecifierNode1 = new AStringTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New29()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        AVoidTypeSpecifier ptypespecifierNode1 = new AVoidTypeSpecifier (
+        );
+        nodeList.Add(ptypespecifierNode1);
+        return nodeList;
+    }
+    ArrayList New30()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
         TypedList listNode2 = new TypedList();
-        PDecl pdeclNode1 = (PDecl)nodeArrayList1[0];
-        if ( pdeclNode1 != null )
+        PDeclaration pdeclarationNode1 = (PDeclaration)nodeArrayList1[0];
+        if ( pdeclarationNode1 != null )
         {
-            listNode2.Add(pdeclNode1);
+            listNode2.Add(pdeclarationNode1);
         }
         nodeList.Add(listNode2);
         return nodeList;
     }
-    ArrayList New23()
+    ArrayList New31()
     {
         ArrayList nodeList = new ArrayList();
         ArrayList nodeArrayList2 = (ArrayList) Pop();
         ArrayList nodeArrayList1 = (ArrayList) Pop();
         TypedList listNode3 = new TypedList();
         TypedList listNode1 = (TypedList)nodeArrayList1[0];
-        PDecl pdeclNode2 = (PDecl)nodeArrayList2[0];
+        PDeclaration pdeclarationNode2 = (PDeclaration)nodeArrayList2[0];
         if ( listNode1 != null )
         {
             listNode3.AddAll(listNode1);
         }
-        if ( pdeclNode2 != null )
+        if ( pdeclarationNode2 != null )
         {
-            listNode3.Add(pdeclNode2);
+            listNode3.Add(pdeclarationNode2);
+        }
+        nodeList.Add(listNode3);
+        return nodeList;
+    }
+    ArrayList New32()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode2 = new TypedList();
+        PVariableDefinition pvariabledefinitionNode1 = (PVariableDefinition)nodeArrayList1[0];
+        if ( pvariabledefinitionNode1 != null )
+        {
+            listNode2.Add(pvariabledefinitionNode1);
+        }
+        nodeList.Add(listNode2);
+        return nodeList;
+    }
+    ArrayList New33()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode3 = new TypedList();
+        TypedList listNode1 = (TypedList)nodeArrayList1[0];
+        PVariableDefinition pvariabledefinitionNode2 = (PVariableDefinition)nodeArrayList2[0];
+        if ( listNode1 != null )
+        {
+            listNode3.AddAll(listNode1);
+        }
+        if ( pvariabledefinitionNode2 != null )
+        {
+            listNode3.Add(pvariabledefinitionNode2);
+        }
+        nodeList.Add(listNode3);
+        return nodeList;
+    }
+    ArrayList New34()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode2 = new TypedList();
+        PStatement pstatementNode1 = (PStatement)nodeArrayList1[0];
+        if ( pstatementNode1 != null )
+        {
+            listNode2.Add(pstatementNode1);
+        }
+        nodeList.Add(listNode2);
+        return nodeList;
+    }
+    ArrayList New35()
+    {
+        ArrayList nodeList = new ArrayList();
+        ArrayList nodeArrayList2 = (ArrayList) Pop();
+        ArrayList nodeArrayList1 = (ArrayList) Pop();
+        TypedList listNode3 = new TypedList();
+        TypedList listNode1 = (TypedList)nodeArrayList1[0];
+        PStatement pstatementNode2 = (PStatement)nodeArrayList2[0];
+        if ( listNode1 != null )
+        {
+            listNode3.AddAll(listNode1);
+        }
+        if ( pstatementNode2 != null )
+        {
+            listNode3.Add(pstatementNode2);
         }
         nodeList.Add(listNode3);
         return nodeList;
     }
 
     private static int[][][] actionTable = {
+      new int[][] {
+        new int[] {-1, 3, 0},
+        new int[] {0, 0, 1},
+        new int[] {1, 0, 2},
+        new int[] {2, 0, 3},
+        new int[] {3, 0, 4},
+        new int[] {4, 0, 5},
+        new int[] {5, 0, 6},
+        new int[] {6, 0, 7},
+        new int[] {7, 0, 8},
+        new int[] {8, 0, 9},
+        new int[] {9, 0, 10},
+        new int[] {10, 0, 11},
+      },
+      new int[][] {
+        new int[] {-1, 1, 29},
+      },
+      new int[][] {
+        new int[] {-1, 1, 21},
+      },
+      new int[][] {
+        new int[] {-1, 1, 22},
+      },
+      new int[][] {
+        new int[] {-1, 1, 23},
+      },
+      new int[][] {
+        new int[] {-1, 1, 24},
+      },
+      new int[][] {
+        new int[] {-1, 1, 25},
+      },
+      new int[][] {
+        new int[] {-1, 1, 26},
+      },
+      new int[][] {
+        new int[] {-1, 1, 27},
+      },
+      new int[][] {
+        new int[] {-1, 1, 28},
+      },
+      new int[][] {
+        new int[] {-1, 1, 19},
+      },
+      new int[][] {
+        new int[] {-1, 1, 20},
+      },
+      new int[][] {
+        new int[] {-1, 3, 12},
+        new int[] {19, 2, -1},
+      },
+      new int[][] {
+        new int[] {-1, 1, 30},
+      },
+      new int[][] {
+        new int[] {-1, 1, 2},
+      },
+      new int[][] {
+        new int[] {-1, 1, 1},
+      },
+      new int[][] {
+        new int[] {-1, 3, 16},
+        new int[] {0, 0, 1},
+        new int[] {1, 0, 2},
+        new int[] {2, 0, 3},
+        new int[] {3, 0, 4},
+        new int[] {4, 0, 5},
+        new int[] {5, 0, 6},
+        new int[] {6, 0, 7},
+        new int[] {7, 0, 8},
+        new int[] {8, 0, 9},
+      },
+      new int[][] {
+        new int[] {-1, 3, 17},
+        new int[] {12, 0, 20},
+      },
       new int[][] {
         new int[] {-1, 1, 0},
         new int[] {0, 0, 1},
@@ -730,187 +1114,281 @@ public class Parser
         new int[] {6, 0, 7},
         new int[] {7, 0, 8},
         new int[] {8, 0, 9},
+        new int[] {9, 0, 10},
+        new int[] {10, 0, 11},
       },
       new int[][] {
-        new int[] {-1, 1, 21},
+        new int[] {-1, 3, 19},
+        new int[] {12, 0, 22},
       },
       new int[][] {
-        new int[] {-1, 1, 13},
+        new int[] {-1, 3, 20},
+        new int[] {13, 0, 23},
+        new int[] {17, 0, 24},
       },
       new int[][] {
-        new int[] {-1, 1, 14},
+        new int[] {-1, 1, 31},
       },
       new int[][] {
-        new int[] {-1, 1, 15},
+        new int[] {-1, 3, 22},
+        new int[] {17, 0, 26},
       },
       new int[][] {
-        new int[] {-1, 1, 16},
+        new int[] {-1, 1, 9},
+        new int[] {0, 0, 27},
+        new int[] {1, 0, 2},
+        new int[] {2, 0, 3},
+        new int[] {3, 0, 4},
+        new int[] {4, 0, 5},
+        new int[] {5, 0, 6},
+        new int[] {6, 0, 7},
+        new int[] {7, 0, 8},
+        new int[] {8, 0, 9},
       },
       new int[][] {
         new int[] {-1, 1, 17},
       },
       new int[][] {
+        new int[] {-1, 3, 25},
+        new int[] {15, 0, 32},
+      },
+      new int[][] {
         new int[] {-1, 1, 18},
       },
       new int[][] {
-        new int[] {-1, 1, 19},
-      },
-      new int[][] {
-        new int[] {-1, 1, 20},
-      },
-      new int[][] {
-        new int[] {-1, 3, 10},
-        new int[] {14, 2, -1},
-      },
-      new int[][] {
-        new int[] {-1, 1, 22},
-      },
-      new int[][] {
-        new int[] {-1, 1, 2},
-      },
-      new int[][] {
-        new int[] {-1, 1, 3},
-      },
-      new int[][] {
-        new int[] {-1, 3, 14},
-        new int[] {9, 0, 16},
-      },
-      new int[][] {
-        new int[] {-1, 1, 1},
-        new int[] {0, 0, 1},
-        new int[] {1, 0, 2},
-        new int[] {2, 0, 3},
-        new int[] {3, 0, 4},
-        new int[] {4, 0, 5},
-        new int[] {5, 0, 6},
-        new int[] {6, 0, 7},
-        new int[] {7, 0, 8},
-        new int[] {8, 0, 9},
-      },
-      new int[][] {
-        new int[] {-1, 3, 16},
-        new int[] {10, 0, 18},
-        new int[] {12, 0, 19},
-      },
-      new int[][] {
-        new int[] {-1, 1, 23},
-      },
-      new int[][] {
-        new int[] {-1, 1, 7},
-        new int[] {0, 0, 21},
-        new int[] {1, 0, 2},
-        new int[] {2, 0, 3},
-        new int[] {3, 0, 4},
-        new int[] {4, 0, 5},
-        new int[] {5, 0, 6},
-        new int[] {6, 0, 7},
-        new int[] {7, 0, 8},
-        new int[] {8, 0, 9},
-      },
-      new int[][] {
-        new int[] {-1, 1, 5},
-      },
-      new int[][] {
-        new int[] {-1, 3, 20},
-        new int[] {12, 0, 26},
-      },
-      new int[][] {
-        new int[] {-1, 1, 8},
-        new int[] {9, 1, 21},
-      },
-      new int[][] {
-        new int[] {-1, 3, 22},
-        new int[] {11, 0, 27},
-        new int[] {13, 0, 28},
-      },
-      new int[][] {
-        new int[] {-1, 1, 9},
-      },
-      new int[][] {
         new int[] {-1, 1, 10},
-      },
-      new int[][] {
-        new int[] {-1, 3, 25},
-        new int[] {9, 0, 29},
-      },
-      new int[][] {
-        new int[] {-1, 1, 4},
-      },
-      new int[][] {
-        new int[] {-1, 1, 6},
+        new int[] {12, 1, 29},
       },
       new int[][] {
         new int[] {-1, 3, 28},
-        new int[] {0, 0, 1},
-        new int[] {1, 0, 2},
-        new int[] {2, 0, 3},
-        new int[] {3, 0, 4},
-        new int[] {4, 0, 5},
-        new int[] {5, 0, 6},
-        new int[] {6, 0, 7},
-        new int[] {7, 0, 8},
-        new int[] {8, 0, 9},
+        new int[] {14, 0, 34},
+        new int[] {18, 0, 35},
+      },
+      new int[][] {
+        new int[] {-1, 1, 11},
       },
       new int[][] {
         new int[] {-1, 1, 12},
       },
       new int[][] {
-        new int[] {-1, 1, 11},
+        new int[] {-1, 3, 31},
+        new int[] {12, 0, 36},
+      },
+      new int[][] {
+        new int[] {-1, 3, 32},
+        new int[] {0, 0, 1},
+        new int[] {1, 0, 2},
+        new int[] {2, 0, 3},
+        new int[] {3, 0, 4},
+        new int[] {4, 0, 5},
+        new int[] {5, 0, 6},
+        new int[] {6, 0, 7},
+        new int[] {7, 0, 8},
+        new int[] {8, 0, 9},
+        new int[] {9, 0, 10},
+        new int[] {10, 0, 11},
+        new int[] {11, 0, 37},
+        new int[] {17, 0, 38},
+      },
+      new int[][] {
+        new int[] {-1, 1, 3},
+      },
+      new int[][] {
+        new int[] {-1, 1, 8},
+      },
+      new int[][] {
+        new int[] {-1, 3, 35},
+        new int[] {0, 0, 1},
+        new int[] {1, 0, 2},
+        new int[] {2, 0, 3},
+        new int[] {3, 0, 4},
+        new int[] {4, 0, 5},
+        new int[] {5, 0, 6},
+        new int[] {6, 0, 7},
+        new int[] {7, 0, 8},
+        new int[] {8, 0, 9},
+      },
+      new int[][] {
+        new int[] {-1, 1, 14},
+      },
+      new int[][] {
+        new int[] {-1, 3, 37},
+        new int[] {17, 0, 46},
+      },
+      new int[][] {
+        new int[] {-1, 1, 15},
+      },
+      new int[][] {
+        new int[] {-1, 1, 34},
+      },
+      new int[][] {
+        new int[] {-1, 3, 40},
+        new int[] {16, 0, 47},
+      },
+      new int[][] {
+        new int[] {-1, 1, 32},
+      },
+      new int[][] {
+        new int[] {-1, 3, 42},
+        new int[] {12, 0, 48},
+      },
+      new int[][] {
+        new int[] {-1, 3, 43},
+        new int[] {0, 0, 1},
+        new int[] {1, 0, 2},
+        new int[] {2, 0, 3},
+        new int[] {3, 0, 4},
+        new int[] {4, 0, 5},
+        new int[] {5, 0, 6},
+        new int[] {6, 0, 7},
+        new int[] {7, 0, 8},
+        new int[] {8, 0, 9},
+        new int[] {9, 0, 10},
+        new int[] {10, 0, 11},
+        new int[] {11, 0, 37},
+        new int[] {17, 0, 38},
+      },
+      new int[][] {
+        new int[] {-1, 3, 44},
+        new int[] {11, 0, 37},
+        new int[] {17, 0, 38},
+      },
+      new int[][] {
+        new int[] {-1, 1, 13},
+      },
+      new int[][] {
+        new int[] {-1, 1, 16},
+      },
+      new int[][] {
+        new int[] {-1, 1, 4},
+      },
+      new int[][] {
+        new int[] {-1, 3, 48},
+        new int[] {17, 0, 24},
+      },
+      new int[][] {
+        new int[] {-1, 3, 49},
+        new int[] {16, 0, 54},
+      },
+      new int[][] {
+        new int[] {-1, 1, 33},
+      },
+      new int[][] {
+        new int[] {-1, 3, 51},
+        new int[] {11, 0, 37},
+        new int[] {17, 0, 38},
+      },
+      new int[][] {
+        new int[] {-1, 1, 35},
+      },
+      new int[][] {
+        new int[] {-1, 3, 53},
+        new int[] {16, 0, 56},
+      },
+      new int[][] {
+        new int[] {-1, 1, 5},
+      },
+      new int[][] {
+        new int[] {-1, 3, 55},
+        new int[] {16, 0, 57},
+      },
+      new int[][] {
+        new int[] {-1, 1, 6},
+      },
+      new int[][] {
+        new int[] {-1, 1, 7},
       },
     };
 
     private static int[][][] gotoTable  = {
       new int[][] {
-        new int[] {-1, 10},
-      },
-      new int[][] {
-        new int[] {-1, 11},
-        new int[] {15, 17},
-      },
-      new int[][] {
         new int[] {-1, 12},
       },
       new int[][] {
         new int[] {-1, 13},
-      },
-      new int[][] {
-        new int[] {-1, 20},
-      },
-      new int[][] {
-        new int[] {-1, 22},
-      },
-      new int[][] {
-        new int[] {-1, 23},
-      },
-      new int[][] {
-        new int[] {-1, 24},
-        new int[] {28, 30},
+        new int[] {18, 21},
       },
       new int[][] {
         new int[] {-1, 14},
-        new int[] {18, 25},
-        new int[] {28, 25},
+      },
+      new int[][] {
+        new int[] {-1, 33},
+      },
+      new int[][] {
+        new int[] {-1, 25},
+      },
+      new int[][] {
+        new int[] {-1, 28},
+      },
+      new int[][] {
+        new int[] {-1, 29},
+      },
+      new int[][] {
+        new int[] {-1, 30},
+        new int[] {35, 45},
+      },
+      new int[][] {
+        new int[] {-1, 39},
+        new int[] {44, 52},
+        new int[] {51, 52},
+      },
+      new int[][] {
+        new int[] {-1, 40},
+        new int[] {43, 49},
+        new int[] {44, 53},
+        new int[] {51, 55},
       },
       new int[][] {
         new int[] {-1, 15},
+        new int[] {32, 41},
+        new int[] {43, 50},
+      },
+      new int[][] {
+        new int[] {-1, 16},
+      },
+      new int[][] {
+        new int[] {-1, 17},
+        new int[] {16, 19},
+        new int[] {23, 31},
+        new int[] {32, 42},
+        new int[] {35, 31},
+        new int[] {43, 42},
+      },
+      new int[][] {
+        new int[] {-1, 18},
+      },
+      new int[][] {
+        new int[] {-1, 43},
+      },
+      new int[][] {
+        new int[] {-1, 44},
+        new int[] {43, 51},
       },
     };
 
     private static String[] errorMessages = {
-      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', EOF",
+      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', 'const', 'volatile'",
       "expecting: identifier",
+      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string'",
       "expecting: EOF",
+      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', 'const', 'volatile', EOF",
       "expecting: '(', ';'",
-      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', ')', ','",
       "expecting: ';'",
+      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', ')', ','",
+      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', 'const', 'volatile', 'return', ';', EOF",
+      "expecting: '{'",
       "expecting: identifier, ')', ','",
       "expecting: ')', ','",
-      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string'",
+      "expecting: 'void', 'ssingle', 'usingle', 'sdouble', 'udouble', 'squad', 'uquad', 'float', 'string', 'const', 'volatile', 'return', ';'",
+      "expecting: 'return', ';'",
+      "expecting: '}'",
     };
 
     private static int[] errors = {
-      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 0, 
-      3, 0, 4, 0, 5, 6, 7, 7, 7, 1, 0, 5, 8, 7, 7, 
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 4, 4, 4, 
+      2, 1, 4, 1, 5, 4, 6, 7, 8, 9, 8, 10, 11, 11, 11, 1, 
+      12, 4, 9, 2, 11, 6, 13, 13, 14, 12, 1, 12, 13, 11, 14, 4, 
+      6, 14, 12, 13, 13, 14, 4, 14, 4, 4, 
     };
 }
 }
