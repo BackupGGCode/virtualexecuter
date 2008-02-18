@@ -1,0 +1,788 @@
+/*
+ * JOOS0 Grammar
+ * Based on Java grammar by Etienne Gagnon.
+ */
+
+Package dovs;
+
+
+/*******************************************************************
+ * Helpers                                                         *
+ *******************************************************************/
+Helpers
+
+    latin1_input_character = [0..0xff];
+    ht  = 0x09;
+    lf  = 0x0a;
+    ff  = 0x0c;
+    cr  = 0x0d;
+    sp  = ' ';
+
+    line_terminator = lf | cr | cr lf; 
+    input_character = [latin1_input_character - [cr + lf]];
+
+    not_star =    [input_character - '*'] | line_terminator;
+    not_star_not_slash = [input_character - ['*' + '/']] | line_terminator;
+
+    digit = ['0'..'9'];
+    non_zero_digit = ['1'..'9'];
+
+    decimal_numeral = '0' | non_zero_digit digit*;
+
+    latin1_letter =
+        [0x41..0x5a] | [0x61..0x7a] | [0xaa..0xaa] | [0xb5..0xb5] |
+        [0xba..0xba] | [0xc0..0xd6] | [0xd8..0xf6] | [0xf8..0xff];
+
+    java_letter = latin1_letter | '$' | '_';
+    java_letter_or_digit = latin1_letter | digit | '$' | '_';
+
+    string_character = [input_character - ['"' + '\']];
+
+
+/*******************************************************************
+ * Tokens                                                          *
+ *******************************************************************/
+Tokens
+
+// Whitespace
+
+    white_space = (sp | ht | ff | line_terminator)*;
+
+    traditional_comment = '/*' not_star+ '*'+ (not_star_not_slash not_star* '*'+)* '/';
+    documentation_comment =    '/**' '*'* (not_star_not_slash not_star* '*'+)* '/';
+
+    end_of_line_comment = '//' input_character* line_terminator?;
+
+// Keywords
+
+    abstract = 'abstract';
+    boolean = 'boolean';
+    break = 'break';
+    byte = 'byte';
+    case = 'case';   
+    catch = 'catch'; 
+    char = 'char';
+    class = 'class'; 
+    const = 'const';
+    continue = 'continue';
+    default = 'default';
+    do = 'do';
+    double = 'double';  
+    else = 'else';  
+    extends = 'extends'; 
+    final = 'final';
+    finally = 'finally';
+    float = 'float';
+    for = 'for';   
+    goto = 'goto';
+    if = 'if';
+    implements = 'implements';
+    import = 'import';
+    instanceof = 'instanceof';      
+    int = 'int';
+    interface = 'interface';
+    long = 'long';
+    native = 'native';
+    new = 'new';
+    package = 'package';
+    private = 'private';
+    protected = 'protected';   
+    public = 'public';
+    return = 'return';
+    short = 'short';   
+    static = 'static';
+    strictfp = 'strictfp';
+    super = 'super'; 
+    switch = 'switch';
+    synchronized = 'synchronized';
+    this = 'this';
+    throw = 'throw';
+    throws = 'throws';
+    transient = 'transient';
+    try = 'try';
+    void = 'void';
+    volatile = 'volatile';
+    while = 'while';
+
+    true = 'true';
+    false = 'false';
+    null = 'null';
+
+// Extra JOOS0 keywords
+
+    string = 'String';
+    exception = 'Exception';
+    system = 'System';
+    out = 'out';
+    print = 'print';
+    in = 'in';
+    read = 'read';
+    main = 'main';
+
+// Delimiters
+
+    l_parenthese = '(';
+    r_parenthese = ')';
+    l_brace = '{';
+    r_brace = '}';
+    l_bracket = '[';
+    r_bracket = ']';
+    semicolon = ';';
+    comma = ',';
+    dot = '.';
+
+// Assignment and complement
+
+    assign = '=';
+    complement = '!';
+
+// Comparison
+
+    lt = '<';
+    gt = '>';
+    eq = '==';
+    lteq = '<=';
+    gteq ='>=';
+    neq = '!=';
+
+// Arithmetic
+
+    plus = '+';
+    minus = '-';
+    star = '*';
+    div = '/';
+    and = '&';
+    or = '|';
+    xor = '^';
+    mod = '%';
+
+// Literals and identifiers
+
+    integer_literal = decimal_numeral;
+    string_literal = '"' string_character* '"';
+    identifier = java_letter java_letter_or_digit*;
+
+
+/*******************************************************************
+ * Ignored Tokens                                                  *
+ *******************************************************************/
+Ignored Tokens
+
+  white_space, 
+  traditional_comment, 
+  documentation_comment, 
+  end_of_line_comment;
+
+
+/*******************************************************************
+ * Productions                                                     *
+ *******************************************************************/
+Productions
+
+// The parsing goal is a source file.
+// A source file just contains a class declaration
+
+goal {-> source_file} =
+    class_declaration
+    {-> New source_file(class_declaration.class_decl)}
+  ;
+
+
+// ********** Class declarations ***********
+
+class_declaration {-> class_decl} =
+    public [t_class]:class identifier class_body
+    {-> New class_decl(identifier,
+                       [class_body.field_decl],
+                       class_body.constructor_decl,
+                       class_body.main_decl,
+                       [class_body.method_decl])}
+  ;
+
+class_body {-> field_decl* constructor_decl main_decl? method_decl*} =
+    l_brace
+    field_declaration*
+    constructor_declaration
+    main_method_declaration?
+    method_declaration*
+    r_brace {-> [field_declaration.field_decl]
+                constructor_declaration.constructor_decl
+                main_method_declaration.main_decl
+                [method_declaration.method_decl]}
+  ;
+
+
+// ********** Field declarations **********
+
+field_declaration {-> field_decl} =
+    protected type identifier variable_initializer? semicolon
+    {-> New field_decl(type.type,
+                       identifier,
+                       variable_initializer.exp)}
+  ;
+
+variable_initializer {-> exp} =
+    assign expression {-> expression.exp}
+  ;
+
+
+// ********** Method declarations **********
+
+main_method_declaration {-> main_decl} =
+    public static void main main_method_params
+    throws_clause
+    l_brace new name l_parenthese r_parenthese semicolon r_brace
+    {-> New main_decl(New formals_and_body
+        ([],
+         [],
+         [New stm.exp(New exp.new(name.identifier, []))],
+         New return_stm.void(Null)))}
+  ;
+
+main_method_params {-> identifier} =
+    l_parenthese string l_bracket r_bracket identifier r_parenthese
+    {-> identifier}
+  ;
+
+method_declaration {-> method_decl} =
+    public type_or_void identifier method_params throws_clause method_body
+    {-> New method_decl(type_or_void.type, identifier,
+        New formals_and_body([method_params.local_decl],
+                             [method_body.local_decl],
+                             [method_body.stm],
+                             method_body.return_stm))}
+  ;
+
+method_params {-> local_decl*} =
+    l_parenthese formal_parameter_list r_parenthese
+    {-> [formal_parameter_list.local_decl]}
+  ;
+
+formal_parameter_list {-> local_decl*} =
+
+    {-> []}
+  | formal_parameter_list_nonempty
+    {-> [formal_parameter_list_nonempty.local_decl]}
+  ;
+
+formal_parameter_list_nonempty {-> local_decl*} =
+    formal_parameter
+    {-> [formal_parameter.local_decl]}
+  | formal_parameter_list comma formal_parameter
+    {-> [formal_parameter_list.local_decl, formal_parameter.local_decl]}
+  ;
+
+formal_parameter {-> local_decl} =
+    type identifier
+    {-> New local_decl(type.type, identifier, Null)}
+  ;
+
+throws_clause {-> } =
+    throws exception
+    {-> }
+  ;
+
+method_body {-> local_decl* stm* return_stm} =
+    l_brace local_variable_declaration* statement* return_statement r_brace
+    {-> [local_variable_declaration.local_decl]
+        [statement.stm]
+        return_statement.return_stm}
+  ;
+
+
+// ********** Constructor declarations **********
+
+constructor_declaration {-> constructor_decl} =
+    public constructor_declarator throws_clause constructor_body
+    {-> New constructor_decl(constructor_declarator.identifier,
+        New formals_and_body([constructor_declarator.local_decl],
+                             [constructor_body.local_decl],
+                             [constructor_body.stm],
+                             New return_stm.void(Null)))}
+  ;
+
+constructor_declarator {-> identifier local_decl*} =
+    identifier l_parenthese formal_parameter_list r_parenthese
+    {-> identifier [formal_parameter_list.local_decl]}
+  ;
+
+constructor_body {-> local_decl* stm*} =
+    l_brace local_variable_declaration* statement* void_return_statement? r_brace
+    {-> [local_variable_declaration.local_decl]
+        [statement.stm]}
+  ;
+
+
+// ********** Types **********
+
+type_or_void {-> type} =
+    void
+    {-> New type.void()}
+  | type
+    {-> type.type}
+  ;
+
+type {-> type} =
+    primitive_type
+    {-> primitive_type.type}
+  | reference_type
+    {-> reference_type.type}
+  ;
+
+reference_type {-> type} =
+    name
+    {-> New type.class(name.identifier)}
+  | string
+    {-> New type.string()}
+  ;
+
+primitive_type {-> type} =
+    boolean
+    {-> New type.boolean()}
+  | int
+    {-> New type.int()}
+  ;
+
+
+// ********** Blocks and statements **********
+
+block {-> stm} =
+    l_brace statement* r_brace
+    {-> New stm.block([statement.stm])}
+  ;
+
+local_variable_declaration {-> local_decl} =
+    type identifier variable_initializer? semicolon
+    {-> New local_decl(type.type,
+                     identifier,
+                     variable_initializer.exp)}
+  ;
+
+statement {-> stm} =
+    statement_without_trailing_substatement
+    {-> statement_without_trailing_substatement.stm}
+  | if_then_statement
+    {-> if_then_statement.stm}
+  | if_then_else_statement
+    {-> if_then_else_statement.stm}
+  | while_statement
+    {-> while_statement.stm}
+  ;
+
+statement_no_short_if {-> stm} =
+    statement_without_trailing_substatement
+    {-> statement_without_trailing_substatement.stm}
+  | if_then_else_statement_no_short_if
+    {-> if_then_else_statement_no_short_if.stm}
+  | while_statement_no_short_if
+    {-> while_statement_no_short_if.stm}
+  ;
+
+statement_without_trailing_substatement {-> stm} =
+    block
+    {-> block.stm}
+  | empty_statement
+    {-> empty_statement.stm}
+  | expression_statement
+    {-> expression_statement.stm}
+  ;
+
+empty_statement {-> stm} =
+    semicolon
+    {-> New stm.empty()}
+  ;
+
+expression_statement {-> stm} =
+    statement_expression semicolon
+    {-> New stm.exp(statement_expression.exp)}
+  ;
+
+if_then_statement {-> stm} =
+    if l_parenthese expression r_parenthese statement
+    {-> New stm.if_then(if, expression.exp, statement.stm)}
+  ;
+
+if_then_else_statement {-> stm} =
+    if l_parenthese expression r_parenthese
+      [true_statement]:statement_no_short_if
+      else [false_statement]:statement
+    {-> New stm.if_then_else(if, expression.exp, true_statement.stm, false_statement.stm)}
+  ;
+
+if_then_else_statement_no_short_if {-> stm} =
+    if l_parenthese expression r_parenthese
+      [true_statement]:statement_no_short_if
+      else [false_statement]:statement_no_short_if
+    {-> New stm.if_then_else(if, expression.exp, true_statement.stm, false_statement.stm)}
+  ;
+
+while_statement {-> stm} =
+    while l_parenthese expression r_parenthese [body]:statement
+    {-> New stm.while(while, expression.exp, body.stm)}
+  ;
+
+while_statement_no_short_if {-> stm} =
+    while l_parenthese expression r_parenthese [body]:statement_no_short_if
+    {-> New stm.while(while, expression.exp, body.stm)}
+  ;
+
+return_statement {-> return_stm} =
+    void_return_statement
+    {-> void_return_statement.return_stm}
+  | value_return_statement
+    {-> value_return_statement.return_stm}
+  ;
+
+void_return_statement {-> return_stm} =
+    return semicolon
+    {-> New return_stm.void(return)}
+  ;
+
+value_return_statement {-> return_stm} =
+    return expression semicolon
+    {-> New return_stm.value(return, expression.exp)}
+  ;
+
+
+// ********** Literals and names **********
+
+literal {-> exp} =
+    integer_literal
+    {-> New exp.int_const(Null, integer_literal)}
+  | minus integer_literal
+    {-> New exp.int_const(minus, integer_literal)}
+  | boolean_literal
+    {-> New exp.boolean_const(boolean_literal.bool)}
+  | string_literal
+    {-> New exp.string_const(string_literal)}
+  | null_literal
+    {-> New exp.null()}
+  ;
+
+literal_not_integer {-> exp} =
+    minus integer_literal
+    {-> New exp.int_const(minus, integer_literal)}
+  | boolean_literal
+    {-> New exp.boolean_const(boolean_literal.bool)}
+  | string_literal
+    {-> New exp.string_const(string_literal)}
+  | null_literal
+    {-> New exp.null()}
+  ;
+
+boolean_literal {-> bool} = 
+    true
+    {-> New bool.true()}
+  | false
+    {-> New bool.false()}
+  ;
+
+null_literal {-> } = 
+    null
+    {-> }
+  ;
+
+name {-> identifier} =
+    identifier
+    {-> identifier}
+  ;
+
+
+// ********** Expressions **********
+
+statement_expression {-> exp} =
+    assignment
+    {-> assignment.exp}
+  | method_invocation
+    {-> method_invocation.exp}
+  | class_instance_creation_expression
+    {-> class_instance_creation_expression.exp}
+  ;
+
+primary {-> exp} =
+    literal
+    {-> literal.exp}
+  | this
+    {-> New exp.this()}
+  | left_hand_side
+    {-> New exp.lvalue(left_hand_side.lvalue)}
+  | l_parenthese expression r_parenthese
+    {-> expression.exp}
+  | class_instance_creation_expression
+    {-> class_instance_creation_expression.exp}
+  | method_invocation
+    {-> method_invocation.exp}
+  ;
+
+primary_not_integer {-> exp} =
+    literal_not_integer
+    {-> literal_not_integer.exp}
+  | this
+    {-> New exp.this()}
+  | left_hand_side
+    {-> New exp.lvalue(left_hand_side.lvalue)}
+  | l_parenthese expression r_parenthese
+    {-> expression.exp}
+  | class_instance_creation_expression
+    {-> class_instance_creation_expression.exp}
+  | method_invocation
+    {-> method_invocation.exp}
+  ;
+
+class_instance_creation_expression {-> exp} =
+    new name l_parenthese argument_list r_parenthese
+    {-> New exp.new(name.identifier, [argument_list.exp])}
+  ;
+
+argument_list {-> exp*} =
+
+    {-> []}
+  | argument_list_nonempty
+    {-> [argument_list_nonempty.exp]}
+  ;
+
+argument_list_nonempty {-> exp*} =
+    expression
+    {-> [expression.exp]}
+  | argument_list comma expression
+    {-> [argument_list.exp, expression.exp]}
+  ;
+
+method_invocation {-> exp} =
+    primary_not_integer dot identifier l_parenthese argument_list r_parenthese
+    {-> New exp.invoke(primary_not_integer.exp, identifier, [argument_list.exp])}
+  | system dot out [dot2]:dot print l_parenthese expression r_parenthese
+    {-> New exp.print(print, expression.exp)}
+  | system dot in [dot2]:dot read l_parenthese r_parenthese
+    {-> New exp.read()}
+  ;
+
+unary_expression {-> exp} =
+    primary
+    {-> primary.exp}
+  | minus unary_expression_not_integer
+    {-> New exp.unop(New unop.negate(minus), unary_expression_not_integer.exp)}
+  | complement unary_expression
+    {-> New exp.unop(New unop.complement(complement), unary_expression.exp)}
+  ;
+
+unary_expression_not_integer {-> exp} =
+    primary_not_integer
+    {-> primary_not_integer.exp}
+  | minus unary_expression_not_integer
+    {-> New exp.unop(New unop.negate(minus), unary_expression_not_integer.exp)}
+  | complement unary_expression
+    {-> New exp.unop(New unop.complement(complement), unary_expression.exp)}
+  ;
+
+multiplicative_expression {-> exp} =
+ unary_expression
+    {-> unary_expression.exp}
+  | multiplicative_expression star unary_expression
+    {-> New exp.binop(multiplicative_expression.exp,
+                      New binop.times(star),
+                      unary_expression.exp)}
+  | multiplicative_expression div unary_expression
+    {-> New exp.binop(multiplicative_expression.exp,
+                      New binop.divide(div),
+                      unary_expression.exp)}
+  | multiplicative_expression mod unary_expression
+    {-> New exp.binop(multiplicative_expression.exp,
+                      New binop.modulo(mod),
+                      unary_expression.exp)}
+  ;
+
+additive_expression {-> exp} =
+    multiplicative_expression
+    {-> multiplicative_expression.exp}
+  | additive_expression plus multiplicative_expression
+    {-> New exp.binop(additive_expression.exp,
+                      New binop.plus(plus),
+                      multiplicative_expression.exp)}
+  | additive_expression plus l_parenthese char r_parenthese unary_expression
+    {-> New exp.binop(additive_expression.exp,
+                      New binop.concat(plus),
+                      New exp.unop(New unop.char_to_string(char), unary_expression.exp))}
+  | additive_expression minus multiplicative_expression
+    {-> New exp.binop(additive_expression.exp,
+                      New binop.minus(minus),
+                      multiplicative_expression.exp)}
+  ;
+
+relational_expression {-> exp} =
+    additive_expression
+    {-> additive_expression.exp}
+  | relational_expression lt additive_expression
+    {-> New exp.binop(relational_expression.exp,
+                      New binop.lt(lt),
+                      additive_expression.exp)}
+  | relational_expression gt additive_expression
+    {-> New exp.binop(relational_expression.exp,
+                      New binop.gt(gt),
+                      additive_expression.exp)}
+  | relational_expression lteq additive_expression
+    {-> New exp.binop(relational_expression.exp,
+                      New binop.le(lteq),
+                      additive_expression.exp)}
+  | relational_expression gteq additive_expression
+    {-> New exp.binop(relational_expression.exp,
+                      New binop.ge(gteq),
+                      additive_expression.exp)}
+  ;
+
+equality_expression {-> exp} =
+    relational_expression
+    {-> relational_expression.exp}
+  | equality_expression eq relational_expression
+    {-> New exp.binop(equality_expression.exp,
+                      New binop.eq(eq),
+                      relational_expression.exp)}
+  | equality_expression neq relational_expression
+    {-> New exp.binop(equality_expression.exp,
+                      New binop.ne(neq),
+                      relational_expression.exp)}
+  ;
+
+and_expression {-> exp} =
+        equality_expression
+        {-> equality_expression.exp}
+  | and_expression and equality_expression
+        {-> New exp.binop(and_expression.exp,
+                          New binop.and(and),
+                          equality_expression.exp)}
+  ;
+
+exclusive_or_expression {-> exp} =
+    and_expression
+    {-> and_expression.exp}
+  | exclusive_or_expression xor and_expression
+    {-> New exp.binop(exclusive_or_expression.exp,
+                      New binop.xor(xor),
+                      and_expression.exp)}
+;
+
+inclusive_or_expression {-> exp} =
+    exclusive_or_expression
+    {-> exclusive_or_expression.exp}
+  | inclusive_or_expression or exclusive_or_expression
+    {-> New exp.binop(inclusive_or_expression.exp,
+                      New binop.or(or),
+                      exclusive_or_expression.exp)}
+  ;
+
+expression {-> exp} =
+    inclusive_or_expression
+    {-> inclusive_or_expression.exp}
+  | assignment
+    {-> assignment.exp}
+  ;
+
+assignment {-> exp} =
+    left_hand_side assign expression
+    {-> New exp.assignment(assign,
+                           left_hand_side.lvalue,
+                           expression.exp)}
+  ;
+
+left_hand_side {-> lvalue} =
+    name
+    {-> New lvalue.local(name.identifier)}
+  | this dot name
+    {-> New lvalue.field(name.identifier)}
+  ;
+
+
+/*******************************************************************
+ * Abstract Syntax Tree                                            *
+ *******************************************************************/
+Abstract Syntax Tree
+
+source_file = class_decl;
+
+program = [source_files]:source_file*;
+
+class_decl = [name]:identifier [fields]:field_decl* [constructor]:constructor_decl [main]:main_decl? [methods]:method_decl*;
+
+field_decl = type [name]:identifier [init]:exp?;
+
+local_decl = type [name]:identifier [init]:exp?;
+
+constructor_decl = [name]:identifier formals_and_body;
+
+main_decl = formals_and_body;
+
+method_decl = [return_type]:type [name]:identifier formals_and_body;
+
+type = {void}
+     | {int}
+     | {boolean}
+     | {string}
+     | {class} [class_name]:identifier
+     | {null} // Not created by grammar
+     ;
+
+formals_and_body = [formals]:local_decl*
+                   [locals]:local_decl*
+                   [statements]:stm*
+                   [return]:return_stm;
+
+stm = {exp} exp
+    | {if_then} [token]:if [condition]:exp [body]:stm
+    | {if_then_else} [token]:if [condition]:exp [then_body]:stm [else_body]:stm
+    | {while} [token]:while [condition]:exp [body]:stm
+    | {empty}
+    | {block} [statements]:stm*
+    ;
+
+return_stm = {void} [token]:return?
+           | {value} [token]:return exp
+           ;
+
+exp = {binop} [left]:exp binop [right]:exp
+    | {unop} unop exp
+    | {int_const} [sign]:minus? integer_literal
+    | {string_const} string_literal
+    | {boolean_const} bool
+    | {null}
+    | {this}
+    | {invoke} [receiver]:exp [name]:identifier [args]:exp*
+    | {new} [name]:identifier [args]:exp*
+    | {lvalue} lvalue
+    | {assignment} [token]:assign lvalue exp
+    | {print} [token]:print exp
+    | {read}
+    ;
+
+lvalue = {local} identifier
+       | {field} identifier
+       ;
+
+bool = {true} | {false};
+
+binop = {plus} [token]:plus
+      | {minus} [token]:minus
+      | {times} [token]:star
+      | {divide} [token]:div
+      | {modulo} [token]:mod
+      | {eq} [token]:eq
+      | {ne} [token]:neq
+      | {lt} [token]:lt
+      | {le} [token]:lteq
+      | {gt} [token]:gt
+      | {ge} [token]:gteq
+      | {and} [token]:and
+      | {or} [token]:or
+      | {xor} [token]:xor
+      | {aeq} [token]:eq // Not created by grammar
+      | {ane} [token]:neq // Not created by grammar
+      | {concat} [token]:plus // Only created for + (char)
+      ;
+
+unop = {negate} [token]:minus
+     | {complement} [token]:complement
+     | {boolean_to_string} // Not created by grammar
+     | {int_to_string} // Not created by grammar
+     | {char_to_string} [token]:char
+     | {object_to_string} // Not created by grammar
+     ;
+
