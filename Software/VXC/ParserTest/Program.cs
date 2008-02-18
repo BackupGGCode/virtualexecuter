@@ -20,7 +20,7 @@ namespace ParserTest
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            StreamReader sr = new StreamReader("program.vxc");
+            StreamReader sr = new StreamReader("../../../Grammar/program.vxc");
             Lexer l = new Lexer(sr);
             Parser p = new Parser(l);
             Start start = p.Parse();
