@@ -1,0 +1,136 @@
+
+// This is the sablecc grammar for the VXC high level programming language.
+// Writen by Arild Boes, 2008.
+
+Package VXC;
+
+/*******************************************************************
+ * Helpers                                                         *
+ *******************************************************************/
+Helpers
+
+    digit = ['0'..'9'];
+    lowercase_letter = ['a'..'z'];
+    uppercase_letter = ['A'..'Z'];
+    letter = (lowercase_letter | uppercase_letter)*;
+    ht  = 0x09;
+    lf  = 0x0a;
+    ff  = 0x0c;
+    cr  = 0x0d;    
+    sp  = ' ';
+    line_terminator = lf | cr | cr lf; 
+
+/*******************************************************************
+ * Tokens *
+ *******************************************************************/
+Tokens
+
+   void = 'void';
+   ssingle = 'ssingle';
+   usingle = 'usingle';
+   sdouble = 'sdouble';
+   udouble = 'udouble';
+   squad = 'squad';
+   uquad = 'uquad';
+   float = 'float';
+   string = 'string';
+
+   identifier = letter (letter | digit)*;
+   comment = '//' (letter | sp)* line_terminator?;
+   whitespace = (sp | ht | ff | line_terminator)*;
+  
+   l_par = '(';
+   r_par = ')';
+   semicolon = ';';
+   comma = ',';
+
+/*******************************************************************
+ * Ignored Tokens                                                  *
+ *******************************************************************/
+Ignored Tokens
+
+    whitespace,
+    comment;
+    
+/*******************************************************************
+ * Productions							   *
+ *******************************************************************/
+Productions
+
+src_file {-> src_file} = 
+    method_decl* 
+    {-> New src_file([method_decl.method_decl])}
+;
+
+method_decl {-> method_decl} =
+    type identifier method_params semicolon 
+    {-> New method_decl(type,identifier,[method_params.local_decl])}
+;
+
+method_params {-> local_decl*} =
+    l_par formal_parameter_list r_par
+    {-> [formal_parameter_list.local_decl]}
+  ;
+
+formal_parameter_list {-> local_decl*} =
+    {none} {-> []}
+  | {void} void {-> []}
+  | {parm_list} formal_parameter_list_nonempty
+    {-> [formal_parameter_list_nonempty.local_decl]}
+  ;
+
+formal_parameter_list_nonempty {-> local_decl*} =
+    {formal_parameter} formal_parameter
+    {-> [formal_parameter.local_decl]}
+  | {formal_parameter_list} formal_parameter_list comma formal_parameter
+    {-> [formal_parameter_list.local_decl, formal_parameter.local_decl]}
+  ;
+
+formal_parameter {-> local_decl} =
+    {param} type identifier
+    {-> New local_decl(type.type, identifier)}
+  ;
+
+type {-> type} =
+    {ssingle} ssingle
+    {-> New type.ssingle()}
+  | {usingle} usingle
+    {-> New type.usingle()}
+  | {sdouble} sdouble
+    {-> New type.sdouble()}
+  | {udouble} udouble
+    {-> New type.udouble()}
+  | {squad} squad
+    {-> New type.squad()}
+  | {uquad} uquad
+    {-> New type.uquad()}
+  | {float} float
+    {-> New type.float()}
+  | {string} string
+    {-> New type.string()}
+  | {void} void
+    {-> New type.void()}
+  ;
+
+/*******************************************************************
+ * Abstract Syntax Tree *
+ *******************************************************************/
+Abstract Syntax Tree
+
+    src_file = [methods]:method_decl*;
+    method_decl = [type]:type [name]:identifier [args]:local_decl*;
+    local_decl = [type]:type [name]:identifier;
+
+type = {void}
+     | {ssingle}
+     | {usingle}    
+     | {sdouble}
+     | {udouble}
+     | {squad}
+     | {uquad}
+     | {float}
+     | {string}
+     ;
+	
+
+
