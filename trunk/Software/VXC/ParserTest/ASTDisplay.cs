@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
-using VXC.node;
-using VXC.analysis;
 using System.Windows.Forms;
+using VXC.analysis;
+using VXC.node;
 
 namespace ParserTest
 {
@@ -12,7 +10,7 @@ namespace ParserTest
         public TreeNode result = null;
         bool isDone = false;
 
-        List<TreeNode> parents = new List<TreeNode>();    
+        readonly List<TreeNode> parents = new List<TreeNode>();    
 
         public override void OutStart(Start node)
         {

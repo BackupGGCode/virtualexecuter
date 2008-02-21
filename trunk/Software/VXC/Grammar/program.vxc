@@ -1,5 +1,5 @@
 // variable declaration
-ssingle variable1;
+ssingle variable1 = 0;
 
 // constant declaration
 const squad variable2;
@@ -7,11 +7,13 @@ const squad variable2;
 // volatile declaration
 volatile squad varable3;
 
+port squad port1 @ 24;
+
 // void function declaration
-void method1(squad arg1)
+void method1(squad arg1 = 25, ssingle arg2)
 {
 	squad local1;
-	ssingle local2;
+	ssingle local2 = 1;
 	;	
 	;
 	;	
