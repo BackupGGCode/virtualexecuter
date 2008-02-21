@@ -18,9 +18,11 @@ public interface Analysis : Switch
     void CaseASourceFile(ASourceFile node);
     void CaseAVariableDeclaration(AVariableDeclaration node);
     void CaseAFunctionDeclaration(AFunctionDeclaration node);
+    void CaseAPortDeclaration(APortDeclaration node);
     void CaseAFunctionDefinition(AFunctionDefinition node);
     void CaseALocalDecl(ALocalDecl node);
     void CaseAVariableDefinition(AVariableDefinition node);
+    void CaseAPortDefinition(APortDefinition node);
     void CaseAConstTypeQualifier(AConstTypeQualifier node);
     void CaseAVolatileTypeQualifier(AVolatileTypeQualifier node);
     void CaseAVoidTypeSpecifier(AVoidTypeSpecifier node);
@@ -35,6 +37,7 @@ public interface Analysis : Switch
     void CaseAEmptyStatement(AEmptyStatement node);
     void CaseAVoidReturnStatement(AVoidReturnStatement node);
     void CaseAFormalsAndBody(AFormalsAndBody node);
+    void CaseAIntegerConstantExpression(AIntegerConstantExpression node);
 
     void CaseTVoid(TVoid node);
     void CaseTSsingle(TSsingle node);
@@ -48,7 +51,7 @@ public interface Analysis : Switch
     void CaseTConst(TConst node);
     void CaseTVolatile(TVolatile node);
     void CaseTReturn(TReturn node);
-    void CaseTIdentifier(TIdentifier node);
+    void CaseTPort(TPort node);
     void CaseTComment(TComment node);
     void CaseTWhitespace(TWhitespace node);
     void CaseTLPar(TLPar node);
@@ -57,6 +60,11 @@ public interface Analysis : Switch
     void CaseTRCurly(TRCurly node);
     void CaseTSemicolon(TSemicolon node);
     void CaseTComma(TComma node);
+    void CaseTMinus(TMinus node);
+    void CaseTAt(TAt node);
+    void CaseTIntegerLiteral(TIntegerLiteral node);
+    void CaseTIdentifier(TIdentifier node);
+    void CaseTAssign(TAssign node);
     void CaseEOF(EOF node);
 }
 
@@ -135,6 +143,10 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
+    public virtual void CaseAPortDeclaration(APortDeclaration node)
+    {
+        DefaultCase(node);
+    }
     public virtual void CaseAFunctionDefinition(AFunctionDefinition node)
     {
         DefaultCase(node);
@@ -144,6 +156,10 @@ public class AnalysisAdapter : Analysis
         DefaultCase(node);
     }
     public virtual void CaseAVariableDefinition(AVariableDefinition node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAPortDefinition(APortDefinition node)
     {
         DefaultCase(node);
     }
@@ -203,6 +219,10 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
+    public virtual void CaseAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        DefaultCase(node);
+    }
 
     public virtual void CaseTVoid(TVoid node)
     {
@@ -252,7 +272,7 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
-    public virtual void CaseTIdentifier(TIdentifier node)
+    public virtual void CaseTPort(TPort node)
     {
         DefaultCase(node);
     }
@@ -285,6 +305,26 @@ public class AnalysisAdapter : Analysis
         DefaultCase(node);
     }
     public virtual void CaseTComma(TComma node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTMinus(TMinus node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTAt(TAt node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTIntegerLiteral(TIntegerLiteral node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTIdentifier(TIdentifier node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTAssign(TAssign node)
     {
         DefaultCase(node);
     }
@@ -389,6 +429,25 @@ public class DepthFirstAdapter : AnalysisAdapter
         }
         OutAFunctionDeclaration(node);
     }
+    public virtual void InAPortDeclaration(APortDeclaration node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPortDeclaration(APortDeclaration node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPortDeclaration(APortDeclaration node)
+    {
+        InAPortDeclaration(node);
+        if(node.GetDeclaration() != null)
+        {
+            node.GetDeclaration().Apply(this);
+        }
+        OutAPortDeclaration(node);
+    }
     public virtual void InAFunctionDefinition(AFunctionDefinition node)
     {
         DefaultIn(node);
@@ -433,6 +492,10 @@ public class DepthFirstAdapter : AnalysisAdapter
         {
             node.GetType().Apply(this);
         }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
@@ -460,11 +523,38 @@ public class DepthFirstAdapter : AnalysisAdapter
         {
             node.GetTypeQualifier().Apply(this);
         }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
         }
         OutAVariableDefinition(node);
+    }
+    public virtual void InAPortDefinition(APortDefinition node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPortDefinition(APortDefinition node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPortDefinition(APortDefinition node)
+    {
+        InAPortDefinition(node);
+        if(node.GetTypeSpecifier() != null)
+        {
+            node.GetTypeSpecifier().Apply(this);
+        }
+        if(node.GetName() != null)
+        {
+            node.GetName().Apply(this);
+        }
+        OutAPortDefinition(node);
     }
     public virtual void InAConstTypeQualifier(AConstTypeQualifier node)
     {
@@ -707,6 +797,29 @@ public class DepthFirstAdapter : AnalysisAdapter
             node.GetReturn().Apply(this);
         }
         OutAFormalsAndBody(node);
+    }
+    public virtual void InAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        InAIntegerConstantExpression(node);
+        if(node.GetSign() != null)
+        {
+            node.GetSign().Apply(this);
+        }
+        if(node.GetIntegerLiteral() != null)
+        {
+            node.GetIntegerLiteral().Apply(this);
+        }
+        OutAIntegerConstantExpression(node);
     }
 }
 
@@ -800,6 +913,25 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         }
         OutAFunctionDeclaration(node);
     }
+    public virtual void InAPortDeclaration(APortDeclaration node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPortDeclaration(APortDeclaration node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPortDeclaration(APortDeclaration node)
+    {
+        InAPortDeclaration(node);
+        if(node.GetDeclaration() != null)
+        {
+            node.GetDeclaration().Apply(this);
+        }
+        OutAPortDeclaration(node);
+    }
     public virtual void InAFunctionDefinition(AFunctionDefinition node)
     {
         DefaultIn(node);
@@ -844,6 +976,10 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         {
             node.GetName().Apply(this);
         }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
         if(node.GetType() != null)
         {
             node.GetType().Apply(this);
@@ -867,6 +1003,10 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         {
             node.GetName().Apply(this);
         }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
         if(node.GetTypeQualifier() != null)
         {
             node.GetTypeQualifier().Apply(this);
@@ -876,6 +1016,29 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
             node.GetTypeSpecifier().Apply(this);
         }
         OutAVariableDefinition(node);
+    }
+    public virtual void InAPortDefinition(APortDefinition node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPortDefinition(APortDefinition node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPortDefinition(APortDefinition node)
+    {
+        InAPortDefinition(node);
+        if(node.GetName() != null)
+        {
+            node.GetName().Apply(this);
+        }
+        if(node.GetTypeSpecifier() != null)
+        {
+            node.GetTypeSpecifier().Apply(this);
+        }
+        OutAPortDefinition(node);
     }
     public virtual void InAConstTypeQualifier(AConstTypeQualifier node)
     {
@@ -1118,6 +1281,29 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
             }
         }
         OutAFormalsAndBody(node);
+    }
+    public virtual void InAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIntegerConstantExpression(AIntegerConstantExpression node)
+    {
+        InAIntegerConstantExpression(node);
+        if(node.GetIntegerLiteral() != null)
+        {
+            node.GetIntegerLiteral().Apply(this);
+        }
+        if(node.GetSign() != null)
+        {
+            node.GetSign().Apply(this);
+        }
+        OutAIntegerConstantExpression(node);
     }
 }
 } // namespace VXC.analysis

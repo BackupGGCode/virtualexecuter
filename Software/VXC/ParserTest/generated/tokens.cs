@@ -309,14 +309,14 @@ public sealed class TReturn : Token
     }
 }
 
-public sealed class TIdentifier : Token
+public sealed class TPort : Token
 {
-    public TIdentifier(string text)
+    public TPort(string text)
     {
         Text = text;
     }
 
-    public TIdentifier(string text, int line, int pos)
+    public TPort(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -325,12 +325,12 @@ public sealed class TIdentifier : Token
 
     public override Object Clone()
     {
-      return new TIdentifier(Text, Line, Pos);
+      return new TPort(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTIdentifier(this);
+        ((Analysis) sw).CaseTPort(this);
     }
 }
 
@@ -531,6 +531,131 @@ public sealed class TComma : Token
     public override void Apply(Switch sw)
     {
         ((Analysis) sw).CaseTComma(this);
+    }
+}
+
+public sealed class TMinus : Token
+{
+    public TMinus(string text)
+    {
+        Text = text;
+    }
+
+    public TMinus(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TMinus(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTMinus(this);
+    }
+}
+
+public sealed class TAt : Token
+{
+    public TAt(string text)
+    {
+        Text = text;
+    }
+
+    public TAt(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TAt(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTAt(this);
+    }
+}
+
+public sealed class TIntegerLiteral : Token
+{
+    public TIntegerLiteral(string text)
+    {
+        Text = text;
+    }
+
+    public TIntegerLiteral(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TIntegerLiteral(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTIntegerLiteral(this);
+    }
+}
+
+public sealed class TIdentifier : Token
+{
+    public TIdentifier(string text)
+    {
+        Text = text;
+    }
+
+    public TIdentifier(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TIdentifier(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTIdentifier(this);
+    }
+}
+
+public sealed class TAssign : Token
+{
+    public TAssign(string text)
+    {
+        Text = text;
+    }
+
+    public TAssign(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TAssign(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTAssign(this);
     }
 }
 

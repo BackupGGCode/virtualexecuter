@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using VXC.lexer;
-using VXC.parser;
 using VXC.node;
-using System.IO;
+using VXC.parser;
 
 namespace ParserTest
 {
