@@ -13,11 +13,9 @@
 stack: single 100
 
 .const
-MICRO: double 1000 export
 KILO: double 1000
-TON: import 
 
-.gdata
+.data
 i: single
 a: single 10
 aa: single 10
@@ -26,20 +24,10 @@ ga: QUaD
 ea: single 2
 
 .code
-!Start:
-&counter: single
-Start_Init:
-	loadls counter 0
-Start_DoTheLoop:
-	pushls counter
-	
-	pushls counter
-	pushgs i
-	subd
-	jmpnz Start_DoTheLoop
+start:
 	loads 100 aa
 	pushcs 100
 	pushcs 10
 	adds
-Bla:
+bla:
 	callc start

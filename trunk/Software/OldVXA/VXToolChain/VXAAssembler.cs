@@ -9,29 +9,32 @@ namespace VXToolChain
 	{
 		public static string BuildDate = "Feb 5. 2008";
 		public static string AssemblerVersion = "1.0.0";
+		public const int HighestCoreVersion = 1;
+
 
 		public static void Run(Dictionary<string, List<string>> options)
 		{
-			if (options.ContainsKey("f") == false)
+			int targetCoreVersion = HighestCoreVersion;
+
+			if (options.ContainsKey("s") == false)
 			{
-				throw new Exception("No input file specified");
+				throw new Exception("No source file specified");
 			}
 
-			if (options["f"].Count == 0)
+			if (options.ContainsKey("v"))
 			{
-				throw new Exception("No input file specified");
-			}
-			if (options["f"].Count > 1)
-			{
-				throw new Exception("Only one input file is accepted");
+				if (int.TryParse(options["v"][0], out targetCoreVersion) == false)
+				{
+					throw new Exception("Invalid target core version");
+				}
 			}
 
-			string fullFileName = options["f"][0];
+			string fullFileName = options["s"][0];
 			string fileNameWithoutExtension = GetPathAndFilenameWithoutExtension(fullFileName);
 
 			Console.WriteLine("Running pre processor...");
 			FileStream sourceFile = File.OpenRead(fullFileName);
-			MemoryStream preProcessed = new MemoryStream();//VXAPreprocessor.Run(sourceFile);
+			MemoryStream preProcessed = VXAPreprocessor.Run(sourceFile);
 			sourceFile.Close();
 			preProcessed.Seek(0, SeekOrigin.Begin);
 
@@ -48,7 +51,7 @@ namespace VXToolChain
 
 			Console.WriteLine("Mapping labels...");
 			VXAProgram program = FindAllLabels(preProcessed);
-
+			
 
 			#region Generate map file
 			if (options.ContainsKey("m"))
@@ -93,6 +96,7 @@ namespace VXToolChain
 			exeFile.WriteByte((byte)'E');
 			exeFile.WriteByte((byte)'X');
 			exeFile.WriteByte((byte)'E');
+			exeFile.WriteByte((byte)targetCoreVersion);		// Core version
 			exeFile.WriteByte((byte)(codeSize >> 8));			// Code size
 			exeFile.WriteByte((byte)(codeSize & 0xff));
 			exeFile.WriteByte((byte)(constSize >> 8));		// Const size
