@@ -28,6 +28,8 @@ namespace VXToolChain
 
 		public void GenerateCode(Stream preprocessedFile, Part part)
 		{
+			part.ResetSections();
+
 			StreamReader reader = new StreamReader(preprocessedFile);
 			string line;
 			while ((line = reader.ReadLine()) != null)

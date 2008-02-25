@@ -8,6 +8,9 @@ namespace VXToolChain
 {
 	class Assembler
 	{
+		public static string Version = "1.1";
+		public static string BuildDate = "Feb. 25. 2008";
+		public static string Author = "Claus Andersen";
 		public Part Assemble(string filename)
 		{
 			Preprocessor preprocessor = new Preprocessor();
