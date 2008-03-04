@@ -21,12 +21,12 @@ TON: import
 i: single
 a: single 10
 aa: single 10
-sa: double 
-ga: QUaD 
+sa: double
+ga: quad
 ea: single 2
 
 .code
-!Start:
+!Start: void, void
 &counter: single
 Start_Init:
 	loadls counter 0
@@ -43,3 +43,5 @@ Start_DoTheLoop:
 	adds
 Bla:
 	callc start
+	
+!Delay: void, udouble 

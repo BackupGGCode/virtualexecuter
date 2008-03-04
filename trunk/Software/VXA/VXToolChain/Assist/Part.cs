@@ -62,10 +62,16 @@ namespace VXToolChain.Assist
 
 			currentSection.Labels.Add(label);
 		}
-		
-		public void AddInstruction(Instruction instruction)
+
+		public void AddCode(byte[] data)
 		{
-		
+			foreach (Section section in sections)
+			{
+				if (section.Name == "code")
+				{
+					section.Data.AddRange(data);
+				}
+			}
 		}
 
 		public void Save(string filename)

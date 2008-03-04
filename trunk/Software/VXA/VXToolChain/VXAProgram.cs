@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using VXToolChain.Assist;
 
 namespace VXToolChain
 {
@@ -14,7 +15,7 @@ namespace VXToolChain
 			set { _sections = value; }
 		}
 
-		private VXAInstructionSet instructionSet = new VXAInstructionSet();
+		private InstructionSet instructionSet = new InstructionSet();
 
 
 		public void AddNewLabel(string sectionName, string labelName, params string[] arguments)

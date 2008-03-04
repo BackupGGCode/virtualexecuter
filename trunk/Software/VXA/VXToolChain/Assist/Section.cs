@@ -27,6 +27,13 @@ namespace VXToolChain.Assist
 			set { functions = value; }
 		}
 
+		private List<byte> data = new List<byte>();
+		public List<byte> Data
+		{
+			get { return data; }
+			set { data = value; }
+		}
+
 		public Section(string text)
 		{
 			if (text.Contains(".") == false)
@@ -47,6 +54,11 @@ namespace VXToolChain.Assist
 				line = line.Substring(i + 1);
 			}
 			name = line;
+		}
+
+		public void AddData(byte[] dataBytes)
+		{
+			data.AddRange(dataBytes);
 		}
 	}
 }

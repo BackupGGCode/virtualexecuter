@@ -1,0 +1,123 @@
+(ExpressProject "VXTestBench"
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (NoModify)
+    (File ".\vxtestbench.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (ANNOTATE_Scope "0")
+    (ANNOTATE_Mode "1")
+    (ANNOTATE_Action "1")
+    (ANNOTATE_Reset_References_to_1 "FALSE")
+    (ANNOTATE_No_Page_Number_Change "FALSE")
+    (ANNOTATE_Property_Combine "{Value}{Source Package}")
+    (Netlist_TAB "5")
+    (LAYOUT_Netlist_File
+       "F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\VXTESTBENCH.MNL")
+    (LAYOUT_PCB_Footprint "{PCB Footprint}")
+    (FALSE)
+    (LAYOUT_Units "0"))
+  (Folder "Outputs"
+    (File ".\vxtestbench.mnl"
+      (Type "LAYOUT Netlist File")))
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (AT45x
+      (FullPartName "AT45x.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    (LED
+      (FullPartName "LED.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (BUTTON_SMALL
+      (FullPartName "BUTTON_SMALL.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    (CN-USB
+      (FullPartName "CN-USB.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    ("CONN JACK"
+      (FullPartName "CONN JACK.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON10AP
+      (FullPartName "CON10AP.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CRYSTAL
+      (FullPartName "CRYSTAL.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    ("Capacitor - SMD - 0805"
+      (FullPartName "Capacitor - SMD - 0805.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    ("CAPACITOR POL"
+      (FullPartName "CAPACITOR POL.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (1N4007
+      (FullPartName "1N4007.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (78xx
+      (FullPartName "78xx.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    (CON9
+      (FullPartName "CON9.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (25LC640
+      (FullPartName "25LC640.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    (24cxxx
+      (FullPartName "24cxxx.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    (CON30
+      (FullPartName "CON30.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (FT245R
+      (FullPartName "FT245R.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\MISC.OLB")
+      (DeviceIndex "0"))
+    (ATmega128
+      (FullPartName "ATmega128.Normal")
+      (LibraryName "F:\PROJECTS\ORCAD LIBRARIES\ATMEL.OLB")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources"
+         "f:\Projects\Virtual eXecuter\Hardware\VXTestBench\vxtestbench.dsn")
+      (Path "Design Resources"
+         "f:\Projects\Virtual eXecuter\Hardware\VXTestBench\vxtestbench.dsn"
+         "SCHEMATIC1")
+      (Path "Outputs")
+      (Select "Design Resources"
+         "f:\Projects\Virtual eXecuter\Hardware\VXTestBench\vxtestbench.dsn"
+         "SCHEMATIC1" "PAGE1"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 0 1 -1 -1 -4 -30 0 200 0 571"))
+      (Tab 0))
+    (Doc
+      (Type "COrSchematicDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -4 -30 44 1126 58 663")
+        (Scroll "0 0")
+        (Zoom "71")
+        (Occurrence "/"))
+      (Path "F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\VXTESTBENCH.DSN")
+      (Schematic "SCHEMATIC1")
+      (Page "PAGE1"))))
