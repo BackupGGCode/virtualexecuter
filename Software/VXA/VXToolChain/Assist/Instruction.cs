@@ -38,7 +38,7 @@ namespace VXToolChain.Assist
 			_mnemonic = mnemonic;
 			_opcode = (byte)opcode;
 			_constants.AddRange(constants);
-			_size = 0;
+			_size = 1;
 			foreach (ConstantType c in _constants)
 			{
 				if (c == ConstantType.Single)
@@ -59,19 +59,19 @@ namespace VXToolChain.Assist
 				}
 				else
 				{
-					throw new Exception("ConstantType '" + c.ToString() + "' not implemented in VXAInstruction");
+					throw new Exception("ConstantType '" + c.ToString() + "' not implemented in the VX machine");
 				}
 			}
 		}
 
-		public byte[] GetData(string[] parts, VXAProgram program)
+		public byte[] GetData(string[] parts, Part part)
 		{
 			long l;
 			for (int j = 1; j < parts.Length; j++)
 			{
 				if (long.TryParse(parts[j], out l) == false)
 				{
-					parts[j] = program.GetLabelAddress(parts[j]).ToString();
+					parts[j] = part.GetLabelAddress(parts[j]).ToString();
 				}
 			}
 
@@ -151,11 +151,13 @@ namespace VXToolChain.Assist
 			return data.ToArray();
 		}
 
+/*
 		public static Instruction Parse(string text)
 		{
 			Instruction instruction = new Instruction("", 1);
 
 			return instruction;
 		}
+ * */
 	}
 }

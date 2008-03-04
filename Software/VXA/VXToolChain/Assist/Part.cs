@@ -37,14 +37,14 @@ namespace VXToolChain.Assist
 			currentSection = section;
 		}
 
-		public string GetNameOfCurrentSection()
+		public Section GetCurrentSection()
 		{
 			if (currentSection == null)
 			{
 				throw new Exception("No section defined yet");
 			}
 
-			return currentSection.Name;
+			return currentSection;
 		}
 
 		public void ResetSections()
@@ -61,6 +61,7 @@ namespace VXToolChain.Assist
 			}
 
 			currentSection.Labels.Add(label);
+			currentSection.AddData(new byte[label.Size]);
 		}
 
 		public void AddCode(byte[] data)
@@ -74,14 +75,41 @@ namespace VXToolChain.Assist
 			}
 		}
 
+		public uint GetLabelAddress(string labelName)
+		{
+			foreach (Section section in sections)
+			{
+				foreach (Label label in section.Labels)
+				{
+					if (label.Name == labelName)
+					{
+						return label.Address;
+					}
+				}
+			}
+
+			throw new Exception("Label '" + labelName + "' not found");
+		}
+
 		public void Save(string filename)
 		{
 			foreach (Section section in sections)
 			{
-				Console.WriteLine(section.Name);
+				Console.WriteLine(section.Name + " - " + section.Data.Count);
 				foreach (Label label in section.Labels)
 				{
-					Console.WriteLine("  " + label.Name);
+					Console.WriteLine("  " + label.Name + "-" + label.Address);
+				}
+			}
+
+			foreach (Section section in sections)
+			{
+				if (section.Name == "code")
+				{
+					foreach (byte b in section.Data)
+					{
+						Console.WriteLine("--" + b.ToString());
+					}
 				}
 			}
 		}

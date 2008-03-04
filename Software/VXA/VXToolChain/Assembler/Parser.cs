@@ -4,7 +4,7 @@ using System.Text;
 using VXToolChain.Assist;
 using System.IO;
 
-namespace VXToolChain
+namespace VXToolChain.Assembler
 {
 	class Parser
 	{
@@ -14,6 +14,7 @@ namespace VXToolChain
 		{
 			StreamReader reader = new StreamReader(preprocessedFile);
 			string line;
+
 			while ((line = reader.ReadLine()) != null)
 			{
 				if (line.Length > 0)
@@ -24,9 +25,9 @@ namespace VXToolChain
 					}
 					else if (line.Contains(":"))
 					{
-						part.AddLabel(new Label(line));
+						part.AddLabel(new Label(line, part));
 					}
-					else if (part.GetNameOfCurrentSection() == "code")
+					else if (part.GetCurrentSection().Name == "code")
 					{
 						part.AddCode(new byte[instructionSet.ParseAndGetSize(line)]);
 					}
@@ -40,13 +41,14 @@ namespace VXToolChain
 
 			StreamReader reader = new StreamReader(preprocessedFile);
 			string line;
+
 			while ((line = reader.ReadLine()) != null)
 			{
 				if (line.Contains("."))
 				{
 					part.SetCurrentSection(new Section(line));
 				}
-				else if (part.GetNameOfCurrentSection() == "code")
+				else if (part.GetCurrentSection().Name == "code")
 				{
 					part.AddCode(instructionSet.ParseAndCreateData(line, null));
 				}

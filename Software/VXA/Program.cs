@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using VXToolChain;
+using VXToolChain.Assembler;
 using VXToolChain.Assist;
 using Coma;
 

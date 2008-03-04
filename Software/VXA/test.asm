@@ -9,8 +9,13 @@
 ; 5. Replace label names with the corresponding addresses
 ; 6. 
 
+
+
+; [&/!]name: [<type>] [<count>] [import/export]
+
+
 .stack
-stack: single 100
+stack: single[100]
 
 .const
 MICRO: double 1000 export
@@ -19,29 +24,26 @@ TON: import
 
 .gdata
 i: single
-a: single 10
-aa: single 10
+a: single[10]
+aa: single[10]
 sa: double
 ga: quad
-ea: single 2
+ea: single[2]
 
 .code
 !Start: void, void
-&counter: single
+;&counter: single
 Start_Init:
 	loadls counter 0
 Start_DoTheLoop:
 	pushls counter
-	
-	pushls counter
 	pushgs i
 	subd
 	jmpnz Start_DoTheLoop
-	loads 100 aa
-	pushcs 100
-	pushcs 10
+	loadls counter 100
+	pushs 100
+	pushs 10
 	adds
+	popls counter
 Bla:
-	callc start
-	
-!Delay: void, udouble 
+	call Start_Init

@@ -36,19 +36,15 @@
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VXToolChain\Assembler.cs" />
+    <Compile Include="VXToolChain\Assembler\Assembler.cs" />
     <Compile Include="VXToolChain\Assist\Function.cs" />
     <Compile Include="VXToolChain\Assist\Instruction.cs" />
     <Compile Include="VXToolChain\Assist\InstructionSet.cs" />
     <Compile Include="VXToolChain\Assist\Label.cs" />
     <Compile Include="VXToolChain\Assist\Part.cs" />
     <Compile Include="VXToolChain\Assist\Section.cs" />
-    <Compile Include="VXToolChain\Parser.cs" />
-    <Compile Include="VXToolChain\Preprocessor.cs" />
-    <Compile Include="VXToolChain\VXAAssembler.cs" />
-    <Compile Include="VXToolChain\VXALabel.cs" />
-    <Compile Include="VXToolChain\VXAProgram.cs" />
-    <Compile Include="VXToolChain\VXASection.cs" />
+    <Compile Include="VXToolChain\Assembler\Parser.cs" />
+    <Compile Include="VXToolChain\Assembler\Preprocessor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,6 +7,7 @@ namespace VXToolChain.Assist
 	class Label
 	{
 		public enum LabelType { None, Single, Double, Quad, Float };
+		static private Dictionary<LabelType, int> SizeOfLabelType = new Dictionary<LabelType, int>();
 
 		private string name;
 		public string Name
@@ -78,38 +79,110 @@ namespace VXToolChain.Assist
 			set { type = value; }
 		}
 
-		public Label(string text)
+		static Label()
 		{
+			SizeOfLabelType.Add(LabelType.None, 0);
+			SizeOfLabelType.Add(LabelType.Single, 1);
+			SizeOfLabelType.Add(LabelType.Double, 2);
+			SizeOfLabelType.Add(LabelType.Quad, 4);
+			SizeOfLabelType.Add(LabelType.Float, 4);
+		}
+
+
+		public Label(string text, Part part)
+		{
+			string sectionName = part.GetCurrentSection().Name;
+
 			if (text.Contains(":") == false)
 			{
 				throw new Exception("This is not a valid label '" + text + "'");
 			}
 
 			text = text.Trim();
-			string[] line = text.Split(new char[] { ':', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = text.Split(new char[] { ':', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-			name = line[0].Trim('!', '&');
+			name = lines[0].Trim('!', '&');
 
 			if (text.StartsWith("&"))
 			{
 				IsLocal = true;
 			}
-			if (text.StartsWith("!"))
+			else if (text.StartsWith("!"))
 			{
 				isFunction = true;
 			}
+
 			if (text.EndsWith("import"))
 			{
 				isImported = true;
 			}
-			if (text.EndsWith("export"))
+			else if (text.EndsWith("export"))
 			{
 				isExported = true;
 			}
 
-			if (line.Length == 2)
+			if (text.Contains(" single"))
 			{
-				line = null;
+				type = LabelType.Single;
+			}
+			else if (text.Contains(" double"))
+			{
+				type = LabelType.Double;
+			}
+			else if (text.Contains(" quad"))
+			{
+				type = LabelType.Quad;
+			}
+			else if (text.Contains(" float"))
+			{
+				type = LabelType.Float;
+			}
+
+			size = SizeOfLabelType[type];
+
+			int i = text.IndexOf('[');
+			if (i > 0)
+			{
+				if (text.IndexOf(']') < i)
+				{
+					throw new Exception("Missing ']' in type declaration");
+				}
+				size *= int.Parse(text.Substring(i).Trim('[', ']'));
+			}
+
+			address = (UInt32)part.GetCurrentSection().Data.Count;
+
+			switch (sectionName)
+			{
+				case "code":
+					if (size > 0 && isLocal == false)
+					{
+						throw new Exception("Only location labels are valid in code section (label '" + name + "')");
+					}
+					break;
+				case "const":
+					if (isLocal)
+					{
+						throw new Exception("Can't declare a local label in constant section (label '" + name + "')");
+					}
+					break;
+				case "gdata":
+					if (isLocal)
+					{
+						throw new Exception("Can't declare a local label in global data section (label '" + name + "')");
+					}
+					break;
+				case "stack":
+					if (isLocal)
+					{
+						throw new Exception("Can't declare a local label in stack section (label '" + name + "')");
+					}
+					break;
+			}
+
+			if (lines.Length == 2)
+			{
+				lines = null;
 			}
 		}
 	}
