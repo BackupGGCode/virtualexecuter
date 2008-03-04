@@ -21,10 +21,10 @@ namespace VXToolChain
 					line = line.Remove(line.IndexOf(";"));
 				}
 
-				writer.WriteLine(line);
+				writer.WriteLine(line.Trim());
 			}
 
-writer.Flush();
+			writer.Flush();
 
 			file.Seek(0, SeekOrigin.Begin);
 			output.Seek(0, SeekOrigin.Begin);

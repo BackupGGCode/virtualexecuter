@@ -8,20 +8,28 @@ namespace VXToolChain
 {
 	class Parser
 	{
+		InstructionSet instructionSet = new InstructionSet();
+
 		public void FindAllLabels(Stream preprocessedFile, Part part)
 		{
 			StreamReader reader = new StreamReader(preprocessedFile);
 			string line;
 			while ((line = reader.ReadLine()) != null)
 			{
-				if (line.Contains("."))
+				if (line.Length > 0)
 				{
-					part.SetCurrentSection(new Section(line));
-				}
-
-				if (line.Contains(":"))
-				{
-					part.AddLabel(new Label(line));
+					if (line.Contains("."))
+					{
+						part.SetCurrentSection(new Section(line));
+					}
+					else if (line.Contains(":"))
+					{
+						part.AddLabel(new Label(line));
+					}
+					else if (part.GetNameOfCurrentSection() == "code")
+					{
+						part.AddCode(new byte[instructionSet.ParseAndGetSize(line)]);
+					}
 				}
 			}
 		}
@@ -38,10 +46,9 @@ namespace VXToolChain
 				{
 					part.SetCurrentSection(new Section(line));
 				}
-
-				if (part.GetNameOfCurrentSection() == "code")
+				else if (part.GetNameOfCurrentSection() == "code")
 				{
-					part.AddInstruction(new Instruction(line));
+					part.AddCode(instructionSet.ParseAndCreateData(line, null));
 				}
 			}
 		}

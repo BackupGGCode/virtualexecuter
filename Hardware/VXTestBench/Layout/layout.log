@@ -1,0 +1,761 @@
+Sat Feb 23 02:40:22 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:40:22 Saved as file BACKUP1.MAX
+Sat Feb 23 02:40:22 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:40:23 UserDiv from Layout.INI for AutoECO: 60
+Sat Feb 23 02:40:23 Loaded file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:40:23 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON100T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON156T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BGA.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\CLCC.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DCON050T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DCON085T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIMM050F.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIMM050T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIN.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIP100B.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIP100T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DSUBT.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DSUBT_HD.LLB
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ECON100T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\FBUS.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ISA.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\JUMPER.LLB
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\LAYOUT.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\LCON100T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PC104.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PCI.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PCON100T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PCON156T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PGA.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PLCC.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\QUAD.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\QUADB.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\RELAY.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\RF.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SBUS.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM050F.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM050T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM100F.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM100T.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIP.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SM.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOG.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOJ.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\STIFF.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TELE.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_AXIAL.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_CAP_P.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_CYLND.llb
+Sat Feb 23 02:40:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_DIODE.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_DISC.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_RAD.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TO.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TRAINING.LLB
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\VRES.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\WCON100T.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\XT.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ZIGZAG.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SM.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\QUAD.llb
+Sat Feb 23 02:40:24 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SM.llb
+Sat Feb 23 02:40:24 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:40:26 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:26 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:27 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON156T.llb
+Sat Feb 23 02:40:28 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:40:29 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:33 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:38 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:40 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:40:41 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:41 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:42 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:40:43 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:48 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:50 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:51 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:56 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:56 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:57 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:58 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:40:59 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:40:59 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:41:02 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:41:03 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON156T.llb
+Sat Feb 23 02:41:09 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOG.llb
+Sat Feb 23 02:41:39 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:41:48 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:41:52 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:41:58 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:00 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:01 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:04 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:05 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:08 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:13 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:14 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:15 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOG.llb
+Sat Feb 23 02:42:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:20 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:20 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:22 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:23 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:42 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Sat Feb 23 02:42:43 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:43 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:42:43 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:42:43 Loaded file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:50:55 Saved as file BACKUP1.MAX
+Sat Feb 23 02:53:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:53:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:53:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:53:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:53:48 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:53:51 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:53:52 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:53:52 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON100T.llb
+Sat Feb 23 02:53:52 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON156T.llb
+Sat Feb 23 02:53:52 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BGA.llb
+Sat Feb 23 02:53:53 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON156T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BGA.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\CLCC.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DCON050T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DCON085T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIMM050F.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIMM050T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIN.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIP100B.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DIP100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DSUBT.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\DSUBT_HD.LLB
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ECON100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\FBUS.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ISA.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\JUMPER.LLB
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\LAYOUT.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\LCON100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PC104.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PCI.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PCON100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PCON156T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PGA.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\PLCC.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\QUAD.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\QUADB.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\RELAY.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\RF.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SBUS.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM050F.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM050T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM100F.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIMM100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SIP.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SM.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOG.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOJ.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\STIFF.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TELE.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_AXIAL.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_CAP_P.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_CYLND.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_DIODE.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_DISC.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TM_RAD.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TO.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\TRAINING.LLB
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\VRES.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\WCON100T.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\XT.llb
+Sat Feb 23 02:53:53 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ZIGZAG.llb
+Sat Feb 23 02:54:09 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:11 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:54:12 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:56:52 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:57:03 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:57:03 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:57:18 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:57:21 Loaded file C:\Program Files\OrCAD\Layout_Plus\library\padstack.llb
+Sat Feb 23 02:57:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\library\padstack.llb
+Sat Feb 23 02:58:23 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:58:23 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:58:32 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:58:32 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:58:32 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:58:32 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:58:33 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:58:34 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Sat Feb 23 02:58:35 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Sat Feb 23 02:59:23 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:59:51 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 02:59:57 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:00:02 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:00:06 Saved as file BACKUP1.MAX
+Sat Feb 23 03:00:06 Routed 8 connections in 0 seconds.
+Sat Feb 23 03:00:06 Total is now 8 out of 145 (5%).
+Sat Feb 23 03:00:06 Saved as file SWEEP1.MAX
+Sat Feb 23 03:00:19 Saved as file BACKUP1.MAX
+Sat Feb 23 03:00:19 Routed 63 connections in 13 seconds.
+Sat Feb 23 03:00:19 Total is now 71 out of 145 (48%).
+Sat Feb 23 03:00:19 Saved as file SWEEP2.MAX
+Sat Feb 23 03:00:35 Routed 1 connections in 15 seconds.
+Sat Feb 23 03:00:35 Total is now 72 out of 145 (49%).
+Sat Feb 23 03:00:35 Saved as file SWEEP3.MAX
+Sat Feb 23 03:04:55 Saved as file BACKUP1.MAX
+Sat Feb 23 03:15:16 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:15:25 Saved as file BACKUP1.MAX
+Sat Feb 23 03:15:43 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:16:47 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:17:16 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:17:19 Saved as file BACKUP1.MAX
+Sat Feb 23 03:17:19 Saved as file BACKUP1.MAX
+Sat Feb 23 03:17:19 Saved as file BACKUP1.MAX
+Sat Feb 23 03:17:19 Routed 11 connections in 0 seconds.
+Sat Feb 23 03:17:19 Total is now 11 out of 145 (7%).
+Sat Feb 23 03:17:19 Saved as file SWEEP1.MAX
+Sat Feb 23 03:17:28 Saved as file BACKUP1.MAX
+Sat Feb 23 03:17:29 Saved as file BACKUP1.MAX
+Sat Feb 23 03:17:29 Saved as file BACKUP1.MAX
+Sat Feb 23 03:17:29 Routed 83 connections in 10 seconds.
+Sat Feb 23 03:17:29 Total is now 70 out of 145 (48%).
+Sat Feb 23 03:17:29 Saved as file SWEEP2.MAX
+Sat Feb 23 03:17:42 Routed 1 connections in 12 seconds.
+Sat Feb 23 03:17:42 Total is now 71 out of 145 (48%).
+Sat Feb 23 03:17:42 Saved as file SWEEP3.MAX
+Sat Feb 23 03:18:39 Routed 21 connections in 31 seconds.
+Sat Feb 23 03:18:39 Total is now 72 out of 145 (49%).
+Sat Feb 23 03:18:39 Saved as file SWEEP4.MAX
+Sat Feb 23 03:19:19 Routed 28 connections in 40 seconds.
+Sat Feb 23 03:19:19 Total is now 73 out of 145 (50%).
+Sat Feb 23 03:19:19 Saved as file SWEEP5.MAX
+Sat Feb 23 03:21:00 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:21:05 Saved as file BACKUP1.MAX
+Sat Feb 23 03:21:05 Saved as file BACKUP1.MAX
+Sat Feb 23 03:21:05 Routed 12 connections in 0 seconds.
+Sat Feb 23 03:21:05 Total is now 12 out of 145 (8%).
+Sat Feb 23 03:21:05 Saved as file SWEEP1.MAX
+Sat Feb 23 03:21:10 Saved as file BACKUP1.MAX
+Sat Feb 23 03:21:11 Saved as file BACKUP1.MAX
+Sat Feb 23 03:21:11 Routed 122 connections in 5 seconds.
+Sat Feb 23 03:21:11 Total is now 119 out of 145 (82%).
+Sat Feb 23 03:21:11 Saved as file SWEEP2.MAX
+Sat Feb 23 03:21:15 Routed 7 connections in 4 seconds.
+Sat Feb 23 03:21:15 Total is now 126 out of 145 (86%).
+Sat Feb 23 03:21:15 Saved as file SWEEP3.MAX
+Sat Feb 23 03:21:20 Routed 3 connections in 4 seconds.
+Sat Feb 23 03:21:20 Total is now 126 out of 145 (86%).
+Sat Feb 23 03:21:20 Saved as file SWEEP4.MAX
+Sat Feb 23 03:21:24 Routed 6 connections in 4 seconds.
+Sat Feb 23 03:21:24 Total is now 127 out of 145 (87%).
+Sat Feb 23 03:21:24 Saved as file SWEEP5.MAX
+Sat Feb 23 03:22:06 Saved as file BACKUP1.MAX
+Sat Feb 23 03:22:06 Saved as file BACKUP1.MAX
+Sat Feb 23 03:22:06 Routed 13 connections in 0 seconds.
+Sat Feb 23 03:22:06 Total is now 13 out of 145 (8%).
+Sat Feb 23 03:22:06 Saved as file SWEEP1.MAX
+Sat Feb 23 03:22:12 Saved as file BACKUP1.MAX
+Sat Feb 23 03:22:14 Saved as file BACKUP1.MAX
+Sat Feb 23 03:22:14 Routed 112 connections in 7 seconds.
+Sat Feb 23 03:22:14 Total is now 111 out of 145 (76%).
+Sat Feb 23 03:22:14 Saved as file SWEEP2.MAX
+Sat Feb 23 03:22:23 Routed 3 connections in 9 seconds.
+Sat Feb 23 03:22:23 Total is now 114 out of 145 (78%).
+Sat Feb 23 03:22:23 Saved as file SWEEP3.MAX
+Sat Feb 23 03:23:11 Routed 9 connections in 48 seconds.
+Sat Feb 23 03:23:12 Total is now 116 out of 145 (80%).
+Sat Feb 23 03:23:12 Saved as file SWEEP4.MAX
+Sat Feb 23 03:24:01 Saved as file BACKUP1.MAX
+Sat Feb 23 03:24:01 Saved as file BACKUP1.MAX
+Sat Feb 23 03:24:01 Saved as file BACKUP1.MAX
+Sat Feb 23 03:24:01 Routed 11 connections in 0 seconds.
+Sat Feb 23 03:24:01 Total is now 11 out of 135 (8%).
+Sat Feb 23 03:24:01 Saved as file SWEEP1.MAX
+Sat Feb 23 03:24:05 Saved as file BACKUP1.MAX
+Sat Feb 23 03:24:07 Saved as file BACKUP1.MAX
+Sat Feb 23 03:24:07 Saved as file BACKUP1.MAX
+Sat Feb 23 03:24:07 Routed 102 connections in 5 seconds.
+Sat Feb 23 03:24:07 Total is now 100 out of 135 (74%).
+Sat Feb 23 03:24:07 Saved as file SWEEP2.MAX
+Sat Feb 23 03:24:13 Routed 7 connections in 6 seconds.
+Sat Feb 23 03:24:13 Total is now 107 out of 135 (79%).
+Sat Feb 23 03:24:13 Saved as file SWEEP3.MAX
+Sat Feb 23 03:24:40 Routed 8 connections in 26 seconds.
+Sat Feb 23 03:24:40 Total is now 108 out of 135 (80%).
+Sat Feb 23 03:24:40 Saved as file SWEEP4.MAX
+Sat Feb 23 03:25:35 Routed 9 connections in 55 seconds.
+Sat Feb 23 03:25:35 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:25:35 Saved as file SWEEP5.MAX
+Sat Feb 23 03:26:55 Saved as file BACKUP1.MAX
+Sat Feb 23 03:29:51 Saved as file BACKUP1.MAX
+Sat Feb 23 03:29:51 Routed 13 connections in 0 seconds.
+Sat Feb 23 03:29:51 Total is now 13 out of 135 (9%).
+Sat Feb 23 03:29:51 Saved as file SWEEP1.MAX
+Sat Feb 23 03:29:55 Saved as file BACKUP1.MAX
+Sat Feb 23 03:29:55 Routed 93 connections in 4 seconds.
+Sat Feb 23 03:29:55 Total is now 106 out of 135 (78%).
+Sat Feb 23 03:29:55 Saved as file SWEEP2.MAX
+Sat Feb 23 03:30:02 Routed 4 connections in 7 seconds.
+Sat Feb 23 03:30:02 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:30:02 Saved as file SWEEP3.MAX
+Sat Feb 23 03:30:31 Routed 9 connections in 28 seconds.
+Sat Feb 23 03:30:31 Total is now 112 out of 135 (82%).
+Sat Feb 23 03:30:31 Saved as file SWEEP4.MAX
+Sat Feb 23 03:31:13 Routed 7 connections in 41 seconds.
+Sat Feb 23 03:31:13 Total is now 113 out of 135 (83%).
+Sat Feb 23 03:31:13 Saved as file SWEEP5.MAX
+Sat Feb 23 03:37:25 Saved as file BACKUP1.MAX
+Sat Feb 23 03:38:29 Saved as file BACKUP1.MAX
+Sat Feb 23 03:38:29 Routed 13 connections in 0 seconds.
+Sat Feb 23 03:38:29 Total is now 13 out of 135 (9%).
+Sat Feb 23 03:38:30 Saved as file SWEEP1.MAX
+Sat Feb 23 03:38:34 Saved as file BACKUP1.MAX
+Sat Feb 23 03:38:34 Routed 90 connections in 4 seconds.
+Sat Feb 23 03:38:34 Total is now 103 out of 135 (76%).
+Sat Feb 23 03:38:34 Saved as file SWEEP2.MAX
+Sat Feb 23 03:38:41 Routed 5 connections in 7 seconds.
+Sat Feb 23 03:38:41 Total is now 108 out of 135 (80%).
+Sat Feb 23 03:38:41 Saved as file SWEEP3.MAX
+Sat Feb 23 03:39:11 Routed 7 connections in 29 seconds.
+Sat Feb 23 03:39:11 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:39:11 Saved as file SWEEP4.MAX
+Sat Feb 23 03:39:49 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 03:39:57 Saved as file BACKUP1.MAX
+Sat Feb 23 03:39:57 Saved as file BACKUP1.MAX
+Sat Feb 23 03:39:57 Saved as file BACKUP1.MAX
+Sat Feb 23 03:39:57 Routed 13 connections in 0 seconds.
+Sat Feb 23 03:39:57 Total is now 13 out of 135 (9%).
+Sat Feb 23 03:39:57 Saved as file SWEEP1.MAX
+Sat Feb 23 03:40:00 Saved as file BACKUP1.MAX
+Sat Feb 23 03:40:02 Saved as file BACKUP1.MAX
+Sat Feb 23 03:40:02 Saved as file BACKUP1.MAX
+Sat Feb 23 03:40:02 Routed 106 connections in 4 seconds.
+Sat Feb 23 03:40:02 Total is now 107 out of 135 (79%).
+Sat Feb 23 03:40:02 Saved as file SWEEP2.MAX
+Sat Feb 23 03:40:09 Routed 3 connections in 7 seconds.
+Sat Feb 23 03:40:09 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:40:09 Saved as file SWEEP3.MAX
+Sat Feb 23 03:40:35 Routed 8 connections in 25 seconds.
+Sat Feb 23 03:40:35 Total is now 111 out of 135 (82%).
+Sat Feb 23 03:40:35 Saved as file SWEEP4.MAX
+Sat Feb 23 03:41:15 Routed 6 connections in 40 seconds.
+Sat Feb 23 03:41:15 Total is now 111 out of 135 (82%).
+Sat Feb 23 03:41:15 Saved as file SWEEP5.MAX
+Sat Feb 23 03:42:15 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:15 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:15 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:15 Routed 13 connections in 0 seconds.
+Sat Feb 23 03:42:15 Total is now 13 out of 135 (9%).
+Sat Feb 23 03:42:15 Saved as file SWEEP1.MAX
+Sat Feb 23 03:42:18 Routed 32 connections in 2 seconds.
+Sat Feb 23 03:42:18 Total is now 45 out of 135 (33%).
+Sat Feb 23 03:42:36 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:36 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:36 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:36 Routed 13 connections in 0 seconds.
+Sat Feb 23 03:42:36 Total is now 13 out of 135 (9%).
+Sat Feb 23 03:42:36 Saved as file SWEEP1.MAX
+Sat Feb 23 03:42:41 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:43 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:43 Saved as file BACKUP1.MAX
+Sat Feb 23 03:42:43 Routed 99 connections in 7 seconds.
+Sat Feb 23 03:42:43 Total is now 101 out of 135 (74%).
+Sat Feb 23 03:42:43 Saved as file SWEEP2.MAX
+Sat Feb 23 03:42:55 Routed 4 connections in 11 seconds.
+Sat Feb 23 03:42:55 Total is now 105 out of 135 (77%).
+Sat Feb 23 03:42:55 Saved as file SWEEP3.MAX
+Sat Feb 23 03:43:41 Routed 12 connections in 46 seconds.
+Sat Feb 23 03:43:41 Total is now 108 out of 135 (80%).
+Sat Feb 23 03:43:41 Saved as file SWEEP4.MAX
+Sat Feb 23 03:44:51 Saved as file BACKUP1.MAX
+Sat Feb 23 03:44:51 Saved as file BACKUP1.MAX
+Sat Feb 23 03:44:51 Saved as file BACKUP1.MAX
+Sat Feb 23 03:44:51 Routed 11 connections in 0 seconds.
+Sat Feb 23 03:44:51 Total is now 11 out of 135 (8%).
+Sat Feb 23 03:44:51 Saved as file SWEEP1.MAX
+Sat Feb 23 03:44:55 Saved as file BACKUP1.MAX
+Sat Feb 23 03:44:56 Saved as file BACKUP1.MAX
+Sat Feb 23 03:44:56 Saved as file BACKUP1.MAX
+Sat Feb 23 03:44:56 Routed 107 connections in 5 seconds.
+Sat Feb 23 03:44:56 Total is now 102 out of 135 (75%).
+Sat Feb 23 03:44:56 Saved as file SWEEP2.MAX
+Sat Feb 23 03:45:07 Routed 7 connections in 10 seconds.
+Sat Feb 23 03:45:07 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:45:07 Saved as file SWEEP3.MAX
+Sat Feb 23 03:45:58 Routed 9 connections in 51 seconds.
+Sat Feb 23 03:45:58 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:45:58 Saved as file SWEEP4.MAX
+Sat Feb 23 03:46:52 Routed 8 connections in 54 seconds.
+Sat Feb 23 03:46:52 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:46:52 Saved as file SWEEP5.MAX
+Sat Feb 23 03:48:25 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:31 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:31 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:31 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:31 Routed 11 connections in 0 seconds.
+Sat Feb 23 03:49:31 Total is now 11 out of 135 (8%).
+Sat Feb 23 03:49:31 Saved as file SWEEP1.MAX
+Sat Feb 23 03:49:34 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:35 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:35 Saved as file BACKUP1.MAX
+Sat Feb 23 03:49:35 Routed 113 connections in 4 seconds.
+Sat Feb 23 03:49:35 Total is now 104 out of 135 (77%).
+Sat Feb 23 03:49:35 Saved as file SWEEP2.MAX
+Sat Feb 23 03:49:44 Routed 5 connections in 8 seconds.
+Sat Feb 23 03:49:44 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:49:44 Saved as file SWEEP3.MAX
+Sat Feb 23 03:50:19 Routed 7 connections in 35 seconds.
+Sat Feb 23 03:50:19 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:50:19 Saved as file SWEEP4.MAX
+Sat Feb 23 03:50:58 Routed 10 connections in 39 seconds.
+Sat Feb 23 03:50:58 Total is now 111 out of 135 (82%).
+Sat Feb 23 03:50:58 Saved as file SWEEP5.MAX
+Sat Feb 23 03:54:01 Saved as file BACKUP1.MAX
+Sat Feb 23 03:54:01 Saved as file BACKUP1.MAX
+Sat Feb 23 03:54:01 Saved as file BACKUP1.MAX
+Sat Feb 23 03:54:01 Routed 11 connections in 0 seconds.
+Sat Feb 23 03:54:01 Total is now 11 out of 135 (8%).
+Sat Feb 23 03:54:01 Saved as file SWEEP1.MAX
+Sat Feb 23 03:54:07 Saved as file BACKUP1.MAX
+Sat Feb 23 03:54:08 Saved as file BACKUP1.MAX
+Sat Feb 23 03:54:08 Saved as file BACKUP1.MAX
+Sat Feb 23 03:54:08 Routed 101 connections in 7 seconds.
+Sat Feb 23 03:54:08 Total is now 99 out of 135 (73%).
+Sat Feb 23 03:54:08 Saved as file SWEEP2.MAX
+Sat Feb 23 03:54:31 Routed 1 connections in 10 seconds.
+Sat Feb 23 03:54:31 Total is now 107 out of 135 (79%).
+Sat Feb 23 03:54:31 Saved as file SWEEP3.MAX
+Sat Feb 23 03:55:12 Routed 10 connections in 40 seconds.
+Sat Feb 23 03:55:12 Total is now 109 out of 135 (80%).
+Sat Feb 23 03:55:12 Saved as file SWEEP4.MAX
+Sat Feb 23 03:56:14 Routed 10 connections in 61 seconds.
+Sat Feb 23 03:56:14 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:56:14 Saved as file SWEEP5.MAX
+Sat Feb 23 03:58:17 Saved as file BACKUP1.MAX
+Sat Feb 23 03:58:17 Saved as file BACKUP1.MAX
+Sat Feb 23 03:58:17 Saved as file BACKUP1.MAX
+Sat Feb 23 03:58:17 No new connections routed.
+Sat Feb 23 03:58:17 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:58:17 Saved as file SWEEP1.MAX
+Sat Feb 23 03:58:24 Saved as file BACKUP1.MAX
+Sat Feb 23 03:58:25 Saved as file BACKUP1.MAX
+Sat Feb 23 03:58:25 Saved as file BACKUP1.MAX
+Sat Feb 23 03:58:25 Routed 3 connections in 7 seconds.
+Sat Feb 23 03:58:25 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:58:25 Saved as file SWEEP2.MAX
+Sat Feb 23 03:58:33 No new connections routed.
+Sat Feb 23 03:58:33 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:58:33 Saved as file SWEEP3.MAX
+Sat Feb 23 03:58:55 Saved as file BACKUP1.MAX
+Sat Feb 23 03:59:14 Routed 10 connections in 41 seconds.
+Sat Feb 23 03:59:14 Total is now 110 out of 135 (81%).
+Sat Feb 23 03:59:14 Saved as file SWEEP4.MAX
+Sat Feb 23 04:00:15 Routed 8 connections in 61 seconds.
+Sat Feb 23 04:00:15 Total is now 110 out of 135 (81%).
+Sat Feb 23 04:00:15 Saved as file SWEEP5.MAX
+Sat Feb 23 04:09:25 Saved as file BACKUP1.MAX
+Sat Feb 23 04:19:55 Saved as file BACKUP1.MAX
+Sat Feb 23 04:30:25 Saved as file BACKUP1.MAX
+Sat Feb 23 04:40:55 Saved as file BACKUP1.MAX
+Sat Feb 23 04:48:24 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 04:50:56 Saved as file BACKUP1.MAX
+Sat Feb 23 05:01:26 Saved as file BACKUP1.MAX
+Sat Feb 23 05:11:26 Saved as file BACKUP1.MAX
+Sat Feb 23 05:21:56 Saved as file BACKUP1.MAX
+Sat Feb 23 12:12:22 Saved as file BACKUP1.MAX
+Sat Feb 23 12:22:52 Saved as file BACKUP1.MAX
+Sat Feb 23 12:33:22 Saved as file BACKUP1.MAX
+Sat Feb 23 12:43:52 Saved as file BACKUP1.MAX
+Sat Feb 23 12:54:22 Saved as file BACKUP1.MAX
+Sat Feb 23 13:04:52 Saved as file BACKUP1.MAX
+Sat Feb 23 13:15:22 Saved as file BACKUP1.MAX
+Sat Feb 23 13:25:52 Saved as file BACKUP1.MAX
+Sat Feb 23 13:36:22 Saved as file BACKUP1.MAX
+Sat Feb 23 13:46:52 Saved as file BACKUP1.MAX
+Sat Feb 23 13:57:22 Saved as file BACKUP1.MAX
+Sat Feb 23 14:07:52 Saved as file BACKUP1.MAX
+Sat Feb 23 14:14:39 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 14:18:52 Saved as file BACKUP1.MAX
+Sat Feb 23 14:24:18 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 14:24:21 Saved as file BACKUP1.MAX
+Sat Feb 23 14:24:21 Routed 6 connections in 0 seconds.
+Sat Feb 23 14:24:21 Total is now 6 out of 140 (4%).
+Sat Feb 23 14:24:21 Saved as file SWEEP1.MAX
+Sat Feb 23 14:24:26 Saved as file BACKUP1.MAX
+Sat Feb 23 14:24:26 Routed 99 connections in 5 seconds.
+Sat Feb 23 14:24:26 Total is now 105 out of 140 (75%).
+Sat Feb 23 14:24:26 Saved as file SWEEP2.MAX
+Sat Feb 23 14:25:00 Routed 1 connections in 12 seconds.
+Sat Feb 23 14:25:00 Total is now 111 out of 140 (79%).
+Sat Feb 23 14:25:00 Saved as file SWEEP3.MAX
+Sat Feb 23 14:26:04 Routed 7 connections in 63 seconds.
+Sat Feb 23 14:26:04 Total is now 112 out of 140 (80%).
+Sat Feb 23 14:26:04 Saved as file SWEEP4.MAX
+Sat Feb 23 14:27:45 Routed 6 connections in 100 seconds.
+Sat Feb 23 14:27:45 Total is now 112 out of 140 (80%).
+Sat Feb 23 14:27:45 Saved as file SWEEP5.MAX
+Sat Feb 23 14:28:54 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 14:29:03 Saved as file BACKUP1.MAX
+Sat Feb 23 14:29:03 Routed 12 connections in 0 seconds.
+Sat Feb 23 14:29:03 Total is now 12 out of 140 (8%).
+Sat Feb 23 14:29:03 Saved as file SWEEP1.MAX
+Sat Feb 23 14:29:09 Saved as file BACKUP1.MAX
+Sat Feb 23 14:29:09 Routed 88 connections in 5 seconds.
+Sat Feb 23 14:29:09 Total is now 100 out of 140 (71%).
+Sat Feb 23 14:29:09 Saved as file SWEEP2.MAX
+Sat Feb 23 14:29:23 Routed 8 connections in 14 seconds.
+Sat Feb 23 14:29:23 Total is now 108 out of 140 (77%).
+Sat Feb 23 14:29:23 Saved as file SWEEP3.MAX
+Sat Feb 23 14:30:20 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 14:30:23 Saved as file BACKUP1.MAX
+Sat Feb 23 14:30:23 Saved as file BACKUP1.MAX
+Sat Feb 23 14:30:23 Saved as file BACKUP1.MAX
+Sat Feb 23 14:30:23 Routed 13 connections in 0 seconds.
+Sat Feb 23 14:30:23 Total is now 13 out of 140 (9%).
+Sat Feb 23 14:30:23 Saved as file SWEEP1.MAX
+Sat Feb 23 14:30:29 Saved as file BACKUP1.MAX
+Sat Feb 23 14:30:30 Saved as file BACKUP1.MAX
+Sat Feb 23 14:30:30 Saved as file BACKUP1.MAX
+Sat Feb 23 14:30:30 Routed 100 connections in 7 seconds.
+Sat Feb 23 14:30:30 Total is now 105 out of 140 (75%).
+Sat Feb 23 14:30:30 Saved as file SWEEP2.MAX
+Sat Feb 23 14:30:44 Routed 7 connections in 13 seconds.
+Sat Feb 23 14:30:44 Total is now 112 out of 140 (80%).
+Sat Feb 23 14:30:44 Saved as file SWEEP3.MAX
+Sat Feb 23 14:31:22 Saved as file BACKUP1.MAX
+Sat Feb 23 14:31:48 Routed 6 connections in 64 seconds.
+Sat Feb 23 14:31:48 Total is now 112 out of 140 (80%).
+Sat Feb 23 14:31:48 Saved as file SWEEP4.MAX
+Sat Feb 23 14:33:02 Routed 10 connections in 73 seconds.
+Sat Feb 23 14:33:02 Total is now 112 out of 140 (80%).
+Sat Feb 23 14:33:02 Saved as file SWEEP5.MAX
+Sat Feb 23 14:41:52 Saved as file BACKUP1.MAX
+Sat Feb 23 14:52:22 Saved as file BACKUP1.MAX
+Sat Feb 23 15:02:52 Saved as file BACKUP1.MAX
+Sat Feb 23 15:13:22 Saved as file BACKUP1.MAX
+Sat Feb 23 15:23:52 Saved as file BACKUP1.MAX
+Sat Feb 23 15:34:22 Saved as file BACKUP1.MAX
+Sat Feb 23 15:44:52 Saved as file BACKUP1.MAX
+Sat Feb 23 15:53:48 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 15:54:38 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 15:55:22 Saved as file BACKUP1.MAX
+Sat Feb 23 16:05:52 Saved as file BACKUP1.MAX
+Sat Feb 23 16:06:06 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:07:39 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:16:22 Saved as file BACKUP1.MAX
+Sat Feb 23 16:16:27 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:26:52 Saved as file BACKUP1.MAX
+Sat Feb 23 16:27:50 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:29:04 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:31:42 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:34:57 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:34:57 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:36:52 Saved as file BACKUP1.MAX
+Sat Feb 23 16:47:22 Saved as file BACKUP1.MAX
+Sat Feb 23 16:54:04 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 16:57:52 Saved as file BACKUP1.MAX
+Sat Feb 23 17:08:22 Saved as file BACKUP1.MAX
+Sat Feb 23 17:09:43 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 17:11:48 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 17:16:14 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 17:18:22 Saved as file BACKUP1.MAX
+Sat Feb 23 17:28:52 Saved as file BACKUP1.MAX
+Sat Feb 23 17:37:47 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 17:39:22 Saved as file BACKUP1.MAX
+Sat Feb 23 17:47:20 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Sat Feb 23 17:49:52 Saved as file BACKUP1.MAX
+Sat Feb 23 18:00:22 Saved as file BACKUP1.MAX
+Sat Feb 23 18:10:22 Saved as file BACKUP1.MAX
+Sat Feb 23 18:20:22 Saved as file BACKUP1.MAX
+Sat Feb 23 18:30:52 Saved as file BACKUP1.MAX
+Sat Feb 23 18:41:22 Saved as file BACKUP1.MAX
+Sat Feb 23 18:51:52 Saved as file BACKUP1.MAX
+Sat Feb 23 19:02:22 Saved as file BACKUP1.MAX
+Sat Feb 23 19:12:52 Saved as file BACKUP1.MAX
+Sat Feb 23 19:23:22 Saved as file BACKUP1.MAX
+Sat Feb 23 19:33:52 Saved as file BACKUP1.MAX
+Sat Feb 23 19:44:22 Saved as file BACKUP1.MAX
+Sat Feb 23 19:54:52 Saved as file BACKUP1.MAX
+Sat Feb 23 20:05:22 Saved as file BACKUP1.MAX
+Sat Feb 23 20:15:52 Saved as file BACKUP1.MAX
+Sat Feb 23 20:26:22 Saved as file BACKUP1.MAX
+Sat Feb 23 20:36:52 Saved as file BACKUP1.MAX
+Sat Feb 23 20:47:22 Saved as file BACKUP1.MAX
+Sat Feb 23 20:57:52 Saved as file BACKUP1.MAX
+Sat Feb 23 21:08:22 Saved as file BACKUP1.MAX
+Sat Feb 23 21:18:52 Saved as file BACKUP1.MAX
+Sat Feb 23 21:29:22 Saved as file BACKUP1.MAX
+Sat Feb 23 21:39:52 Saved as file BACKUP1.MAX
+Sat Feb 23 21:50:22 Saved as file BACKUP1.MAX
+Sat Feb 23 22:00:52 Saved as file BACKUP1.MAX
+Sat Feb 23 22:11:22 Saved as file BACKUP1.MAX
+Sat Feb 23 22:21:52 Saved as file BACKUP1.MAX
+Sat Feb 23 22:32:22 Saved as file BACKUP1.MAX
+Sat Feb 23 22:42:52 Saved as file BACKUP1.MAX
+Sat Feb 23 22:53:22 Saved as file BACKUP1.MAX
+Sat Feb 23 23:03:52 Saved as file BACKUP1.MAX
+Sat Feb 23 23:14:22 Saved as file BACKUP1.MAX
+Sat Feb 23 23:21:50 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Mon Mar 03 21:44:07 Saved as file BACKUP1.MAX
+Mon Mar 03 21:54:37 Saved as file BACKUP1.MAX
+Mon Mar 03 22:05:07 Saved as file BACKUP1.MAX
+Mon Mar 03 22:15:37 Saved as file BACKUP1.MAX
+Mon Mar 03 22:26:07 Saved as file BACKUP1.MAX
+Mon Mar 03 22:26:28 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:26:28 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:26:29 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON100T.llb
+Mon Mar 03 22:28:03 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\ISA.llb
+Mon Mar 03 22:28:03 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\JUMPER.LLB
+Mon Mar 03 22:28:16 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\JUMPER.LLB
+Mon Mar 03 22:28:18 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SM.llb
+Mon Mar 03 22:28:19 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOJ.llb
+Mon Mar 03 22:28:19 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\SOG.llb
+Mon Mar 03 22:28:36 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:49 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:51 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:51 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:55 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:56 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:28:56 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:29:08 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:29:41 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:29:42 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:37:50 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:37:50 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:37:52 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 22:37:52 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:37:58 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\library\BCON156T.llb
+Mon Mar 03 22:38:03 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:38:07 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:40:37 Saved as file BACKUP1.MAX
+Mon Mar 03 22:48:03 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:48:03 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:48:05 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 22:48:10 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 22:53:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\library\padstack.llb
+Mon Mar 03 22:54:22 Loaded file C:\Program Files\OrCAD\Layout_Plus\library\padstack.llb
+Mon Mar 03 22:55:37 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 22:55:37 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 23:07:20 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 23:07:20 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 23:07:24 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 23:07:24 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 23:07:34 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 23:07:34 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 23:07:34 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 23:07:34 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 23:07:35 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Mon Mar 03 23:07:36 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Mon Mar 03 23:11:07 Saved as file BACKUP1.MAX
+Mon Mar 03 23:21:37 Saved as file BACKUP1.MAX
+Mon Mar 03 23:23:13 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Mon Mar 03 23:32:07 Saved as file BACKUP1.MAX
+Mon Mar 03 23:38:12 Error code 2167.011 (94)
+Mon Mar 03 23:38:12 Saved as file Backup0.max
+Mon Mar 03 23:38:12 Windows which were open at time of error:
+Mon Mar 03 23:38:12 	ActiveWindow: &Route
+Mon Mar 03 23:38:12 	Icon: Post Proces&s
+Mon Mar 03 23:38:12 	Icon: &Components
+Mon Mar 03 23:38:12 	Icon: &Nets
+Mon Mar 03 23:38:12 End-of-list
+Mon Mar 03 23:38:13 Loaded file BACKUP0.MAX
+Mon Mar 03 23:39:41 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Mon Mar 03 23:48:43 Saved as file BACKUP1.MAX
+Mon Mar 03 23:59:13 Saved as file BACKUP1.MAX
+Tue Mar 04 00:09:43 Saved as file BACKUP1.MAX
+Tue Mar 04 00:20:13 Saved as file BACKUP1.MAX
+Tue Mar 04 00:30:43 Saved as file BACKUP1.MAX
+Tue Mar 04 00:41:13 Saved as file BACKUP1.MAX
+Tue Mar 04 00:50:52 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Tue Mar 04 00:51:43 Saved as file BACKUP1.MAX
+Tue Mar 04 01:02:13 Saved as file BACKUP1.MAX
+Tue Mar 04 01:12:43 Saved as file BACKUP1.MAX
+Tue Mar 04 01:23:13 Saved as file BACKUP1.MAX
+Tue Mar 04 01:33:03 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Tue Mar 04 16:06:29 Saved as file BACKUP1.MAX
+Tue Mar 04 16:07:25 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Tue Mar 04 16:16:59 Saved as file BACKUP1.MAX
+Tue Mar 04 16:27:29 Saved as file BACKUP1.MAX
+Tue Mar 04 16:37:59 Saved as file BACKUP1.MAX
+Tue Mar 04 16:48:29 Saved as file BACKUP1.MAX
+Tue Mar 04 16:51:35 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 16:51:35 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 16:51:37 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 16:51:39 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 16:52:15 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 16:54:43 Loaded file C:\Program Files\OrCAD\Layout_Plus\library\padstack.llb
+Tue Mar 04 17:03:59 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:03:59 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:04:09 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:04:09 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:04:09 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:04:09 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:04:10 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:04:13 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:04:29 Saved as file BACKUP1.MAX
+Tue Mar 04 17:08:04 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:08:04 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:08:04 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:08:04 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:08:06 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:08:08 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:08:08 Loaded file C:\Program Files\OrCAD\Layout_Plus\data\template.imp
+Tue Mar 04 17:16:17 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Tue Mar 04 17:18:29 Saved as file BACKUP1.MAX
+Tue Mar 04 17:25:00 Error code 5240.027 (5)
+Tue Mar 04 17:25:01 Saved as file Backup0.max
+Tue Mar 04 17:25:01 Windows which were open at time of error:
+Tue Mar 04 17:25:01 	ActiveWindow: &Design
+Tue Mar 04 17:25:01 	Icon: &Components
+Tue Mar 04 17:25:01 	Icon: Post Proces&s
+Tue Mar 04 17:25:01 	Icon: &Nets
+Tue Mar 04 17:25:01 End-of-list
+Tue Mar 04 17:25:01 Loaded file BACKUP0.MAX
+Tue Mar 04 17:27:50 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Tue Mar 04 17:36:01 Saved as file BACKUP1.MAX
+Tue Mar 04 17:46:31 Saved as file BACKUP1.MAX
+Tue Mar 04 17:46:51 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX
+Tue Mar 04 17:50:52 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:50:52 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:50:53 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:50:54 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:52:15 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:52:15 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:52:18 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:52:18 Saved as file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:52:31 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:52:31 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:52:31 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:52:31 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:52:33 Loaded file F:\PROJECTS\ORCAD LIBRARIES\FOOTPRINTS.LLB
+Tue Mar 04 17:52:34 Loaded file C:\PROGRAM FILES\ORCAD\LAYOUT_PLUS\data\template.imp
+Tue Mar 04 17:59:22 Saved as file F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\LAYOUT\VXTESTBENCH.MAX

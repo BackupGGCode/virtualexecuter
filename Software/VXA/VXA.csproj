@@ -39,14 +39,13 @@
     <Compile Include="VXToolChain\Assembler.cs" />
     <Compile Include="VXToolChain\Assist\Function.cs" />
     <Compile Include="VXToolChain\Assist\Instruction.cs" />
+    <Compile Include="VXToolChain\Assist\InstructionSet.cs" />
     <Compile Include="VXToolChain\Assist\Label.cs" />
     <Compile Include="VXToolChain\Assist\Part.cs" />
     <Compile Include="VXToolChain\Assist\Section.cs" />
     <Compile Include="VXToolChain\Parser.cs" />
     <Compile Include="VXToolChain\Preprocessor.cs" />
     <Compile Include="VXToolChain\VXAAssembler.cs" />
-    <Compile Include="VXToolChain\VXAInstructionSet.cs" />
-    <Compile Include="VXToolChain\VXAInstruction.cs" />
     <Compile Include="VXToolChain\VXALabel.cs" />
     <Compile Include="VXToolChain\VXAProgram.cs" />
     <Compile Include="VXToolChain\VXASection.cs" />
