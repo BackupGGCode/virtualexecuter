@@ -10,7 +10,7 @@ namespace VXToolChain.Assist
 
 		public InstructionSet()
 		{
-			int opcode = 0;
+			int opcode = 1;
 
 			// Arithmetic
 			instructions.Add(new Instruction("adds", opcode++));
@@ -163,16 +163,7 @@ namespace VXToolChain.Assist
 
 		public byte[] ParseAndCreateData(string line, Part part)
 		{
-			if (line.Contains(".") || line.Contains(":"))
-			{
-				return new byte[0];
-			}
-
 			string[] parts = line.Split(new char[] { ' ', '\t' });
-			if (parts.Length == 0)
-			{
-				return new byte[0];
-			}
 
 			foreach (Instruction instruction in instructions)
 			{
