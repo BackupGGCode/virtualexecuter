@@ -31,9 +31,13 @@ ga: quad
 ea: single[2]
 
 .code
-!Start: void, void
-;&counter: single
-Start_Init:
+void Start! void
+;!Start: void, void
+counter: single
+Start_Init*
+	subd
+	adds
+	jmp Start_DoTheLoop
 	loadls counter 0
 Start_DoTheLoop:
 	pushls counter

@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+
 namespace VXToolChain.Assist
 {
 	class Part
 	{
+
+
+
 		private List<Section> sections = new List<Section>();
 		public List<Section> Sections
 		{
@@ -47,10 +51,36 @@ namespace VXToolChain.Assist
 			return currentSection;
 		}
 
+		private List<Function> functions = new List<Function>();
+		public List<Function> Functions
+		{
+			get { return functions; }
+			set { functions = value; }
+		}
+
+		private string currentFunctionName = "";
+		public string CurrentFunctionName
+		{
+			get { return currentFunctionName; }
+			set { currentFunctionName = value; }
+		}
+
+
+		public void AddFunction(Function function)
+		{
+			functions.Add(function);
+		}
+
+
 		public void ResetSections()
 		{
-			sections = new List<Section>();
+			foreach (Section section in sections)
+			{
+				section.Data.Clear();
+			}
+			//			sections = new List<Section>();
 			currentSection = null;
+			currentFunctionName = "";
 		}
 
 		public void AddLabel(Label label)
@@ -61,7 +91,17 @@ namespace VXToolChain.Assist
 			}
 
 			currentSection.Labels.Add(label);
-			currentSection.AddData(new byte[label.Size]);
+			if (label.IsLocal == false)
+			{
+				currentSection.AddData(new byte[label.Size]);
+			}
+			if (label.IsFunction)
+			{
+				functions.Add(new Function(label.Name));
+				this.currentFunctionName = label.Name;
+			}
+
+			//			Console.WriteLine("Added label '" + label.Name + "'");
 		}
 
 		public void AddCode(byte[] data)
@@ -75,7 +115,7 @@ namespace VXToolChain.Assist
 			}
 		}
 
-		public uint GetLabelAddress(string labelName)
+		public int GetLabelAddress(string labelName)
 		{
 			foreach (Section section in sections)
 			{
@@ -83,7 +123,21 @@ namespace VXToolChain.Assist
 				{
 					if (label.Name == labelName)
 					{
-						return label.Address;
+						if (label.IsLocal)
+						{
+							if (label.Function == currentFunctionName)
+							{
+								return label.Address;
+							}
+							else
+							{
+								throw new Exception("Label '" + labelName + "' in function '" + currentFunctionName + "' is out of scope");
+							}
+						}
+						else
+						{
+							return label.Address;
+						}
 					}
 				}
 			}

@@ -19,16 +19,20 @@ namespace VXToolChain.Assembler
 			Stream preprocessedFile = preprocessor.Preprocess(file);
 			file.Close();
 
-/*
-			byte[] bytes = new byte[preprocessedFile.Length];
-			preprocessedFile.Read(bytes, 0, bytes.Length);
-			preprocessedFile.Seek(0, SeekOrigin.Begin);
-			File.WriteAllBytes("../../preprocessor.txt", bytes);
-*/
+			/*
+						byte[] bytes = new byte[preprocessedFile.Length];
+						preprocessedFile.Read(bytes, 0, bytes.Length);
+						preprocessedFile.Seek(0, SeekOrigin.Begin);
+						File.WriteAllBytes("../../preprocessor.txt", bytes);
+			*/
 
 			Part part = new Part();
 			Parser parser = new Parser();
 			parser.FindAllLabels(preprocessedFile, part);
+
+			preprocessedFile.Seek(0, SeekOrigin.Begin);
+			parser.GenerateCode(preprocessedFile, part);
+
 			preprocessedFile.Close();
 
 			return part;

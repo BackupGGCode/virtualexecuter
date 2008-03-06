@@ -16,6 +16,13 @@ namespace VXToolChain.Assist
 			set { name = value; }
 		}
 
+		private string functionName = "";
+		public string Function
+		{
+			get { return functionName; }
+			set { functionName = value; }
+		}
+
 		private bool isLocal = false;
 		public bool IsLocal
 		{
@@ -44,15 +51,15 @@ namespace VXToolChain.Assist
 			set { isImported = value; }
 		}
 
-		private UInt32 address = 0;
-		public UInt32 Address
+		private int address = 0;
+		public int Address
 		{
 			get { return address; }
 			set { address = value; }
 		}
 
-		private UInt32 offset = 0;
-		public UInt32 Offset
+		private int offset = 0;
+		public int Offset
 		{
 			get { return offset; }
 			set { offset = value; }
@@ -106,17 +113,19 @@ namespace VXToolChain.Assist
 			if (text.StartsWith("&"))
 			{
 				IsLocal = true;
+				functionName = part.CurrentFunctionName;
 			}
 			else if (text.StartsWith("!"))
 			{
 				isFunction = true;
+				part.CurrentFunctionName = name;
 			}
 
-			if (text.EndsWith("import"))
+			if (text.EndsWith(" import"))
 			{
 				isImported = true;
 			}
-			else if (text.EndsWith("export"))
+			else if (text.EndsWith(" export"))
 			{
 				isExported = true;
 			}
@@ -150,7 +159,7 @@ namespace VXToolChain.Assist
 				size *= int.Parse(text.Substring(i).Trim('[', ']'));
 			}
 
-			address = (UInt32)part.GetCurrentSection().Data.Count;
+			address = part.GetCurrentSection().Data.Count;
 
 			switch (sectionName)
 			{
