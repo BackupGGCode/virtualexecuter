@@ -10,22 +10,90 @@ namespace VXT
 	class Program
 	{
 		static SerialPort com;
-		static bool SendFile(string[] args)
+
+
+		static void LoadDiscImage(string[] args)
 		{
+			if (args.Length != 2)
+			{
+				Console.WriteLine("Please just type the command and the file name mkay.");
+				return;
+			}
+
+			if (File.Exists(args[1]) == false)
+			{
+				Console.WriteLine("I simply could not find that file.");
+				return;
+			}
+
 			byte[] data = File.ReadAllBytes(args[1]);
+			int blockSize = 1024;
+			if (data.Length < blockSize)
+			{
+				blockSize = data.Length;
+			}
 
-			com.Write(data,0,data.Length);
+			com.DiscardInBuffer();
+			com.WriteLine("load " + data.Length + " " + blockSize + " ");
+			com.ReadLine();
+			string[] reply = com.ReadLine().Split(' ');
 
-			return true;
+			if (reply.Length != 2)
+			{
+				Console.WriteLine("Invalid reply.");
+				return;
+			}
+			if (reply[0] != "A")
+			{
+				Console.WriteLine("Come on that image is larger than the disc. I can't do that.");
+				return;
+			}
+
+			blockSize = int.Parse(reply[1]);
+
+			Console.WriteLine("Image size: " + data.Length + " bytes. Block size: " + blockSize + " bytes.");
+
+			DateTime start = DateTime.Now;
+
+			int current = 0;
+			int length;
+			while (current < data.Length && Console.KeyAvailable == false)
+			{
+				if ((current + blockSize) >= data.Length)
+				{
+					length = data.Length - current;
+				}
+				else
+				{
+					length = blockSize;
+				}
+				com.Write(data, current, length);
+				current += length;
+				Console.Write((char)com.ReadChar());
+			}
+
+			Console.WriteLine((char)com.ReadChar());
+
+			TimeSpan time = DateTime.Now.Subtract(start);
+			if (time.Seconds == 0)
+			{
+				Console.WriteLine("Transfer time: " + time.ToString() + " @ > " + data.Length + " B/S.");
+			}
+			else
+			{
+				Console.WriteLine("Transfer time: " + time.ToString() + " @ " + (data.Length / time.Seconds) + " B/S.");
+			}
 		}
+
 
 		static void Main(string[] args)
 		{
 			string port = "";
 			string baudrate = "115200";
-			bool localEcho = true;
-			bool addLineCarriageReturn = true;
+			bool localEcho = false;
+			bool addLineCarriageReturn = false;
 
+			#region Parse command line
 			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
 			if (options.ContainsKey("p"))
@@ -52,9 +120,13 @@ namespace VXT
 			}
 
 			options = null;
+			#endregion
 
 			com = new SerialPort(port, int.Parse(baudrate));
+			com.NewLine = ((char)10).ToString();
 			com.Open();
+
+			Console.WriteLine("Connected to " + port + " @ " + baudrate + " bps.");
 
 			bool run = true;
 			char[] buf = new char[1024];
@@ -62,6 +134,7 @@ namespace VXT
 
 			while (run)
 			{
+				#region Com to con
 				if (com.BytesToRead > 0)
 				{
 					int toRead = com.BytesToRead;
@@ -87,6 +160,7 @@ namespace VXT
 					}
 					Console.Write(buf, 0, toRead);
 				}
+				#endregion
 
 				if (Console.KeyAvailable)
 				{
@@ -104,23 +178,23 @@ namespace VXT
 						{
 							case "quit":
 								return;
-								break;
-							case "send":
-								if (SendFile(cmds))
-								{
-									Console.WriteLine("OK");
-								}
 
-								else
-								{
-									Console.WriteLine("Error");
-								}
+							case "load":
+								LoadDiscImage(cmds);
 								break;
 						}
 					}
 					else
 					{
-						com.Write(new char[1] { key }, 0, 1);
+						if (key == 13)
+						{
+							com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
+						}
+						else
+						{
+							com.Write(new char[1] { key }, 0, 1);
+						}
+
 						if (localEcho)
 						{
 							Console.Write(key);
