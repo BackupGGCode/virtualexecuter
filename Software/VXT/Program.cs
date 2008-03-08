@@ -93,6 +93,9 @@ namespace VXT
 			bool localEcho = false;
 			bool addLineCarriageReturn = false;
 
+			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
+			Console.WriteLine("Version: 1.0 - March 3rd 2008");
+			
 			#region Parse command line
 			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
