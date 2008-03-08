@@ -33,6 +33,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLineParser.cs" />
+    <Compile Include="VXToolChain\ImageCreation\FileEntry.cs" />
+    <Compile Include="VXToolChain\ImageCreation\FileEntryList.cs" />
+    <Compile Include="VXToolChain\ImageCreation\FilesStoreImage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

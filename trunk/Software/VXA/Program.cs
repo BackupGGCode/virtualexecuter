@@ -13,9 +13,8 @@ namespace VXA
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Virtual eXecuter Assembler");
-			Console.WriteLine("Assembler version: " + Assembler.Version + " - " + Assembler.BuildDate);
-			Console.WriteLine("Assembler writen by " + Assembler.Author);
+			Console.WriteLine("Virtual eXecuter Assembler by Claus Andersen");
+			Console.WriteLine("Version: 1.0 - March 3rd 2008");
 
 			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
