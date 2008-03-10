@@ -12,7 +12,7 @@ namespace VXIC
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Virtual eXecuter Image Creator by Claus Andersen");
-			Console.WriteLine("Version: 1.0 - March 3rd 2008");
+			Console.WriteLine("Version: 1.0 - March 9th 2008");
 
 			string sourceDirectory;
 			string outputFileName;
@@ -45,9 +45,9 @@ namespace VXIC
 				return;
 			}
 
-			if (bam.DirectoryFound == true)
+			if (bam.DirectoriesFound > 0)
 			{
-				Console.WriteLine("One or more directories were found but not included in image. Directories are not supported yet (if ever).");
+				Console.WriteLine(bam.DirectoriesFound + " directories were found but not included in the image.");
 			}
 
 			Console.Write("Reading file data...");

@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\UART.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\MemoryManagement.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\Timer.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\inavr.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\MessageQueue.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Timer.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\strings.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\VXInterpreter.pbd</file>
+      <file>$PROJ_DIR$\Debug\Obj\InternalEEPROM.r90</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\KernelInternals.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\TaskManagement.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\TaskManagement.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\TaskManagement.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\Kernel.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\globals.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\Kernel.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Kernel.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\InternalEEPROM.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\FileStore.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Debugger.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\FileStore\FileStore.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\Timer.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Timer.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.c</file>
+      <file>$PROJ_DIR$\Debug\Exe\VXInterpreter.d90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Terminal\Terminal.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\strings.r90</file>
+      <file>$PROJ_DIR$\Debug\Obj\FileStore.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\TaskManagement.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\UART.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\Terminal.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\UART.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\InternalEEPROM.pbi</file>
+      <file>$PROJ_DIR$\config.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\Terminal.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Kernel.h</file>
+      <file>$TOOLKIT_DIR$\inc\ioavr.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\UART.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Semaphore.h</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\UART.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 41</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 35</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 33</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Timer.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 23</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 24 40</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 24 40 10 39 14 42 4 1 21</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Obj\VXInterpreter.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 31 36 17 12 34 2 35 29 6</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 25</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 37</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\TaskManagement.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 32</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 12</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 24 40</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 24 40 39 14 42 4 1 10 21</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Kernel.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 15</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 17</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 39</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 39 14 42 4 1 24 40 10 21</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\InternalEEPROM.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 8</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 36</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\FileStore\FileStore.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 20</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 31</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 30</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 6</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 16 40</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 16 40 3 13</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Terminal\Terminal.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 38</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 34</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 27</file>
+        </tool>
+      </outputs>
+    </file>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>XLINK</tool>
+    </forcedrebuild>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs>
+      <file>$PROJ_DIR$\Release\Obj\Timer.r90</file>
+      <file>$PROJ_DIR$\Release\List\TaskManagement.lst</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\UART.c</file>
+      <file>$PROJ_DIR$\Release\List\FileStore.lst</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\MemoryManagement.h</file>
+      <file>$PROJ_DIR$\Release\List\UART.lst</file>
+      <file>$PROJ_DIR$\Release\List\FileStore.s90</file>
+      <file>$PROJ_DIR$\Release\List\UART.s90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\InternalEEPROM.h</file>
+      <file>$PROJ_DIR$\Release\Obj\FileStore.pbi</file>
+      <file>$PROJ_DIR$\Release\List\MemoryManagement.s90</file>
+      <file>$TOOLKIT_DIR$\inc\inavr.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\MessageQueue.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Commander\Commander.h</file>
+      <file>$PROJ_DIR$\Release\List\Kernel.lst</file>
+      <file>$PROJ_DIR$\VX.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Timer.c</file>
+      <file>$PROJ_DIR$\Release\List\Terminal.s90</file>
+      <file>$PROJ_DIR$\Release\Obj\FileStore.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\Commander.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\VXInterpreter.pbd</file>
+      <file>$PROJ_DIR$\Release\List\main.lst</file>
+      <file>$PROJ_DIR$\Release\Obj\TaskManagement.r90</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Terminal\Terminal.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\KernelInternals.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\TaskManagement.c</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\TaskManagement.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\globals.h</file>
+      <file>$PROJ_DIR$\Release\List\Commander.lst</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Commander\Commander.c</file>
+      <file>$PROJ_DIR$\Release\Obj\VX.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Kernel.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\InternalEEPROM.c</file>
+      <file>$PROJ_DIR$\Release\Obj\TaskManagement.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Debugger.h</file>
+      <file>$PROJ_DIR$\Release\Obj\strings.pbi</file>
+      <file>$PROJ_DIR$\Release\List\Timer.s90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\FileStore\FileStore.c</file>
+      <file>$PROJ_DIR$\Release\List\TaskManagement.s90</file>
+      <file>$PROJ_DIR$\Release\List\main.s90</file>
+      <file>$PROJ_DIR$\Release\List\VX.s90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.h</file>
+      <file>$PROJ_DIR$\Release\Obj\Terminal.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\iom32.h</file>
+      <file>$PROJ_DIR$\Release\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Release\List\MemoryManagement.lst</file>
+      <file>$PROJ_DIR$\Release\List\strings.lst</file>
+      <file>$PROJ_DIR$\Release\List\InternalEEPROM.s90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Timer.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\FileStore\FileStore.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.c</file>
+      <file>$PROJ_DIR$\Release\Obj\VX.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Terminal\Terminal.c</file>
+      <file>$PROJ_DIR$\VX.c</file>
+      <file>$PROJ_DIR$\Release\Obj\UART.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\Timer.pbi</file>
+      <file>$TOOLKIT_DIR$\src\template\cfg3soim.xcl</file>
+      <file>$PROJ_DIR$\Release\Obj\UART.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\UART.h</file>
+      <file>$PROJ_DIR$\Release\Obj\Kernel.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\Commander.r90</file>
+      <file>$TOOLKIT_DIR$\src\template\cfgm32.xcl</file>
+      <file>$TOOLKIT_DIR$\lib\clib\cl3s-ec_mul-sf.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\Terminal.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\InternalEEPROM.r90</file>
+      <file>$PROJ_DIR$\Release\List\strings.s90</file>
+      <file>$PROJ_DIR$\Release\Obj\MemoryManagement.pbi</file>
+      <file>$PROJ_DIR$\Release\Exe\VXInterpreter.a90</file>
+      <file>$PROJ_DIR$\Release\Obj\Kernel.r90</file>
+      <file>$PROJ_DIR$\config.h</file>
+      <file>$PROJ_DIR$\Release\List\Kernel.s90</file>
+      <file>$PROJ_DIR$\Release\List\VXInterpreter.map</file>
+      <file>$PROJ_DIR$\Release\List\Terminal.lst</file>
+      <file>$PROJ_DIR$\Release\Obj\main.r90</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\MemoryManagement.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Kernel.h</file>
+      <file>$PROJ_DIR$\Release\List\InternalEEPROM.lst</file>
+      <file>$PROJ_DIR$\Release\List\VX.lst</file>
+      <file>$PROJ_DIR$\Release\Obj\strings.r90</file>
+      <file>$PROJ_DIR$\Release\List\Commander.s90</file>
+      <file>$PROJ_DIR$\Release\Obj\InternalEEPROM.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\ioavr.h</file>
+      <file>$TOOLKIT_DIR$\inc\iomacro.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Semaphore.h</file>
+      <file>$PROJ_DIR$\Release\Obj\MemoryManagement.r90</file>
+      <file>$PROJ_DIR$\Terminal.c</file>
+      <file>$PROJ_DIR$\Terminal.h</file>
+      <file>$PROJ_DIR$\Release\List\Timer.lst</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\UART.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 56 7 5</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 59</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 60 29 83 45 84 11 27</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 60 29 83 45 84 11 27</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Timer.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 0 38 89</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 57</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 50 83 45 84 71 25 77 29 11 27 28 85 12 4 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 50 83 45 84 71 25 77 29 11 27 28 85 12 4 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Obj\VXInterpreter.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 19 9 82 61 68 35 44 57 59 32 46 37</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 75 41 21</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 46</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 60 51 8 88</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 60 51 8 88</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\TaskManagement.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 22 40 1</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 35</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 50 83 45 84 71 77 29 11 27 28 85 12 4 25 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 50 83 45 84 71 77 29 11 27 28 85 12 4 25 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Commander\Commander.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 62 81 30</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 19</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 13 60 43</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 13 60 43</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\Kernel.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 70 72 14</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 61</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 77 71 29 83 45 84 11 27 28 85 12 4 50 25 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 77 71 29 83 45 84 11 27 28 85 12 4 50 25 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Peripherals\InternalEEPROM.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 66 49 78</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 82</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 77 71 28 85 12 4 50</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 77 71 28 85 12 4 50</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\FileStore\FileStore.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 18 6 3</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 9</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 29 83 45 84 11 27</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 29 83 45 84 11 27</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 80 67 48</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 37</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Terminal\Terminal.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 65</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 44</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 60 13 43 51 8</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 60 13 43 51 8</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\VX.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 53 42 79</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 32</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 51 15</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 51 15</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Exe\VXInterpreter.a90</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 73</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 63 58 62 18 66 70 86 22 65 0 56 53 75 80 64</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 69 73</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\Kernel\MemoryManagement.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 86 10 47</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 68</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 71 4 77 28 85 12 50 25 36</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 71 4 77 28 85 12 50 25 36</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Terminal.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 65 17 74</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 44</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 60 13 43 51 8 15</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29 83 45 84 11 27 71 77 28 85 12 4 50 60 13 43 51 8 15</file>
+        </tool>
+      </inputs>
+    </file>
+  </configuration>
+</project>
+
+

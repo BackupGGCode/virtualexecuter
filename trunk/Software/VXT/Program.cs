@@ -88,14 +88,14 @@ namespace VXT
 
 		static void Main(string[] args)
 		{
-			string port = "";
+			string port = "com1";
 			string baudrate = "115200";
 			bool localEcho = false;
 			bool addLineCarriageReturn = false;
 
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
-			Console.WriteLine("Version: 1.0 - March 3rd 2008");
-			
+			Console.WriteLine("Version: 1.0 - March 9th 2008");
+
 			#region Parse command line
 			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
@@ -181,9 +181,11 @@ namespace VXT
 						{
 							case "quit":
 								return;
-
 							case "load":
 								LoadDiscImage(cmds);
+								break;
+							default:
+								Console.WriteLine("Unknown command");
 								break;
 						}
 					}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>VXInterpreter/Release</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>144</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>915</ColumnWidth1><ColumnWidth2>244</ColumnWidth2><ColumnWidth3>61</ColumnWidth3></Build>
+    </Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-5483-6109</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>VXInterpreter</ExpandedNode><ExpandedNode>VXInterpreter/MROS</ExpandedNode><ExpandedNode>VXInterpreter/MROS/Commander</ExpandedNode><ExpandedNode>VXInterpreter/MROS/Commander/Commander.c</ExpandedNode><ExpandedNode>VXInterpreter/MROS/Kernel</ExpandedNode><ExpandedNode>VXInterpreter/VX.c</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-4270-6745</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>F:\Projects\Virtual eXecuter\code.google\Firmware\VXInterpreter\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>208</SelStart><SelEnd>224</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\Projects\Virtual eXecuter\code.google\Firmware\VXInterpreter\VX.c</Filename><XPos>0</XPos><YPos>88</YPos><SelStart>1967</SelStart><SelEnd>1967</SelEnd></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>f:\Projects\Virtual eXecuter\code.google\Firmware\VXInterpreter\VX.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>55</SelStart><SelEnd>55</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>f:\Projects\Virtual eXecuter\code.google\Firmware\VXInterpreter\Terminal.c</Filename><XPos>0</XPos><YPos>120</YPos><SelStart>2544</SelStart><SelEnd>2544</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\Projects\Virtual eXecuter\code.google\Firmware\VXInterpreter\config.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>501</SelStart><SelEnd>501</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\Projects\[Drivers]\C\MROS\Kernel\MemoryManagement.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>94</SelStart><SelEnd>111</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>f:\Projects\[Drivers]\C\MROS\Commander\Commander.c</Filename><XPos>0</XPos><YPos>21</YPos><SelStart>1013</SelStart><SelEnd>1013</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\Projects\[Drivers]\C\MROS\Commander\Commander.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>200</SelStart><SelEnd>200</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-0039e578><key>iaridepm1</key></Toolbar-0039e578></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>697</Bottom><Right>235</Right><x>-2</x><y>-2</y><xscreen>200</xscreen><yscreen>200</yscreen><sizeHorzCX>0</sizeHorzCX><sizeHorzCY>0</sizeHorzCY><sizeVertCX>0</sizeVertCX><sizeVertCY>0</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>177</Bottom><Right>1282</Right><x>-2</x><y>-2</y><xscreen>1284</xscreen><yscreen>179</yscreen><sizeHorzCX>0</sizeHorzCX><sizeHorzCY>0</sizeHorzCY><sizeVertCX>0</sizeVertCX><sizeVertCY>0</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
