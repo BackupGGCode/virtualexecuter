@@ -1,6 +1,6 @@
 #include <Globals.h>
 #include <Config.h>
-#include "DRAMController.h"
+#include "DRAM.h"
 #include "Kernel.h"
 #include "KernelInternals.h"
 
@@ -85,6 +85,11 @@ block* p = (block*)((unsigned short)pointer - sizeof(block));
 	JoinFreeAdjacentBlocks();
 }
 
+
+void DRAM_Read(void* data, unsigned long address, unsigned long length)
+{
+	
+}
 
 static void JoinFreeAdjacentBlocks()
 {
