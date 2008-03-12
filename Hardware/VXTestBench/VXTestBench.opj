@@ -97,13 +97,13 @@
     (FileView
       (Path "Design Resources")
       (Path "Design Resources"
-         "f:\Projects\Virtual eXecuter\Hardware\VXTestBench\vxtestbench.dsn")
+         "F:\Projects\Virtual eXecuter\code.google\Hardware\VXTestBench\vxtestbench.dsn")
       (Path "Design Resources"
-         "f:\Projects\Virtual eXecuter\Hardware\VXTestBench\vxtestbench.dsn"
+         "F:\Projects\Virtual eXecuter\code.google\Hardware\VXTestBench\vxtestbench.dsn"
          "SCHEMATIC1")
       (Path "Outputs")
       (Select "Design Resources"
-         "f:\Projects\Virtual eXecuter\Hardware\VXTestBench\vxtestbench.dsn"
+         "F:\Projects\Virtual eXecuter\code.google\Hardware\VXTestBench\vxtestbench.dsn"
          "SCHEMATIC1" "PAGE1"))
     (HierarchyView)
     (Doc
@@ -114,10 +114,11 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 2 3 -1 -1 -4 -30 44 1126 58 663")
+        (Placement "44 2 3 -1 -1 -4 -30 66 1144 87 688")
         (Scroll "0 0")
-        (Zoom "71")
+        (Zoom "100")
         (Occurrence "/"))
-      (Path "F:\PROJECTS\VIRTUAL EXECUTER\HARDWARE\VXTESTBENCH\VXTESTBENCH.DSN")
+      (Path
+         "F:\PROJECTS\VIRTUAL EXECUTER\CODE.GOOGLE\HARDWARE\VXTESTBENCH\VXTESTBENCH.DSN")
       (Schematic "SCHEMATIC1")
       (Page "PAGE1"))))
