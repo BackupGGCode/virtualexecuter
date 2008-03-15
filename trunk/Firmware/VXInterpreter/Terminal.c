@@ -231,3 +231,27 @@ void Read(char* line)
 {
 	DRAM_ReadByte(0);
 }
+
+void TestDRAM(char* line)
+{
+unsigned long current, max, step, progress=0, progressStep;
+unsigned char value=1;
+
+	max = 16*1024*1024;
+	step = 12345;
+	progressStep = max / step;
+
+	UART_WriteString_P("Testing memory...\n");
+
+	UART_WriteString_P("Writing...\n");
+	for(current=0;current<max;current+=step)
+	{
+		DRAM_WriteByte(current, value++);
+		progress += progressStep;
+		UART_WriteValueUnsigned(progress/step);
+		UART_WriteString_P("%   ");
+		UART_WriteByte(13);
+	}
+	
+	UART_WriteString_P("Done");
+}
