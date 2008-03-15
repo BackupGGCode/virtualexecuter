@@ -74,8 +74,6 @@ unsigned char uc;
 unsigned short us;
 unsigned long ul, ul2, ul3, ul4;
 float f;
-
-	PORTB^=(1<<5);
 	
 	switch(GetNextByte())
 	{
@@ -111,7 +109,7 @@ float f;
 							ul3 = (ul & 0xffff) + (ul2 & 0xffff);
 							ul3 >>= 16;
 							ul3 += (ul >> 16) + (ul2 >> 16);
-							if(ul3 > 0xffffffff)
+							if(ul3 > 0x0000ffff)
 							{
 								carry = true;
 							}
