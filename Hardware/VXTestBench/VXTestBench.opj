@@ -96,15 +96,7 @@
   (GlobalState
     (FileView
       (Path "Design Resources")
-      (Path "Design Resources"
-         "F:\Projects\Virtual eXecuter\code.google\Hardware\VXTestBench\vxtestbench.dsn")
-      (Path "Design Resources"
-         "F:\Projects\Virtual eXecuter\code.google\Hardware\VXTestBench\vxtestbench.dsn"
-         "SCHEMATIC1")
-      (Path "Outputs")
-      (Select "Design Resources"
-         "F:\Projects\Virtual eXecuter\code.google\Hardware\VXTestBench\vxtestbench.dsn"
-         "SCHEMATIC1" "PAGE1"))
+      (Path "Outputs"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -115,8 +107,8 @@
       (Type "COrSchematicDoc")
       (Frame
         (Placement "44 2 3 -1 -1 -4 -30 66 1144 87 688")
-        (Scroll "0 0")
-        (Zoom "100")
+        (Scroll "1090 210")
+        (Zoom "142")
         (Occurrence "/"))
       (Path
          "F:\PROJECTS\VIRTUAL EXECUTER\CODE.GOOGLE\HARDWARE\VXTESTBENCH\VXTESTBENCH.DSN")

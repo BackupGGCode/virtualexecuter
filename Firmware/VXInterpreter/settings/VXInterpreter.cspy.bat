@@ -22,7 +22,7 @@
 @REM but they are listed at the end of this file for reference.
 
 
-"C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\common\bin\cspybat" "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\bin\avrproc.dll" "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\bin\avrsim.dll"  %1 --plugin "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\bin\<libsupport_plugin>" --backend -B "--cpu=m32" "--enhanced_core" "-p" "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\Config\iom32.ddf" "--eeprom_size" "1024" "-d" "sim" 
+"C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\common\bin\cspybat" "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\bin\avrproc.dll" "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\bin\avrsim.dll"  %1 --plugin "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\bin\<libsupport_plugin>" --backend -B "--cpu=m64" "--enhanced_core" "-p" "C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\Config\iom64.ddf" "--eeprom_size" "2048" "-d" "sim" 
 
 
 @REM loaded plugins:

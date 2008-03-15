@@ -7,6 +7,7 @@
 #include <FileStore/FileStore.h>
 #include <Peripherals/InternalEEPROM.h>
 #include "VX.h"
+#include "DRAM.h"
 
 
 void HelpScreen(char* line);
@@ -17,7 +18,11 @@ void StepProgram(char* line);
 void StartProgram(char* line);
 void StopProgram(char* line);
 void LoadFileToDisc(char* line);
-__flash command commands[] = {{"help", HelpScreen}, {"list", ListFiles}, {"print", PrintFile}, {"run", RunProgram}, {"step", StepProgram}, {"start", StartProgram}, {"stop", StopProgram}, {"load", LoadFileToDisc}};
+void WriteToDRAM(char* line);
+void ReadFromDRAM(char* line);
+void Write(char* line);
+void Read(char* line);
+__flash command commands[] = {{"help", HelpScreen}, {"list", ListFiles}, {"print", PrintFile}, {"run", RunProgram}, {"step", StepProgram}, {"start", StartProgram}, {"stop", StopProgram}, {"load", LoadFileToDisc}, {"write", WriteToDRAM}, {"read", ReadFromDRAM}, {"w", Write}, {"r", Read}};
 
 
 void Terminal_Init()
@@ -146,7 +151,7 @@ void StopProgram(char* line)
 
 
 #define BLOCK_SIZE 16
-#define DISC_SIZE 1024
+#define DISC_SIZE (2*1024)
 void LoadFileToDisc(char* line)
 {
 unsigned char buf[BLOCK_SIZE];
@@ -193,4 +198,36 @@ char* word;
 		current += length;
 	}
 	UART_WriteByte('!');
+}
+
+void WriteToDRAM(char* line)
+{
+char txt[]="Hello DRAM";
+unsigned long address = ReadInteger(GetNextWord(line));
+
+	DRAM_WriteBytes(txt, address, 11);
+	
+	UART_WriteString_P("Done");
+}
+
+void ReadFromDRAM(char* line)
+{
+char txt[16] = {0};
+unsigned long address = ReadInteger(GetNextWord(line));
+
+	DRAM_ReadBytes(txt, address, 11);
+	
+	UART_WriteBytes(txt, 11);
+	
+	UART_WriteString_P("Done");
+}
+
+void Write(char* line)
+{
+	DRAM_WriteByte(0, 0x55);
+}
+
+void Read(char* line)
+{
+	DRAM_ReadByte(0);
 }

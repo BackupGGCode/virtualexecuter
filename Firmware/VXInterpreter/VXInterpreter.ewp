@@ -1021,7 +1021,7 @@
         </option>
         <option>
           <name>SCCStackSize</name>
-          <state>300</state>
+          <state>400</state>
         </option>
         <option>
           <name>SCExtCStack</name>
@@ -1029,7 +1029,7 @@
         </option>
         <option>
           <name>SCRStackSize</name>
-          <state>50</state>
+          <state>60</state>
         </option>
         <option>
           <name>SCExtRStack</name>
@@ -1081,12 +1081,12 @@
         </option>
         <option>
           <name>GGEepromUtilSize</name>
-          <state>1024</state>
+          <state>2048</state>
         </option>
         <option>
           <name>New Variant Processor</name>
           <version>19</version>
-          <state>50</state>
+          <state>63</state>
         </option>
         <option>
           <name>GRuntimeLibSelect</name>
@@ -1707,7 +1707,7 @@
         </option>
         <option>
           <name>XclFile</name>
-          <state>$TOOLKIT_DIR$\src\template\cfgm32.xcl</state>
+          <state>$TOOLKIT_DIR$\src\template\cfgm64.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
