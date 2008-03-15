@@ -156,10 +156,7 @@ unsigned char data;
 	data = DATA_IN;
 	
 	CTRL_PORT = 0xe0;
-	/*
-	CAS_HIGH;
-	RAS_HIGH;
-	*/
+	
 	NonCritical();
 	
 	return data;
@@ -186,11 +183,7 @@ void DRAM_WriteByte(unsigned long address, unsigned char data)
 	__no_operation();
 	
 	CTRL_PORT = 0xe0;
-	/*
-	CAS_HIGH;
-	RAS_HIGH;
-	WE_HIGH;
-	*/
+	
 	DIR_IN;
 	DATA_OUT = 0x00;
 	
