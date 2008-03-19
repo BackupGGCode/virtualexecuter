@@ -125,6 +125,15 @@ namespace VXT
 			options = null;
 			#endregion
 
+			if (options == null || options.Count == 0)
+			{
+				Console.WriteLine("Available ports:");
+				foreach (string s in SerialPort.GetPortNames())
+				{
+					Console.WriteLine("  " + s);
+				}
+			}
+
 			com = new SerialPort(port, int.Parse(baudrate));
 			com.NewLine = ((char)10).ToString();
 			com.Open();
