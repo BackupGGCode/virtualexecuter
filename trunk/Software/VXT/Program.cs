@@ -92,6 +92,8 @@ namespace VXT
 			string baudrate = "115200";
 			bool localEcho = false;
 			bool addLineCarriageReturn = false;
+			bool encodeAll = false;
+			bool encodeControlCharacters = false;
 
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
 			Console.WriteLine("Version: 1.0 - March 9th 2008");
@@ -115,6 +117,14 @@ namespace VXT
 			{
 				localEcho = true;
 			}
+			if (options.ContainsKey("e"))
+			{
+				encodeControlCharacters = true;
+			}
+			if (options.ContainsKey("E"))
+			{
+				encodeAll = true;
+			}
 
 			if (port == "")
 			{
@@ -122,7 +132,6 @@ namespace VXT
 				return;
 			}
 
-			options = null;
 			#endregion
 
 			if (options == null || options.Count == 0)
@@ -141,9 +150,11 @@ namespace VXT
 
 			Console.WriteLine("Connected to " + port + " @ " + baudrate + " bps.");
 
+			const int BLOCK_SIZE = 1024;
 			bool run = true;
-			char[] buf = new char[1024];
-			int i;
+			char[] buf = new char[BLOCK_SIZE];
+			byte[] byteBuf = new byte[BLOCK_SIZE];
+			char[] outBuffer;
 
 			while (run)
 			{
@@ -151,27 +162,76 @@ namespace VXT
 				if (com.BytesToRead > 0)
 				{
 					int toRead = com.BytesToRead;
-					if (toRead > buf.Length)
+					if (toRead > BLOCK_SIZE)
 					{
-						toRead = buf.Length;
+						toRead = BLOCK_SIZE;
 					}
-					toRead = com.Read(buf, 0, toRead);
-					if (addLineCarriageReturn)
+					outBuffer = new char[10 * toRead];
+
+					int j = 0;
+
+					if (encodeAll)
 					{
-						char[] newBuf = new char[toRead * 2];
-						int j = 0;
-						for (i = 0; i < toRead; i++)
+						toRead = com.Read(byteBuf, 0, toRead);
+
+						for (int i = 0; i < toRead; i++)
 						{
-							newBuf[j++] = buf[i];
-							if (buf[i] == (char)13)//&& buf[i+1] == (char)10 )
+							string s = Convert.ToString(byteBuf[i], 16);
+							if (s.Length == 1)
 							{
-								newBuf[j++] = (char)10;
+								outBuffer[j++] = '0';
+							}
+							foreach (char c in s)
+							{
+								outBuffer[j++] = c;
+							}
+							outBuffer[j++] = ' ';
+						}
+					}
+					else
+					{
+						toRead = com.Read(buf, 0, toRead);
+
+						for (int i = 0; i < toRead; i++)
+						{
+							if (buf[i] == (char)13)
+							{
+								outBuffer[j++] = buf[i];
+
+								if (addLineCarriageReturn)
+								{
+									outBuffer[j++] = (char)10;
+								}
+							}
+							else if (buf[i] < 32)
+							{
+								if (encodeControlCharacters)
+								{
+									outBuffer[j++] = '<';
+									string s = Convert.ToString((byte)buf[i], 16);
+									if (s.Length == 1)
+									{
+										outBuffer[j++] = '0';
+									}
+									foreach (char c in s)
+									{
+										outBuffer[j++] = c;
+									}
+									outBuffer[j++] = '>';
+								}
+								else
+								{
+									outBuffer[j++] = buf[i];
+								}
+							}
+							else
+							{
+								outBuffer[j++] = buf[i];
 							}
 						}
-						buf = newBuf;
-						toRead = j;
 					}
-					Console.Write(buf, 0, toRead);
+
+					Console.Write(outBuffer, 0, j);
 				}
 				#endregion
 
