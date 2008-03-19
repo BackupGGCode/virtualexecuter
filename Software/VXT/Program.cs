@@ -132,6 +132,7 @@ namespace VXT
 				{
 					Console.WriteLine("  " + s);
 				}
+				return;
 			}
 
 			com = new SerialPort(port, int.Parse(baudrate));
