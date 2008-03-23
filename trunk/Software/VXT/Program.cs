@@ -94,6 +94,9 @@ namespace VXT
 			bool addLineCarriageReturn = false;
 			bool encodeAll = false;
 			bool encodeControlCharacters = false;
+			bool saveToFile = false;
+			string logFileName = "log.txt";
+			StreamWriter logFile = null;
 
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
 			Console.WriteLine("Version: 1.0 - March 9th 2008");
@@ -124,6 +127,11 @@ namespace VXT
 			if (options.ContainsKey("E"))
 			{
 				encodeAll = true;
+			}
+			if (options.ContainsKey("F"))
+			{
+				saveToFile = true;
+				logFile = new StreamWriter(logFileName);
 			}
 
 			if (port == "")
@@ -232,6 +240,11 @@ namespace VXT
 					}
 
 					Console.Write(outBuffer, 0, j);
+					if (saveToFile)
+					{
+						logFile.Write(outBuffer, 0, j);
+						logFile.Flush();
+					}
 				}
 				#endregion
 
@@ -240,6 +253,10 @@ namespace VXT
 					char key = Console.ReadKey(true).KeyChar;
 					if (key == 3)
 					{
+						if (saveToFile)
+						{
+							logFile.Close();
+						}
 						return;
 					}
 					else if (key == 27)
@@ -250,6 +267,10 @@ namespace VXT
 						switch (cmds[0])
 						{
 							case "quit":
+								if (saveToFile)
+								{
+									logFile.Close();
+								}
 								return;
 							case "load":
 								LoadDiscImage(cmds);
@@ -281,6 +302,10 @@ namespace VXT
 			}
 
 			com.Close();
+			if (saveToFile)
+			{
+				logFile.Close();
+			}
 		}
 	}
 }
