@@ -6,7 +6,7 @@
 #include "VX.h"
 
 
-//--force_switch_type 1
+//--force_switch_type 1 => jump table
 
 
 unsigned char GetNextByte();
@@ -34,7 +34,7 @@ bool VX_Load(fsFile* file)
 		return false;
 	}
 	
-	heap = Kernel_Allocate(file->size);			// IKKE file->size!
+	heap = Kernel_Allocate(file->size);			// skal IKKE være file->size!
 	
 	
 	VX_Reset();

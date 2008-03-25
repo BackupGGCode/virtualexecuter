@@ -1252,7 +1252,7 @@
         </option>
         <option>
           <name>CCConstInRAM</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCInitInFlash</name>
@@ -1962,6 +1962,9 @@
       <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.c</name>
     </file>
   </group>
+  <file>
+    <name>$PROJ_DIR$\DataFlash.c</name>
+  </file>
   <file>
     <name>$PROJ_DIR$\DRAM.c</name>
   </file>

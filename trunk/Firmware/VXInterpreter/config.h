@@ -5,14 +5,14 @@
 #define SYSTEM_CLOCK_FREQUENCY									11059200
 #define SYSTEM_TICKS_PER_SECOND									1000
 
-#define MAX_NUMBER_OF_TASKS											10
+#define MAX_NUMBER_OF_TASKS											20
 
 #define MESSAGE_QUEUE_SIZE											8
 
 
 // Commander config
 #define COMMANDER_MAX_LINE_LENGTH								50
-#define COMMANDER_COMMAND_COUNT									12
+//#define COMMANDER_COMMAND_COUNT									12
 
 #define SEND_CRLF																1
 

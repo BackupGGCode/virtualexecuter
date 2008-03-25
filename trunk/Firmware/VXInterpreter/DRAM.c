@@ -144,11 +144,11 @@ unsigned char data;
 	Critical();
 	
 	ADR_PORT = address;
-	CTRL_PORT = ((address >> 8) & 0x0f) | 0xe0;
+	CTRL_PORT = ((address >> 8) & 0x03) | 0xe0;
 	__no_operation();
 	RAS_LOW;
-	ADR_PORT = (address >> 12);
-	CTRL_PORT = ((address >> 20) & 0x0f) | 0xc0;
+	ADR_PORT = (address >> 10);
+	CTRL_PORT = ((address >> 18) & 0x03) | 0xc0;
 	__no_operation();
 	CAS_LOW;
 	
@@ -172,11 +172,11 @@ void DRAM_WriteByte(unsigned long address, unsigned char data)
 	WE_LOW;
 	
 	ADR_PORT = address;
-	CTRL_PORT = ((address >> 8) & 0x0f) | 0xa0;
+	CTRL_PORT = ((address >> 8) & 0x03) | 0xa0;
 	__no_operation();
 	RAS_LOW;
-	ADR_PORT = (address >> 12);
-	CTRL_PORT = ((address >> 20) & 0x0f) | 0x80;
+	ADR_PORT = (address >> 10);
+	CTRL_PORT = ((address >> 18) & 0x03) | 0x80;
 	__no_operation();
 	CAS_LOW;
 	
@@ -188,6 +188,20 @@ void DRAM_WriteByte(unsigned long address, unsigned char data)
 	DATA_OUT = 0x00;
 	
 	NonCritical();
+}
+
+unsigned long DRAM_ReadLong(unsigned long address)
+{
+unsigned long value;
+
+	DRAM_ReadBytes((unsigned char*)&value, address, 4);
+	
+	return value;
+}
+
+void DRAM_WriteLong(unsigned long address, unsigned long value)
+{
+	DRAM_ReadBytes((unsigned char*)&value, address, 4);
 }
 
 void DRAM_ReadBytes(unsigned char* data, unsigned long address, unsigned long length)
@@ -205,6 +219,7 @@ void DRAM_WriteBytes(unsigned char* data, unsigned long address, unsigned long l
 		DRAM_WriteByte(address++, *data++);
 	}
 }
+
 
 /*
 static void JoinFreeAdjacentBlocks()

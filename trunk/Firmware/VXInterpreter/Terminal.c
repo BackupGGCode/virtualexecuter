@@ -22,7 +22,11 @@ void WriteToDRAM(char* line);
 void ReadFromDRAM(char* line);
 void Write(char* line);
 void Read(char* line);
-__flash command commands[] = {{"help", HelpScreen}, {"list", ListFiles}, {"print", PrintFile}, {"run", RunProgram}, {"step", StepProgram}, {"start", StartProgram}, {"stop", StopProgram}, {"load", LoadFileToDisc}, {"write", WriteToDRAM}, {"read", ReadFromDRAM}, {"w", Write}, {"r", Read}};
+void TestDRAM(char* line);
+void ClearDRAM(char* line);
+void FillDRAM(char* line);
+void PrintDRAM(char* line);
+__flash command commands[] = {{"help", HelpScreen}, {"list", ListFiles}, {"print", PrintFile}, {"run", RunProgram}, {"step", StepProgram}, {"start", StartProgram}, {"stop", StopProgram}, {"load", LoadFileToDisc}, {"w", WriteToDRAM}, {"r", ReadFromDRAM}, {"write", Write}, {"read", Read}, {"testdram", TestDRAM}, {"cleardram", ClearDRAM}, {"fill", FillDRAM}, {"printdram", PrintDRAM}, {0,0}};
 
 
 void Terminal_Init()
@@ -32,11 +36,14 @@ void Terminal_Init()
 
 void HelpScreen(char* line)
 {
-	UART_WriteString_P("help - This help screen\n");
-	UART_WriteString_P("list - List files\n");
-	UART_WriteString_P("print <file> - Print file\n");
-	UART_WriteString_P("run <file> - Run VX program\n");
-	UART_WriteString_P("load <size> <blocksize> - Load image to disc\n");
+	UART_WriteString_P("help - This help screen.\n");
+	UART_WriteString_P("list - List files.\n");
+	UART_WriteString_P("print <file> - Print file.\n");
+	UART_WriteString_P("run <file> - Load a VX program to memory. If a 's' is appended the program is also started.\n");
+	UART_WriteString_P("step <file> - Execute one instruction of the currently loaded program.\n");
+	UART_WriteString_P("start <file> - Starts execution of the currently loaded program.\n");
+	UART_WriteString_P("stop <file> - Stops execution of the currently loaded program.\n");
+	UART_WriteString_P("load <size> <blocksize> - Load image to disc.\n");
 }
 
 void ListFiles(char* line)
@@ -205,7 +212,7 @@ void WriteToDRAM(char* line)
 char txt[]="Hello DRAM";
 unsigned long address = ReadInteger(GetNextWord(line));
 
-	DRAM_WriteBytes(txt, address, 11);
+	DRAM_WriteBytes((unsigned char*)txt, address, 10);
 	
 	UART_WriteString_P("Done");
 }
@@ -215,11 +222,11 @@ void ReadFromDRAM(char* line)
 char txt[16] = {0};
 unsigned long address = ReadInteger(GetNextWord(line));
 
-	DRAM_ReadBytes(txt, address, 11);
+	DRAM_ReadBytes((unsigned char*)txt, address, 10);
 	
-	UART_WriteBytes(txt, 11);
+	UART_WriteBytes((unsigned char*)txt, 10);
 	
-	UART_WriteString_P("Done");
+	UART_WriteString_P("\nDone");
 }
 
 void Write(char* line)
@@ -234,24 +241,77 @@ void Read(char* line)
 
 void TestDRAM(char* line)
 {
-unsigned long current, max, step, progress=0, progressStep;
-unsigned char value=1;
+unsigned long current;
+unsigned long max = 1048576;
+unsigned long step = 57;
+unsigned char value = 123;
 
-	max = 16*1024*1024;
-	step = 12345;
-	progressStep = max / step;
+	UART_WriteString_P("Clearing memory...\n");
 
-	UART_WriteString_P("Testing memory...\n");
-
-	UART_WriteString_P("Writing...\n");
-	for(current=0;current<max;current+=step)
+	for(current = 0; current < max; current += step)
 	{
-		DRAM_WriteByte(current, value++);
-		progress += progressStep;
-		UART_WriteValueUnsigned(progress/step);
-		UART_WriteString_P("%   ");
-		UART_WriteByte(13);
+		DRAM_WriteByte(current, 0);
 	}
 	
-	UART_WriteString_P("Done");
+	UART_WriteString_P("Done\nTesting memory...\n");
+
+	for(current = 0; current < max; current += step)
+	{
+		if(DRAM_ReadByte(current) != 0)
+		{
+			UART_WriteValueUnsigned(DRAM_ReadByte(current));
+			UART_WriteString_P("\nNot cleared");
+			break;
+		}
+		DRAM_WriteByte(current, value);
+		if(DRAM_ReadByte(current) != value)
+		{
+			UART_WriteString_P("\nReadback error");
+			break;
+		}
+		UART_WriteValueUnsigned(current / 1024);
+		UART_WriteString_P(" kB\r");
+		value += 234;
+	}
+	
+	UART_WriteString_P("\nDone");
+}
+
+void ClearDRAM(char* line)
+{
+unsigned long i;
+
+	for(i=0;i<1048576;i++)
+	{
+		DRAM_WriteByte(i,'Z');
+	}
+}
+
+void FillDRAM(char* line)
+{
+unsigned long i;
+unsigned char c='A';
+
+	for(i=0;i<1048576;i++)
+	{
+		DRAM_WriteByte(i,c);
+		if(c == 'Z')
+		{
+			c = 'A';
+		}
+		else
+		{
+			c++;
+		}
+	}
+}
+
+void PrintDRAM(char* line)
+{
+unsigned long i;
+
+	for(i=0;i<1048576;i++)
+	{
+		UART_WriteByte(DRAM_ReadByte(i));
+	}
 }
