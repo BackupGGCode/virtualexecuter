@@ -8,12 +8,6 @@
 #include "DRAM.h"
 
 
-void blink()
-{
-	LED_GREEN_TOGGLE
-	Kernel_Sleep(500);
-}
-
 void main()
 {
 	DDRA=0xff;
@@ -39,11 +33,11 @@ void main()
 	UART_Init(__BAUDRATE__(115200));
 	FileStore_Init(InternalEEPROM_ReadByte, InternalEEPROM_ReadBytes, InternalEEPROM_ReadLong);
 	Terminal_Init();	
-//	Kernel_CreateTask(blink);
 	
 	LED_GREEN_ON
 		
 	Kernel_SystemTimerHook(DRAM_Refresh);
+	DRAM_Init();
 	
 	Kernel_Run();
 }

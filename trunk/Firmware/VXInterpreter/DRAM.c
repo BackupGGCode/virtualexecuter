@@ -3,11 +3,11 @@
 #include "DRAM.h"
 #include <Kernel/Kernel.h>
 #include <Kernel/KernelInternals.h>
+#include <Peripherals/UART.h>
+
 
 #define DRAM_PRESCALER													12
-
 #define NUMBER_OF_ROWS													1024
-
 
 #define DATA_IN																	PIND
 #define DATA_OUT																PORTD
@@ -28,29 +28,26 @@
 typedef struct
 {
 	bool free;
-	unsigned short size;
+	unsigned long size;
 	unsigned long next;
 } block;
 
 
+static void ReadBlock(block* b, unsigned long address);
+static void ReadFirstBlock(block* b);
+static void WriteBlock(block* b, unsigned long address);
 static void JoinFreeAdjacentBlocks();
 
 
-static unsigned long dramSize;
-
-
-void DRAM_Init(unsigned long size)
+void DRAM_Init()
 {
-	dramSize = size;
+block b;
 
-	/*
-block* b = (block*)heap;
+	b.free = true;
+	b.size = DRAM_SIZE - sizeof(block);
+	b.next = null;
 
-
-	b->free = true;
-	b->size = dramSize - sizeof(block);
-	b->next = null;
-*/
+	WriteBlock(&b, 0);
 }
 
 
@@ -79,63 +76,117 @@ unsigned short i;
 	}
 }
 
-/*
-void* Kernel_Allocate(unsigned short size)
-{
-block* b = (block*)heap;
-block* split;
 
-	while((b->free != true || b->size < size) && b->next != null)
+dram DRAM_Allocate(unsigned long size)
+{
+block b;
+block split;
+dram a1 = 0, a2;
+
+	ReadFirstBlock(&b);
+
+	while((b.free != true || b.size < size) && b.next != null)
 	{
-		b = (block*)b->next;
+		a1 = b.next;
+		ReadBlock(&b, a1);
 	}
 	
-	if(b->free != true || b->size < size)																									// Found a valid block?
+	if(b.free != true || b.size < size)																									// Found a valid block?
 	{
 		return null;																																					// No
 	}
 	
-	if(b->size > (size + sizeof(block)))																									// Split block, return first part and mark last part as free
+	if(b.size > (size + sizeof(block)))																									// Split block, return first part and mark last part as free
 	{
-		split = (block*)((unsigned char*)b + sizeof(block) + size);
-		split->free = true;
-		split->size = b->size - size - sizeof(block);
-		split->next = b->next;
+		a2 = a1 + sizeof(block) + size;
+		split.free = true;
+		split.size = b.size - size - sizeof(block);
+		split.next = b.next;
+		WriteBlock(&split, a2);
 		
-		b->free = false;
-		b->size = size;
-		b->next = split;
-		
-		return (void*)((unsigned short)b + sizeof(block));
+		b.free = false;
+		b.size = size;
+		b.next = a2;
 	}
 	else																																									// Block is too small to split - return all
 	{
-		b->free = false;
-		return (void*)((unsigned short)b + sizeof(block));
+		b.free = false;
 	}
+
+	WriteBlock(&b, a1);
+	
+	return (dram)(a1 + sizeof(block));
 }
 
 
-void Kernel_Deallocate(void* pointer)
+void DRAM_Deallocate(dram chunk)
 {
-block* b = (block*)heap;
-block* p = (block*)((unsigned short)pointer - sizeof(block));
-	
-	while(b != p && b->next != null)
+block b;
+dram a1 = 0, a2 = (chunk - sizeof(block));
+
+	ReadFirstBlock(&b);
+
+	while(a1 != a2 && b.next != null)
 	{
-		b = (block*)b->next;
+		a1 = b.next;
+		ReadBlock(&b, a1);
 	}
 	
-	if(b != p)
+	if(a1 != a2)
 	{
 		return;																																								// Invalid pointer
 	}
 	
-	b->free = true;
+	b.free = true;																																					// deallocate it
+	WriteBlock(&b, a1);
 
 	JoinFreeAdjacentBlocks();
 }
+
+
+unsigned long DRAM_GetFreeHeapSpace()
+{
+block b;
+dram a = 0;
+unsigned long space = 0;
+
+	do
+	{
+		ReadBlock(&b, a);
+
+		if(b.free)
+		{
+			space += b.size;
+		}
+		
+		a = b.next;
+	} while(b.next != null);
+	
+	return space;
+}
+
+/*
+unsigned long space = DRAM_SIZE - sizeof(block);
+block b;
+dram a = 0;
+
+	ReadFirstBlock(&b);
+	
+	while(b.next != null)
+	{
+		if(b.free == true)
+		{
+			space -= (b.size + sizeof(block));
+		}
+		a = b.next;
+		ReadBlock(&b, a);
+	}
+	
+	return space;
+}
 */
+
+
 
 unsigned char DRAM_ReadByte(unsigned long address)
 {
@@ -220,25 +271,82 @@ void DRAM_WriteBytes(unsigned char* data, unsigned long address, unsigned long l
 	}
 }
 
+void ReadBlock(block* b, unsigned long address)
+{
+unsigned char i;
+unsigned char* pb = (unsigned char*)b;
 
-/*
+	for(i = 0; i < sizeof(block); i++)
+	{
+		*pb++ = DRAM_ReadByte(address++);
+	}
+}
+
+void ReadFirstBlock(block* b)
+{
+unsigned char i;
+unsigned char* pb = (unsigned char*)b;
+unsigned long address = 0;
+
+	for(i = 0; i < sizeof(block); i++)
+	{
+		*pb++ = DRAM_ReadByte(address++);
+	}
+}
+
+void WriteBlock(block* b, unsigned long address)
+{
+unsigned char i;
+unsigned char* pb = (unsigned char*)b;
+
+	for(i = 0; i < sizeof(block); i++)
+	{
+		DRAM_WriteByte(address++, *pb++);
+	}
+}
+
 static void JoinFreeAdjacentBlocks()
 {
-block* b = (block*)heap;
-block* next;
+block b, next;
+dram a = 0;
 
-	while(b->next != null)
+	ReadFirstBlock(&b);
+
+	while(b.next != null)
 	{
-		next = (block*)b->next;
-		if(b->free == true && next->free == true)
+		ReadBlock(&next, b.next);
+		if(b.free == true && next.free == true)
 		{
-			b->size += next->size + sizeof(block);
-			b->next = next->next;
+			b.size += next.size + sizeof(block);
+			b.next = next.next;
+			WriteBlock(&b, a);
 		}
 		else
 		{
-			b = (block*)b->next;
+			a = b.next;
+			ReadBlock(&b, a);
 		}
 	}
 }
-*/
+
+
+
+void DRAM_PrintBlockList()
+{
+block b;
+dram a = 0;
+
+	do
+	{
+		ReadBlock(&b, a);
+
+		UART_WriteByte(b.free+'0');
+		UART_WriteByte(' ');
+		UART_WriteValueUnsigned(b.size,7,' ');
+		UART_WriteByte(' ');
+		UART_WriteValueUnsigned(b.next,7,' ');
+		UART_WriteString_P("\n");
+		
+		a = b.next;
+	} while(b.next != null);
+}

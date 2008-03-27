@@ -12,7 +12,6 @@
 
 // Commander config
 #define COMMANDER_MAX_LINE_LENGTH								50
-//#define COMMANDER_COMMAND_COUNT									12
 
 #define SEND_CRLF																1
 

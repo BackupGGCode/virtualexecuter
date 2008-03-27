@@ -1,1 +1,1 @@
-@PATH = %PATH%;VXA/bin/release;VXC/bin/release;VXIC/bin/release;VXL/bin/release;VXT/bin/release;
+@PATH = %PATH%;VXA/bin/release;VXC/bin/release;VXIC/bin/release;VXL/bin/release;VXT/bin/release;../tools;
