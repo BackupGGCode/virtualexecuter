@@ -1,3 +1,6 @@
+#include "VX_ProcessManagement.h"
+
+
 extern bool VX_Load(fsFile* file);
 extern void VX_Reset();
 extern void VX_Unload();

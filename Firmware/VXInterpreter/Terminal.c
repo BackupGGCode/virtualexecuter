@@ -6,8 +6,8 @@
 #include <strings.h>
 #include <FileStore/FileStore.h>
 #include <Peripherals/InternalEEPROM.h>
-#include "VX.h"
-#include "DRAM.h"
+#include <VX/VX.h>
+#include <DRAM.h>
 
 
 void HelpScreen(char* line);
@@ -20,13 +20,33 @@ void StopProgram(char* line);
 void LoadFileToDisc(char* line);
 void WriteToDRAM(char* line);
 void ReadFromDRAM(char* line);
-void Write(char* line);
-void Read(char* line);
 void TestDRAM(char* line);
 void ClearDRAM(char* line);
 void FillDRAM(char* line);
 void PrintDRAM(char* line);
-__flash command commands[] = {{"help", HelpScreen}, {"list", ListFiles}, {"print", PrintFile}, {"run", RunProgram}, {"step", StepProgram}, {"start", StartProgram}, {"stop", StopProgram}, {"load", LoadFileToDisc}, {"w", WriteToDRAM}, {"r", ReadFromDRAM}, {"write", Write}, {"read", Read}, {"testdram", TestDRAM}, {"cleardram", ClearDRAM}, {"fill", FillDRAM}, {"printdram", PrintDRAM}, {0,0}};
+void AllocateChunk(char* line);
+void DeallocateChunk(char* line);
+void PrintFreeHeap(char* line);
+__flash command commands[] = {
+	{"help", HelpScreen, "This help screen."},
+	{"list", ListFiles, "List files on disk."},
+	{"print", PrintFile, "Print specified file."},
+	{"run", RunProgram, "Load a VX program to memory. Use option s to auto start the program."},
+	{"step", StepProgram, "Execute one instruction of the currently loaded program."},
+	{"start", StartProgram, "Starts execution of the currently loaded program."},
+	{"stop", StopProgram, "Stops execution of the currently loaded program."},
+	{"load", LoadFileToDisc, "Load image to disc."},
+	{"w", WriteToDRAM, 0},
+	{"r", ReadFromDRAM, 0},
+	{"testdram", TestDRAM, 0},
+	{"cleardram", ClearDRAM, 0},
+	{"fill", FillDRAM, 0},
+	{"printdram", PrintDRAM, 0},
+	{"a", AllocateChunk, 0},
+	{"d", DeallocateChunk, 0},
+	{"h", PrintFreeHeap, 0},
+	{"pro", VX_ListProcesses, "List all processes"},
+  {0, 0, 0} };
 
 
 void Terminal_Init()
@@ -36,14 +56,19 @@ void Terminal_Init()
 
 void HelpScreen(char* line)
 {
-	UART_WriteString_P("help - This help screen.\n");
-	UART_WriteString_P("list - List files.\n");
-	UART_WriteString_P("print <file> - Print file.\n");
-	UART_WriteString_P("run <file> - Load a VX program to memory. If a 's' is appended the program is also started.\n");
-	UART_WriteString_P("step <file> - Execute one instruction of the currently loaded program.\n");
-	UART_WriteString_P("start <file> - Starts execution of the currently loaded program.\n");
-	UART_WriteString_P("stop <file> - Stops execution of the currently loaded program.\n");
-	UART_WriteString_P("load <size> <blocksize> - Load image to disc.\n");
+unsigned char i = 0;
+
+	while(commands[i].name != null)
+	{
+		UART_WriteString_P(commands[i].name);
+		if(commands[i].helpText != null)
+		{
+			UART_WriteString_P(" - ");
+			UART_WriteString_P(commands[i].helpText);
+		}
+		UART_WriteString_P("\n");
+		i++;
+	}
 }
 
 void ListFiles(char* line)
@@ -64,7 +89,7 @@ void ListFiles(char* line)
 			FileStore_GetFileName(&f, name, 50);
 			UART_WriteString(name);
 			UART_WriteByte(' ');
-			UART_WriteValueUnsigned(f.size);
+			UART_WriteValueUnsigned(f.size,0,0);
 			UART_WriteString_P("\n");
 			totalBytes += f.size;
 			totalFiles++;
@@ -72,9 +97,9 @@ void ListFiles(char* line)
 	}
 	
 	UART_WriteString_P("\n");
-	UART_WriteValueUnsigned(totalFiles);
+	UART_WriteValueUnsigned(totalFiles,0,0);
 	UART_WriteString_P(" files ");
-	UART_WriteValueUnsigned(totalBytes);
+	UART_WriteValueUnsigned(totalBytes,0,0);
 	UART_WriteString_P(" bytes");
 }
 
@@ -132,7 +157,7 @@ char* word;
 
 void StepProgram(char* line)
 {
-unsigned long count = ReadInteger(GetNextWord(line));
+unsigned long count = ReadValueUnsigned(GetNextWord(line));
 
 	if(count == 0)
 	{
@@ -167,9 +192,9 @@ unsigned long blockSize, size, current=0;
 char* word;
 
 	word = GetNextWord(line);
-	size = ReadInteger(word);
+	size = ReadValueUnsigned(word);
 	word = GetNextWord(word);
-	blockSize = ReadInteger(word);
+	blockSize = ReadValueUnsigned(word);
 	
 	if(blockSize > BLOCK_SIZE)
 	{
@@ -185,7 +210,7 @@ char* word;
 	{
 		UART_WriteByte('A');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(blockSize);
+		UART_WriteValueUnsigned(blockSize,0,0);
 		UART_WriteString_P("\n");
 	}
 	
@@ -210,7 +235,7 @@ char* word;
 void WriteToDRAM(char* line)
 {
 char txt[]="Hello DRAM";
-unsigned long address = ReadInteger(GetNextWord(line));
+unsigned long address = ReadValueUnsigned(GetNextWord(line));
 
 	DRAM_WriteBytes((unsigned char*)txt, address, 10);
 	
@@ -220,7 +245,7 @@ unsigned long address = ReadInteger(GetNextWord(line));
 void ReadFromDRAM(char* line)
 {
 char txt[16] = {0};
-unsigned long address = ReadInteger(GetNextWord(line));
+unsigned long address = ReadValueUnsigned(GetNextWord(line));
 
 	DRAM_ReadBytes((unsigned char*)txt, address, 10);
 	
@@ -229,20 +254,10 @@ unsigned long address = ReadInteger(GetNextWord(line));
 	UART_WriteString_P("\nDone");
 }
 
-void Write(char* line)
-{
-	DRAM_WriteByte(0, 0x55);
-}
-
-void Read(char* line)
-{
-	DRAM_ReadByte(0);
-}
-
 void TestDRAM(char* line)
 {
 unsigned long current;
-unsigned long max = 1048576;
+unsigned long max = DRAM_SIZE;
 unsigned long step = 57;
 unsigned char value = 123;
 
@@ -259,7 +274,7 @@ unsigned char value = 123;
 	{
 		if(DRAM_ReadByte(current) != 0)
 		{
-			UART_WriteValueUnsigned(DRAM_ReadByte(current));
+			UART_WriteValueUnsigned(DRAM_ReadByte(current),0,0);
 			UART_WriteString_P("\nNot cleared");
 			break;
 		}
@@ -269,7 +284,7 @@ unsigned char value = 123;
 			UART_WriteString_P("\nReadback error");
 			break;
 		}
-		UART_WriteValueUnsigned(current / 1024);
+		UART_WriteValueUnsigned(current / 1024,0,0);
 		UART_WriteString_P(" kB\r");
 		value += 234;
 	}
@@ -281,7 +296,7 @@ void ClearDRAM(char* line)
 {
 unsigned long i;
 
-	for(i=0;i<1048576;i++)
+	for(i=0;i<DRAM_SIZE;i++)
 	{
 		DRAM_WriteByte(i,'Z');
 	}
@@ -292,7 +307,7 @@ void FillDRAM(char* line)
 unsigned long i;
 unsigned char c='A';
 
-	for(i=0;i<1048576;i++)
+	for(i=0;i<DRAM_SIZE;i++)
 	{
 		DRAM_WriteByte(i,c);
 		if(c == 'Z')
@@ -310,8 +325,46 @@ void PrintDRAM(char* line)
 {
 unsigned long i;
 
-	for(i=0;i<1048576;i++)
+	for(i=0;i<DRAM_SIZE;i++)
 	{
 		UART_WriteByte(DRAM_ReadByte(i));
 	}
+}
+
+void AllocateChunk(char* line)
+{
+unsigned long size = ReadValueUnsigned(GetNextWord(line));	
+dram d = DRAM_Allocate(size);
+
+	if(d)
+	{
+		UART_WriteString_P("Allocation succeeded. Location: ");
+		UART_WriteValueUnsigned(d,0,0);
+		UART_WriteString_P("\n");
+	}
+	else
+	{
+		UART_WriteString_P("Allocation failed!\n");
+	}
+}
+
+void DeallocateChunk(char* line)
+{
+unsigned long address = ReadValueUnsigned(GetNextWord(line));	
+
+	DRAM_Deallocate(address);
+
+	UART_WriteString_P("\n");
+}
+
+void PrintFreeHeap(char* line)
+{
+unsigned long space = DRAM_GetFreeHeapSpace();
+
+	DRAM_PrintBlockList();
+	UART_WriteString_P("Allocated/free: ");
+	UART_WriteValueUnsigned(DRAM_SIZE - space,0,0);
+	UART_WriteByte('/');
+	UART_WriteValueUnsigned(space,0,0);
+	UART_WriteString_P(" bytes\n");
 }

@@ -1021,7 +1021,7 @@
         </option>
         <option>
           <name>SCCStackSize</name>
-          <state>400</state>
+          <state>0x130</state>
         </option>
         <option>
           <name>SCExtCStack</name>
@@ -1959,7 +1959,19 @@
       </file>
     </group>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\mem.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\[Drivers]\C\MROS\strings.c</name>
+    </file>
+  </group>
+  <group>
+    <name>VX</name>
+    <file>
+      <name>$PROJ_DIR$\VX\VX.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\VX\VX_ProcessManagement.c</name>
     </file>
   </group>
   <file>
@@ -1973,9 +1985,6 @@
   </file>
   <file>
     <name>$PROJ_DIR$\Terminal.c</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\VX.c</name>
   </file>
 </project>
 
