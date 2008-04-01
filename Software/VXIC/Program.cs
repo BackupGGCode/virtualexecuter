@@ -18,6 +18,7 @@ namespace VXIC
 			string outputFileName;
 			FileStoreImage bam = new FileStoreImage();
 
+			#region Parse command line options
 			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
 			if (options.ContainsKey("d") == false)
@@ -35,13 +36,20 @@ namespace VXIC
 			{
 				outputFileName = Path.GetFileName(sourceDirectory) + ".vxi";
 			}
+			#endregion
+
+			if (File.Exists(sourceDirectory) == false)
+			{
+				Console.WriteLine("Specified source directory was not found.");
+				return;
+			}
 
 			Console.Write("Parsing directory...");
 			bam.SelectDirectory(sourceDirectory);
 			Console.WriteLine("done");
 			if (bam.GetFiles().Count == 0)
 			{
-				Console.WriteLine("No files found. Target file is untouched.");
+				Console.WriteLine("No files found.");
 				return;
 			}
 
