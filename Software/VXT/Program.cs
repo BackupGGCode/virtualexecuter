@@ -4,6 +4,7 @@ using System.Text;
 using Coma;
 using System.IO.Ports;
 using System.IO;
+using System.Threading;
 
 namespace VXT
 {
@@ -67,8 +68,13 @@ namespace VXT
 				{
 					length = blockSize;
 				}
-				com.Write(data, current, length);
-				current += length;
+				//com.Write(data, current, length);
+				for (int aaa = 0; aaa < length; aaa++)
+				{
+					com.Write(data, current++, 1);
+					//					Thread.Sleep(1);
+				}
+				//current += length;
 				Console.Write((char)com.ReadChar());
 			}
 
@@ -101,210 +107,220 @@ namespace VXT
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
 			Console.WriteLine("Version: 1.0 - March 9th 2008");
 
-			#region Parse command line
-			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
+			try
+			{
+				#region Parse command line
+				Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
-			if (options.ContainsKey("p"))
-			{
-				port = options["p"][0];
-			}
-			if (options.ContainsKey("b"))
-			{
-				baudrate = options["b"][0];
-			}
-			if (options.ContainsKey("l"))
-			{
-				localEcho = false;
-			}
-			if (options.ContainsKey("L"))
-			{
-				localEcho = true;
-			}
-			if (options.ContainsKey("e"))
-			{
-				encodeControlCharacters = true;
-			}
-			if (options.ContainsKey("E"))
-			{
-				encodeAll = true;
-			}
-			if (options.ContainsKey("F"))
-			{
-				saveToFile = true;
-				logFile = new StreamWriter(logFileName);
-			}
-
-			if (port == "")
-			{
-				Console.WriteLine("No port specified");
-				return;
-			}
-
-			#endregion
-
-			if (options == null || options.Count == 0)
-			{
-				Console.WriteLine("Available ports:");
-				foreach (string s in SerialPort.GetPortNames())
+				if (options.ContainsKey("p"))
 				{
-					Console.WriteLine("  " + s);
+					port = options["p"][0];
 				}
-				return;
-			}
-
-			com = new SerialPort(port, int.Parse(baudrate));
-			com.NewLine = ((char)10).ToString();
-			com.Open();
-
-			Console.WriteLine("Connected to " + port + " @ " + baudrate + " bps.");
-
-			const int BLOCK_SIZE = 1024;
-			bool run = true;
-			char[] buf = new char[BLOCK_SIZE];
-			byte[] byteBuf = new byte[BLOCK_SIZE];
-			char[] outBuffer;
-
-			while (run)
-			{
-				#region Com to con
-				if (com.BytesToRead > 0)
+				if (options.ContainsKey("b"))
 				{
-					int toRead = com.BytesToRead;
-					if (toRead > BLOCK_SIZE)
+					baudrate = options["b"][0];
+				}
+				if (options.ContainsKey("l"))
+				{
+					localEcho = false;
+				}
+				if (options.ContainsKey("L"))
+				{
+					localEcho = true;
+				}
+				if (options.ContainsKey("e"))
+				{
+					encodeControlCharacters = true;
+				}
+				if (options.ContainsKey("E"))
+				{
+					encodeAll = true;
+				}
+				if (options.ContainsKey("F"))
+				{
+					saveToFile = true;
+					logFile = new StreamWriter(logFileName);
+				}
+
+				if (port == "")
+				{
+					Console.WriteLine("No port specified");
+					return;
+				}
+
+				#endregion
+
+				if (options == null || options.Count == 0)
+				{
+					Console.WriteLine("Available ports:");
+					foreach (string s in SerialPort.GetPortNames())
 					{
-						toRead = BLOCK_SIZE;
+						Console.WriteLine("  " + s);
 					}
-					outBuffer = new char[10 * toRead];
+					return;
+				}
 
-					int j = 0;
+				com = new SerialPort(port, int.Parse(baudrate));
+				com.NewLine = ((char)10).ToString();
+				com.Open();
 
-					if (encodeAll)
+				Console.WriteLine("Connected to " + port + " @ " + baudrate + " bps.");
+
+				const int BLOCK_SIZE = 1024;
+				bool run = true;
+				char[] buf = new char[BLOCK_SIZE];
+				byte[] byteBuf = new byte[BLOCK_SIZE];
+				char[] outBuffer;
+
+				while (run)
+				{
+					#region Com to con
+					if (com.BytesToRead > 0)
 					{
-						toRead = com.Read(byteBuf, 0, toRead);
-
-						for (int i = 0; i < toRead; i++)
+						int toRead = com.BytesToRead;
+						if (toRead > BLOCK_SIZE)
 						{
-							string s = Convert.ToString(byteBuf[i], 16);
-							if (s.Length == 1)
-							{
-								outBuffer[j++] = '0';
-							}
-							foreach (char c in s)
-							{
-								outBuffer[j++] = c;
-							}
-							outBuffer[j++] = ' ';
+							toRead = BLOCK_SIZE;
 						}
-					}
-					else
-					{
-						toRead = com.Read(buf, 0, toRead);
+						outBuffer = new char[10 * toRead];
 
-						for (int i = 0; i < toRead; i++)
+						int j = 0;
+
+						if (encodeAll)
 						{
-							if (buf[i] == (char)13)
-							{
-								outBuffer[j++] = buf[i];
+							toRead = com.Read(byteBuf, 0, toRead);
 
-								if (addLineCarriageReturn)
-								{
-									outBuffer[j++] = (char)10;
-								}
-							}
-							else if (buf[i] < 32)
+							for (int i = 0; i < toRead; i++)
 							{
-								if (encodeControlCharacters)
+								string s = Convert.ToString(byteBuf[i], 16);
+								if (s.Length == 1)
 								{
-									outBuffer[j++] = '<';
-									string s = Convert.ToString((byte)buf[i], 16);
-									if (s.Length == 1)
+									outBuffer[j++] = '0';
+								}
+								foreach (char c in s)
+								{
+									outBuffer[j++] = c;
+								}
+								outBuffer[j++] = ' ';
+							}
+						}
+						else
+						{
+							toRead = com.Read(buf, 0, toRead);
+
+							for (int i = 0; i < toRead; i++)
+							{
+								if (buf[i] == (char)13)
+								{
+									outBuffer[j++] = buf[i];
+
+									if (addLineCarriageReturn)
 									{
-										outBuffer[j++] = '0';
+										outBuffer[j++] = (char)10;
 									}
-									foreach (char c in s)
+								}
+								else if (buf[i] < 32)
+								{
+									if (encodeControlCharacters)
 									{
-										outBuffer[j++] = c;
+										outBuffer[j++] = '<';
+										string s = Convert.ToString((byte)buf[i], 16);
+										if (s.Length == 1)
+										{
+											outBuffer[j++] = '0';
+										}
+										foreach (char c in s)
+										{
+											outBuffer[j++] = c;
+										}
+										outBuffer[j++] = '>';
 									}
-									outBuffer[j++] = '>';
+									else
+									{
+										outBuffer[j++] = buf[i];
+									}
 								}
 								else
 								{
 									outBuffer[j++] = buf[i];
 								}
 							}
+						}
+
+						Console.Write(outBuffer, 0, j);
+						if (saveToFile)
+						{
+							logFile.Write(outBuffer, 0, j);
+							logFile.Flush();
+						}
+					}
+					#endregion
+
+					if (Console.KeyAvailable)
+					{
+						char key = Console.ReadKey(true).KeyChar;
+						if (key == 3)
+						{
+							if (saveToFile)
+							{
+								logFile.Close();
+							}
+							return;
+						}
+						else if (key == 27)
+						{
+							Console.Write("\nVXT>");
+							string cmd = Console.ReadLine();
+							string[] cmds = cmd.Split(' ');
+							switch (cmds[0])
+							{
+								case "quit":
+									if (saveToFile)
+									{
+										logFile.Close();
+									}
+									return;
+								case "load":
+									LoadDiscImage(cmds);
+									break;
+								default:
+									Console.WriteLine("Unknown command");
+									break;
+							}
+						}
+						else
+						{
+							if (key == 13)
+							{
+								com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
+							}
 							else
 							{
-								outBuffer[j++] = buf[i];
+								com.Write(new char[1] { key }, 0, 1);
+							}
+
+							if (localEcho)
+							{
+								Console.Write(key);
 							}
 						}
 					}
 
-					Console.Write(outBuffer, 0, j);
-					if (saveToFile)
-					{
-						logFile.Write(outBuffer, 0, j);
-						logFile.Flush();
-					}
+					System.Threading.Thread.Sleep(1);
 				}
-				#endregion
 
-				if (Console.KeyAvailable)
+				com.Close();
+				if (saveToFile)
 				{
-					char key = Console.ReadKey(true).KeyChar;
-					if (key == 3)
-					{
-						if (saveToFile)
-						{
-							logFile.Close();
-						}
-						return;
-					}
-					else if (key == 27)
-					{
-						Console.Write("\nVXT>");
-						string cmd = Console.ReadLine();
-						string[] cmds = cmd.Split(' ');
-						switch (cmds[0])
-						{
-							case "quit":
-								if (saveToFile)
-								{
-									logFile.Close();
-								}
-								return;
-							case "load":
-								LoadDiscImage(cmds);
-								break;
-							default:
-								Console.WriteLine("Unknown command");
-								break;
-						}
-					}
-					else
-					{
-						if (key == 13)
-						{
-							com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
-						}
-						else
-						{
-							com.Write(new char[1] { key }, 0, 1);
-						}
-
-						if (localEcho)
-						{
-							Console.Write(key);
-						}
-					}
+					logFile.Close();
 				}
-
-				System.Threading.Thread.Sleep(1);
 			}
-
-			com.Close();
-			if (saveToFile)
+			catch (Exception ex)
 			{
-				logFile.Close();
+				if (ex.Message != "")
+				{
+					Console.WriteLine(ex.Message);
+				}
 			}
 		}
 	}

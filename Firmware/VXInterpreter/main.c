@@ -30,7 +30,7 @@ void main()
 		
 	Kernel_Init();
 	
-	UART_Init(__BAUDRATE__(115200));
+	UART_Init(__BAUDRATE__(230400));
 	FileStore_Init(InternalEEPROM_ReadByte, InternalEEPROM_ReadBytes, InternalEEPROM_ReadLong);
 	Terminal_Init();	
 	
