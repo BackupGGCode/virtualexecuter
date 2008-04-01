@@ -143,11 +143,49 @@ dram current = processList;
 	Kernel_Deallocate(proc1);
 	Kernel_Deallocate(proc2);
 	
-	return false;	
+	return false;
 }
 
 bool VX_SetProcessState(vx_pid id, vx_pstate state)
 {
+process* proc1;
+dram current = processList;
+
+	proc = Kernel_Allocate(sizeof(process));
+	if(proc == null)
+	{
+		return false;
+	}
+	
+	ReadProcess(proc, processList);
+	
+	if(processList == id)
+	{
+		proc->state = state;
+		WriteProcess(proc, id);
+	}
+	else
+	{
+		current = processList;
+		while(proc->next != null)**************************************************************************************
+		{
+			if(proc->next == id)
+			{
+				ReadProcess(proc, id);
+				proc->next = proc->next;
+				WriteProcess(proc, current);
+				DRAM_Deallocate(id);
+				Kernel_Deallocate(proc);
+				Kernel_Deallocate(proc);
+				return true;
+			}
+			
+			current = proc->next;
+			ReadProcess(proc, current);
+		}
+	}
+	
+	Kernel_Deallocate(proc);
 	
 	return false;
 }
