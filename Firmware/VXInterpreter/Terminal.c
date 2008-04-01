@@ -82,11 +82,11 @@ unsigned short totalFiles=0;
 	}
 	else
 	{
-		UART_WriteString_P("Size       Name\n");
+		UART_WriteString_P("Size...... Name\n");
 		do
 		{
 			FileStore_GetFileName(&f, name, 50);
-			UART_WriteValueUnsigned(f.size,0,' ');
+			UART_WriteValueUnsigned(f.size, 10, ' ');
 			UART_WriteByte(' ');
 			UART_WriteString(name);
 			UART_WriteString_P("\n");
@@ -335,7 +335,16 @@ vx_pid id;
 
 void KillProcess(char* line)
 {
+	vx_pid id = ReadValueUnsigned(GetNextWord(line));
 	
+	if(VX_KillProcess(id))
+	{
+		UART_WriteString_P("Process died\n");
+	}
+	else
+	{
+		UART_WriteString_P("Process not found\n");
+	}
 }
 
 bool ExecuteProgram(char* line)

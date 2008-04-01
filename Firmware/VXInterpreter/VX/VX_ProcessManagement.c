@@ -81,13 +81,13 @@ dram newProcess;
 	proc->ip = 0;
 	proc->sp = 0;
 	proc->code = newProcess + sizeof(vx_pid) + sizeof(vx_pstate) + sizeof(unsigned long) + sizeof(unsigned char) +  + sizeof(dram) +  + sizeof(dram);
-	proc->code_size = 0;
+	proc->code_size = codeSize;
 	proc->constant = proc->code + proc->code_size;
-	proc->constant_size = 0;
+	proc->constant_size = constantSize;
 	proc->data = proc->constant + proc->constant_size;
-	proc->data_size = 0;
+	proc->data_size = dataSize;
 	proc->stack = proc->data + proc->data_size;
-	proc->stack_size = 0;
+	proc->stack_size = stackSize;
 	proc->next = processList;
 	WriteProcess(proc, newProcess);
 	processList = newProcess;
@@ -101,41 +101,47 @@ dram newProcess;
 
 bool VX_KillProcess(vx_pid id)
 {
-process* proc;
-dram current = processList, previous = processList;
+process* proc1;
+process* proc2;
+dram current = processList;
 
-	proc = Kernel_Allocate(sizeof(process));
-	if(proc == null)
+	proc1 = Kernel_Allocate(sizeof(process));
+	proc2 = Kernel_Allocate(sizeof(process));
+	if(proc1 == null || proc2 == null)
 	{
 		return false;
 	}
-
-	do
+	
+	ReadProcess(proc1, processList);
+	
+	if(processList == id)
 	{
-		ReadProcess(proc, current);
-
-		if(id == current)
+		processList = proc1->next;
+		DRAM_Deallocate(id);
+	}
+	else
+	{
+		current = processList;
+		while(proc1->next != null)
 		{
-			if(current == processList)
+			if(proc1->next == id)
 			{
-				processList = proc->next;
-				DRAM_Deallocate(current);
+				ReadProcess(proc2, id);
+				proc1->next = proc2->next;
+				WriteProcess(proc1, current);
+				DRAM_Deallocate(id);
+				Kernel_Deallocate(proc1);
+				Kernel_Deallocate(proc2);
+				return true;
 			}
-			else
-			{
-				
-			}
-			Kernel_Deallocate(proc);
-			return true;
+			
+			current = proc1->next;
+			ReadProcess(proc1, current);
 		}
-		else
-		{
-			previous = current;
-			current = proc->next;
-		}
-	} while(current != null);
-
-	Kernel_Deallocate(proc);
+	}
+	
+	Kernel_Deallocate(proc1);
+	Kernel_Deallocate(proc2);
 	
 	return false;	
 }
@@ -159,7 +165,7 @@ dram address = processList;
 	
 	p = (process*)Kernel_Allocate(sizeof(process));
 	
-	UART_WriteString_P("PID     State Ticks      IP      SP      Size\n");
+	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... Size...\n");
 	
 	do
 	{
