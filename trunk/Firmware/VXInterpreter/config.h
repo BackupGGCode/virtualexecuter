@@ -17,8 +17,6 @@
 
 #define HEAP_SIZE																500
 
-#define VX_HEAP_SIZE														HEAP_SIZE
-
 #define LED_GREEN_ON														{PORTB|=(1<<6);}
 #define LED_GREEN_OFF														{PORTB&=~(1<<6);}
 #define LED_GREEN_TOGGLE												{PORTB^=(1<<6);}

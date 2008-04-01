@@ -6,8 +6,10 @@
 #include <Peripherals/UART.h>
 
 
-#define DRAM_PRESCALER													12
+#define DRAM_PRESCALER													14
 #define NUMBER_OF_ROWS													1024
+#define CAS_RAS_PER_CYCLE												8
+#define REFRESH_CYCLES													(NUMBER_OF_ROWS / CAS_RAS_PER_CYCLE)
 
 #define DATA_IN																	PIND
 #define DATA_OUT																PORTD
@@ -33,9 +35,9 @@ typedef struct
 } block;
 
 
-static void ReadBlock(block* b, unsigned long address);
+static void ReadBlock(block* b, dram address);
 static void ReadFirstBlock(block* b);
-static void WriteBlock(block* b, unsigned long address);
+static void WriteBlock(block* b, dram address);
 static void JoinFreeAdjacentBlocks();
 
 
@@ -54,18 +56,43 @@ block b;
 void DRAM_Refresh()
 {
 static unsigned char prescaler = 0;
-unsigned short i;
+unsigned char i;
 
 	if(prescaler == 0)
 	{
-		for(i=0;i<NUMBER_OF_ROWS;i++)
+		for(i = 0; i < REFRESH_CYCLES; i++)
 		{
 			CAS_LOW;
-			__no_operation();
 			RAS_LOW;
-			__no_operation();
 			CAS_HIGH;
-			__no_operation();
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
+			RAS_HIGH;
+			CAS_LOW;
+			RAS_LOW;
+			CAS_HIGH;
 			RAS_HIGH;
 		}
 		prescaler = DRAM_PRESCALER;
@@ -187,19 +214,24 @@ dram a = 0;
 */
 
 
-
-unsigned char DRAM_ReadByte(unsigned long address)
+/*
+	This assembles to 60 bytes of code executing in 30 clocks
+*/
+unsigned char DRAM_ReadByte(dram address)
 {
 unsigned char data;
 
 	Critical();
 	
 	ADR_PORT = address;
-	CTRL_PORT = ((address >> 8) & 0x03) | 0xe0;
+	address >>= 8;
+	CTRL_PORT = (address & 0x03) | 0xe0;
 	__no_operation();
 	RAS_LOW;
-	ADR_PORT = (address >> 10);
-	CTRL_PORT = ((address >> 18) & 0x03) | 0xc0;
+	address >>= 2;
+	ADR_PORT = address;
+	address >>= 8;
+	CTRL_PORT = (address & 0x03) | 0xc0;
 	__no_operation();
 	CAS_LOW;
 	
@@ -213,21 +245,25 @@ unsigned char data;
 	return data;
 }
 
-void DRAM_WriteByte(unsigned long address, unsigned char data)
+/*
+	This assembles to 70 bytes of code executing in 35 clocks
+*/
+void DRAM_WriteByte(dram address, unsigned char data)
 {
 	Critical();
 	
 	DIR_OUT;
 	DATA_OUT = data;
 	
-	WE_LOW;
-	
 	ADR_PORT = address;
-	CTRL_PORT = ((address >> 8) & 0x03) | 0xa0;
+	address >>= 8;
+	CTRL_PORT = (address & 0x03) | 0xa0;
 	__no_operation();
 	RAS_LOW;
-	ADR_PORT = (address >> 10);
-	CTRL_PORT = ((address >> 18) & 0x03) | 0x80;
+	address >>= 2;
+	ADR_PORT = address;
+	address >>= 8;
+	CTRL_PORT = (address & 0x03) | 0x80;
 	__no_operation();
 	CAS_LOW;
 	
@@ -241,7 +277,7 @@ void DRAM_WriteByte(unsigned long address, unsigned char data)
 	NonCritical();
 }
 
-unsigned long DRAM_ReadLong(unsigned long address)
+unsigned long DRAM_ReadLong(dram address)
 {
 unsigned long value;
 
@@ -250,12 +286,12 @@ unsigned long value;
 	return value;
 }
 
-void DRAM_WriteLong(unsigned long address, unsigned long value)
+void DRAM_WriteLong(dram address, unsigned long value)
 {
 	DRAM_ReadBytes((unsigned char*)&value, address, 4);
 }
 
-void DRAM_ReadBytes(unsigned char* data, unsigned long address, unsigned long length)
+void DRAM_ReadBytes(unsigned char* data, dram address, unsigned long length)
 {
 	while(length--)
 	{
@@ -263,7 +299,7 @@ void DRAM_ReadBytes(unsigned char* data, unsigned long address, unsigned long le
 	}
 }
 
-void DRAM_WriteBytes(unsigned char* data, unsigned long address, unsigned long length)
+void DRAM_WriteBytes(unsigned char* data, dram address, unsigned long length)
 {
 	while(length--)
 	{
@@ -271,7 +307,7 @@ void DRAM_WriteBytes(unsigned char* data, unsigned long address, unsigned long l
 	}
 }
 
-void ReadBlock(block* b, unsigned long address)
+void ReadBlock(block* b, dram address)
 {
 unsigned char i;
 unsigned char* pb = (unsigned char*)b;
@@ -294,7 +330,7 @@ unsigned long address = 0;
 	}
 }
 
-void WriteBlock(block* b, unsigned long address)
+void WriteBlock(block* b, dram address)
 {
 unsigned char i;
 unsigned char* pb = (unsigned char*)b;
@@ -336,6 +372,8 @@ void DRAM_PrintBlockList()
 block b;
 dram a = 0;
 
+	UART_WriteString_P("F Size    Next    This\n");
+	
 	do
 	{
 		ReadBlock(&b, a);
@@ -345,6 +383,8 @@ dram a = 0;
 		UART_WriteValueUnsigned(b.size,7,' ');
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(b.next,7,' ');
+		UART_WriteByte(' ');
+		UART_WriteValueUnsigned(a,7,' ');
 		UART_WriteString_P("\n");
 		
 		a = b.next;

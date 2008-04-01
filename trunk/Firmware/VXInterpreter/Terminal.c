@@ -18,15 +18,12 @@ void StepProgram(char* line);
 void StartProgram(char* line);
 void StopProgram(char* line);
 void LoadFileToDisc(char* line);
-void WriteToDRAM(char* line);
-void ReadFromDRAM(char* line);
 void TestDRAM(char* line);
-void ClearDRAM(char* line);
-void FillDRAM(char* line);
-void PrintDRAM(char* line);
 void AllocateChunk(char* line);
 void DeallocateChunk(char* line);
 void PrintFreeHeap(char* line);
+//void CreateProcess(char* line);
+void KillProcess(char* line);
 __flash command commands[] = {
 	{"help", HelpScreen, "This help screen."},
 	{"list", ListFiles, "List files on disk."},
@@ -36,29 +33,31 @@ __flash command commands[] = {
 	{"start", StartProgram, "Starts execution of the currently loaded program."},
 	{"stop", StopProgram, "Stops execution of the currently loaded program."},
 	{"load", LoadFileToDisc, "Load image to disc."},
-	{"w", WriteToDRAM, 0},
-	{"r", ReadFromDRAM, 0},
 	{"testdram", TestDRAM, 0},
-	{"cleardram", ClearDRAM, 0},
-	{"fill", FillDRAM, 0},
-	{"printdram", PrintDRAM, 0},
 	{"a", AllocateChunk, 0},
 	{"d", DeallocateChunk, 0},
 	{"h", PrintFreeHeap, 0},
-	{"pro", VX_ListProcesses, "List all processes"},
-  {0, 0, 0} };
+	{"pro", VX_ListProcesses, "List all processes."},
+//	{"create", CreateProcess, "Creates a new process from the file specified."},
+	{"kill", KillProcess, "Kills the process specified by its ID."} };
+
+unsigned short NumberOfCommands;
+
+bool ExecuteProgram(char* line);
 
 
 void Terminal_Init()
 {
 	Kernel_CreateTask(Commander_Run);
+	NumberOfCommands = sizeof(commands) / sizeof(command);
+	defaultHandler = ExecuteProgram;
 }
 
 void HelpScreen(char* line)
 {
-unsigned char i = 0;
+unsigned char i;
 
-	while(commands[i].name != null)
+	for(i = 0; i < NumberOfCommands; i++)
 	{
 		UART_WriteString_P(commands[i].name);
 		if(commands[i].helpText != null)
@@ -67,16 +66,15 @@ unsigned char i = 0;
 			UART_WriteString_P(commands[i].helpText);
 		}
 		UART_WriteString_P("\n");
-		i++;
 	}
 }
 
 void ListFiles(char* line)
 {
-	fsFile f;
-	char name[50];
-	unsigned long totalBytes=0;
-	unsigned short totalFiles=0;
+fsFile f;
+char name[50];
+unsigned long totalBytes=0;
+unsigned short totalFiles=0;
 	
 	if(FileStore_GetNextFileEntry(&f, true) == false)
 	{
@@ -84,12 +82,13 @@ void ListFiles(char* line)
 	}
 	else
 	{
+		UART_WriteString_P("Size       Name\n");
 		do
 		{
 			FileStore_GetFileName(&f, name, 50);
-			UART_WriteString(name);
+			UART_WriteValueUnsigned(f.size,0,' ');
 			UART_WriteByte(' ');
-			UART_WriteValueUnsigned(f.size,0,0);
+			UART_WriteString(name);
 			UART_WriteString_P("\n");
 			totalBytes += f.size;
 			totalFiles++;
@@ -100,14 +99,14 @@ void ListFiles(char* line)
 	UART_WriteValueUnsigned(totalFiles,0,0);
 	UART_WriteString_P(" files ");
 	UART_WriteValueUnsigned(totalBytes,0,0);
-	UART_WriteString_P(" bytes");
+	UART_WriteString_P(" bytes\n");
 }
 
 void PrintFile(char* line)
 {
-	fsFile f;
-	unsigned char bytes;
-	unsigned char buf[20];
+fsFile f;
+unsigned char bytes;
+unsigned char buf[20];
 	
 	if(FileStore_OpenFile(GetNextWord(line), &f) == false)
 	{
@@ -183,7 +182,7 @@ void StopProgram(char* line)
 
 
 #define BLOCK_SIZE 16
-#define DISC_SIZE (2*1024)
+#define DISC_SIZE (E2END + 1)																														// Reserve the entire EEPROM for the disc
 void LoadFileToDisc(char* line)
 {
 unsigned char buf[BLOCK_SIZE];
@@ -208,8 +207,7 @@ char* word;
 	}
 	else
 	{
-		UART_WriteByte('A');
-		UART_WriteByte(' ');
+		UART_WriteString_P("A ");
 		UART_WriteValueUnsigned(blockSize,0,0);
 		UART_WriteString_P("\n");
 	}
@@ -232,27 +230,6 @@ char* word;
 	UART_WriteByte('!');
 }
 
-void WriteToDRAM(char* line)
-{
-char txt[]="Hello DRAM";
-unsigned long address = ReadValueUnsigned(GetNextWord(line));
-
-	DRAM_WriteBytes((unsigned char*)txt, address, 10);
-	
-	UART_WriteString_P("Done");
-}
-
-void ReadFromDRAM(char* line)
-{
-char txt[16] = {0};
-unsigned long address = ReadValueUnsigned(GetNextWord(line));
-
-	DRAM_ReadBytes((unsigned char*)txt, address, 10);
-	
-	UART_WriteBytes((unsigned char*)txt, 10);
-	
-	UART_WriteString_P("\nDone");
-}
 
 void TestDRAM(char* line)
 {
@@ -292,44 +269,6 @@ unsigned char value = 123;
 	UART_WriteString_P("\nDone");
 }
 
-void ClearDRAM(char* line)
-{
-unsigned long i;
-
-	for(i=0;i<DRAM_SIZE;i++)
-	{
-		DRAM_WriteByte(i,'Z');
-	}
-}
-
-void FillDRAM(char* line)
-{
-unsigned long i;
-unsigned char c='A';
-
-	for(i=0;i<DRAM_SIZE;i++)
-	{
-		DRAM_WriteByte(i,c);
-		if(c == 'Z')
-		{
-			c = 'A';
-		}
-		else
-		{
-			c++;
-		}
-	}
-}
-
-void PrintDRAM(char* line)
-{
-unsigned long i;
-
-	for(i=0;i<DRAM_SIZE;i++)
-	{
-		UART_WriteByte(DRAM_ReadByte(i));
-	}
-}
 
 void AllocateChunk(char* line)
 {
@@ -354,7 +293,7 @@ unsigned long address = ReadValueUnsigned(GetNextWord(line));
 
 	DRAM_Deallocate(address);
 
-	UART_WriteString_P("\n");
+	UART_WriteString_P("Done\n");
 }
 
 void PrintFreeHeap(char* line)
@@ -363,8 +302,61 @@ unsigned long space = DRAM_GetFreeHeapSpace();
 
 	DRAM_PrintBlockList();
 	UART_WriteString_P("Allocated/free: ");
-	UART_WriteValueUnsigned(DRAM_SIZE - space,0,0);
+	UART_WriteValueUnsigned(DRAM_SIZE - space, 0, 0);
 	UART_WriteByte('/');
-	UART_WriteValueUnsigned(space,0,0);
+	UART_WriteValueUnsigned(space, 0, 0);
 	UART_WriteString_P(" bytes\n");
+}
+
+/*
+void CreateProcess(char* line)
+{
+char* filename = GetNextWord(line);
+fsFile file;
+vx_pid id;
+
+	if(FileStore_OpenFile(filename, &file) == false)
+	{
+		UART_WriteString_P("Unable to open file.\n");
+		return;
+	}
+	
+	if(VX_CreateProcessFromFile(&file, &id) == false)
+	{
+		UART_WriteString_P("Unable to create process.\n");
+		return;
+	}
+	
+	UART_WriteString_P("Process created with ID: ");
+	UART_WriteValueUnsigned(id, 0, 0);
+	UART_WriteString_P("\n");
+}
+*/
+
+void KillProcess(char* line)
+{
+	
+}
+
+bool ExecuteProgram(char* line)
+{
+fsFile file;
+vx_pid id;
+
+	if(FileStore_OpenFile(line, &file) == false)
+	{
+		return false;
+	}
+	
+	if(VX_CreateProcessFromFile(&file, &id) == false)
+	{
+		UART_WriteString_P("Unable to create process.\n");
+		return true;
+	}
+	
+	UART_WriteString_P("Process created with ID ");
+	UART_WriteValueUnsigned(id, 0, 0);
+	UART_WriteString_P("\n");
+	
+	return true;
 }
