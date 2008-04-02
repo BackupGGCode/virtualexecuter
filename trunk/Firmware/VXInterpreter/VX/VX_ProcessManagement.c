@@ -27,12 +27,16 @@ typedef struct
 	dram stack;
 	unsigned long stack_size;
 	dram next;
+	char name[PROCES_NAME_LENGTH + 1];
 } process;
 
 dram processList = null;
 
-#define WriteProcess(proc, address)							DRAM_WriteBytes((unsigned char*)proc, address, sizeof(process))
-#define ReadProcess(proc, address)							DRAM_ReadBytes((unsigned char*)proc, address, sizeof(process))
+#define WriteProcess(address, proc)							DRAM_WriteBytes(address, (unsigned char*)proc, sizeof(process))
+#define ReadProcess(address, proc)							DRAM_ReadBytes(address, (unsigned char*)proc, sizeof(process))
+
+
+string* vxPStateText[] ={" Stop", " Run ", " Step", "Crash"};
 
 
 void VX_InitProcesses()
@@ -40,14 +44,25 @@ void VX_InitProcesses()
 	
 }
 
-bool VX_CreateProcessFromFile(fsFile* file, vx_pid* id)
+#define BLOCK_SIZE															32
+
+bool VX_CreateProcessFromFile(char* filename, vx_pid* id)
 {
 unsigned char* buffer = Kernel_Allocate(21);
 unsigned long codeSize, constantSize, dataSize, stackSize;
+dram codeStart, constantStart, i;
 process* proc;
 dram newProcess;
+fsFile file;
+unsigned char length;
 
-	FileStore_ReadBytes(file, buffer, 21);
+	if(FileStore_OpenFile(filename, &file) == false)
+	{
+		Kernel_Deallocate(buffer);
+		return false;
+	}
+	
+	FileStore_ReadBytes(&file, buffer, 21);
 	if(buffer[0] != 'V' || buffer[1] != 'X' || buffer[2] != 'E' || buffer[3] != 'X' || buffer[4] != 'E')
 	{
 		Kernel_Deallocate(buffer);
@@ -58,41 +73,92 @@ dram newProcess;
 	Copy(buffer + 9, &constantSize, 4);
 	Copy(buffer + 13, &dataSize, 4);
 	Copy(buffer + 17, &stackSize, 4);
-	
-	if(codeSize == 0)
-	{
-		Kernel_Deallocate(buffer);
-		return false;
-	}
+	Kernel_Deallocate(buffer);
 	
 	newProcess = DRAM_Allocate(sizeof(process) + codeSize + constantSize + dataSize + stackSize);
 	if(newProcess == 0)
 	{
-		Kernel_Deallocate(buffer);
 		return false;
 	}
 	
 	proc = Kernel_Allocate(sizeof(process));
 	
 	proc->id = newProcess;
-	proc->state = Stopped;
+	proc->state = Stop;
 	proc->ticks = 0;
 	proc->flags = 0;
 	proc->ip = 0;
 	proc->sp = 0;
-	proc->code = newProcess + sizeof(vx_pid) + sizeof(vx_pstate) + sizeof(unsigned long) + sizeof(unsigned char) +  + sizeof(dram) +  + sizeof(dram);
+	codeStart = newProcess + sizeof(process);
+	proc->code = codeStart;
 	proc->code_size = codeSize;
-	proc->constant = proc->code + proc->code_size;
+	constantStart = proc->code + proc->code_size;
+	proc->constant = constantStart;
 	proc->constant_size = constantSize;
 	proc->data = proc->constant + proc->constant_size;
 	proc->data_size = dataSize;
 	proc->stack = proc->data + proc->data_size;
 	proc->stack_size = stackSize;
 	proc->next = processList;
-	WriteProcess(proc, newProcess);
+	length = 0;
+	do
+	{
+		proc->name[length] = filename[length];
+		length++;
+	} while(length < PROCES_NAME_LENGTH && filename[length] != 0);
+	proc->name[length] = 0;
+	
+	WriteProcess(newProcess, proc);
+	
 	processList = newProcess;
 	
 	Kernel_Deallocate(proc);
+
+	buffer = Kernel_Allocate(BLOCK_SIZE);
+	if(buffer == null)
+	{
+		DRAM_Deallocate(newProcess);
+		return false;
+	}
+	
+	length = BLOCK_SIZE;
+	i = 0;
+	while(i < codeSize)
+	{
+		if((codeSize - i) < length)
+		{
+			length = codeSize - i;
+		}
+		
+		if(FileStore_ReadBytes(&file, buffer, length) != length)
+		{
+			Kernel_Deallocate(buffer);
+			DRAM_Deallocate(newProcess);
+			return false;		
+		}
+		DRAM_WriteBytes(newProcess + codeStart + i, buffer, length);
+		i += length;
+	}
+	
+	length = BLOCK_SIZE;
+	i = 0;
+	while(i < constantSize)
+	{
+		if((constantSize - i) < length)
+		{
+			length = constantSize - i;
+		}
+		if(FileStore_ReadBytes(&file, buffer, length) != length)
+		{
+			Kernel_Deallocate(buffer);
+			DRAM_Deallocate(newProcess);
+			return false;		
+		}
+		DRAM_WriteBytes(newProcess + constantStart + i, buffer, length);
+		i += length;
+	}
+	
+	Kernel_Deallocate(buffer);
 	
 	*id = newProcess;
 	
@@ -106,18 +172,26 @@ process* proc2;
 dram current = processList;
 
 	proc1 = Kernel_Allocate(sizeof(process));
-	proc2 = Kernel_Allocate(sizeof(process));
-	if(proc1 == null || proc2 == null)
+	if(proc1 == null)
 	{
 		return false;
 	}
+	proc2 = Kernel_Allocate(sizeof(process));
+	if(proc2 == null)
+	{
+		Kernel_Deallocate(proc1);
+		return false;
+	}
 	
-	ReadProcess(proc1, processList);
+	ReadProcess(processList, proc1);
 	
 	if(processList == id)
 	{
 		processList = proc1->next;
 		DRAM_Deallocate(id);
+		Kernel_Deallocate(proc1);
+		Kernel_Deallocate(proc2);
+		return true;
 	}
 	else
 	{
@@ -126,9 +200,9 @@ dram current = processList;
 		{
 			if(proc1->next == id)
 			{
-				ReadProcess(proc2, id);
+				ReadProcess(id, proc2);
 				proc1->next = proc2->next;
-				WriteProcess(proc1, current);
+				WriteProcess(current, proc1);
 				DRAM_Deallocate(id);
 				Kernel_Deallocate(proc1);
 				Kernel_Deallocate(proc2);
@@ -136,7 +210,7 @@ dram current = processList;
 			}
 			
 			current = proc1->next;
-			ReadProcess(proc1, current);
+			ReadProcess(current, proc1);
 		}
 	}
 	
@@ -148,7 +222,7 @@ dram current = processList;
 
 bool VX_SetProcessState(vx_pid id, vx_pstate state)
 {
-process* proc1;
+process* proc;
 dram current = processList;
 
 	proc = Kernel_Allocate(sizeof(process));
@@ -157,34 +231,19 @@ dram current = processList;
 		return false;
 	}
 	
-	ReadProcess(proc, processList);
-	
-	if(processList == id)
+	do
 	{
-		proc->state = state;
-		WriteProcess(proc, id);
-	}
-	else
-	{
-		current = processList;
-		while(proc->next != null)**************************************************************************************
+		ReadProcess(current, proc);
+		if(proc->id == id)
 		{
-			if(proc->next == id)
-			{
-				ReadProcess(proc, id);
-				proc->next = proc->next;
-				WriteProcess(proc, current);
-				DRAM_Deallocate(id);
-				Kernel_Deallocate(proc);
-				Kernel_Deallocate(proc);
-				return true;
-			}
-			
-			current = proc->next;
-			ReadProcess(proc, current);
+			proc->state = state;
+			WriteProcess(id, proc);
+			Kernel_Deallocate(proc);
+			return true;
 		}
-	}
-	
+		current = proc->next;
+	} while(current != null);
+
 	Kernel_Deallocate(proc);
 	
 	return false;
@@ -203,14 +262,14 @@ dram address = processList;
 	
 	p = (process*)Kernel_Allocate(sizeof(process));
 	
-	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... Size...\n");
+	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... Size... Name\n");
 	
 	do
 	{
-		ReadProcess(p, address);
+		ReadProcess(address, p);
 		UART_WriteValueUnsigned(p->id, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(p->state, 5, ' ');
+		UART_WriteString_P(vxPStateText[p->state]);
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->ticks, 10, ' ');
 		UART_WriteByte(' ');
@@ -218,7 +277,9 @@ dram address = processList;
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->sp, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(p->code_size + p->constant_size + p->data_size + p->stack_size, 7, ' ');
+		UART_WriteValueUnsigned(sizeof(process) + p->code_size + p->constant_size + p->data_size + p->stack_size, 7, ' ');
+		UART_WriteByte(' ');
+		UART_WriteString(p->name);
 		UART_WriteString_P("\n");
 		address = p->next;
 	} while(p->next != null);

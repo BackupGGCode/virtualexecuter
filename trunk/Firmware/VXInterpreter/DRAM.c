@@ -281,17 +281,17 @@ unsigned long DRAM_ReadLong(dram address)
 {
 unsigned long value;
 
-	DRAM_ReadBytes((unsigned char*)&value, address, 4);
+	DRAM_ReadBytes(address, (unsigned char*)&value, 4);
 	
 	return value;
 }
 
 void DRAM_WriteLong(dram address, unsigned long value)
 {
-	DRAM_ReadBytes((unsigned char*)&value, address, 4);
+	DRAM_ReadBytes(address, (unsigned char*)&value, 4);
 }
 
-void DRAM_ReadBytes(unsigned char* data, dram address, unsigned long length)
+void DRAM_ReadBytes(dram address, unsigned char* data, unsigned long length)
 {
 	while(length--)
 	{
@@ -299,7 +299,7 @@ void DRAM_ReadBytes(unsigned char* data, dram address, unsigned long length)
 	}
 }
 
-void DRAM_WriteBytes(unsigned char* data, dram address, unsigned long length)
+void DRAM_WriteBytes(dram address, unsigned char* data, unsigned long length)
 {
 	while(length--)
 	{
@@ -341,6 +341,8 @@ unsigned char* pb = (unsigned char*)b;
 	}
 }
 
+
+
 static void JoinFreeAdjacentBlocks()
 {
 block b, next;
@@ -380,11 +382,11 @@ dram a = 0;
 
 		UART_WriteByte(b.free+'0');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(b.size,7,' ');
+		UART_WriteValueUnsigned(b.size, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(b.next,7,' ');
+		UART_WriteValueUnsigned(b.next, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(a,7,' ');
+		UART_WriteValueUnsigned(a + 9, 7, ' ');
 		UART_WriteString_P("\n");
 		
 		a = b.next;
