@@ -15,7 +15,6 @@ void ListFiles(char* line);
 void PrintFile(char* line);
 void RunProgram(char* line);
 void StepProgram(char* line);
-void StartProgram(char* line);
 void StopProgram(char* line);
 void LoadFileToDisc(char* line);
 void TestDRAM(char* line);
@@ -28,10 +27,9 @@ __flash command commands[] = {
 	{"help", HelpScreen, "This help screen."},
 	{"list", ListFiles, "List files on disk."},
 	{"print", PrintFile, "Print specified file."},
-	{"run", RunProgram, "Load a VX program to memory. Use option s to auto start the program."},
-	{"step", StepProgram, "Execute one instruction of the currently loaded program."},
-	{"start", StartProgram, "Starts execution of the currently loaded program."},
-	{"stop", StopProgram, "Stops execution of the currently loaded program."},
+	{"run", RunProgram, "Set process state to running."},
+	{"step", StepProgram, "Perform one instruction of the process."},
+	{"stop", StopProgram, "Stop the process."},
 	{"load", LoadFileToDisc, "Load image to disc."},
 	{"testdram", TestDRAM, 0},
 	{"a", AllocateChunk, 0},
@@ -123,61 +121,57 @@ unsigned char buf[20];
 
 void RunProgram(char* line)
 {
-fsFile f;
-char* word;
-	
-	word = GetNextWord(line);
-	if(FileStore_OpenFile(word, &f) == false)
+vx_pid id = ReadValueUnsigned(GetNextWord(line));
+
+	if(VX_SetProcessState(id, Run))
 	{
-		UART_WriteString_P("File not found");
-		return;
-	}
-	
-	if(VX_Load(&f) == false)
-	{
-		UART_WriteString_P("Unable to load program");
-		return;
-	}
-	
-	UART_WriteString_P("Program loaded ");
-	
-	word = GetNextWord(word);
-	if(*word == 'b')
-	{
-		// dont run program now. Enables stepping.
-		UART_WriteString_P("but not startet.\n");
+		UART_WriteString_P("Process ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P(" is now running\n");
 	}
 	else
 	{
-		VX_Start();
-		UART_WriteString_P("and startet.\n");
+		UART_WriteString_P("Unable to run process ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P("!\n");
 	}
 }
 
 void StepProgram(char* line)
 {
-unsigned long count = ReadValueUnsigned(GetNextWord(line));
+vx_pid id = ReadValueUnsigned(GetNextWord(line));
 
-	if(count == 0)
+	if(VX_SetProcessState(id, Step))
 	{
-		count = 1;
+		UART_WriteString_P("Stepping process ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P(" one tick\n");
 	}
-
-	while(count > 0)
+	else
 	{
-		VX_Step();
-		count--;
+		UART_WriteString_P("Unable to step process ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P("!\n");
 	}
 }
 
-void StartProgram(char* line)
-{
-	VX_Start();
-}
 
 void StopProgram(char* line)
 {
-	VX_Stop();
+vx_pid id = ReadValueUnsigned(GetNextWord(line));
+
+	if(VX_SetProcessState(id, Stop))
+	{
+		UART_WriteString_P("Process ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P(" is now stopped\n");
+	}
+	else
+	{
+		UART_WriteString_P("Unable to stop process ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P("!\n");
+	}
 }
 
 
@@ -349,21 +343,22 @@ void KillProcess(char* line)
 
 bool ExecuteProgram(char* line)
 {
-fsFile file;
 vx_pid id;
+unsigned char i = 0;
 
-	if(FileStore_OpenFile(line, &file) == false)
+	while(line[i] != 0 && line[i] != ' ')
 	{
-		return false;
+		i++;
 	}
-	
-	if(VX_CreateProcessFromFile(&file, &id) == false)
+	line[i] = 0;
+
+	if(VX_CreateProcessFromFile(line, &id) == false)
 	{
 		UART_WriteString_P("Unable to create process.\n");
 		return true;
 	}
 	
-	
+	VX_SetProcessState(id, Run);
 	
 	UART_WriteString_P("Process created with ID ");
 	UART_WriteValueUnsigned(id, 0, 0);
