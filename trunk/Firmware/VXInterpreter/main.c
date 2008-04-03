@@ -6,6 +6,7 @@
 #include <Peripherals/InternalEEPROM.h>
 #include <Terminal.h>
 #include "DRAM.h"
+#include "VX/VX.h"
 
 
 void main()
@@ -38,6 +39,8 @@ void main()
 		
 	Kernel_SystemTimerHook(DRAM_Refresh);
 	DRAM_Init();
+	
+	VX_Init();
 	
 	Kernel_Run();
 }

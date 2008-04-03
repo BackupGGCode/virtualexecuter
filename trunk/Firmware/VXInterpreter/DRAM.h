@@ -1,3 +1,5 @@
+#pragma once
+
 #define DRAM_SIZE																1048576
 
 
