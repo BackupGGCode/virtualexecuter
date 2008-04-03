@@ -27,44 +27,10 @@ bool carry;
 bool zero;
 bool negative;
 
-bool VX_Load(fsFile* file)
-{
-	if(file->size > VX_HEAP_SIZE)
-	{
-		return false;
-	}
-	
-	heap = Kernel_Allocate(file->size);			// skal IKKE være file->size!
-	
-	
-	VX_Reset();
-	
-	return true;
-}
 
-void VX_Reset()
+void VX_Executer()
 {
-	instructionPointer = 0;
-	stackPointer = 0;
-	carry = false;
-	zero = false;
-	negative = false;
-}
-
-void VX_Unload()
-{
-	Kernel_DeleteTask(VX_Step);	
-	Kernel_Deallocate(heap);
-}
-
-void VX_Start()
-{
-	Kernel_CreateTask(VX_Step);
-}
-
-void VX_Stop()
-{
-	Kernel_DeleteTask(VX_Step);	
+	
 }
 
 

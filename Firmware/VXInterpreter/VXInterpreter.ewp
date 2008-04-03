@@ -1968,7 +1968,10 @@
   <group>
     <name>VX</name>
     <file>
-      <name>$PROJ_DIR$\VX\VX.c</name>
+      <name>$PROJ_DIR$\VX\VX_MachineManagement.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\VX\VX_ProcessExecuter.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\VX\VX_ProcessManagement.c</name>

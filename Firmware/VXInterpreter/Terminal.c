@@ -1,6 +1,7 @@
 #include <Globals.h>
 #include "Config.h"
 #include <Kernel/Kernel.h>
+#include <Kernel/MemoryManagement.h>
 #include <Peripherals/UART.h>
 #include <Commander/Commander.h>
 #include <strings.h>
@@ -18,9 +19,9 @@ void StepProgram(char* line);
 void StopProgram(char* line);
 void LoadFileToDisc(char* line);
 void TestDRAM(char* line);
-void AllocateChunk(char* line);
-void DeallocateChunk(char* line);
-void PrintFreeHeap(char* line);
+//void AllocateChunk(char* line);
+//void DeallocateChunk(char* line);
+void PrintHeaps(char* line);
 //void CreateProcess(char* line);
 void KillProcess(char* line);
 __flash command commands[] = {
@@ -32,10 +33,10 @@ __flash command commands[] = {
 	{"stop", StopProgram, "Stop the process."},
 	{"load", LoadFileToDisc, "Load image to disc."},
 	{"testdram", TestDRAM, 0},
-	{"a", AllocateChunk, 0},
-	{"d", DeallocateChunk, 0},
-	{"h", PrintFreeHeap, 0},
-	{"pro", VX_ListProcesses, "List all processes."},
+//	{"a", AllocateChunk, 0},
+//	{"d", DeallocateChunk, 0},
+	{"mem", PrintHeaps, "Print internal and external heap usage."},
+	{"pros", VX_ListProcesses, "List all processes."},
 //	{"create", CreateProcess, "Creates a new process from the file specified."},
 	{"kill", KillProcess, "Kills the process specified by its ID."} };
 
@@ -263,7 +264,7 @@ unsigned char value = 123;
 	UART_WriteString_P("\nDone");
 }
 
-
+/*
 void AllocateChunk(char* line)
 {
 unsigned long size = ReadValueUnsigned(GetNextWord(line));	
@@ -280,7 +281,8 @@ dram d = DRAM_Allocate(size);
 		UART_WriteString_P("Allocation failed!\n");
 	}
 }
-
+*/
+/*
 void DeallocateChunk(char* line)
 {
 unsigned long address = ReadValueUnsigned(GetNextWord(line));	
@@ -289,11 +291,24 @@ unsigned long address = ReadValueUnsigned(GetNextWord(line));
 
 	UART_WriteString_P("Done\n");
 }
+*/
 
-void PrintFreeHeap(char* line)
+void PrintHeaps(char* line)
 {
-unsigned long space = DRAM_GetFreeHeapSpace();
+unsigned long space = Kernel_GetFreeHeapSpace();
 
+	UART_WriteString_P("Internal heap usage:\n");
+	Kernel_PrintHeap();
+	UART_WriteString_P("Allocated/free: ");
+	UART_WriteValueUnsigned(HEAP_SIZE - space, 0, 0);
+	UART_WriteByte('/');
+	UART_WriteValueUnsigned(space, 0, 0);
+	UART_WriteString_P(" bytes\n\n");
+
+
+	space = DRAM_GetFreeHeapSpace();
+
+	UART_WriteString_P("External heap usage:\n");
 	DRAM_PrintBlockList();
 	UART_WriteString_P("Allocated/free: ");
 	UART_WriteValueUnsigned(DRAM_SIZE - space, 0, 0);

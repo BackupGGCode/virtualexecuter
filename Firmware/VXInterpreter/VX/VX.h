@@ -1,9 +1,3 @@
+#include "VX_MachineManagement.h"
+#include "VX_ProcessExecuter.h"
 #include "VX_ProcessManagement.h"
-
-
-extern bool VX_Load(fsFile* file);
-extern void VX_Reset();
-extern void VX_Unload();
-extern void VX_Start();
-extern void VX_Stop();
-extern void VX_Step();

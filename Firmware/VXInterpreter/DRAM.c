@@ -386,7 +386,7 @@ dram a = 0;
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(b.next, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(a + 9, 7, ' ');
+		UART_WriteValueUnsigned(a + sizeof(block), 7, ' ');
 		UART_WriteString_P("\n");
 		
 		a = b.next;

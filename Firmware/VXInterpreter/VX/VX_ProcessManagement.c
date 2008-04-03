@@ -10,26 +10,6 @@
 #include <mem.h>
 
 
-typedef struct
-{
-	vx_pid id;
-	vx_pstate state;
-	unsigned long ticks;
-	unsigned char flags;
-	dram ip;
-	dram sp;
-	dram code;
-	unsigned long code_size;
-	dram constant;
-	unsigned long constant_size;
-	dram data;
-	unsigned long data_size;
-	dram stack;
-	unsigned long stack_size;
-	dram next;
-	char name[PROCES_NAME_LENGTH + 1];
-} process;
-
 dram processList = null;
 
 #define WriteProcess(address, proc)							DRAM_WriteBytes(address, (unsigned char*)proc, sizeof(process))
@@ -48,7 +28,7 @@ void VX_InitProcesses()
 
 bool VX_CreateProcessFromFile(char* filename, vx_pid* id)
 {
-unsigned char* buffer = Kernel_Allocate(21);
+unsigned char* buffer;
 unsigned long codeSize, constantSize, dataSize, stackSize;
 dram codeStart, constantStart, i;
 process* proc;
@@ -58,11 +38,12 @@ unsigned char length;
 
 	if(FileStore_OpenFile(filename, &file) == false)
 	{
-		Kernel_Deallocate(buffer);
 		return false;
 	}
 	
+	buffer = Kernel_Allocate(21);
 	FileStore_ReadBytes(&file, buffer, 21);
+	
 	if(buffer[0] != 'V' || buffer[1] != 'X' || buffer[2] != 'E' || buffer[3] != 'X' || buffer[4] != 'E')
 	{
 		Kernel_Deallocate(buffer);
@@ -109,11 +90,8 @@ unsigned char length;
 	proc->name[length] = 0;
 	
 	WriteProcess(newProcess, proc);
-	
-	processList = newProcess;
-	
 	Kernel_Deallocate(proc);
-
+	
 	buffer = Kernel_Allocate(BLOCK_SIZE);
 	if(buffer == null)
 	{
@@ -136,7 +114,7 @@ unsigned char length;
 			DRAM_Deallocate(newProcess);
 			return false;		
 		}
-		DRAM_WriteBytes(newProcess + codeStart + i, buffer, length);
+		DRAM_WriteBytes(codeStart + i, buffer, length);
 		i += length;
 	}
 	
@@ -154,13 +132,14 @@ unsigned char length;
 			DRAM_Deallocate(newProcess);
 			return false;		
 		}
-		DRAM_WriteBytes(newProcess + constantStart + i, buffer, length);
+		DRAM_WriteBytes(constantStart + i, buffer, length);
 		i += length;
 	}
 	
 	Kernel_Deallocate(buffer);
 	
 	*id = newProcess;
+	processList = newProcess;
 	
 	return true;
 }
