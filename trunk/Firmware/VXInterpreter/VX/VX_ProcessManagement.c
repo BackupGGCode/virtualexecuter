@@ -12,10 +12,6 @@
 
 dram processList = null;
 
-#define WriteProcess(address, proc)							DRAM_WriteBytes(address, (unsigned char*)proc, sizeof(process))
-#define ReadProcess(address, proc)							DRAM_ReadBytes(address, (unsigned char*)proc, sizeof(process))
-
-
 string* vxPStateText[] ={" Stop", " Run ", " Step", "Crash"};
 
 
@@ -29,8 +25,9 @@ void VX_InitProcesses()
 bool VX_CreateProcessFromFile(char* filename, vx_pid* id)
 {
 unsigned char* buffer;
-unsigned long codeSize, constantSize, dataSize, stackSize;
-dram codeStart, constantStart, i;
+unsigned long codeSize, dataSize, stackSize;
+unsigned long options;
+dram codeStart, i;
 process* proc;
 dram newProcess;
 fsFile file;
@@ -50,13 +47,13 @@ unsigned char length;
 		return false;
 	}
 	
-	Copy(buffer + 5, &codeSize, 4);
-	Copy(buffer + 9, &constantSize, 4);
+	Copy(buffer + 5, &options, 4);
+	Copy(buffer + 9, &codeSize, 4);
 	Copy(buffer + 13, &dataSize, 4);
 	Copy(buffer + 17, &stackSize, 4);
 	Kernel_Deallocate(buffer);
 	
-	newProcess = DRAM_Allocate(sizeof(process) + codeSize + constantSize + dataSize + stackSize);
+	newProcess = DRAM_Allocate(sizeof(process) + codeSize + dataSize + stackSize);
 	if(newProcess == 0)
 	{
 		return false;
@@ -71,15 +68,12 @@ unsigned char length;
 	proc->ip = 0;
 	proc->sp = 0;
 	codeStart = newProcess + sizeof(process);
-	proc->code = codeStart;
-	proc->code_size = codeSize;
-	constantStart = proc->code + proc->code_size;
-	proc->constant = constantStart;
-	proc->constant_size = constantSize;
-	proc->data = proc->constant + proc->constant_size;
-	proc->data_size = dataSize;
-	proc->stack = proc->data + proc->data_size;
-	proc->stack_size = stackSize;
+	proc->codeStart = codeStart;
+	proc->codeSize = codeSize;
+	proc->dataStart = proc->codeStart + proc->codeSize;
+	proc->dataSize = dataSize;
+	proc->stackStart = proc->dataStart + proc->dataSize;
+	proc->stackSize = stackSize;
 	proc->next = processList;
 	length = 0;
 	do
@@ -115,24 +109,6 @@ unsigned char length;
 			return false;		
 		}
 		DRAM_WriteBytes(codeStart + i, buffer, length);
-		i += length;
-	}
-	
-	length = BLOCK_SIZE;
-	i = 0;
-	while(i < constantSize)
-	{
-		if((constantSize - i) < length)
-		{
-			length = constantSize - i;
-		}
-		if(FileStore_ReadBytes(&file, buffer, length) != length)
-		{
-			Kernel_Deallocate(buffer);
-			DRAM_Deallocate(newProcess);
-			return false;		
-		}
-		DRAM_WriteBytes(constantStart + i, buffer, length);
 		i += length;
 	}
 	
@@ -241,7 +217,7 @@ dram address = processList;
 	
 	p = (process*)Kernel_Allocate(sizeof(process));
 	
-	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... Size... Name\n");
+	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... SFP.... Size... Name\n");
 	
 	do
 	{
@@ -254,9 +230,11 @@ dram address = processList;
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->ip, 7, ' ');
 		UART_WriteByte(' ');
+		UART_WriteValueUnsigned(p->sfp, 7, ' ');
+		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->sp, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(sizeof(process) + p->code_size + p->constant_size + p->data_size + p->stack_size, 7, ' ');
+		UART_WriteValueUnsigned(sizeof(process) + p->codeSize + p->dataSize + p->stackSize, 7, ' ');
 		UART_WriteByte(' ');
 		UART_WriteString(p->name);
 		UART_WriteString_P("\n");

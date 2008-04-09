@@ -9,6 +9,8 @@
 //--force_switch_type 1 => jump table
 
 
+process p;
+
 unsigned char GetNextByte();
 void PushSingle(unsigned char value);
 unsigned char PopSingle();
@@ -23,7 +25,7 @@ float PopFloat();
 unsigned char* heap;
 unsigned long instructionPointer;
 unsigned long stackPointer;
-bool carry;
+unsigned long stackFramePointer;
 bool zero;
 bool negative;
 
@@ -34,61 +36,95 @@ void VX_Executer()
 }
 
 
-void VX_Step()
+void VX_ExecuteInstruction()
 {
-unsigned char uc;
-unsigned short us;
-unsigned long ul, ul2, ul3, ul4;
-float f;
-	
 	switch(GetNextByte())
 	{
 		case   1: // adds
-							us = PopSingle();
-							us += PopSingle();
-							if(us > 0xff)
-							{
-								carry = true;
-							}
-							else
-							{
-								carry = false;
-							}
-							PushSingle(us & 0xff);
+							PushSingle(PopSingle() + PopSingle());
 							break;
 		case   2: // addd
-							ul = PopDouble();
-							ul += PopDouble();
-							if(ul > 0xffff)
-							{
-								carry = true;
-							}
-							else
-							{
-								carry = false;
-							}
-							PushDouble(ul & 0xffff);
+							PushDouble(PopDouble() + PopDouble());
 							break;
 		case   3: // addq
-							ul = PopQuad();
-							ul2 = PopQuad();
-							ul3 = (ul & 0xffff) + (ul2 & 0xffff);
-							ul3 >>= 16;
-							ul3 += (ul >> 16) + (ul2 >> 16);
-							if(ul3 > 0x0000ffff)
-							{
-								carry = true;
-							}
-							else
-							{
-								carry = false;
-							}
-							PushQuad(ul + ul2);
+							PushQuad(PopQuad() + PopQuad());
 							break;
 		case   4: // addf
-							f = PopFloat();
-							f += PopFloat();
-							PushFloat(f);
+							PushFloat(PopFloat() + PopFloat());
+							break;
+		case   5: // subs
+							PushSingle(PopSingle() - PopSingle());
+							break;
+		case   6: // subd
+							PushDouble(PopDouble() - PopDouble());
+							break;
+		case   7: // subq
+							PushQuad(PopQuad() - PopQuad());
+							break;
+		case   8: // subf
+							PushFloat(PopFloat() - PopFloat());
+							break;
+		case   9: // muls
+							PushDouble(PopSingle() * PopSingle());
+							break;
+		case  10: // muld
+							PushQuad(PopDouble() * PopDouble());
+							break;
+		case  11: // mulq
+							
+							break;
+		case  12: // mulf
+							PushFloat(PopFloat() * PopFloat());
+							break;
+		case  13: // divs
+							
+							break;
+		case  14: // divd
+							
+							break;
+		case  15: // divq
+							
+							break;
+		case  16: // divf
+							PushFloat(PopFloat() / PopFloat());
+							break;
+		case  17: // incs
+							PushSingle(PopSingle() + 1);
+							break;
+		case  18: // incd
+							PushDouble(PopDouble() + 1);
+							break;
+		case  19: // incq
+							PushQuad(PopQuad() + 1);
+							break;
+		case  20: // incf
+							PushFloat(PopFloat() + 1);
+							break;
+		case  21: // decs
+							PushSingle(PopSingle() - 1);
+							break;
+		case  22: // decd
+							PushDouble(PopDouble() - 1);
+							break;
+		case  23: // decq
+							PushQuad(PopQuad() - 1);
+							break;
+		case  24: // decf
+							PushFloat(PopFloat() - 1);
+							break;
+							
+							
+		case  25: // adds
+							PushSingle(PopSingle() + PopSingle());
+							break;
+		case   2: // addd
+							PushDouble(PopDouble() + PopDouble());
+							break;
+		case   3: // addq
+							PushQuad(PopQuad() + PopQuad());
+							break;
+		case   4: // addf
+							PushFloat(PopFloat() + PopFloat());
 							break;
 	}
 }
@@ -96,45 +132,65 @@ float f;
 
 unsigned char GetNextByte()
 {
-	return heap[instructionPointer++];
+unsigned char value = DRAM_ReadByte(p.codeStart + p.ip);
+	p.ip++;
+	return value;
 }
 
 void PushSingle(unsigned char value)
 {
-	heap[stackPointer++] = value;
+	DRAM_WriteByte(p.stackStart + p.sp, value);
+	p.sp++;
 }
 
 unsigned char PopSingle()
 {
-	return heap[stackPointer--];
+unsigned char value = DRAM_ReadByte(p.stackStart + p.sp);
+	p.sp--;
+	return value;
 }
 
 void PushDouble(unsigned short value)
 {
-	heap[stackPointer++] = value;
+	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)&value, 2);
+	p.sp+=2;
 }
 
 unsigned short PopDouble()
 {
-	return heap[stackPointer--];
+unsigned short value;
+
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)&value, 2);
+	p.sp-=2;
+	return value;
 }
 
 void PushQuad(unsigned long value)
 {
-	heap[stackPointer++] = value;
+	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
+	p.sp+=4;
 }
 
 unsigned long PopQuad()
 {
-	return heap[stackPointer--];
+unsigned long value;
+
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
+	p.sp-=4;
+	return value;
 }
 
 void PushFloat(float value)
 {
-	heap[stackPointer++] = value;
+	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
+	p.sp+=4;
 }
 
 float PopFloat()
 {
-	return heap[stackPointer--];
+float value;
+
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
+	p.sp-=4;
+	return value;
 }

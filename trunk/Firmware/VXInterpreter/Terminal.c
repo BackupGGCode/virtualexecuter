@@ -19,10 +19,7 @@ void StepProgram(char* line);
 void StopProgram(char* line);
 void LoadFileToDisc(char* line);
 void TestDRAM(char* line);
-//void AllocateChunk(char* line);
-//void DeallocateChunk(char* line);
 void PrintHeaps(char* line);
-//void CreateProcess(char* line);
 void KillProcess(char* line);
 __flash command commands[] = {
 	{"help", HelpScreen, "This help screen."},
@@ -33,11 +30,8 @@ __flash command commands[] = {
 	{"stop", StopProgram, "Stop the process."},
 	{"load", LoadFileToDisc, "Load image to disc."},
 	{"testdram", TestDRAM, 0},
-//	{"a", AllocateChunk, 0},
-//	{"d", DeallocateChunk, 0},
 	{"mem", PrintHeaps, "Print internal and external heap usage."},
 	{"pros", VX_ListProcesses, "List all processes."},
-//	{"create", CreateProcess, "Creates a new process from the file specified."},
 	{"kill", KillProcess, "Kills the process specified by its ID."} };
 
 unsigned short NumberOfCommands;
@@ -264,35 +258,6 @@ unsigned char value = 123;
 	UART_WriteString_P("\nDone");
 }
 
-/*
-void AllocateChunk(char* line)
-{
-unsigned long size = ReadValueUnsigned(GetNextWord(line));	
-dram d = DRAM_Allocate(size);
-
-	if(d)
-	{
-		UART_WriteString_P("Allocation succeeded. Location: ");
-		UART_WriteValueUnsigned(d,0,0);
-		UART_WriteString_P("\n");
-	}
-	else
-	{
-		UART_WriteString_P("Allocation failed!\n");
-	}
-}
-*/
-/*
-void DeallocateChunk(char* line)
-{
-unsigned long address = ReadValueUnsigned(GetNextWord(line));	
-
-	DRAM_Deallocate(address);
-
-	UART_WriteString_P("Done\n");
-}
-*/
-
 void PrintHeaps(char* line)
 {
 unsigned long space = Kernel_GetFreeHeapSpace();
@@ -316,31 +281,6 @@ unsigned long space = Kernel_GetFreeHeapSpace();
 	UART_WriteValueUnsigned(space, 0, 0);
 	UART_WriteString_P(" bytes\n");
 }
-
-/*
-void CreateProcess(char* line)
-{
-char* filename = GetNextWord(line);
-fsFile file;
-vx_pid id;
-
-	if(FileStore_OpenFile(filename, &file) == false)
-	{
-		UART_WriteString_P("Unable to open file.\n");
-		return;
-	}
-	
-	if(VX_CreateProcessFromFile(&file, &id) == false)
-	{
-		UART_WriteString_P("Unable to create process.\n");
-		return;
-	}
-	
-	UART_WriteString_P("Process created with ID: ");
-	UART_WriteValueUnsigned(id, 0, 0);
-	UART_WriteString_P("\n");
-}
-*/
 
 void KillProcess(char* line)
 {
@@ -369,7 +309,7 @@ unsigned char i = 0;
 
 	if(VX_CreateProcessFromFile(line, &id) == false)
 	{
-		UART_WriteString_P("Unable to create process.\n");
+		UART_WriteString_P("Unknown command.\n");
 		return true;
 	}
 	
