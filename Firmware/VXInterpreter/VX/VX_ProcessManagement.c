@@ -15,11 +15,6 @@ dram processList = null;
 string* vxPStateText[] ={" Stop", " Run ", " Step", "Crash"};
 
 
-void VX_InitProcesses()
-{
-	
-}
-
 #define BLOCK_SIZE															32
 
 bool VX_CreateProcessFromFile(char* filename, vx_pid* id)
@@ -62,19 +57,7 @@ unsigned char length;
 	proc = Kernel_Allocate(sizeof(process));
 	
 	proc->id = newProcess;
-	proc->state = Stop;
-	proc->ticks = 0;
-	proc->flags = 0;
-	proc->ip = 0;
-	proc->sp = 0;
-	codeStart = newProcess + sizeof(process);
-	proc->codeStart = codeStart;
-	proc->codeSize = codeSize;
-	proc->dataStart = proc->codeStart + proc->codeSize;
-	proc->dataSize = dataSize;
-	proc->stackStart = proc->dataStart + proc->dataSize;
-	proc->stackSize = stackSize;
-	proc->next = processList;
+	proc->options = options;
 	length = 0;
 	do
 	{
@@ -82,6 +65,20 @@ unsigned char length;
 		length++;
 	} while(length < PROCES_NAME_LENGTH && filename[length] != 0);
 	proc->name[length] = 0;
+
+	proc->codeStart = newProcess + sizeof(process);
+	proc->codeSize = codeSize;
+	proc->dataStart = proc->codeStart + proc->codeSize;
+	proc->dataSize = dataSize;
+	proc->stackStart = proc->dataStart + proc->dataSize;
+	proc->stackSize = stackSize;
+	proc->next = processList;
+	proc->state = Stop;
+	proc->ticks = 0;
+	proc->flags = 0;
+	proc->ip = 0;
+	proc->sp = 0;
+	proc->sfp = 0;
 	
 	WriteProcess(newProcess, proc);
 	Kernel_Deallocate(proc);
