@@ -313,7 +313,7 @@ unsigned char i = 0;
 		return true;
 	}
 	
-	VX_SetProcessState(id, Run);
+	VX_SetProcessState(id, Stop);
 	
 	UART_WriteString_P("Process created with ID ");
 	UART_WriteValueUnsigned(id, 0, 0);

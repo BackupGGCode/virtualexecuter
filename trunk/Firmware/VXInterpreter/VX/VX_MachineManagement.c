@@ -9,5 +9,5 @@
 
 void VX_Init()
 {
-	Kernel_CreateTask(VX_Executer);
+	Kernel_CreateTask(VX_ProcessExecuter_Tick);
 }

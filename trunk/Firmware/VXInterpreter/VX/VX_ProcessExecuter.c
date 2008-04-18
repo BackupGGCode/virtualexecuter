@@ -2,195 +2,256 @@
 #include "Config.h"
 #include <Kernel/Kernel.h>
 #include <Kernel/MemoryManagement.h>
+#include <Peripherals/UART.h>
 #include <FileStore/FileStore.h>
+#include "VX_ProcessManagement.h"
 #include "VX.h"
 
 
 //--force_switch_type 1 => jump table
 
+bool VX_ExecuteInstruction();
+
+bool GetCodeByte(unsigned char* pValue);
+bool PushSingle(unsigned char* pValue);
+bool PopSingle(unsigned char* pValue);
+bool PushDouble(unsigned short* pValue);
+bool PopDouble(unsigned short* pValue);
+bool PushQuad(unsigned long* pValue);
+bool PopQuad(unsigned long* pValue);
+bool PushFloat(float* pValue);
+bool PopFloat(float* pValue);
+
 
 process p;
 
-unsigned char GetNextByte();
-void PushSingle(unsigned char value);
-unsigned char PopSingle();
-void PushDouble(unsigned short value);
-unsigned short PopDouble();
-void PushQuad(unsigned long value);
-unsigned long PopQuad();
-void PushFloat(float value);
-float PopFloat();
 
-
-unsigned char* heap;
-unsigned long instructionPointer;
-unsigned long stackPointer;
-unsigned long stackFramePointer;
-bool zero;
-bool negative;
-
-
-void VX_Executer()
+// Give all started processes a tick
+void VX_ProcessExecuter_Tick()
 {
-	
-}
+dram currentProcess = processList;	
 
-
-void VX_ExecuteInstruction()
-{
-	switch(GetNextByte())
+	if(currentProcess != null)
 	{
-		case   1: // adds
-							PushSingle(PopSingle() + PopSingle());
-							break;
-		case   2: // addd
-							PushDouble(PopDouble() + PopDouble());
-							break;
-		case   3: // addq
-							PushQuad(PopQuad() + PopQuad());
-							break;
-		case   4: // addf
-							PushFloat(PopFloat() + PopFloat());
-							break;
-		case   5: // subs
-							PushSingle(PopSingle() - PopSingle());
-							break;
-		case   6: // subd
-							PushDouble(PopDouble() - PopDouble());
-							break;
-		case   7: // subq
-							PushQuad(PopQuad() - PopQuad());
-							break;
-		case   8: // subf
-							PushFloat(PopFloat() - PopFloat());
-							break;
-		case   9: // muls
-							PushDouble(PopSingle() * PopSingle());
-							break;
-		case  10: // muld
-							PushQuad(PopDouble() * PopDouble());
-							break;
-		case  11: // mulq
-							
-							break;
-		case  12: // mulf
-							PushFloat(PopFloat() * PopFloat());
-							break;
-		case  13: // divs
-							
-							break;
-		case  14: // divd
-							
-							break;
-		case  15: // divq
-							
-							break;
-		case  16: // divf
-							PushFloat(PopFloat() / PopFloat());
-							break;
-		case  17: // incs
-							PushSingle(PopSingle() + 1);
-							break;
-		case  18: // incd
-							PushDouble(PopDouble() + 1);
-							break;
-		case  19: // incq
-							PushQuad(PopQuad() + 1);
-							break;
-		case  20: // incf
-							PushFloat(PopFloat() + 1);
-							break;
-		case  21: // decs
-							PushSingle(PopSingle() - 1);
-							break;
-		case  22: // decd
-							PushDouble(PopDouble() - 1);
-							break;
-		case  23: // decq
-							PushQuad(PopQuad() - 1);
-							break;
-		case  24: // decf
-							PushFloat(PopFloat() - 1);
-							break;
-							
-							
-		case  25: // adds
-							PushSingle(PopSingle() + PopSingle());
-							break;
-		case   2: // addd
-							PushDouble(PopDouble() + PopDouble());
-							break;
-		case   3: // addq
-							PushQuad(PopQuad() + PopQuad());
-							break;
-		case   4: // addf
-							PushFloat(PopFloat() + PopFloat());
-							break;
+		ReadProcess(currentProcess, &p);
+		if(p.state == Run || p.state == Step)
+		{
+			if(VX_ExecuteInstruction() == false)
+			{
+				p.state = Crash;
+			}
+			else
+			{
+				p.ticks++;
+				if(p.state == Step)
+				{
+					p.state = Stop;
+				}
+			}
+			WriteProcess(p.id, &p);
+//			UpdateProcess(p);
+		}
+		currentProcess = p.next;
 	}
 }
 
 
-unsigned char GetNextByte()
+bool VX_ExecuteInstruction()
 {
-unsigned char value = DRAM_ReadByte(p.codeStart + p.ip);
-	p.ip++;
-	return value;
+unsigned char instruction;
+unsigned char uc1, uc2;
+unsigned short us1, us2;
+unsigned long ul1, ul2;
+float f1, f2;
+
+	if(GetCodeByte(&instruction) == false)
+	{
+		return false;
+	}
+
+	switch(instruction)
+	{
+
+// Arithmetic
+		
+		case   1:	// adds
+							if(PopSingle(&uc1) == false || PopSingle(&uc2) == false)
+							{
+								return false;
+							}
+							uc1 += uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+// Transfer
+							
+		case  2:	// loads
+							if(GetCodeByte(&uc1) == false)
+							{
+								return false;
+							}
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+
+// Unknown instructions
+
+		default:	// Unknown instruction => crash
+							return false;
+	}
+	
+	return true;
 }
 
-void PushSingle(unsigned char value)
+
+bool GetCodeByte(unsigned char* pValue)
 {
-	DRAM_WriteByte(p.stackStart + p.sp, value);
-	p.sp++;
+	UART_WriteString_P("GetCodeByte");
+	
+	if(p.ip >= p.codeSize)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	*pValue = DRAM_ReadByte(p.codeStart + p.ip);
+
+	p.ip += 1;
+	
+	UART_WriteString_P("*\n");
+	
+	return true;
 }
 
-unsigned char PopSingle()
+bool PushSingle(unsigned char* pValue)
 {
-unsigned char value = DRAM_ReadByte(p.stackStart + p.sp);
-	p.sp--;
-	return value;
+	UART_WriteString_P("PushSingle");
+
+	if((p.sp + 1) > p.codeSize)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_WriteByte(p.stackStart + p.sp, *pValue);
+
+	p.sp += 1;
+
+	UART_WriteString_P("*\n");
+	
+	return true;
 }
 
-void PushDouble(unsigned short value)
+bool PopSingle(unsigned char* pValue)
 {
-	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)&value, 2);
-	p.sp+=2;
+	UART_WriteString_P("PopSingle");
+	
+	if(p.sp < 1)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	*pValue = DRAM_ReadByte(p.stackStart + p.sp);
+
+	p.sp -= 1;
+	
+	UART_WriteString_P("*\n");
+	
+	return true;
 }
 
-unsigned short PopDouble()
+bool PushDouble(unsigned short* pValue)
 {
-unsigned short value;
+	if((p.sp + 2) > p.codeSize)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)pValue, 2);
 
-	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)&value, 2);
-	p.sp-=2;
-	return value;
+	p.sp += 2;
+	
+	return true;
 }
 
-void PushQuad(unsigned long value)
+bool PopDouble(unsigned short* pValue)
 {
-	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
-	p.sp+=4;
+	if(p.sp < 2)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 2);
+
+	p.sp -= 2;
+	
+	return true;
 }
 
-unsigned long PopQuad()
+bool PushQuad(unsigned long* pValue)
 {
-unsigned long value;
+	if((p.sp + 4) > p.codeSize)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
 
-	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
-	p.sp-=4;
-	return value;
+	p.sp += 4;
+	
+	return true;
 }
 
-void PushFloat(float value)
+bool PopQuad(unsigned long* pValue)
 {
-	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
-	p.sp+=4;
+	if(p.sp < 4)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
+
+	p.sp -= 4;
+	
+	return true;
 }
 
-float PopFloat()
+bool PushFloat(float* pValue)
 {
-float value;
+	if((p.sp + 4) > p.codeSize)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_WriteBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
 
-	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)&value, 4);
-	p.sp-=4;
-	return value;
+	p.sp += 4;
+	
+	return true;
+}
+
+bool PopFloat(float* pValue)
+{
+	if(p.sp < 4)
+	{
+		p.state = Crash;
+		return false;
+	}
+	
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
+
+	p.sp -= 4;
+	
+	return true;
 }
