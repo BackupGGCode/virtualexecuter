@@ -6,7 +6,7 @@
 
 #define WriteProcess(address, proc)							DRAM_WriteBytes(address, (unsigned char*)proc, sizeof(process))
 #define ReadProcess(address, proc)							DRAM_ReadBytes(address, (unsigned char*)proc, sizeof(process))
-#define UpdateProcess(proc)											DRAM_WriteBytes((dram)proc.id, (unsigned char*)(&(proc.state)), 22)
+//#define UpdateProcess(proc)											DRAM_WriteBytes((dram)proc.id, (unsigned char*)(&(proc.state)), 22)
 
 #define FLAG_ZERO																0
 #define FLAG_NEGATIVE														1

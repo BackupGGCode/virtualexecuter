@@ -66,7 +66,8 @@ unsigned char length;
 	} while(length < PROCES_NAME_LENGTH && filename[length] != 0);
 	proc->name[length] = 0;
 
-	proc->codeStart = newProcess + sizeof(process);
+	codeStart = newProcess + sizeof(process);
+	proc->codeStart = codeStart;
 	proc->codeSize = codeSize;
 	proc->dataStart = proc->codeStart + proc->codeSize;
 	proc->dataSize = dataSize;
@@ -188,10 +189,18 @@ dram current = processList;
 		ReadProcess(current, proc);
 		if(proc->id == id)
 		{
-			proc->state = state;
-			WriteProcess(id, proc);
-			Kernel_Deallocate(proc);
-			return true;
+			if(proc->state != Crash)
+			{
+				proc->state = state;
+				WriteProcess(id, proc);
+				Kernel_Deallocate(proc);
+				return true;
+			}
+			else
+			{
+				Kernel_Deallocate(proc);
+				return false;
+			}
 		}
 		current = proc->next;
 	} while(current != null);
@@ -227,9 +236,9 @@ dram address = processList;
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->ip, 7, ' ');
 		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(p->sfp, 7, ' ');
-		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->sp, 7, ' ');
+		UART_WriteByte(' ');
+		UART_WriteValueUnsigned(p->sfp, 7, ' ');
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(sizeof(process) + p->codeSize + p->dataSize + p->stackSize, 7, ' ');
 		UART_WriteByte(' ');
