@@ -309,7 +309,7 @@ unsigned char i = 0;
 
 	if(VX_CreateProcessFromFile(line, &id) == false)
 	{
-		UART_WriteString_P("Unknown command.\n");
+		UART_WriteString_P("Unknown command\n");
 		return true;
 	}
 	

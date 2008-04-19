@@ -22,6 +22,7 @@ bool PopQuad(unsigned long* pValue);
 bool PushFloat(float* pValue);
 bool PopFloat(float* pValue);
 
+void PrintStack();
 
 process p;
 
@@ -34,13 +35,11 @@ dram currentProcess = processList;
 	if(currentProcess != null)
 	{
 		ReadProcess(currentProcess, &p);
+		
 		if(p.state == Run || p.state == Step)
 		{
-			if(VX_ExecuteInstruction() == false)
-			{
-				p.state = Crash;
-			}
-			else
+			PrintStack();
+			if(VX_ExecuteInstruction())
 			{
 				p.ticks++;
 				if(p.state == Step)
@@ -48,7 +47,11 @@ dram currentProcess = processList;
 					p.state = Stop;
 				}
 			}
-			WriteProcess(p.id, &p);
+			else
+			{
+				p.state = Crash;
+			}
+			WriteProcess(currentProcess, &p);
 //			UpdateProcess(p);
 		}
 		currentProcess = p.next;
@@ -72,6 +75,11 @@ float f1, f2;
 	switch(instruction)
 	{
 
+// No operation
+		
+		case   0:	// nop
+							break;
+
 // Arithmetic
 		
 		case   1:	// adds
@@ -86,9 +94,45 @@ float f1, f2;
 							}
 							break;
 							
+		case   2:	// addd
+							if(PopDouble(&us1) == false || PopDouble(&us2) == false)
+							{
+								return false;
+							}
+							us1 += us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   3:	// addq
+							if(PopQuad(&ul1) == false || PopQuad(&ul2) == false)
+							{
+								return false;
+							}
+							ul1 += ul2;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   4:	// addf
+							if(PopFloat(&f1) == false || PopFloat(&f2) == false)
+							{
+								return false;
+							}
+							f1 += f2;
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+							
 // Transfer
 							
-		case  2:	// loads
+		case  100:// loads
 							if(GetCodeByte(&uc1) == false)
 							{
 								return false;
@@ -111,8 +155,6 @@ float f1, f2;
 
 bool GetCodeByte(unsigned char* pValue)
 {
-	UART_WriteString_P("GetCodeByte");
-	
 	if(p.ip >= p.codeSize)
 	{
 		p.state = Crash;
@@ -123,16 +165,12 @@ bool GetCodeByte(unsigned char* pValue)
 
 	p.ip += 1;
 	
-	UART_WriteString_P("*\n");
-	
 	return true;
 }
 
 bool PushSingle(unsigned char* pValue)
 {
-	UART_WriteString_P("PushSingle");
-
-	if((p.sp + 1) > p.codeSize)
+	if((p.sp + 1) > p.stackSize)
 	{
 		p.state = Crash;
 		return false;
@@ -141,34 +179,28 @@ bool PushSingle(unsigned char* pValue)
 	DRAM_WriteByte(p.stackStart + p.sp, *pValue);
 
 	p.sp += 1;
-
-	UART_WriteString_P("*\n");
 	
 	return true;
 }
 
 bool PopSingle(unsigned char* pValue)
 {
-	UART_WriteString_P("PopSingle");
-	
 	if(p.sp < 1)
 	{
 		p.state = Crash;
 		return false;
 	}
 	
-	*pValue = DRAM_ReadByte(p.stackStart + p.sp);
-
 	p.sp -= 1;
 	
-	UART_WriteString_P("*\n");
-	
+	*pValue = DRAM_ReadByte(p.stackStart + p.sp);
+
 	return true;
 }
 
 bool PushDouble(unsigned short* pValue)
 {
-	if((p.sp + 2) > p.codeSize)
+	if((p.sp + 2) > p.stackSize)
 	{
 		p.state = Crash;
 		return false;
@@ -189,16 +221,16 @@ bool PopDouble(unsigned short* pValue)
 		return false;
 	}
 	
-	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 2);
-
 	p.sp -= 2;
 	
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 2);
+
 	return true;
 }
 
 bool PushQuad(unsigned long* pValue)
 {
-	if((p.sp + 4) > p.codeSize)
+	if((p.sp + 4) > p.stackSize)
 	{
 		p.state = Crash;
 		return false;
@@ -219,16 +251,16 @@ bool PopQuad(unsigned long* pValue)
 		return false;
 	}
 	
-	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
-
 	p.sp -= 4;
 	
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
+
 	return true;
 }
 
 bool PushFloat(float* pValue)
 {
-	if((p.sp + 4) > p.codeSize)
+	if((p.sp + 4) > p.stackSize)
 	{
 		p.state = Crash;
 		return false;
@@ -249,9 +281,23 @@ bool PopFloat(float* pValue)
 		return false;
 	}
 	
-	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
-
 	p.sp -= 4;
 	
+	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
+
 	return true;
+}
+
+
+void PrintStack()
+{
+unsigned char i, t;
+
+	for(i=0; i<p.stackSize; i++)
+	{
+		t = DRAM_ReadByte(p.stackStart + i);
+		UART_WriteValueUnsigned(t, 3, '0');
+		UART_WriteByte(' ');
+	}
+	UART_WriteString_P("\n");
 }
