@@ -170,6 +170,63 @@ vx_pid id = ReadValueUnsigned(GetNextWord(line));
 }
 
 
+//#define BLOCK_SIZE 200
+//#define DISC_SIZE (500*1024)
+//const unsigned long DISC_SIZE = 512000;
+/*
+void DRAM_LoadFileToDisc(char* line)
+{
+unsigned char* buffer;
+unsigned char length;
+unsigned long blockSize, size, current=0;
+char* word;
+
+	word = GetNextWord(line);
+	size = ReadValueUnsigned(word);
+	word = GetNextWord(word);
+	blockSize = ReadValueUnsigned(word);
+	
+	if(blockSize > BLOCK_SIZE)
+	{
+		blockSize = BLOCK_SIZE;
+	}
+	
+	buffer = Kernel_Allocate(blockSize);
+	
+	if(size > DISC_SIZE || buffer == null)
+	{
+		UART_WriteString_P("N 0\n");
+		return;
+	}
+	else
+	{
+		UART_WriteString_P("A ");
+		UART_WriteValueUnsigned(blockSize,0,0);
+		UART_WriteString_P("\n");
+	}
+	
+	while(current < size)
+	{
+		if((current + blockSize) >= size)
+		{
+			length = size - current;
+		}
+		else
+		{
+			length = blockSize;
+		}
+		UART_ReadBytes(buffer, length);
+		DRAM_WriteBytes(current, buffer, length);
+		UART_WriteByte('*');
+		current += length;
+	}
+	
+	UART_WriteByte('!');
+	
+	Kernel_Deallocate(buffer);
+}
+*/
+
 #define BLOCK_SIZE 16
 #define DISC_SIZE (E2END + 1)																														// Reserve the entire EEPROM for the disc
 void LoadFileToDisc(char* line)

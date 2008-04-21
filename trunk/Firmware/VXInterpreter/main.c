@@ -7,7 +7,16 @@
 #include <Terminal.h>
 #include "DRAM.h"
 #include "VX/VX.h"
+#include "DRAM.h"
 
+unsigned long dramReadLong(unsigned long address)
+{
+unsigned long l;
+
+	DRAM_ReadBytes(address, (unsigned char*)&l, 4);
+	
+	return l;
+}
 
 void main()
 {
@@ -33,6 +42,7 @@ void main()
 	
 	UART_Init(__BAUDRATE__(230400));
 	FileStore_Init(InternalEEPROM_ReadByte, InternalEEPROM_ReadBytes, InternalEEPROM_ReadLong);
+//	FileStore_Init(DRAM_ReadByte, DRAM_ReadBytes, dramReadLong);
 	Terminal_Init();	
 	
 	LED_GREEN_ON
