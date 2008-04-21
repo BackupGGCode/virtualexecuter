@@ -12,7 +12,10 @@
 
 bool VX_ExecuteInstruction();
 
-bool GetCodeByte(unsigned char* pValue);
+bool GetSingle(unsigned char* pValue);
+bool GetDouble(unsigned short* pValue);
+bool GetQuad(unsigned long* pValue);
+bool GetFloat(float* pValue);
 bool PushSingle(unsigned char* pValue);
 bool PopSingle(unsigned char* pValue);
 bool PushDouble(unsigned short* pValue);
@@ -32,13 +35,13 @@ void VX_ProcessExecuter_Tick()
 {
 dram currentProcess = processList;	
 
-	if(currentProcess != null)
+	while(currentProcess != null)
 	{
 		ReadProcess(currentProcess, &p);
 		
 		if(p.state == Run || p.state == Step)
 		{
-			PrintStack();
+//			PrintStack();
 			if(VX_ExecuteInstruction())
 			{
 				p.ticks++;
@@ -51,8 +54,8 @@ dram currentProcess = processList;
 			{
 				p.state = Crash;
 			}
-			WriteProcess(currentProcess, &p);
-//			UpdateProcess(p);
+//			WriteProcess(currentProcess, &p);
+			UpdateProcess(p);
 		}
 		currentProcess = p.next;
 	}
@@ -67,7 +70,7 @@ unsigned short us1, us2;
 unsigned long ul1, ul2;
 float f1, f2;
 
-	if(GetCodeByte(&instruction) == false)
+	if(GetSingle(&instruction) == false)
 	{
 		return false;
 	}
@@ -132,8 +135,8 @@ float f1, f2;
 							
 // Transfer
 							
-		case  100:// loads
-							if(GetCodeByte(&uc1) == false)
+		case  51:	// loads
+							if(GetSingle(&uc1) == false)
 							{
 								return false;
 							}
@@ -141,6 +144,53 @@ float f1, f2;
 							{
 								return false;
 							}
+							break;
+							
+		case  52:	// loadd
+							if(GetDouble(&us1) == false)
+							{
+								return false;
+							}
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+
+		case  53:	// loadq
+							if(GetQuad(&ul1) == false)
+							{
+								return false;
+							}
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+
+		case  54:	// loadf
+							if(GetFloat(&f1) == false)
+							{
+								return false;
+							}
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+
+// Branches
+
+		case  71:	// jmp
+							if(GetQuad(&ul1) == false)
+							{
+								return false;
+							}
+							if(ul1 >= p.codeSize)
+							{
+								return false;
+							}
+							p.ip = ul1;
 							break;
 
 // Unknown instructions
@@ -153,11 +203,10 @@ float f1, f2;
 }
 
 
-bool GetCodeByte(unsigned char* pValue)
+bool GetSingle(unsigned char* pValue)
 {
 	if(p.ip >= p.codeSize)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -168,11 +217,52 @@ bool GetCodeByte(unsigned char* pValue)
 	return true;
 }
 
+bool GetDouble(unsigned short* pValue)
+{
+	if((p.ip + 1) >= p.codeSize)
+	{
+		return false;
+	}
+	
+	DRAM_ReadBytes(p.codeStart + p.ip, (unsigned char*)pValue, 2);
+
+	p.ip += 2;
+	
+	return true;
+}
+
+bool GetQuad(unsigned long* pValue)
+{
+	if((p.ip + 3) >= p.codeSize)
+	{
+		return false;
+	}
+	
+	DRAM_ReadBytes(p.codeStart + p.ip, (unsigned char*)pValue, 4);
+
+	p.ip += 4;
+	
+	return true;
+}
+
+bool GetFloat(float* pValue)
+{
+	if((p.ip + 3) >= p.codeSize)
+	{
+		return false;
+	}
+	
+	DRAM_ReadBytes(p.codeStart + p.ip, (unsigned char*)pValue, 4);
+
+	p.ip += 4;
+	
+	return true;
+}
+
 bool PushSingle(unsigned char* pValue)
 {
 	if((p.sp + 1) > p.stackSize)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -187,7 +277,6 @@ bool PopSingle(unsigned char* pValue)
 {
 	if(p.sp < 1)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -202,7 +291,6 @@ bool PushDouble(unsigned short* pValue)
 {
 	if((p.sp + 2) > p.stackSize)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -217,7 +305,6 @@ bool PopDouble(unsigned short* pValue)
 {
 	if(p.sp < 2)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -232,7 +319,6 @@ bool PushQuad(unsigned long* pValue)
 {
 	if((p.sp + 4) > p.stackSize)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -247,7 +333,6 @@ bool PopQuad(unsigned long* pValue)
 {
 	if(p.sp < 4)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -262,7 +347,6 @@ bool PushFloat(float* pValue)
 {
 	if((p.sp + 4) > p.stackSize)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
@@ -277,7 +361,6 @@ bool PopFloat(float* pValue)
 {
 	if(p.sp < 4)
 	{
-		p.state = Crash;
 		return false;
 	}
 	
