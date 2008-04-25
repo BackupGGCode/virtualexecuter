@@ -745,65 +745,120 @@ kernelDebugDump:
 // unsigned char DRAM_ReadByte(dram address)
 
 DRAMLL_ReadByte:
+; critical
   cli
-  out		
+; adr_port = address & 0xff
+  out		ADR_PORT, r16
+; ctrl_port = (address & 0x03) | 0xe0
+	mov		r20, r17
+	andi	r20, 0x03
+	ori		r20, 0xe0
+	out		CTRL_PORT, r20
+; no op
+	nop
+; address >>= 2
+	
+; RAS_LOW - PORTn, m
+	cbi		
+; address >>= 8
+	movw	r17:r16, r19:r18
+	lsr		r17
+	ror		r16
+	lsr		r17
+	ror		r16
+; adr_port = address
+	out		CTRL_PORT, r16
+; address &= 0x03
 
-   \   00000000   94F8               CLI
-    225          	
-    226          	ADR_PORT = address;
-   \   00000002   BB0B               OUT     0x1B, R16
-    227          	address >>= 8;
-    228          	CTRL_PORT = (address & 0x03) | 0xe0;
-   \   00000004   2F41               MOV     R20, R17
-   \   00000006   7043               ANDI    R20, 0x03
-   \   00000008   6E40               ORI     R20, 0xE0
-   \   0000000A   BB45               OUT     0x15, R20
-    229          	__no_operation();
-   \   0000000C   0000               NOP
-    230          	address >>= 2;
-    231          	RAS_LOW;
-   \   0000000E   98AD               CBI     0x15, 0x05
-    232          //	address >>= 2;
-    233          	address >>= 8;
-   \   00000010   0189               MOVW    R17:R16, R19:R18
-   \   00000012   9516               LSR     R17
-   \   00000014   9507               ROR     R16
-   \   00000016   9516               LSR     R17
-   \   00000018   9507               ROR     R16
-    234          	ADR_PORT = address;
-   \   0000001A   BB0B               OUT     0x1B, R16
-    235          //	address >>= 8;
-    236            address &= 0x03;
-    237          //	CTRL_PORT = (address & 0x03) | 0xc0;
-    238          	CTRL_PORT = address | 0xc0;
-   \   0000001C   7003               ANDI    R16, 0x03
-   \   0000001E   6C00               ORI     R16, 0xC0
-   \   00000020   BB05               OUT     0x15, R16
-    239          	__no_operation();
-   \   00000022   0000               NOP
-    240          	CAS_LOW;
-   \   00000024   98AF               CBI     0x15, 0x07
-    241          	
-    242          	__no_operation();
-   \   00000026   0000               NOP
-    243          	data = DATA_IN;
-   \   00000028   B300               IN      R16, 0x10
-    244          	
-    245          	CTRL_PORT = 0xe0;
-   \   0000002A   EE10               LDI     R17, 224
-   \   0000002C   BB15               OUT     0x15, R17
-    246          	
-    247          	NonCritical();
-   \   0000002E   9478               SEI
-    248          	
-    249          	return data;
-   \   00000030   9508               RET
-  ret
+; ctrl_port = address | 0xc0
+	andi	r16, 0x03
+	ori		r16, 0xc0
+	out		CTRL_PORT, r16
+; no op
+	nop
+; CAS_LOW - PORTn, m
+	cbi		
+; no op
+	nop
+; data = DATA_IN
+	in		r16, DATA_IN_PINS
+; CTRL_PORT = 0xe0
+	ldi		r17, 0xe0
+	out		CTRL_PORT, r17
+; non critical
+	sei
+; return data
+	ret
+
+
 
 // void DRAM_WriteByte(dram address, unsigned char value)
 
 DRAMLL_WriteByte:
 
+   \   00000000   94F8               CLI
+    258          	
+    259          	DIR_OUT;
+   \   00000002   EF5F               LDI     R21, 255
+   \   00000004   BB51               OUT     0x11, R21
+    260          	DATA_OUT = data;
+   \   00000006   BB42               OUT     0x12, R20
+    261          	
+    262          	ADR_PORT = address;
+   \   00000008   BB0B               OUT     0x1B, R16
+    263          	address >>= 8;
+   \   0000000A   2F01               MOV     R16, R17
+   \   0000000C   2F12               MOV     R17, R18
+   \   0000000E   2F23               MOV     R18, R19
+   \   00000010   E030               LDI     R19, 0
+    264          	CTRL_PORT = (address & 0x03) | 0xa0;
+   \   00000012   2F40               MOV     R20, R16
+   \   00000014   7043               ANDI    R20, 0x03
+   \   00000016   6A40               ORI     R20, 0xA0
+   \   00000018   BB45               OUT     0x15, R20
+    265          	__no_operation();
+   \   0000001A   0000               NOP
+    266           	address >>= 2;
+    267          	RAS_LOW;
+   \   0000001C   98AD               CBI     0x15, 0x05
+    268          //	address >>= 2;
+    269          	address >>= 8;
+   \   0000001E   2F01               MOV     R16, R17
+   \   00000020   2F12               MOV     R17, R18
+   \   00000022   9516               LSR     R17
+   \   00000024   9507               ROR     R16
+   \   00000026   9516               LSR     R17
+   \   00000028   9507               ROR     R16
+    270          	ADR_PORT = address;
+   \   0000002A   BB0B               OUT     0x1B, R16
+    271          //	address >>= 8;
+    272            address &= 0x03;
+    273          //	CTRL_PORT = (address & 0x03) | 0x80;
+    274          	CTRL_PORT = address | 0x80;
+   \   0000002C   7003               ANDI    R16, 0x03
+   \   0000002E   6800               ORI     R16, 0x80
+   \   00000030   BB05               OUT     0x15, R16
+    275          	__no_operation();
+   \   00000032   0000               NOP
+    276          	CAS_LOW;
+   \   00000034   98AF               CBI     0x15, 0x07
+    277          	
+    278          	__no_operation();
+   \   00000036   0000               NOP
+    279          	
+    280          	CTRL_PORT = 0xe0;
+   \   00000038   EE00               LDI     R16, 224
+   \   0000003A   BB05               OUT     0x15, R16
+    281          	
+    282          	DIR_IN;
+   \   0000003C   BB31               OUT     0x11, R19
+    283          	DATA_OUT = 0x00;
+   \   0000003E   BB32               OUT     0x12, R19
+    284          	
+    285          	NonCritical();
+   \   00000040   9478               SEI
+    286          }
+   \   00000042   9508               RET
   ret
 
 END
