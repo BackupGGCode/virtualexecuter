@@ -6,6 +6,7 @@
 #include <FileStore/FileStore.h>
 #include "VX_ProcessManagement.h"
 #include "VX.h"
+#include "VX_SoftPeripherals.h"
 
 
 //--force_switch_type 1 => jump table
@@ -84,7 +85,7 @@ float f1, f2;
 							break;
 
 // Arithmetic
-		
+
 		case   1:	// adds
 							if(PopSingle(&uc1) == false || PopSingle(&uc2) == false)
 							{
@@ -135,7 +136,7 @@ float f1, f2;
 							
 // Transfer
 							
-		case  51:	// loads
+		case  51:	// loads - 0x33
 							if(GetSingle(&uc1) == false)
 							{
 								return false;
@@ -146,7 +147,7 @@ float f1, f2;
 							}
 							break;
 							
-		case  52:	// loadd
+		case  52:	// loadd - 0x34
 							if(GetDouble(&us1) == false)
 							{
 								return false;
@@ -157,7 +158,7 @@ float f1, f2;
 							}
 							break;
 
-		case  53:	// loadq
+		case  53:	// loadq - 0x35
 							if(GetQuad(&ul1) == false)
 							{
 								return false;
@@ -168,7 +169,7 @@ float f1, f2;
 							}
 							break;
 
-		case  54:	// loadf
+		case  54:	// loadf - 0x36
 							if(GetFloat(&f1) == false)
 							{
 								return false;
@@ -181,7 +182,7 @@ float f1, f2;
 
 // Branches
 
-		case  71:	// jmp
+		case  71:	// jmp - 0x47
 							if(GetQuad(&ul1) == false)
 							{
 								return false;
@@ -193,6 +194,25 @@ float f1, f2;
 							p.ip = ul1;
 							break;
 
+// IO
+
+		case  75:	// input - 0x4b
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+              uc1 = VX_SoftPeripherals_Read(uc1);
+              PushSingle(&uc1);
+							break;
+
+		case  76:	// output - 0x4c
+							if(PopSingle(&uc1) == false || PopSingle(&uc2) == false)
+							{
+								return false;
+							}
+              VX_SoftPeripherals_Write(uc1, uc2);
+							break;
+              
 // Unknown instructions
 
 		default:	// Unknown instruction => crash

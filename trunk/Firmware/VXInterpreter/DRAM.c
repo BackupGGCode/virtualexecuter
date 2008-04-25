@@ -215,7 +215,7 @@ dram a = 0;
 
 
 /*
-	This assembles to 60 bytes of code executing in 30 clocks
+	This assembles to 50 bytes of code executing in 25 clocks
 */
 unsigned char DRAM_ReadByte(dram address)
 {
@@ -227,11 +227,15 @@ unsigned char data;
 	address >>= 8;
 	CTRL_PORT = (address & 0x03) | 0xe0;
 	__no_operation();
-	RAS_LOW;
 	address >>= 2;
-	ADR_PORT = address;
+	RAS_LOW;
+//	address >>= 2;
 	address >>= 8;
-	CTRL_PORT = (address & 0x03) | 0xc0;
+	ADR_PORT = address;
+//	address >>= 8;
+  address &= 0x03;
+//	CTRL_PORT = (address & 0x03) | 0xc0;
+	CTRL_PORT = address | 0xc0;
 	__no_operation();
 	CAS_LOW;
 	
@@ -246,7 +250,7 @@ unsigned char data;
 }
 
 /*
-	This assembles to 70 bytes of code executing in 35 clocks
+	This assembles to 70 bytes of code executing in 34 clocks
 */
 void DRAM_WriteByte(dram address, unsigned char data)
 {
@@ -259,11 +263,15 @@ void DRAM_WriteByte(dram address, unsigned char data)
 	address >>= 8;
 	CTRL_PORT = (address & 0x03) | 0xa0;
 	__no_operation();
+ 	address >>= 2;
 	RAS_LOW;
-	address >>= 2;
-	ADR_PORT = address;
+//	address >>= 2;
 	address >>= 8;
-	CTRL_PORT = (address & 0x03) | 0x80;
+	ADR_PORT = address;
+//	address >>= 8;
+  address &= 0x03;
+//	CTRL_PORT = (address & 0x03) | 0x80;
+	CTRL_PORT = address | 0x80;
 	__no_operation();
 	CAS_LOW;
 	
@@ -291,7 +299,7 @@ void DRAM_WriteLong(dram address, unsigned long value)
 	DRAM_ReadBytes(address, (unsigned char*)&value, 4);
 }
 
-void DRAM_ReadBytes(dram address, unsigned char* data, unsigned long length)
+void DRAM_ReadBytes(dram address, unsigned char* data, unsigned short length)
 {
 	while(length--)
 	{
@@ -299,7 +307,7 @@ void DRAM_ReadBytes(dram address, unsigned char* data, unsigned long length)
 	}
 }
 
-void DRAM_WriteBytes(dram address, unsigned char* data, unsigned long length)
+void DRAM_WriteBytes(dram address, unsigned char* data, unsigned short length)
 {
 	while(length--)
 	{
