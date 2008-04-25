@@ -9,14 +9,6 @@
 #include "VX/VX.h"
 #include "DRAM.h"
 
-unsigned long dramReadLong(unsigned long address)
-{
-unsigned long l;
-
-	DRAM_ReadBytes(address, (unsigned char*)&l, 4);
-	
-	return l;
-}
 
 void main()
 {
