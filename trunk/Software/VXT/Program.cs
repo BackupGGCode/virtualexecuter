@@ -12,7 +12,6 @@ namespace VXT
 	{
 		static SerialPort com;
 
-
 		static void LoadDiscImage(string[] args)
 		{
 			if (args.Length != 2)
@@ -91,7 +90,6 @@ namespace VXT
 			}
 		}
 
-
 		static void Main(string[] args)
 		{
 			string port = "com1";
@@ -105,7 +103,7 @@ namespace VXT
 			StreamWriter logFile = null;
 
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
-			Console.WriteLine("Version: 1.0 - March 9th 2008");
+			Console.WriteLine("Version: 1.1 - April 26th 2008");
 
 			try
 			{
@@ -122,10 +120,6 @@ namespace VXT
 				}
 				if (options.ContainsKey("l"))
 				{
-					localEcho = false;
-				}
-				if (options.ContainsKey("L"))
-				{
 					localEcho = true;
 				}
 				if (options.ContainsKey("e"))
@@ -136,9 +130,22 @@ namespace VXT
 				{
 					encodeAll = true;
 				}
-				if (options.ContainsKey("F"))
+				if (options.ContainsKey("f"))
 				{
 					saveToFile = true;
+					if (options["f"].Count == 0)
+					{
+
+					}
+					else if (options["f"].Count == 1)
+					{
+						logFileName = options["f"][0];
+					}
+					else
+					{
+						Console.WriteLine("Only one log file name may be specified");
+					}
+					Console.WriteLine("Logging to file '" + logFileName + "'");
 					logFile = new StreamWriter(logFileName);
 				}
 
@@ -152,6 +159,7 @@ namespace VXT
 
 				if (options == null || options.Count == 0)
 				{
+					Help();
 					Console.WriteLine("Available ports:");
 					foreach (string s in SerialPort.GetPortNames())
 					{
@@ -322,6 +330,24 @@ namespace VXT
 					Console.WriteLine(ex.Message);
 				}
 			}
+		}
+
+		static void Help()
+		{
+			Console.WriteLine("Available options:");
+			Console.WriteLine("  p - Set port name.");
+			Console.WriteLine("  b - Set baudrate (default is 115200 bps).");
+			Console.WriteLine("  l - Enable local echo of all typed characters.");
+			Console.WriteLine("  e - Enable partial encoding. Control characters will be shown as hex values.");
+			Console.WriteLine("  E - Enable full encoding. All characters will be shown as hex values.");
+			Console.WriteLine("  f - Enable logging. If no file name is specified the default name will be used.");
+			Console.WriteLine("");
+			Console.WriteLine("To run special functions hit ESC and enter function name and arguments.");
+			Console.WriteLine("  load - Load a disc image to a VX machine.");
+			Console.WriteLine("  quit - Quit VXT.");
+			Console.WriteLine("");
+			Console.WriteLine("To close the terminal either hit CTRL+C or use the special function 'quit'.");
+			Console.WriteLine("");
 		}
 	}
 }

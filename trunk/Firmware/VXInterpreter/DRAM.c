@@ -230,6 +230,76 @@ unsigned char data;
 	address >>= 2;
 	RAS_LOW;
 //	address >>= 2;
+	ADR_PORT = address;
+	address >>= 8;
+  address &= 0x03;
+//	CTRL_PORT = (address & 0x03) | 0xc0;
+	CTRL_PORT = address | 0xc0;
+	__no_operation();
+	CAS_LOW;
+	
+	__no_operation();
+	data = DATA_IN;
+	
+	CTRL_PORT = 0xe0;
+	
+	NonCritical();
+	
+	return data;
+}
+
+/*
+	This assembles to 68 bytes of code executing in 34 clocks
+*/
+void DRAM_WriteByte(dram address, unsigned char data)
+{
+	Critical();
+	
+	DIR_OUT;
+	DATA_OUT = data;
+	
+	ADR_PORT = address;
+	address >>= 8;
+	CTRL_PORT = (address & 0x03) | 0xa0;
+	__no_operation();
+ 	address >>= 2;
+	RAS_LOW;
+//	address >>= 2;
+	ADR_PORT = address;
+	address >>= 8;
+  address &= 0x03;
+//	CTRL_PORT = (address & 0x03) | 0x80;
+	CTRL_PORT = address | 0x80;
+	__no_operation();
+	CAS_LOW;
+	
+	__no_operation();
+	
+	CTRL_PORT = 0xe0;
+	
+	DIR_IN;
+	DATA_OUT = 0x00;
+	
+	NonCritical();
+}
+
+
+/*
+	This assembles to 50 bytes of code executing in 25 clocks
+*//*
+unsigned char DRAM_ReadByte(dram address)
+{
+unsigned char data;
+
+	Critical();
+	
+	ADR_PORT = address;
+	address >>= 8;
+	CTRL_PORT = (address & 0x03) | 0xe0;
+	__no_operation();
+	address >>= 2;
+	RAS_LOW;
+//	address >>= 2;
 	address >>= 8;
 	ADR_PORT = address;
 //	address >>= 8;
@@ -248,10 +318,10 @@ unsigned char data;
 	
 	return data;
 }
-
-/*
-	This assembles to 70 bytes of code executing in 34 clocks
 */
+/*
+	This assembles to 68 bytes of code executing in 34 clocks
+*//*
 void DRAM_WriteByte(dram address, unsigned char data)
 {
 	Critical();
@@ -283,7 +353,7 @@ void DRAM_WriteByte(dram address, unsigned char data)
 	DATA_OUT = 0x00;
 	
 	NonCritical();
-}
+}*/
 
 unsigned long DRAM_ReadLong(dram address)
 {
