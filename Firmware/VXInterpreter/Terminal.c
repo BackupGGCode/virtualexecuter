@@ -281,18 +281,29 @@ void TestDRAM(char* line)
 {
 unsigned long current;
 unsigned long max = DRAM_SIZE;
-unsigned long step = 57;
+unsigned long step = 1;
 unsigned char value = 123;
+unsigned short sent;
 
 	UART_WriteString_P("Clearing memory...\n");
 
+	sent=0;
 	for(current = 0; current < max; current += step)
 	{
 		DRAM_WriteByte(current, 0);
+		sent+=step;
+		if(sent>=1024)
+		{
+			UART_WriteValueUnsigned(current / 1024, 0, 0);
+			UART_WriteString_P(" kB\r");
+			sent-=1024;
+		}
+		value += 234;
 	}
 	
-	UART_WriteString_P("Done\nTesting memory...\n");
+	UART_WriteString_P("\nDone\nTesting memory...\n");
 
+	sent=0;
 	for(current = 0; current < max; current += step)
 	{
 		if(DRAM_ReadByte(current) != 0)
@@ -307,12 +318,17 @@ unsigned char value = 123;
 			UART_WriteString_P("\nReadback error");
 			break;
 		}
-		UART_WriteValueUnsigned(current / 1024,0,0);
-		UART_WriteString_P(" kB\r");
+		sent+=step;
+		if(sent>=1024)
+		{
+			UART_WriteValueUnsigned(current / 1024, 0, 0);
+			UART_WriteString_P(" kB\r");
+			sent-=1024;
+		}
 		value += 234;
 	}
 	
-	UART_WriteString_P("\nDone");
+	UART_WriteString_P("\nDone - all is well :)\n");
 }
 
 void PrintHeaps(char* line)
