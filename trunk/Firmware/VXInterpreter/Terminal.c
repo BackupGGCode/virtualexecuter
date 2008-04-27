@@ -101,7 +101,7 @@ fsFile f;
 unsigned char bytes;
 unsigned char buf[20];
 	
-	if(FileStore_OpenFile(GetNextWord(line), &f) == false)
+	if(FileStore_OpenFile(Strings_GetNextWord(line), &f) == false)
 	{
 		UART_WriteString_P("File not found");
 		return;
@@ -116,7 +116,7 @@ unsigned char buf[20];
 
 void RunProgram(char* line)
 {
-vx_pid id = ReadValueUnsigned(GetNextWord(line));
+vx_pid id = Strings_ReadValueUnsigned(Strings_GetNextWord(line));
 
 	if(VX_SetProcessState(id, Run))
 	{
@@ -134,7 +134,7 @@ vx_pid id = ReadValueUnsigned(GetNextWord(line));
 
 void StepProgram(char* line)
 {
-vx_pid id = ReadValueUnsigned(GetNextWord(line));
+vx_pid id = Strings_ReadValueUnsigned(Strings_GetNextWord(line));
 
 	if(VX_SetProcessState(id, Step))
 	{
@@ -153,7 +153,7 @@ vx_pid id = ReadValueUnsigned(GetNextWord(line));
 
 void StopProgram(char* line)
 {
-vx_pid id = ReadValueUnsigned(GetNextWord(line));
+vx_pid id = Strings_ReadValueUnsigned(Strings_GetNextWord(line));
 
 	if(VX_SetProcessState(id, Stop))
 	{
@@ -236,10 +236,10 @@ unsigned char length;
 unsigned long blockSize, size, current=0;
 char* word;
 
-	word = GetNextWord(line);
-	size = ReadValueUnsigned(word);
-	word = GetNextWord(word);
-	blockSize = ReadValueUnsigned(word);
+	word = Strings_GetNextWord(line);
+	size = Strings_ReadValueUnsigned(word);
+	word = Strings_GetNextWord(word);
+	blockSize = Strings_ReadValueUnsigned(word);
 	
 	if(blockSize > BLOCK_SIZE)
 	{
@@ -357,7 +357,7 @@ unsigned long space = Kernel_GetFreeHeapSpace();
 
 void KillProcess(char* line)
 {
-	vx_pid id = ReadValueUnsigned(GetNextWord(line));
+	vx_pid id = Strings_ReadValueUnsigned(Strings_GetNextWord(line));
 	
 	if(VX_KillProcess(id))
 	{
