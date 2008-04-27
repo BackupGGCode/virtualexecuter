@@ -26,7 +26,6 @@ bool PopQuad(unsigned long* pValue);
 bool PushFloat(float* pValue);
 bool PopFloat(float* pValue);
 
-void PrintStack();
 
 process p;
 
@@ -42,7 +41,6 @@ dram currentProcess = processList;
 		
 		if(p.state == Run || p.state == Step)
 		{
-//			PrintStack();
 			if(VX_ExecuteInstruction())
 			{
 				p.ticks++;
@@ -55,7 +53,6 @@ dram currentProcess = processList;
 			{
 				p.state = Crash;
 			}
-//			WriteProcess(currentProcess, &p);
 			UpdateProcess(p);
 		}
 		currentProcess = p.next;
@@ -87,7 +84,7 @@ float f1, f2;
 // Arithmetic
 
 		case   1:	// adds
-							if(PopSingle(&uc1) == false || PopSingle(&uc2) == false)
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
 							{
 								return false;
 							}
@@ -99,7 +96,7 @@ float f1, f2;
 							break;
 							
 		case   2:	// addd
-							if(PopDouble(&us1) == false || PopDouble(&us2) == false)
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
 							{
 								return false;
 							}
@@ -111,7 +108,7 @@ float f1, f2;
 							break;
 							
 		case   3:	// addq
-							if(PopQuad(&ul1) == false || PopQuad(&ul2) == false)
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
 							{
 								return false;
 							}
@@ -123,12 +120,361 @@ float f1, f2;
 							break;
 							
 		case   4:	// addf
-							if(PopFloat(&f1) == false || PopFloat(&f2) == false)
+							if(PopFloat(&f2) == false || PopFloat(&f1) == false)
 							{
 								return false;
 							}
 							f1 += f2;
 							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+
+		case   5:	// subs
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 -= uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   6:	// subd
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 -= us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   7:	// subq
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 -= ul2;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   8:	// subf
+							if(PopFloat(&f2) == false || PopFloat(&f1) == false)
+							{
+								return false;
+							}
+							f1 -= f2;
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   9:	// muls
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 *= uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   10:	// muld
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 *= us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   11:	// mulq
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 *= ul2;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   12:	// mulf
+							if(PopFloat(&f2) == false || PopFloat(&f1) == false)
+							{
+								return false;
+							}
+							f1 *= f2;
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   13:	// divs
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 /= uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   14:	// divd
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 /= us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   15:	// divq
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 /= ul2;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   16:	// divf
+							if(PopFloat(&f2) == false || PopFloat(&f1) == false)
+							{
+								return false;
+							}
+							f1 /= f2;
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							
+		case   17:	// incs
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 += 1;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   18:	// incd
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 += 1;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   19:	// incq
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 += 1;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   20:	// incf
+							if(PopFloat(&f1) == false)
+							{
+								return false;
+							}
+							f1 += 1.0;
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   21:	// decs
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 -= 1;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   22:	// decd
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 -= 1;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   23:	// decq
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 -= 1;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   24:	// decf
+							if(PopFloat(&f1) == false)
+							{
+								return false;
+							}
+							f1 -= 1.0;
+							if(PushFloat(&f1) == false)
+							{
+								return false;
+							}
+							break;
+							
+// Logical
+
+		case   25:	// ands
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 &= uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   26:	// andd
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 &= us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   27:	// andq
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 &= ul2;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   28:	// ors
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 |= uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   29:	// ord
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 |= us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   30:	// orq
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 |= ul2;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   31:	// xors
+							if(PopSingle(&uc2) == false || PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 ^= uc2;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   32:	// xord
+							if(PopDouble(&us2) == false || PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 ^= us2;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   33:	// xorq
+							if(PopQuad(&ul2) == false || PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 ^= ul2;
+							if(PushQuad(&ul1) == false)
 							{
 								return false;
 							}
@@ -389,18 +735,4 @@ bool PopFloat(float* pValue)
 	DRAM_ReadBytes(p.stackStart + p.sp, (unsigned char*)pValue, 4);
 
 	return true;
-}
-
-
-void PrintStack()
-{
-unsigned char i, t;
-
-	for(i=0; i<p.stackSize; i++)
-	{
-		t = DRAM_ReadByte(p.stackStart + i);
-		UART_WriteValueUnsigned(t, 3, '0');
-		UART_WriteByte(' ');
-	}
-	UART_WriteString_P("\n");
 }

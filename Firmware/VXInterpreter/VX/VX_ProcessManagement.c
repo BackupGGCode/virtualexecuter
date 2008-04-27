@@ -7,7 +7,7 @@
 #include "VX.h"
 #include "DRAM.h"
 #include "VX_ProcessManagement.h"
-#include <mem.h>
+#include <Memory.h>
 
 
 dram processList = null;
@@ -42,10 +42,10 @@ unsigned char length;
 		return false;
 	}
 	
-	Copy(buffer + 5, &options, 4);
-	Copy(buffer + 9, &codeSize, 4);
-	Copy(buffer + 13, &dataSize, 4);
-	Copy(buffer + 17, &stackSize, 4);
+	Memory_Copy_Tiny(buffer + 5, &options, 4);
+	Memory_Copy_Tiny(buffer + 9, &codeSize, 4);
+	Memory_Copy_Tiny(buffer + 13, &dataSize, 4);
+	Memory_Copy_Tiny(buffer + 17, &stackSize, 4);
 	Kernel_Deallocate(buffer);
 	
 	newProcess = DRAM_Allocate(sizeof(process) + codeSize + dataSize + stackSize);

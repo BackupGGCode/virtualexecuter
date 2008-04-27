@@ -6,27 +6,6 @@
 #include <Peripherals/UART.h>
 
 
-#define DRAM_PRESCALER													14
-#define NUMBER_OF_ROWS													1024
-#define CAS_RAS_PER_CYCLE												8
-#define REFRESH_CYCLES													(NUMBER_OF_ROWS / CAS_RAS_PER_CYCLE)
-
-#define DATA_IN																	PIND
-#define DATA_OUT																PORTD
-#define ADR_PORT																PORTA
-#define CTRL_PORT																PORTC
-
-#define DIR_IN																	DDRD = 0x00
-#define DIR_OUT																	DDRD = 0xff
-
-#define CAS_HIGH																CTRL_PORT |= (1<<7)
-#define CAS_LOW																	CTRL_PORT &= ~(1<<7)
-#define RAS_HIGH																CTRL_PORT |= (1<<5)
-#define RAS_LOW																	CTRL_PORT &= ~(1<<5)
-#define WE_HIGH																	CTRL_PORT |= (1<<6)
-#define WE_LOW																	CTRL_PORT &= ~(1<<6)
-
-
 typedef struct
 {
 	bool free;
@@ -193,31 +172,13 @@ unsigned long space = 0;
 }
 
 /*
-unsigned long space = DRAM_SIZE - sizeof(block);
-block b;
-dram a = 0;
-
-	ReadFirstBlock(&b);
-	
-	while(b.next != null)
-	{
-		if(b.free == true)
-		{
-			space -= (b.size + sizeof(block));
-		}
-		a = b.next;
-		ReadBlock(&b, a);
-	}
-	
-	return space;
-}
+	Low level read/write has been moved to assembly -> see DRAM_LowLevel.asm
 */
-
 
 /*
 	This assembles to 50 bytes of code executing in 25 clocks
 */
-unsigned char DRAM_ReadByte(dram address)
+/*unsigned char DRAM_ReadByte(dram address)
 {
 unsigned char data;
 
@@ -247,11 +208,12 @@ unsigned char data;
 	
 	return data;
 }
+*/
 
 /*
 	This assembles to 68 bytes of code executing in 34 clocks
 */
-void DRAM_WriteByte(dram address, unsigned char data)
+/*void DRAM_WriteByte(dram address, unsigned char data)
 {
 	Critical();
 	
@@ -282,78 +244,8 @@ void DRAM_WriteByte(dram address, unsigned char data)
 	
 	NonCritical();
 }
-
-
-/*
-	This assembles to 50 bytes of code executing in 25 clocks
-*//*
-unsigned char DRAM_ReadByte(dram address)
-{
-unsigned char data;
-
-	Critical();
-	
-	ADR_PORT = address;
-	address >>= 8;
-	CTRL_PORT = (address & 0x03) | 0xe0;
-	__no_operation();
-	address >>= 2;
-	RAS_LOW;
-//	address >>= 2;
-	address >>= 8;
-	ADR_PORT = address;
-//	address >>= 8;
-  address &= 0x03;
-//	CTRL_PORT = (address & 0x03) | 0xc0;
-	CTRL_PORT = address | 0xc0;
-	__no_operation();
-	CAS_LOW;
-	
-	__no_operation();
-	data = DATA_IN;
-	
-	CTRL_PORT = 0xe0;
-	
-	NonCritical();
-	
-	return data;
-}
 */
-/*
-	This assembles to 68 bytes of code executing in 34 clocks
-*//*
-void DRAM_WriteByte(dram address, unsigned char data)
-{
-	Critical();
-	
-	DIR_OUT;
-	DATA_OUT = data;
-	
-	ADR_PORT = address;
-	address >>= 8;
-	CTRL_PORT = (address & 0x03) | 0xa0;
-	__no_operation();
- 	address >>= 2;
-	RAS_LOW;
-//	address >>= 2;
-	address >>= 8;
-	ADR_PORT = address;
-//	address >>= 8;
-  address &= 0x03;
-//	CTRL_PORT = (address & 0x03) | 0x80;
-	CTRL_PORT = address | 0x80;
-	__no_operation();
-	CAS_LOW;
-	
-	__no_operation();
-	
-	CTRL_PORT = 0xe0;
-	
-	DIR_IN;
-	DATA_OUT = 0x00;
-	
-	NonCritical();
-}*/
+
 
 unsigned long DRAM_ReadLong(dram address)
 {
