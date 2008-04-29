@@ -11,6 +11,17 @@ namespace VXT
 	class Program
 	{
 		static SerialPort com;
+		static string port = "com1";
+		static string baudrate = "115200";
+		static bool localEcho = false;
+		static bool fullNewLinesOnIncoming = false;
+		static bool fullNewLinesOnOutgoing = false;
+		static bool encodeAll = false;
+		static bool encodeControlCharacters = false;
+		static bool saveToFile = false;
+		static string logFileName = "log.txt";
+		static StreamWriter logFile = null;
+		static bool waitWhenExiting = false;
 
 		static void LoadDiscImage(string[] args)
 		{
@@ -92,18 +103,9 @@ namespace VXT
 
 		static void Main(string[] args)
 		{
-			string port = "com1";
-			string baudrate = "115200";
-			bool localEcho = false;
-			bool addLineCarriageReturn = false;
-			bool encodeAll = false;
-			bool encodeControlCharacters = false;
-			bool saveToFile = false;
-			string logFileName = "log.txt";
-			StreamWriter logFile = null;
 
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
-			Console.WriteLine("Version: 1.1 - April 26th 2008");
+			Console.WriteLine("Version: 1.11 - April 29th 2008");
 
 			try
 			{
@@ -148,13 +150,10 @@ namespace VXT
 					Console.WriteLine("Logging to file '" + logFileName + "'");
 					logFile = new StreamWriter(logFileName);
 				}
-
-				if (port == "")
+				if (options.ContainsKey("w"))
 				{
-					Console.WriteLine("No port specified");
-					return;
+					waitWhenExiting = true;
 				}
-
 				#endregion
 
 				if (options == null || options.Count == 0)
@@ -165,6 +164,13 @@ namespace VXT
 					{
 						Console.WriteLine("  " + s);
 					}
+					Quit();
+					return;
+				}
+
+				if (port == "")
+				{
+					Console.WriteLine("No port specified");
 					return;
 				}
 
@@ -180,173 +186,191 @@ namespace VXT
 				byte[] byteBuf = new byte[BLOCK_SIZE];
 				char[] outBuffer;
 
-				while (run)
+				try
 				{
-					#region Com to con
-					if (com.BytesToRead > 0)
+					while (run)
 					{
-						int toRead = com.BytesToRead;
-						if (toRead > BLOCK_SIZE)
+						#region Com to con
+						if (com.BytesToRead > 0)
 						{
-							toRead = BLOCK_SIZE;
-						}
-						outBuffer = new char[10 * toRead];
-
-						int j = 0;
-
-						if (encodeAll)
-						{
-							toRead = com.Read(byteBuf, 0, toRead);
-
-							for (int i = 0; i < toRead; i++)
+							int toRead = com.BytesToRead;
+							if (toRead > BLOCK_SIZE)
 							{
-								string s = Convert.ToString(byteBuf[i], 16);
-								if (s.Length == 1)
-								{
-									outBuffer[j++] = '0';
-								}
-								foreach (char c in s)
-								{
-									outBuffer[j++] = c;
-								}
-								outBuffer[j++] = ' ';
+								toRead = BLOCK_SIZE;
 							}
-						}
-						else
-						{
-							toRead = com.Read(buf, 0, toRead);
+							outBuffer = new char[10 * toRead];
 
-							for (int i = 0; i < toRead; i++)
+							int j = 0;
+
+							if (encodeAll)
 							{
-								if (buf[i] == (char)13)
-								{
-									outBuffer[j++] = buf[i];
+								toRead = com.Read(byteBuf, 0, toRead);
 
-									if (addLineCarriageReturn)
-									{
-										outBuffer[j++] = (char)10;
-									}
-								}
-								else if (buf[i] < 32)
+								for (int i = 0; i < toRead; i++)
 								{
-									if (encodeControlCharacters)
+									string s = Convert.ToString(byteBuf[i], 16);
+									if (s.Length == 1)
 									{
-										outBuffer[j++] = '<';
-										string s = Convert.ToString((byte)buf[i], 16);
-										if (s.Length == 1)
+										outBuffer[j++] = '0';
+									}
+									foreach (char c in s)
+									{
+										outBuffer[j++] = c;
+									}
+									outBuffer[j++] = ' ';
+								}
+							}
+							else
+							{
+								toRead = com.Read(buf, 0, toRead);
+
+								for (int i = 0; i < toRead; i++)
+								{
+									if (buf[i] == (char)13)
+									{
+										outBuffer[j++] = buf[i];
+
+										if (fullNewLinesOnIncoming)
 										{
-											outBuffer[j++] = '0';
+											outBuffer[j++] = (char)10;
 										}
-										foreach (char c in s)
+									}
+									else if (buf[i] < 32)
+									{
+										if (encodeControlCharacters)
 										{
-											outBuffer[j++] = c;
+											outBuffer[j++] = '<';
+											string s = Convert.ToString((byte)buf[i], 16);
+											if (s.Length == 1)
+											{
+												outBuffer[j++] = '0';
+											}
+											foreach (char c in s)
+											{
+												outBuffer[j++] = c;
+											}
+											outBuffer[j++] = '>';
 										}
-										outBuffer[j++] = '>';
+										else
+										{
+											outBuffer[j++] = buf[i];
+										}
 									}
 									else
 									{
 										outBuffer[j++] = buf[i];
 									}
 								}
-								else
-								{
-									outBuffer[j++] = buf[i];
-								}
 							}
-						}
 
-						Console.Write(outBuffer, 0, j);
-						if (saveToFile)
-						{
-							logFile.Write(outBuffer, 0, j);
-							logFile.Flush();
-						}
-					}
-					#endregion
-
-					if (Console.KeyAvailable)
-					{
-						char key = Console.ReadKey(true).KeyChar;
-						if (key == 3)
-						{
+							Console.Write(outBuffer, 0, j);
 							if (saveToFile)
 							{
-								logFile.Close();
-							}
-							return;
-						}
-						else if (key == 27)
-						{
-							Console.Write("\nVXT>");
-							string cmd = Console.ReadLine();
-							string[] cmds = cmd.Split(' ');
-							switch (cmds[0])
-							{
-								case "quit":
-									if (saveToFile)
-									{
-										logFile.Close();
-									}
-									return;
-								case "load":
-									LoadDiscImage(cmds);
-									break;
-								default:
-									Console.WriteLine("Unknown command");
-									break;
+								logFile.Write(outBuffer, 0, j);
+								logFile.Flush();
 							}
 						}
-						else
+						#endregion
+
+						#region Con to com
+						if (Console.KeyAvailable)
 						{
-							if (key == 13)
+							char key = Console.ReadKey(true).KeyChar;
+							if (key == 3)
 							{
-								com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
+								Quit();
+								return;
+							}
+							else if (key == 27)
+							{
+								Console.Write("\nVXT>");
+								string cmd = Console.ReadLine();
+								string[] cmds = cmd.Split(' ');
+								switch (cmds[0])
+								{
+									case "quit":
+										if (saveToFile)
+										{
+											logFile.Close();
+										}
+										return;
+									case "load":
+										LoadDiscImage(cmds);
+										break;
+									default:
+										Console.WriteLine("Unknown command");
+										break;
+								}
 							}
 							else
 							{
-								com.Write(new char[1] { key }, 0, 1);
-							}
+								if (key == 13)
+								{
+									com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
+								}
+								else
+								{
+									com.Write(new char[1] { key }, 0, 1);
+								}
 
-							if (localEcho)
-							{
-								Console.Write(key);
+								if (localEcho)
+								{
+									Console.Write(key);
+								}
 							}
 						}
+						#endregion
+
+						System.Threading.Thread.Sleep(1);
 					}
 
-					System.Threading.Thread.Sleep(1);
+					com.Close();
+					if (saveToFile)
+					{
+						logFile.Close();
+					}
 				}
-
-				com.Close();
-				if (saveToFile)
+				catch (Exception ex)
 				{
-					logFile.Close();
+					if (ex.Message != "")
+					{
+						Console.WriteLine(ex.Message);
+					}
 				}
 			}
 			catch (Exception ex)
 			{
-				if (ex.Message != "")
-				{
-					Console.WriteLine(ex.Message);
-				}
+				Console.WriteLine(ex.Message);
+			}
+		}
+
+		static void Quit()
+		{
+			if (saveToFile)
+			{
+				logFile.Close();
+			}
+			if (waitWhenExiting)
+			{
+				Console.ReadKey(true);
 			}
 		}
 
 		static void Help()
 		{
 			Console.WriteLine("Available options:");
-			Console.WriteLine("  p - Set port name.");
-			Console.WriteLine("  b - Set baudrate (default is 115200 bps).");
-			Console.WriteLine("  l - Enable local echo of all typed characters.");
-			Console.WriteLine("  e - Enable partial encoding. Control characters will be shown as hex values.");
-			Console.WriteLine("  E - Enable full encoding. All characters will be shown as hex values.");
-			Console.WriteLine("  f - Enable logging. If no file name is specified the default name will be used.");
+			Console.WriteLine("  p - Set port name.\n      'vxt -p com1'");
+			Console.WriteLine("  b - Set baudrate (default is 115200 bps).\n      'vxt -p com1 -b 9600'");
+			Console.WriteLine("  l - Enable local echo of all typed characters.\n      'vxt -p com1 -l'");
+			Console.WriteLine("  e - Enable partial encoding. Control characters will be shown as hex values.\n      'vxt -p com1 -e'");
+			Console.WriteLine("  E - Enable full encoding. All characters will be shown as hex values.\n      'vxt -p com1 -E'");
+			Console.WriteLine("  f - Enable logging. If no file name is specified the default name will be used.\n      'vxt -p com1 -f logfile.txt'");
 			Console.WriteLine("");
 			Console.WriteLine("To run special functions hit ESC and enter function name and arguments.");
 			Console.WriteLine("  load - Load a disc image to a VX machine.");
 			Console.WriteLine("  quit - Quit VXT.");
 			Console.WriteLine("");
-			Console.WriteLine("To close the terminal either hit CTRL+C or use the special function 'quit'.");
+			Console.WriteLine("To close the terminal either hit Ctrl + C or use the special function 'quit'.");
 			Console.WriteLine("");
 		}
 	}
