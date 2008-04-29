@@ -480,6 +480,150 @@ float f1, f2;
 							}
 							break;
 							
+		case   34:	// coms
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 = ~uc1;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   35:	// comd
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 = ~us1;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   36:	// comq
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 = ~ul1;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   37:	// negs
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 = 0 - uc1;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   38:	// negd
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 = 0 - us1;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   39:	// negq
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 = 0 - ul1;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   40:	// shfls
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 <<= 1;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   41:	// shfld
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 <<= 1;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   42:	// shflq
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 <<= 1;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   43:	// shfrs
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+							uc1 >>= 1;
+							if(PushSingle(&uc1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   44:	// shfrd
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							us1 >>= 1;
+							if(PushDouble(&us1) == false)
+							{
+								return false;
+							}
+							break;
+							
+		case   45:	// shfrq
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							ul1 >>= 1;
+							if(PushQuad(&ul1) == false)
+							{
+								return false;
+							}
+							break;
+							
 // Transfer
 							
 		case  51:	// loads - 0x33
