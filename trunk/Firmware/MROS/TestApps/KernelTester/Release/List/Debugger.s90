@@ -1,0 +1,372 @@
+        NAME Debugger
+
+        RTMODEL "__64bit_doubles", "disabled"
+        RTMODEL "__cpu", "3"
+        RTMODEL "__cpu_name", "AT90Mega32"
+        RTMODEL "__enhanced_core", "enabled"
+        RTMODEL "__has_elpm", "false"
+        RTMODEL "__memory_model", "2"
+        RTMODEL "__rt_version", "2.30"
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN UART_Init
+        FUNCTION UART_Init,0202H
+        EXTERN ?Register_R4_is_cg_reg
+        EXTERN ?Register_R5_is_cg_reg
+        EXTERN ?Register_R6_is_cg_reg
+        EXTERN ?Register_R7_is_cg_reg
+        EXTERN ?Register_R8_is_cg_reg
+        EXTERN ?Register_R9_is_cg_reg
+        EXTERN currentTaskIndex
+        EXTERN taskQueue
+        EXTERN putc
+        FUNCTION putc,0202H
+        EXTERN totalExecutionTime
+
+        PUBLIC Hexify
+        FUNCTION Hexify,0203H
+        PUBLIC Kernel_DebuggerEvent
+        FUNCTION Kernel_DebuggerEvent,021203H
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC Kernel_InitDebugger
+        FUNCTION Kernel_InitDebugger,021201H
+        LOCFRAME RSTACK, 2, STACK
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+;     1 #include <Peripherals/UART.h>
+;     2 #include "KernelInternals.h"
+;     3 #include "Kernel.h"
+;     4 
+;     5 
+;     6 #define SOP																			0x00
+;     7 #define EOP																			0x01
+;     8 
+;     9 
+
+        RSEG CODE:CODE:NOROOT(1)
+;    10 void Hexify(unsigned char value, unsigned char* destination)
+;    11 {
+;    12 	destination[0] = value&0x0f;
+; __nearfunc void Hexify(unsigned char, unsigned char *);
+Hexify:
+	MOV	R17,R16
+	ANDI	R17,0x0F
+	MOVW	R31 : R30,R19 : R18
+	ST	Z,R17
+;    13 	destination[1] = (value>>4)&0x0f;
+	SWAP	R16
+	ANDI	R16,0x0F
+	STD	Z+1,R16
+;    14 }
+	RET
+;    15 
+;    16 
+
+        RSEG CODE:CODE:NOROOT(1)
+;    17 void Kernel_InitDebugger()
+;    18 {
+;    19 	UART_Init(DEBUGGER_BAUDRATE);
+; __nearfunc void Kernel_InitDebugger();
+Kernel_InitDebugger:
+        FUNCALL Kernel_InitDebugger, UART_Init
+        LOCFRAME RSTACK, 2, STACK
+	LDI	R16,11
+	LDI	R17,0
+	JMP	UART_Init
+;    20 }
+;    21 
+;    22 
+
+        RSEG CODE:CODE:NOROOT(1)
+;    23 void Kernel_DebuggerEvent(unsigned char event, task target, unsigned char status, unsigned long extended)
+;    24 {
+; __nearfunc void Kernel_DebuggerEvent(unsigned char, task, unsigned char, unsigned long);
+Kernel_DebuggerEvent:
+        FUNCALL Kernel_DebuggerEvent, putc
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, Hexify
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, putc
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, putc
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL Kernel_DebuggerEvent, putc
+        LOCFRAME CSTACK, 38, STACK
+        LOCFRAME RSTACK, 2, STACK
+	ST	-Y,R9
+	ST	-Y,R8
+	ST	-Y,R7
+	ST	-Y,R6
+	ST	-Y,R5
+	ST	-Y,R4
+	ST	-Y,R27
+	ST	-Y,R26
+	ST	-Y,R25
+	ST	-Y,R24
+	REQUIRE	?Register_R4_is_cg_reg
+	REQUIRE	?Register_R5_is_cg_reg
+	REQUIRE	?Register_R6_is_cg_reg
+	REQUIRE	?Register_R7_is_cg_reg
+	REQUIRE	?Register_R8_is_cg_reg
+	REQUIRE	?Register_R9_is_cg_reg
+	SBIW	R29 : R28,28
+	MOV	R7,R16
+	MOVW	R5 : R4,R19 : R18
+	MOV	R6,R17
+	MOVW	R25 : R24,R21 : R20
+	MOVW	R27 : R26,R23 : R22
+;    25 unsigned char buffer[2*14];
+;    26 unsigned char i, current, count;
+;    27 unsigned short caller = (unsigned short)CurrentTask();
+	LDS	R18,currentTaskIndex
+	LDI	R19,0
+	LDI	R16,13
+	LDI	R17,0
+	MUL	R17,R18
+	MOV	R17,R0
+	MUL	R16,R19
+	ADD	R17,R0
+	MUL	R16,R18
+	MOV	R16,R0
+	ADD	R17,R1
+	MOVW	R31 : R30,R17 : R16
+	SUBI	R30,LOW((-(taskQueue) & 0xFFFF))
+	SBCI	R31,(-(taskQueue) & 0xFFFF) >> 8
+	LD	R8,Z
+	LDD	R9,Z+1
+;    28 
+;    29 	putc(SOP);
+	LDI	R16,0
+	CALL	putc
+;    30 
+;    31 // Put into buffer as non ASCII hex values using two bytes per byte
+;    32 
+;    33 	Hexify(event, buffer+0);
+	MOVW	R19 : R18,R29 : R28
+	MOV	R16,R7
+	RCALL	Hexify
+;    34 	
+;    35 	Hexify(totalExecutionTime, buffer+2);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,254
+	SBCI	R19,255
+	LDI	R30,LOW(totalExecutionTime)
+	LDI	R31,(totalExecutionTime) >> 8
+	LD	R16,Z
+	RCALL	Hexify
+;    36 	Hexify(totalExecutionTime>>8, buffer+4);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,252
+	SBCI	R19,255
+	LDI	R30,LOW(totalExecutionTime)
+	LDI	R31,(totalExecutionTime) >> 8
+	LDD	R16,Z+1
+	RCALL	Hexify
+;    37 	Hexify(totalExecutionTime>>16, buffer+6);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,250
+	SBCI	R19,255
+	LDI	R30,LOW(totalExecutionTime)
+	LDI	R31,(totalExecutionTime) >> 8
+	LDD	R16,Z+2
+	RCALL	Hexify
+;    38 	Hexify(totalExecutionTime>>24, buffer+8);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,248
+	SBCI	R19,255
+	LDI	R30,LOW(totalExecutionTime)
+	LDI	R31,(totalExecutionTime) >> 8
+	LDD	R16,Z+3
+	RCALL	Hexify
+;    39 	
+;    40 	Hexify(caller, buffer+10);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,246
+	SBCI	R19,255
+	MOV	R16,R8
+	RCALL	Hexify
+;    41 	Hexify(caller>>8, buffer+12);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,244
+	SBCI	R19,255
+	MOV	R16,R9
+	RCALL	Hexify
+;    42 
+;    43 	Hexify((unsigned short)target, buffer+14);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,242
+	SBCI	R19,255
+	MOV	R16,R4
+	RCALL	Hexify
+;    44 	Hexify(((unsigned short)target)>>8, buffer+16);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,240
+	SBCI	R19,255
+	MOV	R16,R5
+	RCALL	Hexify
+;    45 
+;    46 	Hexify(status, buffer+18);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,238
+	SBCI	R19,255
+	MOV	R16,R6
+	RCALL	Hexify
+;    47 	
+;    48 	Hexify(extended, buffer+20);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,236
+	SBCI	R19,255
+	MOV	R16,R24
+	RCALL	Hexify
+;    49 	Hexify(extended>>8, buffer+22);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,234
+	SBCI	R19,255
+	MOV	R16,R25
+	RCALL	Hexify
+;    50 	Hexify(extended>>16, buffer+24);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,232
+	SBCI	R19,255
+	MOV	R16,R26
+	RCALL	Hexify
+;    51 	Hexify(extended>>24, buffer+26);
+	MOVW	R19 : R18,R29 : R28
+	SUBI	R18,230
+	SBCI	R19,255
+	MOV	R16,R27
+	RCALL	Hexify
+;    52 
+;    53 
+;    54 // Compress (RLE) the buffer and send the compressed frame
+;    55 	current = buffer[0];
+	LD	R17,Y
+;    56 	count = 1;
+	LDI	R16,1
+;    57 	
+;    58 	for(i = 1; i < (2*14); i++)
+	MOVW	R27 : R26,R29 : R28
+	ADIW	R27 : R26,1
+	LDI	R24,27
+;    59 	{
+;    60 		if(buffer[i] == current && count < 15)
+??Kernel_DebuggerEvent_0:
+	LD	R18,X
+	CP	R18,R17
+	BRNE	??Kernel_DebuggerEvent_1
+	CPI	R16,15
+	BRCC	??Kernel_DebuggerEvent_1
+;    61 		{
+;    62 			count++;
+	INC	R16
+	RJMP	??Kernel_DebuggerEvent_2
+;    63 		}
+;    64 		else
+;    65 		{
+;    66 			putc( ((count)<<4) | current );
+??Kernel_DebuggerEvent_1:
+	SWAP	R16
+	ANDI	R16,0xF0
+	OR	R16,R17
+	CALL	putc
+;    67 			current = buffer[i];
+	LD	R17,X
+;    68 			count = 1;
+	LDI	R16,1
+??Kernel_DebuggerEvent_2:
+	ADIW	R27 : R26,1
+	DEC	R24
+	BRNE	??Kernel_DebuggerEvent_0
+;    69 		}
+;    70 	}
+;    71 	putc( ((count)<<4) | current );
+	SWAP	R16
+	ANDI	R16,0xF0
+	OR	R16,R17
+	CALL	putc
+;    72 	
+;    73 	putc(EOP);
+	LDI	R16,1
+	CALL	putc
+;    74 }
+	ADIW	R29 : R28,28
+	LD	R24,Y+
+	LD	R25,Y+
+	LD	R26,Y+
+	LD	R27,Y+
+	LD	R4,Y+
+	LD	R5,Y+
+	LD	R6,Y+
+	LD	R7,Y+
+	LD	R8,Y+
+	LD	R9,Y+
+	RET
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        END
+; 
+;    332 bytes in segment CODE
+; 
+;    332 bytes of CODE memory
+;
+;Errors: none
+;Warnings: none

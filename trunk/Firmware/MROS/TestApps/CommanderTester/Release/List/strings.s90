@@ -1,0 +1,359 @@
+//////////////////////////////////////////////////////////////////////////////
+//                                                                           /
+//                                                     09/Mar/2008  16:57:11 /
+// IAR Atmel AVR C/C++ Compiler V4.21A/W32, Evaluation Version               /
+// Copyright 1996-2006 IAR Systems. All rights reserved.                     /
+//                                                                           /
+//    Source file  =  f:\Projects\[Drivers]\C\MROS\strings.c                 /
+//    Command line =  --string_literals_in_flash                             /
+//                    f:\Projects\[Drivers]\C\MROS\strings.c --cpu=m32 -ms   /
+//                    -o f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTest /
+//                    er\Release\Obj\ -D NDEBUG -lC                          /
+//                    f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\ /
+//                    Release\List\ -lA f:\Projects\[Drivers]\C\MROS\TestApp /
+//                    s\CommanderTester\Release\List\                        /
+//                    --initializers_in_flash -s9 -DENABLE_BIT_DEFINITIONS   /
+//                    -e -I f:\Projects\[Drivers]\C\mros\TestApps\CommanderT /
+//                    ester\ -I f:\Projects\[Drivers]\C\mros\ -I             /
+//                    "C:\Program Files\IAR Systems\Embedded Workbench 4.0   /
+//                    Evaluation\avr\INC\" -I "C:\Program Files\IAR          /
+//                    Systems\Embedded Workbench 4.0                         /
+//                    Evaluation\avr\INC\CLIB\" --eeprom_size 1024           /
+//    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\ /
+//                    Release\List\strings.s90                               /
+//                                                                           /
+//                                                                           /
+//////////////////////////////////////////////////////////////////////////////
+
+        NAME strings
+
+        RTMODEL "__64bit_doubles", "disabled"
+        RTMODEL "__cpu", "3"
+        RTMODEL "__cpu_name", "ATmega32"
+        RTMODEL "__enhanced_core", "enabled"
+        RTMODEL "__has_elpm", "false"
+        RTMODEL "__memory_model", "2"
+        RTMODEL "__rt_version", "3"
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        PUBLIC GetNextWord
+        FUNCTION GetNextWord,0203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC ReadInteger
+        FUNCTION ReadInteger,0203H
+        LOCFRAME CSTACK, 4, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC StringCompare_PD
+        FUNCTION StringCompare_PD,0203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC StringCopy_PD
+        FUNCTION StringCopy_PD,0203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        
+        CFI Names cfiNames0
+        CFI StackFrame CFA_Y Y DATA
+        CFI StackFrame CFA_SP SP DATA
+        CFI VirtualResource ?RetPad:1, ?RetHigh:8, ?RetLow:8, ?Ret:17
+        CFI Resource R0:8, R1:8, R2:8, R3:8, R4:8, R5:8, R6:8, R7:8, R8:8, R9:8
+        CFI Resource R10:8, R11:8, R12:8, R13:8, R14:8, R15:8, R16:8, R17:8
+        CFI Resource R18:8, R19:8, R20:8, R21:8, R22:8, R23:8, R24:8, R25:8
+        CFI Resource R26:8, R27:8, R28:8, R29:8, R30:8, R31:8
+        CFI Resource ?RetHighByteMask:8, SP:16, SPH:8, SPL:8, Y:16
+        CFI ResourceParts ?Ret ?RetHigh, ?RetLow, ?RetPad
+        CFI ResourceParts SP SPH, SPL
+        CFI ResourceParts Y R29, R28
+        CFI EndNames cfiNames0
+        
+        CFI Common cfiCommon0 Using cfiNames0
+        CFI CodeAlign 1
+        CFI DataAlign 1
+        CFI ReturnAddress ?Ret CODE
+        CFI CFA_Y Y+0
+        CFI CFA_SP SP+2
+        CFI ?RetPad 0
+        CFI ?RetHigh and(load(1, DATA, sub(CFA_SP, 1)), ?RetHighByteMask)
+        CFI ?RetLow Frame(CFA_SP, 0)
+        CFI ?Ret Concat
+        CFI R0 Undefined
+        CFI R1 Undefined
+        CFI R2 Undefined
+        CFI R3 Undefined
+        CFI R4 SameValue
+        CFI R5 SameValue
+        CFI R6 SameValue
+        CFI R7 SameValue
+        CFI R8 SameValue
+        CFI R9 SameValue
+        CFI R10 SameValue
+        CFI R11 SameValue
+        CFI R12 SameValue
+        CFI R13 SameValue
+        CFI R14 SameValue
+        CFI R15 SameValue
+        CFI R16 Undefined
+        CFI R17 Undefined
+        CFI R18 Undefined
+        CFI R19 Undefined
+        CFI R20 Undefined
+        CFI R21 Undefined
+        CFI R22 Undefined
+        CFI R23 Undefined
+        CFI R24 SameValue
+        CFI R25 SameValue
+        CFI R26 SameValue
+        CFI R27 SameValue
+        CFI R28 Undefined
+        CFI R29 Undefined
+        CFI R30 Undefined
+        CFI R31 Undefined
+        CFI ?RetHighByteMask SameValue
+        CFI SPH Undefined
+        CFI SPL Undefined
+        CFI EndCommon cfiCommon0
+        
+// f:\Projects\[Drivers]\C\MROS\strings.c
+//    1 #include "Globals.h"
+//    2 
+//    3 
+
+        RSEG CODE:CODE:NOROOT(1)
+//    4 bool StringCompare_PD(string* s1, char* s2)
+StringCompare_PD:
+        CFI Block cfiBlock0 Using cfiCommon0
+        CFI Function StringCompare_PD
+//    5 {
+        MOVW    R1:R0, R27:R26
+//    6 	unsigned char i=0;
+        LDI     R20, 0
+        RJMP    ??StringCompare_PD_0
+//    7 	
+//    8 	while(s1[i] != 0)
+//    9 	{
+//   10 		if(s1[i] != s2[i])
+//   11 		{
+//   12 			return false;
+//   13 		}
+//   14 		
+//   15 		i++;
+??StringCompare_PD_1:
+        INC     R20
+??StringCompare_PD_0:
+        LDI     R23, 0
+        MOVW    R27:R26, R19:R18
+        ADD     R26, R20
+        ADC     R27, R23
+        MOVW    R31:R30, R17:R16
+        ADD     R30, R20
+        ADC     R31, R23
+        LPM     R21, Z
+        TST     R21
+        BREQ    ??StringCompare_PD_2
+        LD      R22, X
+        CP      R21, R22
+        BREQ    ??StringCompare_PD_1
+??StringCompare_PD_3:
+        LDI     R16, 0
+        RJMP    ??StringCompare_PD_4
+//   16 	}
+//   17 	
+//   18 	if(s2[i] != 0 && s2[i] != ' ')
+??StringCompare_PD_2:
+        LD      R16, X
+        TST     R16
+        BREQ    ??StringCompare_PD_5
+        CPI     R16, 32
+        BRNE    ??StringCompare_PD_3
+//   19 	{
+//   20 		return false;
+//   21 	}
+//   22 	
+//   23 	return true;
+??StringCompare_PD_5:
+        LDI     R16, 1
+??StringCompare_PD_4:
+        MOVW    R27:R26, R1:R0
+        RET
+        CFI EndBlock cfiBlock0
+//   24 }
+//   25 
+//   26 
+
+        RSEG CODE:CODE:NOROOT(1)
+//   27 void StringCopy_PD(string* src, char* des)
+StringCopy_PD:
+        CFI Block cfiBlock1 Using cfiCommon0
+        CFI Function StringCopy_PD
+//   28 {
+//   29 	unsigned char i=0;
+        LDI     R20, 0
+        RJMP    ??StringCopy_PD_0
+//   30 	
+//   31 	while(src[i])
+//   32 	{
+//   33 		des[i]=src[i];
+??StringCopy_PD_1:
+        MOVW    R31:R30, R19:R18
+        ADD     R30, R20
+        ADC     R31, R23
+        ST      Z, R21
+//   34 		i++;
+        INC     R20
+//   35 	}
+??StringCopy_PD_0:
+        LDI     R23, 0
+        MOVW    R31:R30, R17:R16
+        ADD     R30, R20
+        ADC     R31, R23
+        LPM     R21, Z
+        TST     R21
+        BRNE    ??StringCopy_PD_1
+//   36 }
+        RET
+        CFI EndBlock cfiBlock1
+//   37 
+//   38 
+
+        RSEG CODE:CODE:NOROOT(1)
+//   39 char* GetNextWord(char* s)
+GetNextWord:
+        CFI Block cfiBlock2 Using cfiCommon0
+        CFI Function GetNextWord
+//   40 {
+        RJMP    ??GetNextWord_0
+//   41 	while(*s)
+//   42 	{
+//   43 		if(*s == ' ')
+//   44 		{
+//   45 			return (s+1);
+//   46 		}
+//   47 		
+//   48 		s++;
+??GetNextWord_1:
+        SUBI    R16, 255
+        SBCI    R17, 255
+??GetNextWord_0:
+        MOVW    R31:R30, R17:R16
+        LD      R18, Z
+        TST     R18
+        BREQ    ??GetNextWord_2
+        CPI     R18, 32
+        BRNE    ??GetNextWord_1
+        SUBI    R16, 255
+        SBCI    R17, 255
+        RET
+//   49 	}
+//   50 	
+//   51 	return 0;
+??GetNextWord_2:
+        LDI     R16, 0
+        LDI     R17, 0
+        RET
+        CFI EndBlock cfiBlock2
+//   52 }
+//   53 
+//   54 
+
+        RSEG CODE:CODE:NOROOT(1)
+//   55 unsigned long ReadInteger(char* text)
+ReadInteger:
+        CFI Block cfiBlock3 Using cfiCommon0
+        CFI Function ReadInteger
+//   56 {
+        ST      -Y, R27
+        CFI R27 Frame(CFA_Y, -1)
+        CFI CFA_Y Y+1
+        ST      -Y, R26
+        CFI R26 Frame(CFA_Y, -2)
+        CFI CFA_Y Y+2
+        MOVW    R3:R2, R17:R16
+//   57 unsigned char i=0;
+        LDI     R26, 0
+//   58 unsigned long value=0;
+        LDI     R16, 0
+        LDI     R17, 0
+        LDI     R18, 0
+        LDI     R19, 0
+        RJMP    ??ReadInteger_0
+//   59 	
+//   60 	while('9' >= text[i] && text[i] >= '0')
+//   61 	{
+//   62 		value *= 10;
+//   63 		value += (text[i++] - '0');
+??ReadInteger_1:
+        LDI     R20, 10
+        MUL     R20, R19
+        MOV     R23, R0
+        MUL     R20, R18
+        MOV     R22, R0
+        ADD     R23, R1
+        MUL     R20, R17
+        MOV     R21, R0
+        ADD     R22, R1
+        ADC     R23, R27
+        MUL     R20, R16
+        ADD     R21, R1
+        ADC     R22, R27
+        ADC     R23, R27
+        LD      R16, Z
+        LDI     R17, 0
+        SUBI    R16, 48
+        SBCI    R17, 0
+        MOV     R18, R17
+        LSL     R18
+        SBC     R18, R18
+        MOV     R19, R18
+        ADD     R16, R0
+        ADC     R17, R21
+        ADC     R18, R22
+        ADC     R19, R23
+        INC     R26
+//   64 	}
+??ReadInteger_0:
+        LDI     R27, 0
+        MOVW    R31:R30, R3:R2
+        ADD     R30, R26
+        ADC     R31, R27
+        LD      R20, Z
+        CPI     R20, 58
+        BRCC    ??ReadInteger_2
+        CPI     R20, 48
+        BRCC    ??ReadInteger_1
+//   65 	
+//   66 	return value;
+??ReadInteger_2:
+        LD      R26, Y+
+        CFI R26 SameValue
+        CFI CFA_Y Y+1
+        LD      R27, Y+
+        CFI R27 SameValue
+        CFI CFA_Y Y+0
+        RET
+        CFI EndBlock cfiBlock3
+//   67 }
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        END
+// 
+// 210 bytes in segment CODE
+// 
+// 210 bytes of CODE memory
+//
+//Errors: none
+//Warnings: none

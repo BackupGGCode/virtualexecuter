@@ -1,0 +1,255 @@
+##############################################################################
+#                                                                            #
+#                                                      09/Mar/2008  16:57:11 #
+# IAR Atmel AVR C/C++ Compiler V4.21A/W32, Evaluation Version                #
+# Copyright 1996-2006 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\strings.c                  #
+#    Command line =  --string_literals_in_flash                              #
+#                    f:\Projects\[Drivers]\C\MROS\strings.c --cpu=m32 -ms    #
+#                    -o f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTeste #
+#                    r\Release\Obj\ -D NDEBUG -lC                            #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\R #
+#                    elease\List\ -lA f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    CommanderTester\Release\List\ --initializers_in_flash   #
+#                    -s9 -DENABLE_BIT_DEFINITIONS -e -I                      #
+#                    f:\Projects\[Drivers]\C\mros\TestApps\CommanderTester\  #
+#                    -I f:\Projects\[Drivers]\C\mros\ -I "C:\Program         #
+#                    Files\IAR Systems\Embedded Workbench 4.0                #
+#                    Evaluation\avr\INC\" -I "C:\Program Files\IAR           #
+#                    Systems\Embedded Workbench 4.0                          #
+#                    Evaluation\avr\INC\CLIB\" --eeprom_size 1024            #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\R #
+#                    elease\List\strings.lst                                 #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\R #
+#                    elease\Obj\strings.r90                                  #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+f:\Projects\[Drivers]\C\MROS\strings.c
+      1          #include "Globals.h"
+      2          
+      3          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      4          bool StringCompare_PD(string* s1, char* s2)
+   \                     StringCompare_PD:
+      5          {
+   \   00000000   010D               MOVW    R1:R0, R27:R26
+      6          	unsigned char i=0;
+   \   00000002   E040               LDI     R20, 0
+   \   00000004   C001               RJMP    ??StringCompare_PD_0
+      7          	
+      8          	while(s1[i] != 0)
+      9          	{
+     10          		if(s1[i] != s2[i])
+     11          		{
+     12          			return false;
+     13          		}
+     14          		
+     15          		i++;
+   \                     ??StringCompare_PD_1:
+   \   00000006   9543               INC     R20
+   \                     ??StringCompare_PD_0:
+   \   00000008   E070               LDI     R23, 0
+   \   0000000A   01D9               MOVW    R27:R26, R19:R18
+   \   0000000C   0FA4               ADD     R26, R20
+   \   0000000E   1FB7               ADC     R27, R23
+   \   00000010   01F8               MOVW    R31:R30, R17:R16
+   \   00000012   0FE4               ADD     R30, R20
+   \   00000014   1FF7               ADC     R31, R23
+   \   00000016   9154               LPM     R21, Z
+   \   00000018   2355               TST     R21
+   \   0000001A   F029               BREQ    ??StringCompare_PD_2
+   \   0000001C   916C               LD      R22, X
+   \   0000001E   1756               CP      R21, R22
+   \   00000020   F391               BREQ    ??StringCompare_PD_1
+   \                     ??StringCompare_PD_3:
+   \   00000022   E000               LDI     R16, 0
+   \   00000024   C006               RJMP    ??StringCompare_PD_4
+     16          	}
+     17          	
+     18          	if(s2[i] != 0 && s2[i] != ' ')
+   \                     ??StringCompare_PD_2:
+   \   00000026   910C               LD      R16, X
+   \   00000028   2300               TST     R16
+   \   0000002A   F011               BREQ    ??StringCompare_PD_5
+   \   0000002C   3200               CPI     R16, 32
+   \   0000002E   F7C9               BRNE    ??StringCompare_PD_3
+     19          	{
+     20          		return false;
+     21          	}
+     22          	
+     23          	return true;
+   \                     ??StringCompare_PD_5:
+   \   00000030   E001               LDI     R16, 1
+   \                     ??StringCompare_PD_4:
+   \   00000032   01D0               MOVW    R27:R26, R1:R0
+   \   00000034   9508               RET
+     24          }
+     25          
+     26          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     27          void StringCopy_PD(string* src, char* des)
+   \                     StringCopy_PD:
+     28          {
+     29          	unsigned char i=0;
+   \   00000000   E040               LDI     R20, 0
+   \   00000002   C005               RJMP    ??StringCopy_PD_0
+     30          	
+     31          	while(src[i])
+     32          	{
+     33          		des[i]=src[i];
+   \                     ??StringCopy_PD_1:
+   \   00000004   01F9               MOVW    R31:R30, R19:R18
+   \   00000006   0FE4               ADD     R30, R20
+   \   00000008   1FF7               ADC     R31, R23
+   \   0000000A   8350               ST      Z, R21
+     34          		i++;
+   \   0000000C   9543               INC     R20
+     35          	}
+   \                     ??StringCopy_PD_0:
+   \   0000000E   E070               LDI     R23, 0
+   \   00000010   01F8               MOVW    R31:R30, R17:R16
+   \   00000012   0FE4               ADD     R30, R20
+   \   00000014   1FF7               ADC     R31, R23
+   \   00000016   9154               LPM     R21, Z
+   \   00000018   2355               TST     R21
+   \   0000001A   F7A1               BRNE    ??StringCopy_PD_1
+     36          }
+   \   0000001C   9508               RET
+     37          
+     38          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     39          char* GetNextWord(char* s)
+   \                     GetNextWord:
+     40          {
+   \   00000000   C002               RJMP    ??GetNextWord_0
+     41          	while(*s)
+     42          	{
+     43          		if(*s == ' ')
+     44          		{
+     45          			return (s+1);
+     46          		}
+     47          		
+     48          		s++;
+   \                     ??GetNextWord_1:
+   \   00000002   5F0F               SUBI    R16, 255
+   \   00000004   4F1F               SBCI    R17, 255
+   \                     ??GetNextWord_0:
+   \   00000006   01F8               MOVW    R31:R30, R17:R16
+   \   00000008   8120               LD      R18, Z
+   \   0000000A   2322               TST     R18
+   \   0000000C   F029               BREQ    ??GetNextWord_2
+   \   0000000E   3220               CPI     R18, 32
+   \   00000010   F7C1               BRNE    ??GetNextWord_1
+   \   00000012   5F0F               SUBI    R16, 255
+   \   00000014   4F1F               SBCI    R17, 255
+   \   00000016   9508               RET
+     49          	}
+     50          	
+     51          	return 0;
+   \                     ??GetNextWord_2:
+   \   00000018   E000               LDI     R16, 0
+   \   0000001A   E010               LDI     R17, 0
+   \   0000001C   9508               RET
+     52          }
+     53          
+     54          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     55          unsigned long ReadInteger(char* text)
+   \                     ReadInteger:
+     56          {
+   \   00000000   93BA               ST      -Y, R27
+   \   00000002   93AA               ST      -Y, R26
+   \   00000004   0118               MOVW    R3:R2, R17:R16
+     57          unsigned char i=0;
+   \   00000006   E0A0               LDI     R26, 0
+     58          unsigned long value=0;
+   \   00000008   E000               LDI     R16, 0
+   \   0000000A   E010               LDI     R17, 0
+   \   0000000C   E020               LDI     R18, 0
+   \   0000000E   E030               LDI     R19, 0
+   \   00000010   C01B               RJMP    ??ReadInteger_0
+     59          	
+     60          	while('9' >= text[i] && text[i] >= '0')
+     61          	{
+     62          		value *= 10;
+     63          		value += (text[i++] - '0');
+   \                     ??ReadInteger_1:
+   \   00000012   E04A               LDI     R20, 10
+   \   00000014   9F43               MUL     R20, R19
+   \   00000016   2D70               MOV     R23, R0
+   \   00000018   9F42               MUL     R20, R18
+   \   0000001A   2D60               MOV     R22, R0
+   \   0000001C   0D71               ADD     R23, R1
+   \   0000001E   9F41               MUL     R20, R17
+   \   00000020   2D50               MOV     R21, R0
+   \   00000022   0D61               ADD     R22, R1
+   \   00000024   1F7B               ADC     R23, R27
+   \   00000026   9F40               MUL     R20, R16
+   \   00000028   0D51               ADD     R21, R1
+   \   0000002A   1F6B               ADC     R22, R27
+   \   0000002C   1F7B               ADC     R23, R27
+   \   0000002E   8100               LD      R16, Z
+   \   00000030   E010               LDI     R17, 0
+   \   00000032   5300               SUBI    R16, 48
+   \   00000034   4010               SBCI    R17, 0
+   \   00000036   2F21               MOV     R18, R17
+   \   00000038   0F22               LSL     R18
+   \   0000003A   0B22               SBC     R18, R18
+   \   0000003C   2F32               MOV     R19, R18
+   \   0000003E   0D00               ADD     R16, R0
+   \   00000040   1F15               ADC     R17, R21
+   \   00000042   1F26               ADC     R18, R22
+   \   00000044   1F37               ADC     R19, R23
+   \   00000046   95A3               INC     R26
+     64          	}
+   \                     ??ReadInteger_0:
+   \   00000048   E0B0               LDI     R27, 0
+   \   0000004A   01F1               MOVW    R31:R30, R3:R2
+   \   0000004C   0FEA               ADD     R30, R26
+   \   0000004E   1FFB               ADC     R31, R27
+   \   00000050   8140               LD      R20, Z
+   \   00000052   334A               CPI     R20, 58
+   \   00000054   F410               BRCC    ??ReadInteger_2
+   \   00000056   3340               CPI     R20, 48
+   \   00000058   F6E0               BRCC    ??ReadInteger_1
+     65          	
+     66          	return value;
+   \                     ??ReadInteger_2:
+   \   0000005A   91A9               LD      R26, Y+
+   \   0000005C   91B9               LD      R27, Y+
+   \   0000005E   9508               RET
+     67          }
+
+   Maximum stack usage in bytes:
+
+     Function         CSTACK RSTACK
+     --------         ------ ------
+     GetNextWord          0      2
+     ReadInteger          4      2
+     StringCompare_PD     0      2
+     StringCopy_PD        0      2
+
+
+   Segment part sizes:
+
+     Function/Label   Bytes
+     --------------   -----
+     StringCompare_PD   54
+     StringCopy_PD      30
+     GetNextWord        30
+     ReadInteger        96
+
+ 
+ 210 bytes in segment CODE
+ 
+ 210 bytes of CODE memory
+
+Errors: none
+Warnings: none

@@ -1,0 +1,493 @@
+##############################################################################
+#                                                                            #
+# IAR Atmel AVR C/EC++ Compiler V2.28A/WIN, Evaluation Version30/Nov/2007  23:47:25 #
+# Copyright 1996-2002 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\main.c #
+#    Command line =  --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    MenuTester\Release\Obj\ -I                              #
+#                    C:\PROGRA~1\IARSYS~1\EW23EV~1\avr\SRC\CLIB\INC\ -I      #
+#                    f:\Projects\[Drivers]\C\MROS\ -I                        #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\       #
+#                    --string_literals_in_flash -lC                          #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\Releas #
+#                    e\List\ -e --initializers_in_flash -s9                  #
+#                    -DENABLE_BIT_DEFINITIONS f:\Projects\[Drivers]\C\MROS\T #
+#                    estApps\MenuTester\main.c                               #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\Releas #
+#                    e\List\main.lst                                         #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\Releas #
+#                    e\Obj\main.r90                                          #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+      1          #include <Menu/Menu.h>
+      2          #include <UART.h>
+      3          #include <Kernel/Kernel.h>
+      4          
+      5          
+
+   \                                 In segment NEAR_Z, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_Z>`
+      6          unsigned char testValue=0;
+   \   unsigned char __near testValue;
+   \                     testValue:
+   \   00000000                              DS 1
+      7          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      8          bool inc()
+      9          {
+     10          	if(testValue<10)
+   \   __nearfunc unsigned char inc();
+   \                     `inc`:
+   \   00000000   9100....                   LDS     R16,testValue
+   \   00000004   300A                       CPI     R16,10
+   \   00000006   F438                       BRCC    ??inc_0
+     11          	{
+     12          		testValue++;
+   \   00000008   ....                       LDI     R30,LOW(testValue)
+   \   0000000A   ....                       LDI     R31,(testValue) >> 8
+   \   0000000C   8100                       LD      R16,Z
+   \   0000000E   9503                       INC     R16
+   \   00000010   8300                       ST      Z,R16
+     13          		return true;
+   \   00000012   E001                       LDI     R16,1
+   \   00000014   9508                       RET
+     14          	}
+     15          	else
+     16          	{
+     17          		return false;
+   \                     ??inc_0:
+   \   00000016   E000                       LDI     R16,0
+   \   00000018   9508                       RET
+     18          	}
+     19          }
+     20          
+     21          
+     22          MenuItem mainMenu[], settingsMenu[], infoMenu[], extrasMenu[];
+     23          
+
+   \                                 In segment NEAR_I, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_I>`
+     24          MenuItem mainMenu[]={			{"Settings",&mainMenu[2],&mainMenu[1],null,&settingsMenu[0],VOID,null,null,null},
+   \   struct <unnamed> __near mainMenu[3];
+   \                     mainMenu:
+   \   00000000                              DS 51
+   \   00000033                              REQUIRE `?<Initializer for mainMenu>`
+     25          													{"Info",&mainMenu[0],&mainMenu[2],null,&infoMenu[0],VOID,null,null,null},
+     26          													{"Extras",&mainMenu[1],&mainMenu[0],null,&extrasMenu[0],VOID,null,null,null}};
+     27          
+
+   \                                 In segment NEAR_I, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_I>`
+     28          MenuItem settingsMenu[]={	{"Contrast",null,&settingsMenu[1],&mainMenu[0],null,VOID,null,null,null},
+   \   struct <unnamed> __near settingsMenu[3];
+   \                     settingsMenu:
+   \   00000000                              DS 51
+   \   00000033                              REQUIRE `?<Initializer for settingsMenu>`
+     29          													{"Volume",&settingsMenu[0],&settingsMenu[2],&mainMenu[0],null,VOID,null,null,null},
+     30          													{"Key timeout",&settingsMenu[1],null,&mainMenu[0],null,VOID,null,null,null}};
+     31          
+
+   \                                 In segment NEAR_I, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_I>`
+     32          MenuItem infoMenu[]={			{"Power cycles",null,&infoMenu[1],&mainMenu[1],null,VOID,null,null,null},
+   \   struct <unnamed> __near infoMenu[3];
+   \                     infoMenu:
+   \   00000000                              DS 51
+   \   00000033                              REQUIRE `?<Initializer for infoMenu>`
+     33          													{"Firmware version",&infoMenu[0],&infoMenu[2],&mainMenu[1],null,VOID,null,null,null},
+     34          													{"Production date",&infoMenu[1],null,&mainMenu[1],null,VOID,null,null,null}};
+     35          
+
+   \                                 In segment NEAR_I, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_I>`
+     36          MenuItem extrasMenu[]={		{"Stuff",null,&extrasMenu[1],&mainMenu[2],null,VOID,null,null,null},
+   \   struct <unnamed> __near extrasMenu[3];
+   \                     extrasMenu:
+   \   00000000                              DS 51
+   \   00000033                              REQUIRE `?<Initializer for extrasMenu>`
+     37          													{"Time",&extrasMenu[0],&extrasMenu[2],&mainMenu[2],null,VOID,null,null,null},
+     38          													{"Date",&extrasMenu[1],null,&mainMenu[2],null,UINT8,&testValue,&inc,null}};
+     39          
+     40          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     41          void CheckKeys()
+     42          {
+     43          	YieldBegin
+   \   __nearfunc void CheckKeys();
+   \                     CheckKeys:
+   \   00000000   9100....                   LDS     R16,??__state
+   \   00000004   2300                       TST     R16
+   \   00000006   F449                       BRNE    ??CheckKeys_0
+     44          	YieldUntil(UART_BytesReady())
+   \   00000008   ........                   CALL    UART_BytesReady
+   \   0000000C   2300                       TST     R16
+   \   0000000E   F151                       BREQ    ??CheckKeys_1
+   \   00000010   ....                       LDI     R30,LOW(??__state)
+   \   00000012   ....                       LDI     R31,(??__state) >> 8
+   \   00000014   8100                       LD      R16,Z
+   \   00000016   9503                       INC     R16
+   \   00000018   8300                       ST      Z,R16
+   \                     ??CheckKeys_0:
+   \   0000001A   3001                       CPI     R16,1
+   \   0000001C   F519                       BRNE    ??CheckKeys_1
+     45          	switch(UART_ReadByte())
+   \   0000001E   ........                   CALL    UART_ReadByte
+   \   00000022   520B                       SUBI    R16,43
+   \   00000024   F059                       BREQ    ??CheckKeys_2
+   \   00000026   5002                       SUBI    R16,2
+   \   00000028   F061                       BREQ    ??CheckKeys_3
+   \   0000002A   5005                       SUBI    R16,5
+   \   0000002C   F081                       BREQ    ??CheckKeys_4
+   \   0000002E   5002                       SUBI    R16,2
+   \   00000030   F0A1                       BREQ    ??CheckKeys_5
+   \   00000032   5002                       SUBI    R16,2
+   \   00000034   F079                       BREQ    ??CheckKeys_6
+   \   00000036   5002                       SUBI    R16,2
+   \   00000038   F039                       BREQ    ??CheckKeys_7
+   \   0000003A   C011                       RJMP    ??CheckKeys_8
+     46          	{
+     47          		case '+':						Menu_Increment();
+   \                     ??CheckKeys_2:
+   \   0000003C   ........                   CALL    Menu_Increment
+   \   00000040   C00E                       RJMP    ??CheckKeys_8
+     48          												break;
+     49          		case '-':						Menu_Decrement();
+   \                     ??CheckKeys_3:
+   \   00000042   ........                   CALL    Menu_Decrement
+   \   00000046   C00B                       RJMP    ??CheckKeys_8
+     50          												break;
+     51          		case '8':						Menu_Previous();
+   \                     ??CheckKeys_7:
+   \   00000048   ........                   CALL    Menu_Previous
+   \   0000004C   C008                       RJMP    ??CheckKeys_8
+     52          												break;
+     53          		case '2':						Menu_Next();
+   \                     ??CheckKeys_4:
+   \   0000004E   ........                   CALL    Menu_Next
+   \   00000052   C005                       RJMP    ??CheckKeys_8
+     54          												break;
+     55          		case '6':						Menu_Enter();
+   \                     ??CheckKeys_6:
+   \   00000054   ........                   CALL    Menu_Enter
+   \   00000058   C002                       RJMP    ??CheckKeys_8
+     56          												break;
+     57          		case '4':						Menu_Exit();
+   \                     ??CheckKeys_5:
+   \   0000005A   ........                   CALL    Menu_Exit
+     58          												break;
+     59          	}
+     60          	YieldEnd
+   \                     ??CheckKeys_8:
+   \   0000005E   E000                       LDI     R16,0
+   \   00000060   9300....                   STS     ??__state,R16
+   \                     ??CheckKeys_1:
+   \   00000064   9508                       RET
+     61          }
+
+   \                                 In segment NEAR_Z, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_Z>`
+   \   unsigned char __near __state;
+   \                     ??__state:
+   \   00000000                              DS 1
+     62          
+     63          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     64          void MenuUpdate(MenuItem* menuItem)
+     65          {
+   \   __nearfunc void MenuUpdate(MenuItem *);
+   \                     MenuUpdate:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+   \   00000004   01D8                       MOVW    R27 : R26,R17 : R16
+     66          //	UART_WriteByte(27);
+     67          	UART_WriteString_P(menuItem->text);
+   \   00000006   910D                       LD      R16,X+
+   \   00000008   911C                       LD      R17,X
+   \   0000000A   9711                       SBIW    R27 : R26,1
+   \   0000000C   ........                   CALL    UART_WriteString_P
+     68          	switch(menuItem->type)
+   \   00000010   961A                       ADIW    R27 : R26,10
+   \   00000012   910C                       LD      R16,X
+   \   00000014   971A                       SBIW    R27 : R26,10
+   \   00000016   5002                       SUBI    R16,2
+   \   00000018   F431                       BRNE    ??MenuUpdate_0
+     69          	{
+     70          		case UINT8:		UART_WriteValueUnsignedChar(*((unsigned char*)menuItem->variable));
+   \   0000001A   961B                       ADIW    R27 : R26,11
+   \   0000001C   91ED                       LD      R30,X+
+   \   0000001E   91FC                       LD      R31,X
+   \   00000020   8100                       LD      R16,Z
+   \   00000022   ........                   CALL    UART_WriteValueUnsignedChar
+     71          									break;
+     72          	}
+     73          }
+   \                     ??MenuUpdate_0:
+   \   00000026   91A9                       LD      R26,Y+
+   \   00000028   91B9                       LD      R27,Y+
+   \   0000002A   9508                       RET
+     74          
+     75          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     76          void main()
+     77          {
+     78          	UART_Init(11);
+   \   __nearfunc void main();
+   \                     main:
+   \   00000000   E00B                       LDI     R16,11
+   \   00000002   E010                       LDI     R17,0
+   \   00000004   ........                   CALL    UART_Init
+     79          	Menu_Init(mainMenu, MenuUpdate);
+   \   00000008   ....                       LDI     R18,LOW(MenuUpdate/2)
+   \   0000000A   ....                       LDI     R19,(MenuUpdate/2) >> 8
+   \   0000000C   ....                       LDI     R16,LOW(mainMenu)
+   \   0000000E   ....                       LDI     R17,(mainMenu) >> 8
+   \   00000010   ........                   CALL    Menu_Init
+     80          
+     81          //	UART_WriteString_P("YAYYAY");
+     82          
+     83          	Kernel_InitScheduler();
+   \   00000014   ........                   CALL    Kernel_InitScheduler
+     84          	Kernel_CreateTask(CheckKeys);
+   \   00000018   ....                       LDI     R16,LOW(CheckKeys/2)
+   \   0000001A   ....                       LDI     R17,(CheckKeys/2) >> 8
+   \   0000001C   ........                   CALL    Kernel_CreateTask
+     85          	Kernel_RunScheduler();
+   \   00000020   ........                   JMP     Kernel_RunScheduler
+     86          }
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Date">[5];
+   \                     `?<Constant "Date">`:
+   \   00000000   6144657400                 DB "Date"
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Time">[5];
+   \                     `?<Constant "Time">`:
+   \   00000000   6954656D00                 DB "Time"
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Stuff">[6];
+   \                     `?<Constant "Stuff">`:
+   \   00000000   745366750066               DB "Stuff"
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Production date">[16];
+   \                     `?<Constant "Production date">`:
+   \   00000000   7250646F6375               DB "Production date"
+   \            69746E6F6420
+   \            74610065    
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Firmware version">[17];
+   \                     `?<Constant "Firmware version">`:
+   \   00000000   69466D726177               DB "Firmware version"
+   \            657276207265
+   \            69736E6F00  
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Settings">[9];
+   \                     `?<Constant "Settings">`:
+   \   00000000   655374746E69               DB "Settings"
+   \            736700      
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Info">[5];
+   \                     `?<Constant "Info">`:
+   \   00000000   6E496F6600                 DB "Info"
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Extras">[7];
+   \                     `?<Constant "Extras">`:
+   \   00000000   784572747361               DB "Extras"
+   \            00          
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Contrast">[9];
+   \                     `?<Constant "Contrast">`:
+   \   00000000   6F43746E6172               DB "Contrast"
+   \            747300      
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Volume">[7];
+   \                     `?<Constant "Volume">`:
+   \   00000000   6F56756C656D               DB "Volume"
+   \            00          
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Key timeout">[12];
+   \                     `?<Constant "Key timeout">`:
+   \   00000000   654B20796974               DB "Key timeout"
+   \            656D756F0074
+
+   \                                 In segment NEAR_F, align 1, keep-with-next
+   \   char __flash <Constant "Power cycles">[13];
+   \                     `?<Constant "Power cycles">`:
+   \   00000000   6F5065772072               DB "Power cycles"
+   \            79636C637365
+   \            00          
+
+   \                                 In segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for mainMenu>`:
+   \   00000000   ....                       DW `?<Constant "Settings">`
+   \   00000002   ....                       DW mainMenu + 22H
+   \   00000004   ....                       DW mainMenu + 11H
+   \   00000006   0000                       DW 0H
+   \   00000008   ....                       DW settingsMenu
+   \   0000000A   00                         DB 0
+   \   0000000B   0000                       DW 0H
+   \   0000000D   0000                       DW 0H
+   \   0000000F   0000                       DW 0H
+   \   00000011   ....                       DW `?<Constant "Info">`
+   \   00000013   ....                       DW mainMenu
+   \   00000015   ....                       DW mainMenu + 22H
+   \   00000017   0000                       DW 0H
+   \   00000019   ....                       DW infoMenu
+   \   0000001B   00                         DB 0
+   \   0000001C   0000                       DW 0H
+   \   0000001E   0000                       DW 0H
+   \   00000020   0000                       DW 0H
+   \   00000022   ....                       DW `?<Constant "Extras">`
+   \   00000024   ....                       DW mainMenu + 11H
+   \   00000026   ....                       DW mainMenu
+   \   00000028   0000                       DW 0H
+   \   0000002A   ....                       DW extrasMenu
+   \   0000002C   00                         DB 0
+   \   0000002D   0000                       DW 0H
+   \   0000002F   0000                       DW 0H
+   \   00000031   0000                       DW 0H
+
+   \                                 In segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for settingsMenu>`:
+   \   00000000   ....                       DW `?<Constant "Contrast">`
+   \   00000002   0000                       DW 0H
+   \   00000004   ....                       DW settingsMenu + 11H
+   \   00000006   ....                       DW mainMenu
+   \   00000008   0000                       DW 0H
+   \   0000000A   00                         DB 0
+   \   0000000B   0000                       DW 0H
+   \   0000000D   0000                       DW 0H
+   \   0000000F   0000                       DW 0H
+   \   00000011   ....                       DW `?<Constant "Volume">`
+   \   00000013   ....                       DW settingsMenu
+   \   00000015   ....                       DW settingsMenu + 22H
+   \   00000017   ....                       DW mainMenu
+   \   00000019   0000                       DW 0H
+   \   0000001B   00                         DB 0
+   \   0000001C   0000                       DW 0H
+   \   0000001E   0000                       DW 0H
+   \   00000020   0000                       DW 0H
+   \   00000022   ....                       DW `?<Constant "Key timeout">`
+   \   00000024   ....                       DW settingsMenu + 11H
+   \   00000026   0000                       DW 0H
+   \   00000028   ....                       DW mainMenu
+   \   0000002A   0000                       DW 0H
+   \   0000002C   00                         DB 0
+   \   0000002D   0000                       DW 0H
+   \   0000002F   0000                       DW 0H
+   \   00000031   0000                       DW 0H
+
+   \                                 In segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for infoMenu>`:
+   \   00000000   ....                       DW `?<Constant "Power cycles">`
+   \   00000002   0000                       DW 0H
+   \   00000004   ....                       DW infoMenu + 11H
+   \   00000006   ....                       DW mainMenu + 11H
+   \   00000008   0000                       DW 0H
+   \   0000000A   00                         DB 0
+   \   0000000B   0000                       DW 0H
+   \   0000000D   0000                       DW 0H
+   \   0000000F   0000                       DW 0H
+   \   00000011   ....                       DW `?<Constant "Firmware version">`
+   \   00000013   ....                       DW infoMenu
+   \   00000015   ....                       DW infoMenu + 22H
+   \   00000017   ....                       DW mainMenu + 11H
+   \   00000019   0000                       DW 0H
+   \   0000001B   00                         DB 0
+   \   0000001C   0000                       DW 0H
+   \   0000001E   0000                       DW 0H
+   \   00000020   0000                       DW 0H
+   \   00000022   ....                       DW `?<Constant "Production date">`
+   \   00000024   ....                       DW infoMenu + 11H
+   \   00000026   0000                       DW 0H
+   \   00000028   ....                       DW mainMenu + 11H
+   \   0000002A   0000                       DW 0H
+   \   0000002C   00                         DB 0
+   \   0000002D   0000                       DW 0H
+   \   0000002F   0000                       DW 0H
+   \   00000031   0000                       DW 0H
+
+   \                                 In segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for extrasMenu>`:
+   \   00000000   ....                       DW `?<Constant "Stuff">`
+   \   00000002   0000                       DW 0H
+   \   00000004   ....                       DW extrasMenu + 11H
+   \   00000006   ....                       DW mainMenu + 22H
+   \   00000008   0000                       DW 0H
+   \   0000000A   00                         DB 0
+   \   0000000B   0000                       DW 0H
+   \   0000000D   0000                       DW 0H
+   \   0000000F   0000                       DW 0H
+   \   00000011   ....                       DW `?<Constant "Time">`
+   \   00000013   ....                       DW extrasMenu
+   \   00000015   ....                       DW extrasMenu + 22H
+   \   00000017   ....                       DW mainMenu + 22H
+   \   00000019   0000                       DW 0H
+   \   0000001B   00                         DB 0
+   \   0000001C   0000                       DW 0H
+   \   0000001E   0000                       DW 0H
+   \   00000020   0000                       DW 0H
+   \   00000022   ....                       DW `?<Constant "Date">`
+   \   00000024   ....                       DW extrasMenu + 11H
+   \   00000026   0000                       DW 0H
+   \   00000028   ....                       DW mainMenu + 22H
+   \   0000002A   0000                       DW 0H
+   \   0000002C   02                         DB 2
+   \   0000002D   ....                       DW testValue
+   \   0000002F   ....                       DW `inc`/2
+   \   00000031   0000                       DW 0H
+
+   Maximum stack usage in bytes:
+
+     Function                        CSTACK  RSTACK
+     --------                        ------  ------
+     CheckKeys                           0       2 
+       -> UART_BytesReady                0       2 
+       -> UART_ReadByte                  0       2 
+       -> Menu_Increment                 0       2 
+       -> Menu_Decrement                 0       2 
+       -> Menu_Previous                  0       2 
+       -> Menu_Next                      0       2 
+       -> Menu_Enter                     0       2 
+       -> Menu_Exit                      0       2 
+     MenuUpdate                          2       2 
+       -> UART_WriteString_P             2       2 
+       -> UART_WriteValueUnsignedChar
+                                         2       2 
+     inc                                 0       0 
+     main                                0       2 
+       -> UART_Init                      0       2 
+       -> Menu_Init                      0       2 
+       -> Kernel_InitScheduler           0       2 
+       -> Kernel_CreateTask              0       2 
+       -> Kernel_RunScheduler            0       2 
+
+ 
+    208 bytes in segment CODE
+     12 bytes in segment INITTAB
+    111 bytes in segment NEAR_F
+    204 bytes in segment NEAR_I
+    204 bytes in segment NEAR_ID
+      2 bytes in segment NEAR_Z
+ 
+    523 bytes of CODE memory (+ 12 bytes shared)
+    206 bytes of DATA memory
+
+Errors: none
+Warnings: none

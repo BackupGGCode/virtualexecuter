@@ -1,0 +1,662 @@
+//////////////////////////////////////////////////////////////////////////////
+//                                                                           /
+//                                                     09/Mar/2008  16:57:10 /
+// IAR Atmel AVR C/C++ Compiler V4.21A/W32, Evaluation Version               /
+// Copyright 1996-2006 IAR Systems. All rights reserved.                     /
+//                                                                           /
+//    Source file  =  f:\Projects\[Drivers]\C\MROS\Kernel\Kernel.c           /
+//    Command line =  --string_literals_in_flash                             /
+//                    f:\Projects\[Drivers]\C\MROS\Kernel\Kernel.c           /
+//                    --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps /
+//                    \CommanderTester\Release\Obj\ -D NDEBUG -lC            /
+//                    f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\ /
+//                    Release\List\ -lA f:\Projects\[Drivers]\C\MROS\TestApp /
+//                    s\CommanderTester\Release\List\                        /
+//                    --initializers_in_flash -s9 -DENABLE_BIT_DEFINITIONS   /
+//                    -e -I f:\Projects\[Drivers]\C\mros\TestApps\CommanderT /
+//                    ester\ -I f:\Projects\[Drivers]\C\mros\ -I             /
+//                    "C:\Program Files\IAR Systems\Embedded Workbench 4.0   /
+//                    Evaluation\avr\INC\" -I "C:\Program Files\IAR          /
+//                    Systems\Embedded Workbench 4.0                         /
+//                    Evaluation\avr\INC\CLIB\" --eeprom_size 1024           /
+//    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\ /
+//                    Release\List\Kernel.s90                                /
+//                                                                           /
+//                                                                           /
+//////////////////////////////////////////////////////////////////////////////
+
+        NAME Kernel
+
+        RTMODEL "__64bit_doubles", "disabled"
+        RTMODEL "__cpu", "3"
+        RTMODEL "__cpu_name", "ATmega32"
+        RTMODEL "__enhanced_core", "enabled"
+        RTMODEL "__has_elpm", "false"
+        RTMODEL "__memory_model", "2"
+        RTMODEL "__rt_version", "3"
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBWEAK `?<Segment init: NEAR_Z>`
+        PUBLIC Kernel_Init
+        FUNCTION Kernel_Init,021203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC Kernel_Run
+        FUNCTION Kernel_Run,041203H
+        LOCFRAME CSTACK, 4, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC SystemTimer
+        FUNCTION SystemTimer,0603H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC TaskToIndex
+        FUNCTION TaskToIndex,0203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBWEAK _A_OCR0
+        PUBWEAK _A_TCNT0
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC currentTaskIndex
+        PUBLIC executionTimer
+        PUBLIC taskQueue
+        PUBLIC totalExecutionTime
+        
+        CFI Names cfiNames0
+        CFI StackFrame CFA_Y Y DATA
+        CFI StackFrame CFA_SP SP DATA
+        CFI VirtualResource ?RetPad:1, ?RetHigh:8, ?RetLow:8, ?Ret:17
+        CFI Resource R0:8, R1:8, R2:8, R3:8, R4:8, R5:8, R6:8, R7:8, R8:8, R9:8
+        CFI Resource R10:8, R11:8, R12:8, R13:8, R14:8, R15:8, R16:8, R17:8
+        CFI Resource R18:8, R19:8, R20:8, R21:8, R22:8, R23:8, R24:8, R25:8
+        CFI Resource R26:8, R27:8, R28:8, R29:8, R30:8, R31:8
+        CFI Resource ?RetHighByteMask:8, SP:16, SPH:8, SPL:8, Y:16
+        CFI ResourceParts ?Ret ?RetHigh, ?RetLow, ?RetPad
+        CFI ResourceParts SP SPH, SPL
+        CFI ResourceParts Y R29, R28
+        CFI EndNames cfiNames0
+        
+        CFI Common cfiCommon0 Using cfiNames0
+        CFI CodeAlign 1
+        CFI DataAlign 1
+        CFI ReturnAddress ?Ret CODE
+        CFI CFA_Y Y+0
+        CFI CFA_SP SP+2
+        CFI ?RetPad 0
+        CFI ?RetHigh and(load(1, DATA, sub(CFA_SP, 1)), ?RetHighByteMask)
+        CFI ?RetLow Frame(CFA_SP, 0)
+        CFI ?Ret Concat
+        CFI R0 Undefined
+        CFI R1 Undefined
+        CFI R2 Undefined
+        CFI R3 Undefined
+        CFI R4 SameValue
+        CFI R5 SameValue
+        CFI R6 SameValue
+        CFI R7 SameValue
+        CFI R8 SameValue
+        CFI R9 SameValue
+        CFI R10 SameValue
+        CFI R11 SameValue
+        CFI R12 SameValue
+        CFI R13 SameValue
+        CFI R14 SameValue
+        CFI R15 SameValue
+        CFI R16 Undefined
+        CFI R17 Undefined
+        CFI R18 Undefined
+        CFI R19 Undefined
+        CFI R20 Undefined
+        CFI R21 Undefined
+        CFI R22 Undefined
+        CFI R23 Undefined
+        CFI R24 SameValue
+        CFI R25 SameValue
+        CFI R26 SameValue
+        CFI R27 SameValue
+        CFI R28 Undefined
+        CFI R29 Undefined
+        CFI R30 Undefined
+        CFI R31 Undefined
+        CFI ?RetHighByteMask SameValue
+        CFI SPH Undefined
+        CFI SPL Undefined
+        CFI EndCommon cfiCommon0
+        
+        EXTERN Kernel_InitTimer
+        FUNCTION Kernel_InitTimer,0202H
+
+// f:\Projects\[Drivers]\C\MROS\Kernel\Kernel.c
+//    1 #include "Kernel.h"
+
+        ASEGN ABSOLUTE:DATA:NOROOT,052H
+// union <unnamed> volatile __io _A_TCNT0
+_A_TCNT0:
+        DS 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,05cH
+// union <unnamed> volatile __io _A_OCR0
+_A_OCR0:
+        DS 1
+//    2 #include "KernelInternals.h"
+//    3 #include "Timer.h"
+//    4 #include "Debugger.h"
+//    5 
+//    6 
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+//    7 volatile taskStruct taskQueue[MAX_NUMBER_OF_TASKS];
+taskQueue:
+        DS 130
+//    8 unsigned char currentTaskIndex = ~0;
+//    9 unsigned short executionTimer;
+//   10 unsigned long totalExecutionTime;
+//   11 #if TASKER_DEBUG_LEVEL > 1
+//   12 unsigned short debugTimer = 0;
+//   13 #endif
+//   14 
+//   15 
+//   16 /***************************************************************************************************************************
+//   17 	Removes all tasks from the task queue
+//   18 ***************************************************************************************************************************/
+
+        RSEG CODE:CODE:NOROOT(1)
+//   19 void Kernel_Init(void)
+Kernel_Init:
+        CFI Block cfiBlock0 Using cfiCommon0
+        CFI Function Kernel_Init
+//   20 {
+//   21 unsigned short index;
+//   22 
+//   23 #if TASKER_DEBUG_LEVEL > 0
+//   24 	Kernel_InitDebugger();
+//   25 #endif
+//   26 
+//   27 #if defined(HEAP_SIZE)
+//   28 	Kernel_InitHeap();
+//   29 #endif
+//   30 
+//   31 	// Clearing the task queue this way takes up less code space than using initializer ( ={0} )!
+//   32 	for(index = 0; index < MAX_NUMBER_OF_TASKS; index++)																	// Clear all task index'
+        FUNCALL Kernel_Init, Kernel_InitTimer
+        LOCFRAME RSTACK, 2, STACK
+        LDI     R30, LOW(taskQueue)
+        LDI     R31, (taskQueue) >> 8
+        LDI     R20, 10
+//   33 	{
+//   34 		taskQueue[index].theTask = null;
+??Kernel_Init_0:
+        LDI     R16, 0
+        ST      Z, R16
+        STD     Z+1, R16
+//   35 		taskQueue[index].executionTime = 0;
+        STD     Z+3, R16
+        STD     Z+4, R16
+        STD     Z+5, R16
+        STD     Z+6, R16
+//   36 		taskQueue[index].state = TASK_STATE_READY;
+        STD     Z+2, R16
+//   37 		taskQueue[index].blockingMessageQueue = null;
+        STD     Z+9, R16
+        STD     Z+10, R16
+//   38 		taskQueue[index].blockingSemaphore = null;
+        STD     Z+11, R16
+        STD     Z+12, R16
+//   39 		taskQueue[index].timer = 0;
+        STD     Z+7, R16
+        STD     Z+8, R16
+//   40 	}
+        ADIW    R31:R30, 13
+        DEC     R20
+        BRNE    ??Kernel_Init_0
+//   41 	
+//   42 	Kernel_InitTimer(SystemTimer);
+        LDI     R16, LOW(SystemTimer/2)
+        LDI     R17, (SystemTimer/2) >> 8
+        CALL    Kernel_InitTimer
+//   43 	
+//   44 	NonCritical();
+        SEI
+//   45 	
+//   46 #if TASKER_DEBUG_LEVEL > 0
+//   47 	Kernel_DebuggerEvent(DEBUG_EVENT_INITSCHEDULER, null, DEBUG_STATUS_OK, 0);
+//   48 #endif
+//   49 }
+        RET
+        CFI EndBlock cfiBlock0
+//   50 
+//   51 
+//   52 /***************************************************************************************************************************
+//   53 	Loops through the task queue and calls the tasks
+//   54 ***************************************************************************************************************************/
+
+        RSEG CODE:CODE:NOROOT(1)
+//   55 void Kernel_Run(void)
+Kernel_Run:
+        CFI Block cfiBlock1 Using cfiCommon0
+        CFI Function Kernel_Run
+//   56 {
+        FUNCALL Kernel_Run
+        LOCFRAME CSTACK, 4, STACK
+        LOCFRAME RSTACK, 2, STACK
+        ST      -Y, R27
+        CFI R27 Frame(CFA_Y, -1)
+        CFI CFA_Y Y+1
+        ST      -Y, R26
+        CFI R26 Frame(CFA_Y, -2)
+        CFI CFA_Y Y+2
+        ST      -Y, R25
+        CFI R25 Frame(CFA_Y, -3)
+        CFI CFA_Y Y+3
+        ST      -Y, R24
+        CFI R24 Frame(CFA_Y, -4)
+        CFI CFA_Y Y+4
+        LDI     R24, LOW(taskQueue)
+        LDI     R25, (taskQueue) >> 8
+        RJMP    ??Kernel_Run_0
+//   57 #if TASKER_DEBUG_LEVEL > 1
+//   58 static unsigned char debugIndex = 0;
+//   59 #endif
+//   60 
+//   61 static unsigned char tcnt;
+//   62 
+//   63 #if TASKER_DEBUG_LEVEL > 0
+//   64 	Kernel_DebuggerEvent(DEBUG_EVENT_RUNSCHEDULER, null, DEBUG_STATUS_OK, 0);
+//   65 #endif
+//   66 		
+//   67 	while(true)												// Run scheduler forever
+//   68 	{
+//   69 //		Critical();
+//   70 		
+//   71 		do
+//   72 		{
+//   73 			NonCritical();
+//   74 			__no_operation();
+//   75 			Critical();
+//   76 			
+//   77 			currentTaskIndex++;
+//   78 			
+//   79 			if(currentTaskIndex >= MAX_NUMBER_OF_TASKS || taskQueue[currentTaskIndex].theTask == null)
+//   80 			{
+//   81 				currentTaskIndex = 0;
+//   82 			}
+//   83 		} while(taskQueue[currentTaskIndex].state != TASK_STATE_READY || taskQueue[currentTaskIndex].timer > 0 ||
+//   84 						taskQueue[currentTaskIndex].blockingMessageQueue != null || taskQueue[currentTaskIndex].blockingSemaphore != null );
+//   85 		
+//   86 		executionTimer = 0;
+//   87 		tcnt = TCNT0;
+//   88 		
+//   89 		NonCritical();
+//   90 		
+//   91 		taskQueue[currentTaskIndex].theTask();																							// Execute the task
+//   92 		
+//   93 		Critical();
+//   94 		
+//   95 #if defined(__IOM8_H)
+//   96 
+//   97 #elif defined(__IOM168_H)
+//   98 		
+//   99 #else
+//  100 		executionTimer *= OCR0;
+//  101 #endif
+//  102 
+//  103 #if defined(__IOM8_H)
+//  104 
+//  105 #elif defined(__IOM168_H)
+//  106 
+//  107 #else
+//  108 		if(tcnt >= TCNT0)
+//  109 			executionTimer += ((OCR0+1)-tcnt)+TCNT0;
+//  110 		else
+//  111 			executionTimer += TCNT0-tcnt;
+??Kernel_Run_1:
+        IN      R18, 0x32
+        LDI     R19, 0
+        SUB     R18, R16
+        SBCI    R19, 0
+        MOV     R16, R0
+        LDD     R17, Z+5
+        ADD     R16, R18
+        ADC     R17, R19
+        STD     Z+4, R16
+        STD     Z+5, R17
+??Kernel_Run_2:
+        LDD     R16, Z+4
+        LDD     R17, Z+5
+        LDI     R18, 0
+        LD      R20, X+
+        LD      R21, X+
+        LD      R22, X+
+        LD      R23, X
+        ADD     R20, R16
+        ADC     R21, R17
+        ADC     R22, R18
+        ADC     R23, R18
+        ST      X, R23
+        ST      -X, R22
+        ST      -X, R21
+        ST      -X, R20
+//  112 #endif
+//  113 		
+//  114 		totalExecutionTime += executionTimer;
+//  115 		
+//  116 		taskQueue[currentTaskIndex].executionTime += executionTimer;
+        LDD     R22, Z+6
+        LDI     R20, 13
+        MUL     R20, R22
+        MOVW    R31:R30, R25:R24
+        ADD     R30, R0
+        ADC     R31, R1
+        LDD     R20, Z+3
+        LDD     R21, Z+4
+        LDD     R22, Z+5
+        LDD     R23, Z+6
+        ADD     R20, R16
+        ADC     R21, R17
+        ADC     R22, R18
+        ADC     R23, R18
+        STD     Z+3, R20
+        STD     Z+4, R21
+        STD     Z+5, R22
+        STD     Z+6, R23
+??Kernel_Run_0:
+        SEI
+        NOP
+        CLI
+        LDI     R26, LOW(totalExecutionTime)
+        LDI     R27, (totalExecutionTime) >> 8
+        MOVW    R31:R30, R27:R26
+        LDD     R16, Z+6
+        INC     R16
+        STD     Z+6, R16
+        CPI     R16, 10
+        BRCC    ??Kernel_Run_3
+        MOV     R18, R16
+        LDI     R16, 13
+        MUL     R16, R18
+        MOVW    R31:R30, R25:R24
+        ADD     R30, R0
+        ADC     R31, R1
+        LD      R18, Z
+        LDD     R19, Z+1
+        CPI     R18, 0
+        SBCI    R19, 0
+        BRNE    ??Kernel_Run_4
+??Kernel_Run_3:
+        LDI     R16, 0
+        MOVW    R31:R30, R27:R26
+        STD     Z+6, R16
+??Kernel_Run_4:
+        MOVW    R31:R30, R27:R26
+        LDD     R18, Z+6
+        LDI     R16, 13
+        MUL     R16, R18
+        MOVW    R31:R30, R25:R24
+        ADIW    R31:R30, 2
+        ADD     R30, R0
+        ADC     R31, R1
+        LD      R18, Z
+        TST     R18
+        BRNE    ??Kernel_Run_0
+        MOVW    R31:R30, R25:R24
+        ADD     R30, R0
+        ADC     R31, R1
+        LDD     R16, Z+7
+        LDD     R17, Z+8
+        OR      R16, R17
+        BRNE    ??Kernel_Run_0
+        LDD     R16, Z+9
+        LDD     R17, Z+10
+        OR      R16, R17
+        BRNE    ??Kernel_Run_0
+        LDD     R16, Z+11
+        LDD     R17, Z+12
+        OR      R16, R17
+        BRNE    ??Kernel_Run_0
+        LDI     R16, 0
+        MOVW    R31:R30, R27:R26
+        STD     Z+4, R16
+        STD     Z+5, R16
+        IN      R16, 0x32
+        STD     Z+7, R16
+        SEI
+        MOVW    R31:R30, R25:R24
+        ADD     R30, R0
+        ADC     R31, R1
+        LD      R16, Z
+        LDD     R17, Z+1
+        MOVW    R31:R30, R17:R16
+        ICALL
+        CLI
+        MOVW    R31:R30, R27:R26
+        LDD     R18, Z+4
+        LDD     R19, Z+5
+        IN      R16, 0x3C
+        MUL     R16, R19
+        MOV     R17, R0
+        MUL     R16, R18
+        ADD     R17, R1
+        STD     Z+4, R0
+        STD     Z+5, R17
+        LDD     R16, Z+7
+        IN      R17, 0x32
+        CP      R16, R17
+        BRCC    $+2+2
+        RJMP    ??Kernel_Run_1
+        IN      R30, 0x3C
+        LDI     R31, 0
+        ADIW    R31:R30, 1
+        LDI     R17, 0
+        SUB     R30, R16
+        SBCI    R31, 0
+        IN      R16, 0x32
+        ADD     R16, R30
+        ADC     R17, R31
+        MOVW    R31:R30, R27:R26
+        MOV     R18, R0
+        LDD     R19, Z+5
+        ADD     R18, R16
+        ADC     R19, R17
+        STD     Z+4, R18
+        STD     Z+5, R19
+        RJMP    ??Kernel_Run_2
+        CFI EndBlock cfiBlock1
+//  117 
+//  118 #if TASKER_DEBUG_LEVEL > 1
+//  119 		if(debugTimer == 0)
+//  120 		{
+//  121 			debugTimer=TASKER_DEBUG_RATE;
+//  122 
+//  123 			Kernel_DebuggerEvent(DEBUG_EVENT_TASKINFO, null, DEBUG_STATUS_OK, taskQueue[debugIndex].executionTime);
+//  124 			debugIndex++;			
+//  125 			if(taskQueue[debugIndex].theTask == null || debugIndex >= MAX_NUMBER_OF_TASKS)
+//  126 				debugIndex=0;
+//  127 		}
+//  128 #endif
+//  129 
+//  130   }
+//  131 }
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+totalExecutionTime:
+        DS 4
+        REQUIRE `?<Initializer for totalExecutionTime>`
+executionTimer:
+        DS 2
+        REQUIRE `?<Initializer for executionTimer>`
+currentTaskIndex:
+        DS 1
+        REQUIRE `?<Initializer for currentTaskIndex>`
+        DS 1
+        REQUIRE `?<Initializer for tcnt>`
+//  132 
+//  133 
+//  134 /***************************************************************************************************************************
+//  135 	
+//  136 ***************************************************************************************************************************/
+
+        RSEG CODE:CODE:NOROOT(1)
+//  137 void SystemTimer(void)
+SystemTimer:
+        CFI Block cfiBlock2 Using cfiCommon0
+        CFI Function SystemTimer
+//  138 {
+//  139 unsigned char index;
+//  140 
+//  141 	// Tick all active task timers
+//  142 	for(index=0;index<MAX_NUMBER_OF_TASKS;index++)				// For all task
+        LDI     R30, LOW((taskQueue + 7))
+        LDI     R31, HIGH((taskQueue + 7))
+        LDI     R16, 10
+//  143 	{
+//  144 		if(taskQueue[index].timer > 0)													// check if timer is active
+??SystemTimer_0:
+        LD      R18, Z
+        LDD     R19, Z+1
+        OR      R18, R19
+        BREQ    ??SystemTimer_1
+//  145 		{
+//  146 			taskQueue[index].timer--;
+        LD      R18, Z
+        LDD     R19, Z+1
+        SUBI    R18, 1
+        SBCI    R19, 0
+        ST      Z, R18
+        STD     Z+1, R19
+//  147 		}
+//  148 	}
+??SystemTimer_1:
+        ADIW    R31:R30, 13
+        DEC     R16
+        BRNE    ??SystemTimer_0
+//  149 	
+//  150 	executionTimer++;
+        LDI     R30, LOW(totalExecutionTime)
+        LDI     R31, (totalExecutionTime) >> 8
+        LDD     R16, Z+4
+        LDD     R17, Z+5
+        SUBI    R16, 255
+        SBCI    R17, 255
+        STD     Z+4, R16
+        STD     Z+5, R17
+//  151 	totalExecutionTime++;
+        LD      R16, Z
+        LDD     R17, Z+1
+        LDD     R18, Z+2
+        LDD     R19, Z+3
+        SUBI    R16, 255
+        SBCI    R17, 255
+        SBCI    R18, 255
+        SBCI    R19, 255
+        ST      Z, R16
+        STD     Z+1, R17
+        STD     Z+2, R18
+        STD     Z+3, R19
+//  152 	
+//  153 #if TASKER_DEBUG_LEVEL > 1
+//  154 	if(debugTimer > 0)
+//  155 		debugTimer--;
+//  156 #endif
+//  157 }
+        RET
+        CFI EndBlock cfiBlock2
+//  158 
+//  159 
+//  160 /***************************************************************************************************************************
+//  161 	Returns the specfied tasks index in the task queue. If the task is not in the queue -1 is returned.
+//  162 ***************************************************************************************************************************/
+
+        RSEG CODE:CODE:NOROOT(1)
+//  163 signed char TaskToIndex(task t)
+TaskToIndex:
+        CFI Block cfiBlock3 Using cfiCommon0
+        CFI Function TaskToIndex
+//  164 {
+//  165 unsigned char index;
+//  166 
+//  167 	for(index=0;index<MAX_NUMBER_OF_TASKS;index++)
+        LDI     R18, 0
+//  168 	{
+//  169 		if(taskQueue[index].theTask==t)
+??TaskToIndex_0:
+        LDI     R20, 13
+        MUL     R20, R18
+        MOVW    R31:R30, R1:R0
+        SUBI    R30, LOW((-(taskQueue) & 0xFFFF))
+        SBCI    R31, (-(taskQueue) & 0xFFFF) >> 8
+        LD      R20, Z
+        LDD     R21, Z+1
+        CP      R20, R16
+        CPC     R21, R17
+        BRNE    ??TaskToIndex_1
+//  170 			return index;
+        MOV     R16, R18
+        RET
+//  171 	}
+??TaskToIndex_1:
+        INC     R18
+        CPI     R18, 10
+        BRCS    ??TaskToIndex_0
+//  172 
+//  173 	return -1;
+        LDI     R16, 255
+        RET
+        CFI EndBlock cfiBlock3
+//  174 }
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_Z>`:
+        DW      SFE(NEAR_Z) - SFB(NEAR_Z)
+        DW      SFB(NEAR_Z)
+        DW      0
+        REQUIRE ?need_segment_init
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for totalExecutionTime>`:
+        DB 0, 0, 0, 0
+`?<Initializer for executionTimer>`:
+        DB 0, 0
+`?<Initializer for currentTaskIndex>`:
+        DB 255
+`?<Initializer for tcnt>`:
+        DB 0
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+        DW      SFE(NEAR_I) - SFB(NEAR_I)
+        DW      SFB(NEAR_I)
+        DW      SFB(NEAR_ID)
+        REQUIRE ?need_segment_init
+
+        END
+// 
+//   2 bytes in segment ABSOLUTE
+// 458 bytes in segment CODE
+//  12 bytes in segment INITTAB
+//   8 bytes in segment NEAR_I
+//   8 bytes in segment NEAR_ID
+// 130 bytes in segment NEAR_Z
+// 
+// 466 bytes of CODE memory (+ 12 bytes shared)
+// 138 bytes of DATA memory (+  2 bytes shared)
+//
+//Errors: none
+//Warnings: 1

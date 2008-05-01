@@ -1,0 +1,1291 @@
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V4.60E/386                                         #
+#                                                                              #
+#           Link time     =  09/Mar/2008  16:57:11                             #
+#           Target CPU    =  A90                                               #
+#           List file     =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\List\CommandTester.map               #
+#           Output file 1 =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Exe\CommandTester.a90                #
+#                            Format: intel-standard                            #
+#           Command line  =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\Commander.r90                    #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\FileStore.r90                    #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\InternalEEPROM.r90               #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\Kernel.r90                       #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\MessageQueue.r90                 #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\TaskManagement.r90               #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\Terminal.r90                     #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\Timer.r90                        #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\UART.r90                         #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\main.r90                         #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Obj\strings.r90                      #
+#                            -o                                                #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\Exe\CommandTester.a90                #
+#                            -Fintel-standard -l                               #
+#                            f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTe #
+#                            ster\Release\List\CommandTester.map               #
+#                            -xms                                              #
+#                            "-IC:\Program Files\IAR Systems\Embedded Workbenc #
+#                            h 4.0 Evaluation\avr\LIB\"                        #
+#                            -f                                                #
+#                            "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                            4.0 Evaluation\avr\src\template\cfgm32.xcl"       #
+#                            (-D_..X_INTVEC_SIZE=58 -D_..X_FLASH_NEND=7FFF     #
+#                            -D_..X_FLASH_END=7FFF -D_..X_SRAM_BASE=60         #
+#                            -D_..X_SRAM_TBASE=_..X_SRAM_BASE                  #
+#                            -D_..X_SRAM_TSIZE=(100-_..X_SRAM_BASE)            #
+#                            -D_..X_SRAM_END=85F                               #
+#                            -D_..X_EXT_SRAM_BASE=_..X_SRAM_END                #
+#                            -D_..X_EXT_SRAM_SIZE=0                            #
+#                            -D_..X_EXT_ROM_BASE=_..X_SRAM_END                 #
+#                            -D_..X_EXT_ROM_SIZE=0                             #
+#                            -D_..X_EXT_NV_BASE=_..X_SRAM_END                  #
+#                            -D_..X_EXT_NV_SIZE=0 -D_..X_EEPROM_END=3FF        #
+#                            -D_..X_EEPROM_START=0) -D_..X_HEAP_SIZE=10        #
+#                            -D_..X_TINY_HEAP_SIZE=0 -D_..X_NEAR_HEAP_SIZE=0   #
+#                            -D_..X_FAR_HEAP_SIZE=0 -D_..X_HUGE_HEAP_SIZE=0    #
+#                            -D_..X_CSTACK_SIZE=12C -D_..X_RSTACK_SIZE=80 -f   #
+#                            "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                            4.0 Evaluation\avr\src\template\cfg3soim.xcl"     #
+#                            (-ca90 -w29                                       #
+#                            -Z(CODE)INTVEC=0-(_..X_INTVEC_SIZE-1)             #
+#                            -Z(CODE)TINY_F=_..X_FLASH_BASE-FF                 #
+#                            -Z(CODE)NEAR_F=_..X_FLASH_BASE-_..X_FLASH_NEND    #
+#                            -Z(CODE)SWITCH=_..X_FLASH_BASE-_..X_FLASH_NEND    #
+#                            -Z(CODE)DIFUNCT=_..X_FLASH_BASE-_..X_FLASH_NEND   #
+#                            -Z(CODE)CODE=_..X_FLASH_BASE-_..X_FLASH_END       #
+#                            -Z(CODE)FAR_F=[_..X_FLASH_BASE-_..X_FLASH_END]/10 #
+#                            000                                               #
+#                            -Z(CODE)INITTAB=_..X_FLASH_BASE-_..X_FLASH_END    #
+#                            -Z(CODE)HUGE_F=_..X_FLASH_BASE-_..X_FLASH_END     #
+#                            -Z(CODE)TINY_ID=_..X_FLASH_BASE-_..X_FLASH_END    #
+#                            -Z(CODE)NEAR_ID=_..X_FLASH_BASE-_..X_FLASH_END    #
+#                            -Z(CODE)CHECKSUM#_..X_FLASH_END                   #
+#                            -Z(DATA)TINY_I,TINY_Z,TINY_N=_..X_SRAM_TBASE:+_.. #
+#                            X_SRAM_TSIZE                                      #
+#                            -Z(DATA)CSTACK+_..X_CSTACK_SIZE=_..X_CSTACK_BASE- #
+#                            _..X_CSTACK_END                                   #
+#                            -Z(DATA)HEAP+_..X_HEAP_SIZE=_..X_SRAM_BASE-_..X_S #
+#                            RAM_END                                           #
+#                            -Z(DATA)IOSTREAM_N#_..X_SRAM_BASE-_..X_SRAM_END   #
+#                            -Z(DATA)NEAR_HEAP+_..X_NEAR_HEAP_SIZE=_..X_SRAM_B #
+#                            ASE-_..X_SRAM_END                                 #
+#                            -Z(DATA)RSTACK+_..X_RSTACK_SIZE=_..X_RSTACK_BASE- #
+#                            _..X_RSTACK_END                                   #
+#                            -Z(DATA)NEAR_I,NEAR_Z,NEAR_N=_..X_SRAM_BASE-_..X_ #
+#                            SRAM_END                                          #
+#                            -Z(XDATA)EEPROM_I,EEPROM_N=_..X_EEPROM_START-_..X #
+#                            _EEPROM_END)                                      #
+#                            -D_..X_FLASH_BASE=_..X_INTVEC_SIZE -H1895         #
+#                            -h(CODE)0-(_..X_INTVEC_SIZE-1)                    #
+#                            -D_..X_CSTACK_BASE=_..X_SRAM_BASE                 #
+#                            -D_..X_CSTACK_END=_..X_SRAM_END                   #
+#                            -D_..X_RSTACK_BASE=_..X_SRAM_BASE                 #
+#                            -D_..X_RSTACK_END=_..X_SRAM_END -s                #
+#                            __program_start                                   #
+#                            "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                            4.0 Evaluation\avr\LIB\CLIB\cl3s-ec_mul-sf.r90"   #
+#                            -e_small_write=_formatted_write                   #
+#                            -e_medium_read=_formatted_read                    #
+#                                                                              #
+#                        Copyright 1987-2006 IAR Systems. All rights reserved. #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+       Program entry at : CODE      00000000  Relocatable, from module : ?RESET
+
+
+
+
+                ****************************************
+                *                                      *
+                *            RUNTIME MODEL             *
+                *                                      *
+                ****************************************
+
+  R10             = REG
+  R11             = REG
+  R12             = REG
+  R13             = REG
+  R4              = REG
+  R5              = REG
+  R6              = REG
+  R7              = REG
+  R8              = REG
+  R9              = REG
+  __64bit_doubles = disabled
+  __cpu           = 3
+  __cpu_name      = ATmega32
+  __enhanced_core = enabled
+  __has_elpm      = false
+  __memory_model  = 2
+  __rt_version    = 3
+
+
+
+                ****************************************
+                *                                      *
+                *              MODULE MAP              *
+                *                                      *
+                ****************************************
+
+
+  DEFINED ABSOLUTE ENTRIES
+  PROGRAM MODULE, NAME : ?ABS_ENTRY_MOD
+
+Absolute parts
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _..X_RSTACK_END         0000085F 
+           _..X_RSTACK_BASE        00000060 
+           _..X_CSTACK_END         0000085F 
+           _..X_CSTACK_BASE        00000060 
+           _..X_FLASH_BASE         00000058 
+           _..X_RSTACK_SIZE        00000080 
+           _..X_CSTACK_SIZE        0000012C 
+           _..X_HUGE_HEAP_SIZE     00000000 
+           _..X_FAR_HEAP_SIZE      00000000 
+           _..X_NEAR_HEAP_SIZE     00000000 
+           _..X_TINY_HEAP_SIZE     00000000 
+           _..X_HEAP_SIZE          00000010 
+           _..X_EEPROM_START       00000000 
+           _..X_EEPROM_END         000003FF 
+           _..X_EXT_NV_SIZE        00000000 
+           _..X_EXT_NV_BASE        0000085F 
+           _..X_EXT_ROM_SIZE       00000000 
+           _..X_EXT_ROM_BASE       0000085F 
+           _..X_EXT_SRAM_SIZE      00000000 
+           _..X_EXT_SRAM_BASE      0000085F 
+           _..X_SRAM_END           0000085F 
+           _..X_SRAM_TSIZE         000000A0 
+           _..X_SRAM_TBASE         00000060 
+           _..X_SRAM_BASE          00000060 
+           _..X_FLASH_END          00007FFF 
+           _..X_FLASH_NEND         00007FFF 
+           _..X_INTVEC_SIZE        00000058 
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\Commander.r90
+  PROGRAM MODULE, NAME : Commander
+
+  SEGMENTS IN THE MODULE
+  ======================
+ABSOLUTE
+  Relative segment, address: DATA 00000038 - 00000038 (0x1 bytes), align: 0
+  Segment part 1. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_PORTB                00000038 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000000CA - 000001FB (0x132 bytes), align: 1
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Commander_Run           000000CA        Terminal_Init (Terminal)
+               calls direct and indirect
+               stack 1 = 00000000 ( 00000006 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_I
+  Relative segment, address: DATA 0000020C - 00000211 (0x6 bytes), align: 0
+  Segment part 9.             Intra module refs:   Commander_Run
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           prompt                  0000020E 
+    -------------------------------------------------------------------------
+NEAR_Z
+  Relative segment, address: DATA 0000021A - 0000024C (0x33 bytes), align: 0
+  Segment part 12.            Intra module refs:   Commander_Run
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000001C, align: 0
+  Segment part 2. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __?EECR                 0000001C 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000001D, align: 0
+  Segment part 3. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __?EEDR                 0000001D 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000001E, align: 0
+  Segment part 4. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __?EEARL                0000001E 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000001F, align: 0
+  Segment part 5. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __?EEARH                0000001F 
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: CODE 00000E9E - 00000EA3 (0x6 bytes), align: 0
+  Segment part 10.            Intra module refs:   prompt
+    -------------------------------------------------------------------------
+INITTAB
+  Relative segment, address: CODE 00000E92 - 00000E97 (0x6 bytes), align: 0
+  Segment part 11.            Intra module refs:   Segment part 11 (Kernel)
+                                                   prompt
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?<Segment init: NEAR_I>
+                                   00000E92 
+    -------------------------------------------------------------------------
+INITTAB
+  Relative segment, address: CODE 00000E98 - 00000E9D (0x6 bytes), align: 0
+  Segment part 13.            Intra module refs:   Segment part 11 (Timer)
+                                                   Segment part 12
+                                                   Segment part 7 (FileStore)
+                                                   taskQueue (Kernel)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?<Segment init: NEAR_Z>
+                                   00000E98 
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 00000058 - 00000079 (0x22 bytes), align: 0
+  Segment part 8.             Intra module refs:   Commander_Run
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\FileStore.r90
+  PROGRAM MODULE, NAME : FileStore
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_Z
+  Relative segment, address: DATA 0000024D - 00000252 (0x6 bytes), align: 0
+  Segment part 7.             Intra module refs:   FileStore_GetFileName
+                                                   FileStore_GetNextFileEntry
+                                                   FileStore_Init
+                                                   FileStore_OpenFile
+                                                   FileStore_ReadBytes
+                                                   FindNextFileEntry
+                                                   MatchFileName
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           readByte                0000024D 
+           readBytes               0000024F 
+           readLong                00000251 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000001FC - 0000020D (0x12 bytes), align: 1
+  Segment part 9.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FileStore_Init          000001FC        main (main)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 0000020E - 000002A9 (0x9c bytes), align: 1
+  Segment part 10.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FileStore_OpenFile      0000020E        PrintFile (Terminal)
+                                                   RunProgram (Terminal)
+               calls direct and indirect
+               stack 1 = 00000000 ( 00000008 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000002AA - 000002BB (0x12 bytes), align: 1
+  Segment part 11.            Intra module refs:   FileStore_GetFileName
+                                                   FileStore_OpenFile
+                                                   FindNextFileEntry
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000002BC - 00000327 (0x6c bytes), align: 1
+  Segment part 12.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FileStore_GetFileName   000002BC        ListFiles (Terminal)
+               calls indirect
+               stack 1 = 00000000 ( 00000008 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000328 - 000003D1 (0xaa bytes), align: 1
+  Segment part 13.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FileStore_ReadBytes     00000328        PrintFile (Terminal)
+               calls indirect
+               stack 1 = 00000000 ( 0000000C )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000003D2 - 00000471 (0xa0 bytes), align: 1
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FileStore_GetNextFileEntry
+                                   000003D2        ListFiles (Terminal)
+               calls direct and indirect
+               stack 1 = 00000000 ( 00000008 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000472 - 0000047F (0xe bytes), align: 1
+  Segment part 15.            Intra module refs:   FileStore_GetNextFileEntry
+                                                   MatchFileName
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000480 - 000004D7 (0x58 bytes), align: 1
+  Segment part 16.            Intra module refs:   FileStore_GetNextFileEntry
+                                                   FileStore_OpenFile
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FindNextFileEntry       00000480 
+               calls indirect
+               stack 1 = 00000000 ( 00000008 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000004D8 - 0000053B (0x64 bytes), align: 1
+  Segment part 17.            Intra module refs:   FileStore_OpenFile
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MatchFileName           000004D8 
+               calls indirect
+               stack 1 = 00000000 ( 00000006 )
+               stack 2 = 00000000 ( 00000002 )
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\InternalEEPROM.r90
+  PROGRAM MODULE, NAME : InternalEEPROM
+
+  SEGMENTS IN THE MODULE
+  ======================
+ABSOLUTE
+  Relative segment, address: DATA 0000003C - 0000003C (0x1 bytes), align: 0
+  Segment part 1. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_EECR                 0000003C 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000003D - 0000003D (0x1 bytes), align: 0
+  Segment part 2. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_EEDR                 0000003D 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000003E - 0000003F (0x2 bytes), align: 0
+  Segment part 3. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_EEAR                 0000003E 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 0000053C - 00000549 (0xe bytes), align: 1
+  Segment part 10.            Intra module refs:   InternalEEPROM_ReadBytes
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InternalEEPROM_ReadByte
+                                   0000053C        main (main)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 0000054A - 0000055D (0x14 bytes), align: 1
+  Segment part 11.            Intra module refs:   InternalEEPROM_WriteBytes
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InternalEEPROM_WriteByte
+                                   0000054A 
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 0000055E - 00000597 (0x3a bytes), align: 1
+  Segment part 12.            Intra module refs:   InternalEEPROM_ReadLong
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InternalEEPROM_ReadBytes
+                                   0000055E        main (main)
+               calls direct
+               stack 1 = 00000000 ( 00000008 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000598 - 000005A9 (0x12 bytes), align: 1
+  Segment part 13.            Intra module refs:   InternalEEPROM_ReadBytes
+                                                   InternalEEPROM_WriteBytes
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000005AA - 000005BF (0x16 bytes), align: 1
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InternalEEPROM_ReadLong
+                                   000005AA        main (main)
+               calls direct
+               stack 1 = 00000000 ( 00000004 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000005C0 - 000005FB (0x3c bytes), align: 1
+  Segment part 15.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InternalEEPROM_WriteBytes
+                                   000005C0        LoadFileToDisc (Terminal)
+               calls direct
+               stack 1 = 00000000 ( 00000008 )
+               stack 2 = 00000000 ( 00000002 )
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\Kernel.r90
+  PROGRAM MODULE, NAME : Kernel
+
+  SEGMENTS IN THE MODULE
+  ======================
+ABSOLUTE
+  Relative segment, address: DATA 00000052 - 00000052 (0x1 bytes), align: 0
+  Segment part 1. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_TCNT0                00000052 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000005C - 0000005C (0x1 bytes), align: 0
+  Segment part 2. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_OCR0                 0000005C 
+    -------------------------------------------------------------------------
+NEAR_Z
+  Relative segment, address: DATA 00000253 - 000002D4 (0x82 bytes), align: 0
+  Segment part 9.             Intra module refs:   Kernel_Init
+                                                   Kernel_Run
+                                                   SystemTimer
+                                                   TaskToIndex
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           taskQueue               00000253        Kernel_CreateTask (TaskManagement)
+                                                   Kernel_Sleep (TaskManagement)
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000005FC - 0000062F (0x34 bytes), align: 1
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_Init             000005FC        main (main)
+               calls direct
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000630 - 00000757 (0x128 bytes), align: 1
+  Segment part 15.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_Run              00000630        main (main)
+               calls indirect
+               stack 1 = 00000000 ( 00000004 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_I
+  Relative segment, address: DATA 00000212 - 00000219 (0x8 bytes), align: 0
+  Segment part 11.            Intra module refs:   Kernel_Run
+                                                   SystemTimer
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           currentTaskIndex        00000218        Kernel_Sleep (TaskManagement)
+           executionTimer          00000216 
+           totalExecutionTime      00000212 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000758 - 000007A1 (0x4a bytes), align: 1
+  Segment part 16.            Intra module refs:   Kernel_Init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           SystemTimer             00000758 
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 000007A2 - 000007C5 (0x24 bytes), align: 1
+  Segment part 17.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           TaskToIndex             000007A2        Kernel_CreateTask (TaskManagement)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: CODE 00000EA4 - 00000EAB (0x8 bytes), align: 0
+  Segment part 12.            Intra module refs:   Segment part 11
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\MessageQueue.r90
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\TaskManagement.r90
+  PROGRAM MODULE, NAME : TaskManagement
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 000007C6 - 0000081B (0x56 bytes), align: 1
+  Segment part 7.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_CreateTask       000007C6        Terminal_Init (Terminal)
+                                                   main (main)
+               calls direct
+               stack 1 = 00000000 ( 00000002 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 0000081C - 0000083B (0x20 bytes), align: 1
+  Segment part 13.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_Sleep            0000081C        blink (main)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\Terminal.r90
+  PROGRAM MODULE, NAME : Terminal
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 0000083C - 00000843 (0x8 bytes), align: 1
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Terminal_Init           0000083C        main (main)
+               calls direct
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000844 - 00000907 (0xc4 bytes), align: 1
+  Segment part 15.            Intra module refs:   commands
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ListFiles               00000844 
+               calls direct
+               stack 1 = 00000000 ( 00000048 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000908 - 0000094B (0x44 bytes), align: 1
+  Segment part 16.            Intra module refs:   commands
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           PrintFile               00000908 
+               calls direct
+               stack 1 = 00000000 ( 00000025 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 0000094C - 00000967 (0x1c bytes), align: 1
+  Segment part 17.            Intra module refs:   commands
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           RunProgram              0000094C 
+               calls direct
+               stack 1 = 00000000 ( 00000010 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000968 - 00000A6D (0x106 bytes), align: 1
+  Segment part 18.            Intra module refs:   commands
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           LoadFileToDisc          00000968 
+               calls direct
+               stack 1 = 00000000 ( 00000020 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 0000007A - 0000007C (0x3 bytes), align: 0
+  Segment part 7.             Intra module refs:   commands
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 0000007D - 00000080 (0x4 bytes), align: 0
+  Segment part 8.             Intra module refs:   commands
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 00000081 - 00000084 (0x4 bytes), align: 0
+  Segment part 9.             Intra module refs:   commands
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 00000085 - 00000089 (0x5 bytes), align: 0
+  Segment part 10.            Intra module refs:   commands
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 0000008A - 000000A9 (0x20 bytes), align: 0
+  Segment part 11.            Intra module refs:   ListFiles
+                                                   LoadFileToDisc
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 000000AA - 000000B8 (0xf bytes), align: 0
+  Segment part 12.            Intra module refs:   PrintFile
+                                                   RunProgram
+    -------------------------------------------------------------------------
+NEAR_F
+  Relative segment, address: CODE 000000B9 - 000000C8 (0x10 bytes), align: 0
+  Segment part 13.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           commands                000000B9        Commander_Run (Commander)
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\Timer.r90
+  PROGRAM MODULE, NAME : Timer
+
+  SEGMENTS IN THE MODULE
+  ======================
+ABSOLUTE
+  Relative segment, address: DATA 00000053 - 00000053 (0x1 bytes), align: 0
+  Segment part 1. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_TCCR0                00000053 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 00000059 - 00000059 (0x1 bytes), align: 0
+  Segment part 2. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_TIMSK                00000059 
+    -------------------------------------------------------------------------
+NEAR_Z
+  Relative segment, address: DATA 000002D5 - 000002D8 (0x4 bytes), align: 0
+  Segment part 11.            Intra module refs:   Kernel_InitTimer
+                                                   Kernel_TimerInterruptHandler
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000A6E - 00000A85 (0x18 bytes), align: 1
+  Segment part 13.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_InitTimer        00000A6E        Kernel_Init (Kernel)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000A86 - 00000AEF (0x6a bytes), align: 1
+  Segment part 15.            Intra module refs:   Kernel_TimerInterruptHandler::??INTVEC 40
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_TimerInterruptHandler
+                                   00000A86 
+               interrupt function
+               calls indirect
+               stack 1 = 00000000 ( 0000000F )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+INTVEC
+  Common segment, address: CODE 00000000 - 0000002B (0x2c bytes), align: 1
+  Segment part 8. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Kernel_TimerInterruptHandler::??INTVEC 40
+                                   00000028 
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\UART.r90
+  PROGRAM MODULE, NAME : UART
+
+  SEGMENTS IN THE MODULE
+  ======================
+ABSOLUTE
+  Relative segment, address: DATA 00000029 - 00000029 (0x1 bytes), align: 0
+  Segment part 1. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_UBRRL                00000029 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000002A - 0000002A (0x1 bytes), align: 0
+  Segment part 2. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_UCSRB                0000002A 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000002B - 0000002B (0x1 bytes), align: 0
+  Segment part 3. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_UCSRA                0000002B 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 0000002C - 0000002C (0x1 bytes), align: 0
+  Segment part 4. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_UDR                  0000002C 
+    -------------------------------------------------------------------------
+ABSOLUTE
+  Relative segment, address: DATA 00000040 - 00000040 (0x1 bytes), align: 0
+  Segment part 5. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_UBRRH                00000040 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000AF0 - 00000AFD (0xe bytes), align: 1
+  Segment part 12.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_Init               00000AF0        main (main)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000AFE - 00000B05 (0x8 bytes), align: 1
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_BytesReady         00000AFE        Commander_Run (Commander)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B06 - 00000B0D (0x8 bytes), align: 1
+  Segment part 15.            Intra module refs:   UART_ReadBytes
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_ReadByte           00000B06        Commander_Run (Commander)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B0E - 00000B2B (0x1e bytes), align: 1
+  Segment part 16.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_ReadBytes          00000B0E        LoadFileToDisc (Terminal)
+               calls direct
+               stack 1 = 00000000 ( 00000003 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B2C - 00000B33 (0x8 bytes), align: 1
+  Segment part 17.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_WriteByte          00000B2C        Commander_Run (Commander)
+                                                   ListFiles (Terminal)
+                                                   LoadFileToDisc (Terminal)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B34 - 00000B4D (0x1a bytes), align: 1
+  Segment part 21.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_WriteBytes         00000B34        PrintFile (Terminal)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B4E - 00000B63 (0x16 bytes), align: 1
+  Segment part 22.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_WriteString        00000B4E        Commander_Run (Commander)
+                                                   ListFiles (Terminal)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B64 - 00000B79 (0x16 bytes), align: 1
+  Segment part 23.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_WriteString_P      00000B64        Commander_Run (Commander)
+                                                   ListFiles (Terminal)
+                                                   LoadFileToDisc (Terminal)
+                                                   PrintFile (Terminal)
+                                                   RunProgram (Terminal)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000B7A - 00000CD7 (0x15e bytes), align: 1
+  Segment part 24.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           UART_WriteValueUnsigned
+                                   00000B7A        ListFiles (Terminal)
+                                                   LoadFileToDisc (Terminal)
+               stack 1 = 00000000 ( 00000004 )
+               stack 2 = 00000000 ( 00000004 )
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\main.r90
+  PROGRAM MODULE, NAME : main
+
+  SEGMENTS IN THE MODULE
+  ======================
+ABSOLUTE
+  Relative segment, address: DATA 00000037 - 00000037 (0x1 bytes), align: 0
+  Segment part 1. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_DDRB                 00000037 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000CD8 - 00000CE7 (0x10 bytes), align: 1
+  Segment part 9.             Intra module refs:   main
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           blink                   00000CD8 
+               calls direct
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000CE8 - 00000D19 (0x32 bytes), align: 1
+  Segment part 10.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           main                    00000CE8        ?cstartup_call_main (?C_STARTUP)
+               calls direct
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+
+    *************************************************************************
+
+  FILE NAME : f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\Release\Obj\strings.r90
+  PROGRAM MODULE, NAME : strings
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000D1A - 00000D4F (0x36 bytes), align: 1
+  Segment part 7.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           StringCompare_PD        00000D1A        Commander_Run (Commander)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000D50 - 00000D6D (0x1e bytes), align: 1
+  Segment part 9.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           GetNextWord             00000D50        LoadFileToDisc (Terminal)
+                                                   PrintFile (Terminal)
+                                                   RunProgram (Terminal)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000D6E - 00000DCD (0x60 bytes), align: 1
+  Segment part 10.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ReadInteger             00000D6E        LoadFileToDisc (Terminal)
+               stack 1 = 00000000 ( 00000004 )
+               stack 2 = 00000000 ( 00000002 )
+
+    *************************************************************************
+
+  FILE NAME : C:\Program Files\IAR Systems\Embedded Workbench 4.0 Evaluation\avr\LIB\CLIB\cl3s-ec_mul-sf.r90
+  LIBRARY MODULE, NAME : ?__exit
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000DCE - 00000DD3 (0x6 bytes), align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __exit                  00000DD0 
+           ?C_EXIT                 00000DD0 
+           ?C_FUNCALL              00000DCE 
+           _exit                   00000DCE        ?cstartup_call_main (?C_STARTUP)
+           exit                    00000DCE        ?cstartup_call_main (?C_STARTUP)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?RESET
+
+  SEGMENTS IN THE MODULE
+  ======================
+INTVEC
+  Common segment, address: CODE 00000000 - 00000003 (0x4 bytes), align: 1
+  Segment part 0. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __program_start         00000000        Absolute parts (?ABS_ENTRY_MOD)
+           ?RESET                  00000000        Segment part 2 (?C_STARTUP)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?C_STARTUP
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000DD4, align: 1
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?C_STARTUP              00000DD4        Segment part 0 (?RESET)
+           __RESTART               00000DD4 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000DD4 - 00000DDF (0xc bytes), align: 1
+  Segment part 5.             Intra module refs:   Segment part 2
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000DE0 - 00000DE3 (0x4 bytes), align: 1
+  Segment part 7.             Intra module refs:   Segment part 5
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?call_low_level_init    00000DE0 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000DE4 - 00000DEB (0x8 bytes), align: 1
+  Segment part 8.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?need_segment_init      00000DE4        ?<Segment init: NEAR_I> (Commander)
+                                                   ?<Segment init: NEAR_Z> (Commander)
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000DEC - 00000DF7 (0xc bytes), align: 1
+  Segment part 9.             Intra module refs:   ?call_low_level_init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?cstartup_call_main     00000DEC 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?UL_DIVMOD_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000DF8 - 00000E3D (0x46 bytes), align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?UL_DIVMOD_L03          00000DF8        UART_WriteValueUnsigned (UART)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR4_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R4_is_cg_reg
+                                   00000E3E        Commander_Run (Commander)
+                                                   FileStore_GetFileName (FileStore)
+                                                   FileStore_GetNextFileEntry (FileStore)
+                                                   FileStore_OpenFile (FileStore)
+                                                   FileStore_ReadBytes (FileStore)
+                                                   FindNextFileEntry (FileStore)
+                                                   InternalEEPROM_ReadBytes (InternalEEPROM)
+                                                   InternalEEPROM_WriteBytes (InternalEEPROM)
+                                                   ListFiles (Terminal)
+                                                   LoadFileToDisc (Terminal)
+                                                   MatchFileName (FileStore)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR5_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R5_is_cg_reg
+                                   00000E3E        Commander_Run (Commander)
+                                                   FileStore_GetFileName (FileStore)
+                                                   FileStore_GetNextFileEntry (FileStore)
+                                                   FileStore_OpenFile (FileStore)
+                                                   FileStore_ReadBytes (FileStore)
+                                                   FindNextFileEntry (FileStore)
+                                                   InternalEEPROM_ReadBytes (InternalEEPROM)
+                                                   InternalEEPROM_WriteBytes (InternalEEPROM)
+                                                   ListFiles (Terminal)
+                                                   LoadFileToDisc (Terminal)
+                                                   MatchFileName (FileStore)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR6_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R6_is_cg_reg
+                                   00000E3E        FileStore_GetFileName (FileStore)
+                                                   FileStore_OpenFile (FileStore)
+                                                   FileStore_ReadBytes (FileStore)
+                                                   FindNextFileEntry (FileStore)
+                                                   InternalEEPROM_ReadBytes (InternalEEPROM)
+                                                   InternalEEPROM_WriteBytes (InternalEEPROM)
+                                                   LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR7_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R7_is_cg_reg
+                                   00000E3E        FileStore_GetFileName (FileStore)
+                                                   FileStore_OpenFile (FileStore)
+                                                   FileStore_ReadBytes (FileStore)
+                                                   FindNextFileEntry (FileStore)
+                                                   InternalEEPROM_ReadBytes (InternalEEPROM)
+                                                   InternalEEPROM_WriteBytes (InternalEEPROM)
+                                                   LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR8_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R8_is_cg_reg
+                                   00000E3E        FileStore_ReadBytes (FileStore)
+                                                   LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR9_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R9_is_cg_reg
+                                   00000E3E        FileStore_ReadBytes (FileStore)
+                                                   LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR10_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R10_is_cg_reg
+                                   00000E3E        FileStore_ReadBytes (FileStore)
+                                                   LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR11_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R11_is_cg_reg
+                                   00000E3E        FileStore_ReadBytes (FileStore)
+                                                   LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR12_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R12_is_cg_reg
+                                   00000E3E        LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?REGISTER_CGREGR13_L10
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E, align: 1
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?Register_R13_is_cg_reg
+                                   00000E3E        LoadFileToDisc (Terminal)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?low_level_init
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E3E - 00000E41 (0x4 bytes), align: 1
+  Segment part 3.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __low_level_init        00000E3E        ?call_low_level_init (?C_STARTUP)
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?segment_init
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: CODE 00000E42 - 00000E49 (0x8 bytes), align: 1
+  Segment part 3.             Intra module refs:   __segment_init
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           __memclr                00000E42 
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000E4A - 00000E51 (0x8 bytes), align: 1
+  Segment part 4.             Intra module refs:   __segment_init
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           __flashcpy              00000E4A 
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000E52 - 00000E5D (0xc bytes), align: 1
+  Segment part 5.             Intra module refs:   __flashcpy
+                                                   __memclr
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: CODE 00000E5E - 00000E91 (0x34 bytes), align: 1
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __segment_init          00000E5E        ?need_segment_init (?C_STARTUP)
+               calls direct
+               stack 1 = 00000000 ( 00000000 )
+               stack 2 = 00000000 ( 00000002 )
+
+    *************************************************************************
+
+  DEFINED ABSOLUTE ENTRIES
+  PROGRAM MODULE, NAME : ?FILLER_BYTES
+
+  SEGMENTS IN THE MODULE
+  ======================
+INTVEC
+  Common segment, address: CODE 00000000 - 0000002B (0x2c bytes), align: 0
+  Segment part 1.
+    -------------------------------------------------------------------------
+?FILL1
+  Relative segment, address: CODE 0000002C - 00000057 (0x2c bytes), align: 0
+  Segment part 0.
+
+
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
+=======              =====    =============   ===========     ====  ====  =====
+INTVEC               CODE          00000000 - 0000002B          2C   com    1
+?FILL1               CODE          0000002C - 00000057          2C   rel    0
+NEAR_F               CODE          00000058 - 000000C8          71   rel    0
+CODE                 CODE          000000CA - 00000E91         DC8   rel    1
+INITTAB              CODE          00000E92 - 00000E9D           C   rel    0
+NEAR_ID              CODE          00000E9E - 00000EAB           E   rel    0
+ABSOLUTE             DATA               0000001C                     rel    0
+                     DATA               0000001D                   
+                     DATA               0000001E                   
+                     DATA               0000001F                   
+                     DATA          00000029 - 0000002C           4 
+                     DATA          00000037 - 00000038           2 
+                     DATA          0000003C - 00000040           5 
+                     DATA          00000052 - 00000053           2 
+                     DATA          00000059 - 00000059           1 
+                     DATA          0000005C - 0000005C           1 
+CSTACK               DATA          00000060 - 0000018B         12C   dse    0
+RSTACK               DATA          0000018C - 0000020B          80   dse    0
+NEAR_I               DATA          0000020C - 00000219           E   rel    0
+NEAR_Z               DATA          0000021A - 000002D8          BF   rel    0
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+ 3 711 bytes of CODE memory (+             44 range fill )
+   633 bytes of DATA memory (+ 15 absolute )
+
+Errors: none
+Warnings: none
+

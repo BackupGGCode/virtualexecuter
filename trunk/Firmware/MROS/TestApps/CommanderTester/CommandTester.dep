@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\Debug\Exe\CommandTester.d90</file>
+      <file>$PROJ_DIR$\Debug\Obj\CommandTester.pbd</file>
+      <file>$PROJ_DIR$\config.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.r90</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\Debug\Obj\CommandTester.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 5</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 0</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 3</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 5</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2</file>
+        </tool>
+      </inputs>
+    </file>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>XLINK</tool>
+    </forcedrebuild>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs>
+      <file>$PROJ_DIR$\Release\Obj\Terminal.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\strings.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\main.r90</file>
+      <file>$TOOLKIT_DIR$\inc\ioavr.h</file>
+      <file>$TOOLKIT_DIR$\src\template\cfgm32.xcl</file>
+      <file>$PROJ_DIR$\..\..\Kernel\Kernel.h</file>
+      <file>$PROJ_DIR$\Release\Obj\UART.r90</file>
+      <file>$PROJ_DIR$\Release\List\Timer.lst</file>
+      <file>$PROJ_DIR$\..\..\Kernel\MessageQueue.h</file>
+      <file>$PROJ_DIR$\..\..\Peripherals\InternalEEPROM.h</file>
+      <file>$PROJ_DIR$\..\..\Kernel\MemoryManagement.c</file>
+      <file>$PROJ_DIR$\Release\List\CommandTester.map</file>
+      <file>$PROJ_DIR$\Release\List\FileStore.lst</file>
+      <file>$PROJ_DIR$\Release\List\Commander.lst</file>
+      <file>$PROJ_DIR$\..\..\Peripherals\UART.h</file>
+      <file>$PROJ_DIR$\Release\List\TaskManagement.s90</file>
+      <file>$PROJ_DIR$\..\..\Kernel\Debugger.h</file>
+      <file>$PROJ_DIR$\Release\List\InternalEEPROM.s90</file>
+      <file>$PROJ_DIR$\Release\List\Kernel.lst</file>
+      <file>$PROJ_DIR$\Release\List\FileStore.s90</file>
+      <file>$PROJ_DIR$\Release\Obj\Kernel.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\UART.pbi</file>
+      <file>$PROJ_DIR$\Release\List\MessageQueue.lst</file>
+      <file>$PROJ_DIR$\Release\Obj\MessageQueue.r90</file>
+      <file>$PROJ_DIR$\Release\List\MessageQueue.s90</file>
+      <file>$PROJ_DIR$\Release\Obj\Kernel.pbi</file>
+      <file>$PROJ_DIR$\..\..\Kernel\Timer.h</file>
+      <file>$PROJ_DIR$\Release\Obj\InternalEEPROM.pbi</file>
+      <file>$PROJ_DIR$\..\..\Terminal\Terminal.h</file>
+      <file>$TOOLKIT_DIR$\inc\inavr.h</file>
+      <file>$TOOLKIT_DIR$\src\template\cfg3soim.xcl</file>
+      <file>$PROJ_DIR$\Release\List\TaskManagement.lst</file>
+      <file>$PROJ_DIR$\Release\List\Terminal.lst</file>
+      <file>$PROJ_DIR$\..\..\Kernel\KernelInternals.h</file>
+      <file>$PROJ_DIR$\Release\Obj\FileStore.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\Terminal.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\MessageQueue.pbi</file>
+      <file>$PROJ_DIR$\..\..\strings.h</file>
+      <file>$PROJ_DIR$\Release\Obj\MemoryManagement.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\Commander.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\TaskManagement.r90</file>
+      <file>$PROJ_DIR$\Release\Obj\TaskManagement.pbi</file>
+      <file>$PROJ_DIR$\..\..\Kernel\MemoryManagement.h</file>
+      <file>$PROJ_DIR$\..\..\Kernel\Semaphore.h</file>
+      <file>$PROJ_DIR$\config.h</file>
+      <file>$PROJ_DIR$\Release\List\InternalEEPROM.lst</file>
+      <file>$PROJ_DIR$\Release\Exe\CommandTester.a90</file>
+      <file>$PROJ_DIR$\Release\Obj\CommandTester.pbd</file>
+      <file>$PROJ_DIR$\Release\Obj\Timer.r90</file>
+      <file>$TOOLKIT_DIR$\lib\clib\cl3s-ec_mul-sf.r90</file>
+      <file>$PROJ_DIR$\..\..\Commander\Commander.h</file>
+      <file>$PROJ_DIR$\..\..\globals.h</file>
+      <file>$PROJ_DIR$\..\..\FileStore\FileStore.h</file>
+      <file>$PROJ_DIR$\Release\List\strings.s90</file>
+      <file>$PROJ_DIR$\Release\List\Terminal.s90</file>
+      <file>$PROJ_DIR$\Release\List\Timer.s90</file>
+      <file>$PROJ_DIR$\Release\Obj\Timer.pbi</file>
+      <file>$PROJ_DIR$\Release\List\strings.lst</file>
+      <file>$PROJ_DIR$\Release\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\MemoryManagement.pbi</file>
+      <file>$PROJ_DIR$\Release\List\UART.s90</file>
+      <file>$PROJ_DIR$\..\..\FileStore\InternalEEPROM.h</file>
+      <file>$PROJ_DIR$\Release\List\MemoryManagement.lst</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\Release\Obj\FileStore.pbi</file>
+      <file>$PROJ_DIR$\Release\List\UART.lst</file>
+      <file>$PROJ_DIR$\Release\List\main.s90</file>
+      <file>$PROJ_DIR$\Release\List\Commander.s90</file>
+      <file>$PROJ_DIR$\Release\List\main.lst</file>
+      <file>$PROJ_DIR$\Release\List\Kernel.s90</file>
+      <file>$PROJ_DIR$\..\..\Kernel\TaskManagement.h</file>
+      <file>$TOOLKIT_DIR$\inc\iom32.h</file>
+      <file>$PROJ_DIR$\Release\Obj\Commander.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\iomacro.h</file>
+      <file>$PROJ_DIR$\Release\Obj\strings.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\InternalEEPROM.r90</file>
+      <file>$PROJ_DIR$\..\..\Peripherals\UART.c</file>
+      <file>$PROJ_DIR$\..\..\FileStore\InternalEEPROM.c</file>
+      <file>$PROJ_DIR$\..\..\FileStore\FileStore.c</file>
+      <file>$PROJ_DIR$\..\..\Terminal\Terminal.c</file>
+      <file>$PROJ_DIR$\..\..\Kernel\Kernel.c</file>
+      <file>$PROJ_DIR$\..\..\Kernel\MessageQueue.c</file>
+      <file>$PROJ_DIR$\..\..\strings.c</file>
+      <file>$PROJ_DIR$\..\..\Kernel\Timer.c</file>
+      <file>$PROJ_DIR$\..\..\Kernel\TaskManagement.c</file>
+      <file>$PROJ_DIR$\..\..\Commander\Commander.c</file>
+      <file>$PROJ_DIR$\main.c</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\..\Kernel\MemoryManagement.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 38 62</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 59</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63 44 42 5 70 43 8 26 33 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 3 71 73 29 63 44 42 5 70 43 8 26 33 16</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 46 11</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Exe\CommandTester.a90</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 11</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 4 30 39 34 75 20 23 40 35 48 6 2 1 49</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Obj\CommandTester.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 72 64 27 25 36 41 0 56 21 58 74</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Peripherals\UART.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 6 60 65</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 21</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 14 51 3 71 73 29 63</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 14 51 3 71 73 29 63</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\FileStore\InternalEEPROM.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 75 17 45</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 27</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63 5 44 70 43 8 42 26</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\FileStore\FileStore.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 34 19 12</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 64</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 52 51 3 71 73 29 63</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 52 51 3 71 73 29 63</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Terminal\Terminal.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 35 54 32</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 0</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63 44 5 70 43 8 42 26 14 50 37 52 61</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 3 71 73 29 63 44 5 70 43 8 42 26 14 50 37 52 9</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Kernel\Kernel.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 20 69 18</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 25</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 5 44 51 3 71 73 29 63 70 43 8 42 26 33 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 5 44 51 3 71 73 29 63 70 43 8 42 26 33 16</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Kernel\MessageQueue.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 23 24 22</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 36</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63 5 44 70 43 8 42 26 33 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 3 71 73 29 63 5 44 70 43 8 42 26 33 16</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\strings.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 1 53 57</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 74</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 3 71 73 29 63</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Kernel\Timer.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 48 55 7</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 56</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 26 3 71 73 44 33 5 51 29 63 70 43 8 42 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 26 3 71 73 44 33 5 51 29 63 70 43 8 42 16</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Kernel\TaskManagement.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 40 15 31</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 41</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 26 3 71 73 44 5 51 29 63 70 43 8 42 33 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 26 3 71 73 44 5 51 29 63 70 43 8 42 33 16</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Commander\Commander.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 39 67 13</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 72</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63 44 5 70 43 8 42 26 50 14 37</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 3 71 73 29 63 44 5 70 43 8 42 26 50 14 37</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 2 66 68</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 58</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCAVR</name>
+          <file> 51 3 71 73 29 63 44 5 70 43 8 42 26 14 52 61 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 3 71 73 29 63 44 5 70 43 8 42 26 14 52 28</file>
+        </tool>
+      </inputs>
+    </file>
+  </configuration>
+</project>
+
+
