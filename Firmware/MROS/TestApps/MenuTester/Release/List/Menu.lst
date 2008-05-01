@@ -1,0 +1,603 @@
+##############################################################################
+#                                                                            #
+# IAR Atmel AVR C/EC++ Compiler V2.28A/WIN, Evaluation Version30/Nov/2007  23:47:25 #
+# Copyright 1996-2002 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\Menu\Menu.c                #
+#    Command line =  --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    MenuTester\Release\Obj\ -I                              #
+#                    C:\PROGRA~1\IARSYS~1\EW23EV~1\avr\SRC\CLIB\INC\ -I      #
+#                    f:\Projects\[Drivers]\C\MROS\ -I                        #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\       #
+#                    --string_literals_in_flash -lC                          #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\Releas #
+#                    e\List\ -e --initializers_in_flash -s9                  #
+#                    -DENABLE_BIT_DEFINITIONS f:\Projects\[Drivers]\C\MROS\M #
+#                    enu\Menu.c                                              #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\Releas #
+#                    e\List\Menu.lst                                         #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\MenuTester\Releas #
+#                    e\Obj\Menu.r90                                          #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+      1          #include <Menu/Menu.h>
+      2          
+      3          
+
+   \                                 In segment NEAR_Z, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_Z>`
+      4          MenuItem* currentMenuItem;
+   \   MenuItem *__near currentMenuItem;
+   \                     currentMenuItem:
+   \   00000000                              DS 2
+      5          void(*update)(MenuItem* menuItem);
+   \   void (*__near update)(MenuItem *);
+   \                     update:
+   \   00000002                              DS 2
+      6          
+      7          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      8          void Menu_Init(MenuItem* theMenu, void(*menuWriter)(MenuItem* menuItem))
+      9          {
+   \   __nearfunc void Menu_Init(MenuItem *, void (*)(MenuItem *));
+   \                     Menu_Init:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+     10          	currentMenuItem = theMenu;
+   \   00000004   ....                       LDI     R26,LOW(currentMenuItem)
+   \   00000006   ....                       LDI     R27,(currentMenuItem) >> 8
+   \   00000008   930D                       ST      X+,R16
+   \   0000000A   931D                       ST      X+,R17
+     11          	update = menuWriter;
+   \   0000000C   932D                       ST      X+,R18
+   \   0000000E   933C                       ST      X,R19
+   \   00000010   9713                       SBIW    R27 : R26,3
+     12          	update(currentMenuItem);
+   \   00000012   910D                       LD      R16,X+
+   \   00000014   911D                       LD      R17,X+
+   \   00000016   91ED                       LD      R30,X+
+   \   00000018   91FC                       LD      R31,X
+   \   0000001A   9509                       ICALL
+     13          }
+   \   0000001C   91A9                       LD      R26,Y+
+   \   0000001E   91B9                       LD      R27,Y+
+   \   00000020   9508                       RET
+     14          
+     15          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     16          void Menu_Refresh()
+     17          {
+   \   __nearfunc void Menu_Refresh();
+   \                     Menu_Refresh:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+     18          	update(currentMenuItem);
+   \   00000004   ....                       LDI     R26,LOW(currentMenuItem)
+   \   00000006   ....                       LDI     R27,(currentMenuItem) >> 8
+   \   00000008   910D                       LD      R16,X+
+   \   0000000A   911D                       LD      R17,X+
+   \   0000000C   91ED                       LD      R30,X+
+   \   0000000E   91FC                       LD      R31,X
+   \   00000010   9509                       ICALL
+     19          }
+   \   00000012   91A9                       LD      R26,Y+
+   \   00000014   91B9                       LD      R27,Y+
+   \   00000016   9508                       RET
+     20          
+     21          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     22          void Menu_Next()
+     23          {
+   \   __nearfunc void Menu_Next();
+   \                     Menu_Next:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+     24          	if((*currentMenuItem).next != null)
+   \   00000004   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000006   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000008   81A0                       LD      R26,Z
+   \   0000000A   81B1                       LDD     R27,Z+1
+   \   0000000C   9614                       ADIW    R27 : R26,4
+   \   0000000E   910D                       LD      R16,X+
+   \   00000010   911C                       LD      R17,X
+   \   00000012   2F20                       MOV     R18,R16
+   \   00000014   2B21                       OR      R18,R17
+   \   00000016   F031                       BREQ    ??Menu_Next_0
+     25          	{
+     26          		currentMenuItem = (MenuItem*)((*currentMenuItem).next);
+   \   00000018   8300                       ST      Z,R16
+   \   0000001A   8311                       STD     Z+1,R17
+     27          		update(currentMenuItem);
+   \   0000001C   8122                       LDD     R18,Z+2
+   \   0000001E   8133                       LDD     R19,Z+3
+   \   00000020   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000022   9509                       ICALL
+     28          	}
+     29          }
+   \                     ??Menu_Next_0:
+   \   00000024   91A9                       LD      R26,Y+
+   \   00000026   91B9                       LD      R27,Y+
+   \   00000028   9508                       RET
+     30          
+     31          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     32          void Menu_Previous()
+     33          {
+   \   __nearfunc void Menu_Previous();
+   \                     Menu_Previous:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+     34          	if((*currentMenuItem).previous != null)
+   \   00000004   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000006   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000008   81A0                       LD      R26,Z
+   \   0000000A   81B1                       LDD     R27,Z+1
+   \   0000000C   9612                       ADIW    R27 : R26,2
+   \   0000000E   910D                       LD      R16,X+
+   \   00000010   911C                       LD      R17,X
+   \   00000012   2F20                       MOV     R18,R16
+   \   00000014   2B21                       OR      R18,R17
+   \   00000016   F031                       BREQ    ??Menu_Previous_0
+     35          	{
+     36          		currentMenuItem = (MenuItem*)((*currentMenuItem).previous);
+   \   00000018   8300                       ST      Z,R16
+   \   0000001A   8311                       STD     Z+1,R17
+     37          		update(currentMenuItem);
+   \   0000001C   8122                       LDD     R18,Z+2
+   \   0000001E   8133                       LDD     R19,Z+3
+   \   00000020   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000022   9509                       ICALL
+     38          	}
+     39          }
+   \                     ??Menu_Previous_0:
+   \   00000024   91A9                       LD      R26,Y+
+   \   00000026   91B9                       LD      R27,Y+
+   \   00000028   9508                       RET
+     40          
+     41          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     42          void Menu_Enter()
+     43          {
+   \   __nearfunc void Menu_Enter();
+   \                     Menu_Enter:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+     44          	if((*currentMenuItem).child != null)
+   \   00000004   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000006   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000008   81A0                       LD      R26,Z
+   \   0000000A   81B1                       LDD     R27,Z+1
+   \   0000000C   9618                       ADIW    R27 : R26,8
+   \   0000000E   910D                       LD      R16,X+
+   \   00000010   911C                       LD      R17,X
+   \   00000012   2F20                       MOV     R18,R16
+   \   00000014   2B21                       OR      R18,R17
+   \   00000016   F031                       BREQ    ??Menu_Enter_0
+     45          	{
+     46          		currentMenuItem = (MenuItem*)((*currentMenuItem).child);
+   \   00000018   8300                       ST      Z,R16
+   \   0000001A   8311                       STD     Z+1,R17
+     47          		update(currentMenuItem);
+   \   0000001C   8122                       LDD     R18,Z+2
+   \   0000001E   8133                       LDD     R19,Z+3
+   \   00000020   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000022   9509                       ICALL
+     48          	}
+     49          }
+   \                     ??Menu_Enter_0:
+   \   00000024   91A9                       LD      R26,Y+
+   \   00000026   91B9                       LD      R27,Y+
+   \   00000028   9508                       RET
+     50          
+     51          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     52          void Menu_Exit()
+     53          {
+   \   __nearfunc void Menu_Exit();
+   \                     Menu_Exit:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+     54          	if((*currentMenuItem).parent != null)
+   \   00000004   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000006   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000008   81A0                       LD      R26,Z
+   \   0000000A   81B1                       LDD     R27,Z+1
+   \   0000000C   9616                       ADIW    R27 : R26,6
+   \   0000000E   910D                       LD      R16,X+
+   \   00000010   911C                       LD      R17,X
+   \   00000012   2F20                       MOV     R18,R16
+   \   00000014   2B21                       OR      R18,R17
+   \   00000016   F031                       BREQ    ??Menu_Exit_0
+     55          	{
+     56          		currentMenuItem = (MenuItem*)((*currentMenuItem).parent);
+   \   00000018   8300                       ST      Z,R16
+   \   0000001A   8311                       STD     Z+1,R17
+     57          		update(currentMenuItem);
+   \   0000001C   8122                       LDD     R18,Z+2
+   \   0000001E   8133                       LDD     R19,Z+3
+   \   00000020   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000022   9509                       ICALL
+     58          	}
+     59          }
+   \                     ??Menu_Exit_0:
+   \   00000024   91A9                       LD      R26,Y+
+   \   00000026   91B9                       LD      R27,Y+
+   \   00000028   9508                       RET
+     60          
+     61          	
+
+   \                                 In segment CODE, align 2, keep-with-next
+     62          void Menu_Increment()
+     63          {
+   \   __nearfunc void Menu_Increment();
+   \                     Menu_Increment:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+   \   00000004   939A                       ST      -Y,R25
+   \   00000006   938A                       ST      -Y,R24
+     64          bool refresh = true;
+   \   00000008   E021                       LDI     R18,1
+     65          
+     66          	if(currentMenuItem->incrementFunction != null)
+   \   0000000A   ....                       LDI     R26,LOW(currentMenuItem)
+   \   0000000C   ....                       LDI     R27,(currentMenuItem) >> 8
+   \   0000000E   91ED                       LD      R30,X+
+   \   00000010   91FC                       LD      R31,X
+   \   00000012   9711                       SBIW    R27 : R26,1
+   \   00000014   8505                       LDD     R16,Z+13
+   \   00000016   8516                       LDD     R17,Z+14
+   \   00000018   E040                       LDI     R20,0
+   \   0000001A   3000                       CPI     R16,0
+   \   0000001C   0714                       CPC     R17,R20
+   \   0000001E   F091                       BREQ    ??Menu_Increment_0
+     67          	{
+     68          		refresh = currentMenuItem->incrementFunction();
+   \   00000020   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000022   9509                       ICALL
+   \   00000024   2F20                       MOV     R18,R16
+     69          	}
+     70          	else
+     71          	{
+     72          		switch(currentMenuItem->type)
+     73          		{
+     74          			case SINT8:		*((signed char*)(currentMenuItem->variable))+=1;
+     75          										break;
+     76          			case UINT8:		*((unsigned char*)(currentMenuItem->variable))+=1;
+     77          										break;
+     78          			case SINT16:	*((signed short*)(currentMenuItem->variable))+=1;
+     79          										break;
+     80          			case UINT16:	*((unsigned short*)(currentMenuItem->variable))+=1;
+     81          										break;
+     82          			case SINT32:	*((signed long*)(currentMenuItem->variable))+=1;
+     83          										break;
+     84          			case UINT32:	*((unsigned long*)(currentMenuItem->variable))+=1;
+     85          										break;
+     86          			case FLOAT:		*((float*)(currentMenuItem->variable))+=1;
+     87          										break;
+     88          			case DOUBLE:	*((double*)(currentMenuItem->variable))+=1;
+     89          										break;
+     90          		}
+     91          	}
+     92          	
+     93          	if(refresh)
+   \                     ??Menu_Increment_1:
+   \   00000026   2322                       TST     R18
+   \   00000028   F041                       BREQ    ??Menu_Increment_2
+     94          	{
+     95          		update(currentMenuItem);
+   \                     ??Menu_Increment_3:
+   \   0000002A   910D                       LD      R16,X+
+   \   0000002C   911C                       LD      R17,X
+   \   0000002E   9711                       SBIW    R27 : R26,1
+   \   00000030   01FD                       MOVW    R31 : R30,R27 : R26
+   \   00000032   8122                       LDD     R18,Z+2
+   \   00000034   8133                       LDD     R19,Z+3
+   \   00000036   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000038   9509                       ICALL
+     96          	}
+     97          }
+   \                     ??Menu_Increment_2:
+   \   0000003A   9189                       LD      R24,Y+
+   \   0000003C   9199                       LD      R25,Y+
+   \   0000003E   91A9                       LD      R26,Y+
+   \   00000040   91B9                       LD      R27,Y+
+   \   00000042   9508                       RET
+   \                     ??Menu_Increment_0:
+   \   00000044   91ED                       LD      R30,X+
+   \   00000046   91FC                       LD      R31,X
+   \   00000048   9711                       SBIW    R27 : R26,1
+   \   0000004A   8502                       LDD     R16,Z+10
+   \   0000004C   950A                       DEC     R16
+   \   0000004E   F079                       BREQ    ??Menu_Increment_4
+   \   00000050   950A                       DEC     R16
+   \   00000052   F069                       BREQ    ??Menu_Increment_4
+   \   00000054   950A                       DEC     R16
+   \   00000056   F0B9                       BREQ    ??Menu_Increment_5
+   \   00000058   950A                       DEC     R16
+   \   0000005A   F0A9                       BREQ    ??Menu_Increment_5
+   \   0000005C   950A                       DEC     R16
+   \   0000005E   F111                       BREQ    ??Menu_Increment_6
+   \   00000060   950A                       DEC     R16
+   \   00000062   F101                       BREQ    ??Menu_Increment_6
+   \   00000064   950A                       DEC     R16
+   \   00000066   F199                       BREQ    ??Menu_Increment_7
+   \   00000068   950A                       DEC     R16
+   \   0000006A   F189                       BREQ    ??Menu_Increment_7
+   \   0000006C   CFDC                       RJMP    ??Menu_Increment_1
+   \                     ??Menu_Increment_4:
+   \   0000006E   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000070   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000072   8100                       LD      R16,Z
+   \   00000074   8111                       LDD     R17,Z+1
+   \   00000076   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000078   8503                       LDD     R16,Z+11
+   \   0000007A   8514                       LDD     R17,Z+12
+   \   0000007C   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000007E   8100                       LD      R16,Z
+   \   00000080   9503                       INC     R16
+   \   00000082   8300                       ST      Z,R16
+   \   00000084   CFD2                       RJMP    ??Menu_Increment_3
+   \                     ??Menu_Increment_5:
+   \   00000086   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000088   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   0000008A   8100                       LD      R16,Z
+   \   0000008C   8111                       LDD     R17,Z+1
+   \   0000008E   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000090   8503                       LDD     R16,Z+11
+   \   00000092   8514                       LDD     R17,Z+12
+   \   00000094   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000096   8100                       LD      R16,Z
+   \   00000098   8111                       LDD     R17,Z+1
+   \   0000009A   5F0F                       SUBI    R16,255
+   \   0000009C   4F1F                       SBCI    R17,255
+   \   0000009E   8300                       ST      Z,R16
+   \   000000A0   8311                       STD     Z+1,R17
+   \   000000A2   CFC3                       RJMP    ??Menu_Increment_3
+   \                     ??Menu_Increment_6:
+   \   000000A4   ....                       LDI     R30,LOW(currentMenuItem)
+   \   000000A6   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   000000A8   8100                       LD      R16,Z
+   \   000000AA   8111                       LDD     R17,Z+1
+   \   000000AC   01F8                       MOVW    R31 : R30,R17 : R16
+   \   000000AE   8503                       LDD     R16,Z+11
+   \   000000B0   8514                       LDD     R17,Z+12
+   \   000000B2   01F8                       MOVW    R31 : R30,R17 : R16
+   \   000000B4   8100                       LD      R16,Z
+   \   000000B6   8111                       LDD     R17,Z+1
+   \   000000B8   8122                       LDD     R18,Z+2
+   \   000000BA   8133                       LDD     R19,Z+3
+   \   000000BC   5F0F                       SUBI    R16,255
+   \   000000BE   4F1F                       SBCI    R17,255
+   \   000000C0   4F2F                       SBCI    R18,255
+   \   000000C2   4F3F                       SBCI    R19,255
+   \                     ??Menu_Increment_8:
+   \   000000C4   8300                       ST      Z,R16
+   \   000000C6   8311                       STD     Z+1,R17
+   \   000000C8   8322                       STD     Z+2,R18
+   \   000000CA   8333                       STD     Z+3,R19
+   \   000000CC   CFAE                       RJMP    ??Menu_Increment_3
+   \                     ??Menu_Increment_7:
+   \   000000CE   91ED                       LD      R30,X+
+   \   000000D0   91FC                       LD      R31,X
+   \   000000D2   9711                       SBIW    R27 : R26,1
+   \   000000D4   8583                       LDD     R24,Z+11
+   \   000000D6   8594                       LDD     R25,Z+12
+   \   000000D8   01FC                       MOVW    R31 : R30,R25 : R24
+   \   000000DA   8100                       LD      R16,Z
+   \   000000DC   8111                       LDD     R17,Z+1
+   \   000000DE   8122                       LDD     R18,Z+2
+   \   000000E0   8133                       LDD     R19,Z+3
+   \   000000E2   E050                       LDI     R21,0
+   \   000000E4   E860                       LDI     R22,128
+   \   000000E6   E37F                       LDI     R23,63
+   \   000000E8   ........                   CALL    ?F_ADD_L04
+   \   000000EC   01FC                       MOVW    R31 : R30,R25 : R24
+   \   000000EE   CFEA                       RJMP    ??Menu_Increment_8
+     98          
+     99          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    100          void Menu_Decrement()
+    101          {
+   \   __nearfunc void Menu_Decrement();
+   \                     Menu_Decrement:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+    102          bool refresh = false;
+   \   00000004   E020                       LDI     R18,0
+    103          
+    104          	if(currentMenuItem->decrementFunction != null)
+   \   00000006   ....                       LDI     R26,LOW(currentMenuItem)
+   \   00000008   ....                       LDI     R27,(currentMenuItem) >> 8
+   \   0000000A   91ED                       LD      R30,X+
+   \   0000000C   91FC                       LD      R31,X
+   \   0000000E   9711                       SBIW    R27 : R26,1
+   \   00000010   8507                       LDD     R16,Z+15
+   \   00000012   8910                       LDD     R17,Z+16
+   \   00000014   3000                       CPI     R16,0
+   \   00000016   0712                       CPC     R17,R18
+   \   00000018   F081                       BREQ    ??Menu_Decrement_0
+    105          	{
+    106          		refresh = currentMenuItem->decrementFunction();
+   \   0000001A   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000001C   9509                       ICALL
+   \   0000001E   2F20                       MOV     R18,R16
+    107          	}
+    108          	else
+    109          	{
+    110          		switch(currentMenuItem->type)
+    111          		{
+    112          			case SINT8:		*((signed char*)(currentMenuItem->variable))-=1;
+    113          										break;
+    114          			case UINT8:		*((unsigned char*)(currentMenuItem->variable))-=1;
+    115          										break;
+    116          			case SINT16:	*((signed short*)(currentMenuItem->variable))-=1;
+    117          										break;
+    118          			case UINT16:	*((unsigned short*)(currentMenuItem->variable))-=1;
+    119          										break;
+    120          			case SINT32:	*((signed long*)(currentMenuItem->variable))-=1;
+    121          										break;
+    122          			case UINT32:	*((unsigned long*)(currentMenuItem->variable))-=1;
+    123          										break;
+    124          			case FLOAT:		*((float*)(currentMenuItem->variable))-=1;
+    125          										break;
+    126          			case DOUBLE:	*((double*)(currentMenuItem->variable))-=1;
+    127          										break;
+    128          		}
+    129          	}
+    130          	
+    131          	if(refresh)
+   \                     ??Menu_Decrement_1:
+   \   00000020   2322                       TST     R18
+   \   00000022   F041                       BREQ    ??Menu_Decrement_2
+    132          	{
+    133          		update(currentMenuItem);
+   \   00000024   910D                       LD      R16,X+
+   \   00000026   911C                       LD      R17,X
+   \   00000028   9711                       SBIW    R27 : R26,1
+   \   0000002A   01FD                       MOVW    R31 : R30,R27 : R26
+   \   0000002C   8122                       LDD     R18,Z+2
+   \   0000002E   8133                       LDD     R19,Z+3
+   \   00000030   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000032   9509                       ICALL
+    134          	}
+    135          }
+   \                     ??Menu_Decrement_2:
+   \   00000034   91A9                       LD      R26,Y+
+   \   00000036   91B9                       LD      R27,Y+
+   \   00000038   9508                       RET
+   \                     ??Menu_Decrement_0:
+   \   0000003A   91ED                       LD      R30,X+
+   \   0000003C   91FC                       LD      R31,X
+   \   0000003E   9711                       SBIW    R27 : R26,1
+   \   00000040   8502                       LDD     R16,Z+10
+   \   00000042   950A                       DEC     R16
+   \   00000044   F079                       BREQ    ??Menu_Decrement_3
+   \   00000046   950A                       DEC     R16
+   \   00000048   F069                       BREQ    ??Menu_Decrement_3
+   \   0000004A   950A                       DEC     R16
+   \   0000004C   F0B9                       BREQ    ??Menu_Decrement_4
+   \   0000004E   950A                       DEC     R16
+   \   00000050   F0A9                       BREQ    ??Menu_Decrement_4
+   \   00000052   950A                       DEC     R16
+   \   00000054   F111                       BREQ    ??Menu_Decrement_5
+   \   00000056   950A                       DEC     R16
+   \   00000058   F101                       BREQ    ??Menu_Decrement_5
+   \   0000005A   950A                       DEC     R16
+   \   0000005C   F199                       BREQ    ??Menu_Decrement_6
+   \   0000005E   950A                       DEC     R16
+   \   00000060   F189                       BREQ    ??Menu_Decrement_6
+   \   00000062   CFDE                       RJMP    ??Menu_Decrement_1
+   \                     ??Menu_Decrement_3:
+   \   00000064   ....                       LDI     R30,LOW(currentMenuItem)
+   \   00000066   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000068   8100                       LD      R16,Z
+   \   0000006A   8111                       LDD     R17,Z+1
+   \   0000006C   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000006E   8503                       LDD     R16,Z+11
+   \   00000070   8514                       LDD     R17,Z+12
+   \   00000072   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000074   8100                       LD      R16,Z
+   \   00000076   950A                       DEC     R16
+   \   00000078   8300                       ST      Z,R16
+   \   0000007A   CFDC                       RJMP    ??Menu_Decrement_2
+   \                     ??Menu_Decrement_4:
+   \   0000007C   ....                       LDI     R30,LOW(currentMenuItem)
+   \   0000007E   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   00000080   8100                       LD      R16,Z
+   \   00000082   8111                       LDD     R17,Z+1
+   \   00000084   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000086   8503                       LDD     R16,Z+11
+   \   00000088   8514                       LDD     R17,Z+12
+   \   0000008A   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000008C   8100                       LD      R16,Z
+   \   0000008E   8111                       LDD     R17,Z+1
+   \   00000090   5001                       SUBI    R16,1
+   \   00000092   4010                       SBCI    R17,0
+   \   00000094   8300                       ST      Z,R16
+   \   00000096   8311                       STD     Z+1,R17
+   \   00000098   CFCD                       RJMP    ??Menu_Decrement_2
+   \                     ??Menu_Decrement_5:
+   \   0000009A   ....                       LDI     R30,LOW(currentMenuItem)
+   \   0000009C   ....                       LDI     R31,(currentMenuItem) >> 8
+   \   0000009E   8100                       LD      R16,Z
+   \   000000A0   8111                       LDD     R17,Z+1
+   \   000000A2   01F8                       MOVW    R31 : R30,R17 : R16
+   \   000000A4   8503                       LDD     R16,Z+11
+   \   000000A6   8514                       LDD     R17,Z+12
+   \   000000A8   01F8                       MOVW    R31 : R30,R17 : R16
+   \   000000AA   8100                       LD      R16,Z
+   \   000000AC   8111                       LDD     R17,Z+1
+   \   000000AE   8122                       LDD     R18,Z+2
+   \   000000B0   8133                       LDD     R19,Z+3
+   \   000000B2   5001                       SUBI    R16,1
+   \   000000B4   4010                       SBCI    R17,0
+   \   000000B6   4020                       SBCI    R18,0
+   \   000000B8   4030                       SBCI    R19,0
+   \   000000BA   8300                       ST      Z,R16
+   \   000000BC   8311                       STD     Z+1,R17
+   \   000000BE   8322                       STD     Z+2,R18
+   \   000000C0   8333                       STD     Z+3,R19
+   \   000000C2   CFB8                       RJMP    ??Menu_Decrement_2
+   \                     ??Menu_Decrement_6:
+   \   000000C4   91ED                       LD      R30,X+
+   \   000000C6   91FC                       LD      R31,X
+   \   000000C8   85A3                       LDD     R26,Z+11
+   \   000000CA   85B4                       LDD     R27,Z+12
+   \   000000CC   910D                       LD      R16,X+
+   \   000000CE   911D                       LD      R17,X+
+   \   000000D0   912D                       LD      R18,X+
+   \   000000D2   913C                       LD      R19,X
+   \   000000D4   9713                       SBIW    R27 : R26,3
+   \   000000D6   E040                       LDI     R20,0
+   \   000000D8   E050                       LDI     R21,0
+   \   000000DA   E860                       LDI     R22,128
+   \   000000DC   EB7F                       LDI     R23,191
+   \   000000DE   ........                   CALL    ?F_ADD_L04
+   \   000000E2   930D                       ST      X+,R16
+   \   000000E4   931D                       ST      X+,R17
+   \   000000E6   932D                       ST      X+,R18
+   \   000000E8   933C                       ST      X,R19
+   \   000000EA   CFA4                       RJMP    ??Menu_Decrement_2
+
+   Maximum stack usage in bytes:
+
+     Function              CSTACK  RSTACK
+     --------              ------  ------
+     Menu_Decrement            2       2 
+       ->   Indirect call      2       2 
+       ->   Indirect call      2       2 
+     Menu_Enter                2       2 
+       ->   Indirect call      2       2 
+     Menu_Exit                 2       2 
+       ->   Indirect call      2       2 
+     Menu_Increment            4       2 
+       ->   Indirect call      4       2 
+       ->   Indirect call      4       2 
+     Menu_Init                 2       2 
+       ->   Indirect call      2       2 
+     Menu_Next                 2       2 
+       ->   Indirect call      2       2 
+     Menu_Previous             2       2 
+       ->   Indirect call      2       2 
+     Menu_Refresh              2       2 
+       ->   Indirect call      2       2 
+
+ 
+    702 bytes in segment CODE
+      6 bytes in segment INITTAB
+      4 bytes in segment NEAR_Z
+ 
+    702 bytes of CODE memory (+ 6 bytes shared)
+      4 bytes of DATA memory
+
+Errors: none
+Warnings: none

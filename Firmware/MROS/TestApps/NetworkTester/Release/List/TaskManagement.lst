@@ -1,0 +1,576 @@
+##############################################################################
+#                                                                            #
+# IAR Atmel AVR C/EC++ Compiler V2.28A/WIN, Evaluation Version04/Dec/2007  19:19:36 #
+# Copyright 1996-2002 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\Kernel\TaskManagement.c    #
+#    Command line =  --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    NetworkTester\Release\Obj\ -I "C:\Program Files\IAR     #
+#                    Systems\Ew23 Evaluation version\avr\SRC\CLIB\INC\" -I   #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\    #
+#                    -I f:\Projects\[Drivers]\C\MROS\ -I                     #
+#                    f:\Projects\[Drivers]\C\MROS\Network\ -lC               #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\Rel #
+#                    ease\List\ -e --initializers_in_flash -s9 --debug       #
+#                    -DENABLE_BIT_DEFINITIONS f:\Projects\[Drivers]\C\MROS\K #
+#                    ernel\TaskManagement.c                                  #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\Rel #
+#                    ease\List\TaskManagement.lst                            #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\Rel #
+#                    ease\Obj\TaskManagement.r90                             #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+      1          #include "Timer.h"
+      2          #include "Kernel.h"
+      3          #include "KernelInternals.h"
+      4          
+      5          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      6          bool Kernel_CreateTask(task t)
+      7          {
+   \   __nearfunc unsigned char Kernel_CreateTask(task);
+   \                     Kernel_CreateTask:
+   \   00000000   939A                       ST      -Y,R25
+   \   00000002   938A                       ST      -Y,R24
+   \   00000004   01C8                       MOVW    R25 : R24,R17 : R16
+      8          unsigned char index;
+      9          
+     10          	if(TaskToIndex(t) >= 0)																																// Abort if task is already in task queue
+   \   00000006   ........                   CALL    TaskToIndex
+   \   0000000A   2300                       TST     R16
+   \   0000000C   F52A                       BRPL    ??Kernel_CreateTask_0
+     11          	{
+     12          #if TASKER_DEBUG_LEVEL > 0
+     13          		Kernel_DebuggerEvent(DEBUG_EVENT_CREATETASK, t, DEBUG_STATUS_ALREADY_RUNNING, 0);
+     14          #endif
+     15          		return false;
+     16          	}
+     17          
+     18          	for(index = 0; index < MAX_NUMBER_OF_TASKS; index++)
+   \   0000000E   E020                       LDI     R18,0
+     19          	{
+     20          		if(taskQueue[index].theTask == null)
+   \                     ??Kernel_CreateTask_1:
+   \   00000010   ....                       LDI     R30,LOW(taskQueue)
+   \   00000012   ....                       LDI     R31,(taskQueue) >> 8
+   \   00000014   E030                       LDI     R19,0
+   \   00000016   E00D                       LDI     R16,13
+   \   00000018   E010                       LDI     R17,0
+   \   0000001A   9F12                       MUL     R17,R18
+   \   0000001C   2D10                       MOV     R17,R0
+   \   0000001E   9F03                       MUL     R16,R19
+   \   00000020   0D10                       ADD     R17,R0
+   \   00000022   9F02                       MUL     R16,R18
+   \   00000024   0D11                       ADD     R17,R1
+   \   00000026   0DE0                       ADD     R30,R0
+   \   00000028   1FF1                       ADC     R31,R17
+   \   0000002A   8140                       LD      R20,Z
+   \   0000002C   8151                       LDD     R21,Z+1
+   \   0000002E   3040                       CPI     R20,0
+   \   00000030   4050                       SBCI    R21,0
+   \   00000032   F479                       BRNE    ??Kernel_CreateTask_2
+     21          		{
+     22          			taskQueue[index].theTask = t;																											// Add task at the end of the queue
+   \   00000034   8380                       ST      Z,R24
+   \   00000036   8391                       STD     Z+1,R25
+     23          			taskQueue[index].state = TASK_STATE_READY;
+   \   00000038   8332                       STD     Z+2,R19
+     24          			taskQueue[index].executionTime = 0;
+   \   0000003A   8333                       STD     Z+3,R19
+   \   0000003C   8334                       STD     Z+4,R19
+   \   0000003E   8335                       STD     Z+5,R19
+   \   00000040   8336                       STD     Z+6,R19
+     25          			taskQueue[index].blockingMessageQueue = null;
+   \   00000042   8731                       STD     Z+9,R19
+   \   00000044   8732                       STD     Z+10,R19
+     26          			taskQueue[index].blockingSemaphore = null;
+   \   00000046   8733                       STD     Z+11,R19
+   \   00000048   8734                       STD     Z+12,R19
+     27          			taskQueue[index].timer = 0;
+   \   0000004A   8337                       STD     Z+7,R19
+   \   0000004C   8730                       STD     Z+8,R19
+     28          
+     29          #if TASKER_DEBUG_LEVEL > 0
+     30          			Kernel_DebuggerEvent(DEBUG_EVENT_CREATETASK, t, DEBUG_STATUS_OK, 0);
+     31          #endif
+     32          
+     33          			return true;
+   \   0000004E   E001                       LDI     R16,1
+   \   00000050   C004                       RJMP    ??Kernel_CreateTask_3
+   \                     ??Kernel_CreateTask_2:
+   \   00000052   9523                       INC     R18
+   \   00000054   3028                       CPI     R18,8
+   \   00000056   F2E0                       BRCS    ??Kernel_CreateTask_1
+     34          		}
+     35          	}
+     36          #if TASKER_DEBUG_LEVEL > 0
+     37          	Kernel_DebuggerEvent(DEBUG_EVENT_CREATETASK, t, DEBUG_STATUS_NO_ROOM, 0);
+     38          #endif
+     39            return false;
+   \                     ??Kernel_CreateTask_0:
+   \   00000058   E000                       LDI     R16,0
+   \                     ??Kernel_CreateTask_3:
+   \   0000005A   9189                       LD      R24,Y+
+   \   0000005C   9199                       LD      R25,Y+
+   \   0000005E   9508                       RET
+     40          }
+     41          
+     42          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     43          bool Kernel_DeleteTask(task t)
+     44          {
+   \   __nearfunc unsigned char Kernel_DeleteTask(task);
+   \                     Kernel_DeleteTask:
+   \   00000000   2E3B                       MOV     R3,R27
+   \   00000002   2E2A                       MOV     R2,R26
+     45          unsigned char index;
+     46          
+     47          	for(index = 0; index < MAX_NUMBER_OF_TASKS; index++)
+   \   00000004   E020                       LDI     R18,0
+     48          	{
+     49          		if(taskQueue[index].theTask == t)																										// The task has been found
+   \                     ??Kernel_DeleteTask_0:
+   \   00000006   E030                       LDI     R19,0
+   \   00000008   E04D                       LDI     R20,13
+   \   0000000A   E050                       LDI     R21,0
+   \   0000000C   9F52                       MUL     R21,R18
+   \   0000000E   2D50                       MOV     R21,R0
+   \   00000010   9F43                       MUL     R20,R19
+   \   00000012   0D50                       ADD     R21,R0
+   \   00000014   9F42                       MUL     R20,R18
+   \   00000016   2D40                       MOV     R20,R0
+   \   00000018   0D51                       ADD     R21,R1
+   \   0000001A   01FA                       MOVW    R31 : R30,R21 : R20
+   \   0000001C   ....                       SUBI    R30,LOW((-(taskQueue) & 0xFFFF))
+   \   0000001E   ....                       SBCI    R31,(-(taskQueue) & 0xFFFF) >> 8
+   \   00000020   8140                       LD      R20,Z
+   \   00000022   8151                       LDD     R21,Z+1
+   \   00000024   1740                       CP      R20,R16
+   \   00000026   0751                       CPC     R21,R17
+   \   00000028   F5F9                       BRNE    ??Kernel_DeleteTask_1
+     50          		{
+     51          			while((index+1) < MAX_NUMBER_OF_TASKS && taskQueue[index].theTask != null)					// and move the rest of the queue one step up
+   \                     ??Kernel_DeleteTask_2:
+   \   0000002A   2FE2                       MOV     R30,R18
+   \   0000002C   E0F0                       LDI     R31,0
+   \   0000002E   ....                       LDI     R26,LOW(taskQueue)
+   \   00000030   ....                       LDI     R27,(taskQueue) >> 8
+   \   00000032   E00D                       LDI     R16,13
+   \   00000034   E010                       LDI     R17,0
+   \   00000036   9F1E                       MUL     R17,R30
+   \   00000038   2D10                       MOV     R17,R0
+   \   0000003A   9F0F                       MUL     R16,R31
+   \   0000003C   0D10                       ADD     R17,R0
+   \   0000003E   9F0E                       MUL     R16,R30
+   \   00000040   0D11                       ADD     R17,R1
+   \   00000042   0DA0                       ADD     R26,R0
+   \   00000044   1FB1                       ADC     R27,R17
+   \   00000046   9631                       ADIW    R31 : R30,1
+   \   00000048   30E8                       CPI     R30,8
+   \   0000004A   E000                       LDI     R16,0
+   \   0000004C   07F0                       CPC     R31,R16
+   \   0000004E   F4D4                       BRGE    ??Kernel_DeleteTask_3
+   \   00000050   914D                       LD      R20,X+
+   \   00000052   915C                       LD      R21,X
+   \   00000054   9711                       SBIW    R27 : R26,1
+   \   00000056   3040                       CPI     R20,0
+   \   00000058   4050                       SBCI    R21,0
+   \   0000005A   F0A1                       BREQ    ??Kernel_DeleteTask_3
+     52          			{
+     53          				taskQueue[index] = taskQueue[index+1];																								// move it
+   \   0000005C   ....                       LDI     R22,LOW(taskQueue)
+   \   0000005E   ....                       LDI     R23,(taskQueue) >> 8
+   \   00000060   E00D                       LDI     R16,13
+   \   00000062   E010                       LDI     R17,0
+   \   00000064   9F1E                       MUL     R17,R30
+   \   00000066   2D10                       MOV     R17,R0
+   \   00000068   9F0F                       MUL     R16,R31
+   \   0000006A   0D10                       ADD     R17,R0
+   \   0000006C   9F0E                       MUL     R16,R30
+   \   0000006E   0D11                       ADD     R17,R1
+   \   00000070   0D60                       ADD     R22,R0
+   \   00000072   1F71                       ADC     R23,R17
+   \   00000074   018D                       MOVW    R17 : R16,R27 : R26
+   \   00000076   01FB                       MOVW    R31 : R30,R23 : R22
+   \   00000078   E04D                       LDI     R20,13
+   \   0000007A   E050                       LDI     R21,0
+   \   0000007C   ........                   CALL    ?ML_SRAM_SRAM_16_L07
+     54          				index++;
+   \   00000080   9523                       INC     R18
+   \   00000082   CFD3                       RJMP    ??Kernel_DeleteTask_2
+     55          			}
+     56          			taskQueue[index].theTask = null;																										// clear the last task entry
+   \                     ??Kernel_DeleteTask_3:
+   \   00000084   E010                       LDI     R17,0
+   \   00000086   930D                       ST      X+,R16
+   \   00000088   930C                       ST      X,R16
+   \   0000008A   9711                       SBIW    R27 : R26,1
+     57          			taskQueue[index].executionTime = 0;
+   \   0000008C   01FD                       MOVW    R31 : R30,R27 : R26
+   \   0000008E   8303                       STD     Z+3,R16
+   \   00000090   8304                       STD     Z+4,R16
+   \   00000092   8305                       STD     Z+5,R16
+   \   00000094   8316                       STD     Z+6,R17
+     58          			taskQueue[index].state = TASK_STATE_READY;
+   \   00000096   8312                       STD     Z+2,R17
+     59          			taskQueue[index].blockingMessageQueue = null;
+   \   00000098   8711                       STD     Z+9,R17
+   \   0000009A   8712                       STD     Z+10,R17
+     60          			taskQueue[index].blockingSemaphore = null;
+   \   0000009C   8713                       STD     Z+11,R17
+   \   0000009E   8714                       STD     Z+12,R17
+     61          			taskQueue[index].timer = 0;
+   \   000000A0   8317                       STD     Z+7,R17
+   \   000000A2   8710                       STD     Z+8,R17
+     62          #if TASKER_DEBUG_LEVEL > 0
+     63          			Kernel_DebuggerEvent(DEBUG_EVENT_DELETETASK, t, DEBUG_STATUS_OK, 0);
+     64          #endif
+     65          			return true;
+   \   000000A4   E001                       LDI     R16,1
+   \   000000A6   C005                       RJMP    ??Kernel_DeleteTask_4
+   \                     ??Kernel_DeleteTask_1:
+   \   000000A8   9523                       INC     R18
+   \   000000AA   3028                       CPI     R18,8
+   \   000000AC   F408                       BRCC    ??Kernel_DeleteTask_5
+   \   000000AE   CFAB                       RJMP    ??Kernel_DeleteTask_0
+     66          		}
+     67          	}
+     68          
+     69          #if TASKER_DEBUG_LEVEL > 0
+     70          	Kernel_DebuggerEvent(DEBUG_EVENT_DELETETASK, t, DEBUG_STATUS_NO_TASK, 0);
+     71          #endif
+     72          
+     73          	return false;
+   \                     ??Kernel_DeleteTask_5:
+   \   000000B0   E000                       LDI     R16,0
+   \                     ??Kernel_DeleteTask_4:
+   \   000000B2   2DA2                       MOV     R26,R2
+   \   000000B4   2DB3                       MOV     R27,R3
+   \   000000B6   9508                       RET
+     74          }
+     75          
+     76          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     77          bool Kernel_SuspendTask(task t)
+     78          {
+     79          signed char index = TaskToIndex(t);
+   \   __nearfunc unsigned char Kernel_SuspendTask(task);
+   \                     Kernel_SuspendTask:
+   \   00000000   ........                   CALL    TaskToIndex
+     80          
+     81          	if(index < 0)
+   \   00000004   2300                       TST     R16
+   \   00000006   F412                       BRPL    ??Kernel_SuspendTask_0
+     82          	{
+     83          #if TASKER_DEBUG_LEVEL > 0
+     84          		Kernel_DebuggerEvent(DEBUG_EVENT_SUSPENDTASK, t, DEBUG_STATUS_NO_TASK, 0);
+     85          #endif
+     86          		return false;
+   \   00000008   E000                       LDI     R16,0
+   \   0000000A   9508                       RET
+     87          	}
+     88          	
+     89          	taskQueue[index].state |= TASK_STATE_SUSPENDED;
+   \                     ??Kernel_SuspendTask_0:
+   \   0000000C   2F20                       MOV     R18,R16
+   \   0000000E   2F30                       MOV     R19,R16
+   \   00000010   0F33                       LSL     R19
+   \   00000012   0B33                       SBC     R19,R19
+   \   00000014   E00D                       LDI     R16,13
+   \   00000016   E010                       LDI     R17,0
+   \   00000018   9F12                       MUL     R17,R18
+   \   0000001A   2D10                       MOV     R17,R0
+   \   0000001C   9F03                       MUL     R16,R19
+   \   0000001E   0D10                       ADD     R17,R0
+   \   00000020   9F02                       MUL     R16,R18
+   \   00000022   2D00                       MOV     R16,R0
+   \   00000024   0D11                       ADD     R17,R1
+   \   00000026   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000028   ....                       SUBI    R30,LOW((-(taskQueue) & 0xFFFF))
+   \   0000002A   ....                       SBCI    R31,(-(taskQueue) & 0xFFFF) >> 8
+   \   0000002C   8102                       LDD     R16,Z+2
+   \   0000002E   6001                       ORI     R16,0x01
+   \   00000030   8302                       STD     Z+2,R16
+     90          	
+     91          #if TASKER_DEBUG_LEVEL > 0
+     92          	Kernel_DebuggerEvent(DEBUG_EVENT_SUSPENDTASK, t, DEBUG_STATUS_OK, 0);
+     93          #endif
+     94          	return true;
+   \   00000032   E001                       LDI     R16,1
+   \   00000034   9508                       RET
+     95          }
+     96          
+     97          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     98          void Kernel_Suspend(void)
+     99          {
+    100          	taskQueue[currentTaskIndex].state |= TASK_STATE_SUSPENDED;
+   \   __nearfunc void Kernel_Suspend();
+   \                     Kernel_Suspend:
+   \   00000000   9120....                   LDS     R18,currentTaskIndex
+   \   00000004   E030                       LDI     R19,0
+   \   00000006   E00D                       LDI     R16,13
+   \   00000008   E010                       LDI     R17,0
+   \   0000000A   9F12                       MUL     R17,R18
+   \   0000000C   2D10                       MOV     R17,R0
+   \   0000000E   9F03                       MUL     R16,R19
+   \   00000010   0D10                       ADD     R17,R0
+   \   00000012   9F02                       MUL     R16,R18
+   \   00000014   2D00                       MOV     R16,R0
+   \   00000016   0D11                       ADD     R17,R1
+   \   00000018   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000001A   ....                       SUBI    R30,LOW((-(taskQueue) & 0xFFFF))
+   \   0000001C   ....                       SBCI    R31,(-(taskQueue) & 0xFFFF) >> 8
+   \   0000001E   8102                       LDD     R16,Z+2
+   \   00000020   6001                       ORI     R16,0x01
+   \   00000022   8302                       STD     Z+2,R16
+    101          	
+    102          #if TASKER_DEBUG_LEVEL > 0
+    103          	Kernel_DebuggerEvent(DEBUG_EVENT_SUSPENDTASK, CurrentTask(), DEBUG_STATUS_OK, 0);
+    104          #endif
+    105          }
+   \   00000024   9508                       RET
+    106          
+    107          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    108          bool Kernel_ResumeTask(task t)
+    109          {
+    110          signed char index = TaskToIndex(t);
+   \   __nearfunc unsigned char Kernel_ResumeTask(task);
+   \                     Kernel_ResumeTask:
+   \   00000000   ........                   CALL    TaskToIndex
+    111          
+    112          	if(index < 0)
+   \   00000004   2300                       TST     R16
+   \   00000006   F412                       BRPL    ??Kernel_ResumeTask_0
+    113          	{
+    114          #if TASKER_DEBUG_LEVEL > 0
+    115          		Kernel_DebuggerEvent(DEBUG_EVENT_RESUMETASK, t, DEBUG_STATUS_NO_TASK, 0);
+    116          #endif
+    117          		return false;
+   \   00000008   E000                       LDI     R16,0
+   \   0000000A   9508                       RET
+    118          	}
+    119          
+    120          	taskQueue[index].state &= ~TASK_STATE_SUSPENDED;
+   \                     ??Kernel_ResumeTask_0:
+   \   0000000C   2F20                       MOV     R18,R16
+   \   0000000E   2F30                       MOV     R19,R16
+   \   00000010   0F33                       LSL     R19
+   \   00000012   0B33                       SBC     R19,R19
+   \   00000014   E00D                       LDI     R16,13
+   \   00000016   E010                       LDI     R17,0
+   \   00000018   9F12                       MUL     R17,R18
+   \   0000001A   2D10                       MOV     R17,R0
+   \   0000001C   9F03                       MUL     R16,R19
+   \   0000001E   0D10                       ADD     R17,R0
+   \   00000020   9F02                       MUL     R16,R18
+   \   00000022   2D00                       MOV     R16,R0
+   \   00000024   0D11                       ADD     R17,R1
+   \   00000026   01F8                       MOVW    R31 : R30,R17 : R16
+   \   00000028   ....                       SUBI    R30,LOW((-(taskQueue) & 0xFFFF))
+   \   0000002A   ....                       SBCI    R31,(-(taskQueue) & 0xFFFF) >> 8
+   \   0000002C   8102                       LDD     R16,Z+2
+   \   0000002E   7F0E                       ANDI    R16,0xFE
+   \   00000030   8302                       STD     Z+2,R16
+    121          #if TASKER_DEBUG_LEVEL > 0
+    122          	Kernel_DebuggerEvent(DEBUG_EVENT_RESUMETASK, t, DEBUG_STATUS_OK, 0);
+    123          #endif
+    124          	return true;
+   \   00000032   E001                       LDI     R16,1
+   \   00000034   9508                       RET
+    125          }
+    126          
+    127          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    128          bool Kernel_SleepTask(task t, unsigned short time)
+    129          {
+   \   __nearfunc unsigned char Kernel_SleepTask(task, unsigned short);
+   \                     Kernel_SleepTask:
+   \   00000000   01A8                       MOVW    R21 : R20,R17 : R16
+    130          unsigned char index;
+    131          
+    132          	for(index=0; index < MAX_NUMBER_OF_TASKS; index++)
+   \   00000002   E000                       LDI     R16,0
+    133          	{
+    134          		if(taskQueue[index].theTask == t)
+   \                     ??Kernel_SleepTask_0:
+   \   00000004   ....                       LDI     R30,LOW(taskQueue)
+   \   00000006   ....                       LDI     R31,(taskQueue) >> 8
+   \   00000008   E010                       LDI     R17,0
+   \   0000000A   E06D                       LDI     R22,13
+   \   0000000C   E070                       LDI     R23,0
+   \   0000000E   9F70                       MUL     R23,R16
+   \   00000010   2D70                       MOV     R23,R0
+   \   00000012   9F61                       MUL     R22,R17
+   \   00000014   0D70                       ADD     R23,R0
+   \   00000016   9F60                       MUL     R22,R16
+   \   00000018   0D71                       ADD     R23,R1
+   \   0000001A   0DE0                       ADD     R30,R0
+   \   0000001C   1FF7                       ADC     R31,R23
+   \   0000001E   8160                       LD      R22,Z
+   \   00000020   8171                       LDD     R23,Z+1
+   \   00000022   1764                       CP      R22,R20
+   \   00000024   0775                       CPC     R23,R21
+   \   00000026   F449                       BRNE    ??Kernel_SleepTask_1
+    135          		{
+    136          			if(taskQueue[index].timer < time)
+   \   00000028   8147                       LDD     R20,Z+7
+   \   0000002A   8550                       LDD     R21,Z+8
+   \   0000002C   1742                       CP      R20,R18
+   \   0000002E   0753                       CPC     R21,R19
+   \   00000030   F410                       BRCC    ??Kernel_SleepTask_2
+    137          			{
+    138          				taskQueue[index].timer = time;
+   \   00000032   8327                       STD     Z+7,R18
+   \   00000034   8730                       STD     Z+8,R19
+    139          			}
+    140          #if TASKER_DEBUG_LEVEL > 0
+    141          			Kernel_DebuggerEvent(DEBUG_EVENT_SLEEPTASK, t, DEBUG_STATUS_OK, time);
+    142          #endif
+    143          			return true;
+   \                     ??Kernel_SleepTask_2:
+   \   00000036   E001                       LDI     R16,1
+   \   00000038   9508                       RET
+   \                     ??Kernel_SleepTask_1:
+   \   0000003A   9503                       INC     R16
+   \   0000003C   3008                       CPI     R16,8
+   \   0000003E   F310                       BRCS    ??Kernel_SleepTask_0
+    144          		}
+    145          	}
+    146          #if TASKER_DEBUG_LEVEL > 0
+    147          	Kernel_DebuggerEvent(DEBUG_EVENT_SLEEPTASK, t, DEBUG_STATUS_NO_TASK, time);
+    148          #endif
+    149          	return false;
+   \   00000040   E000                       LDI     R16,0
+   \   00000042   9508                       RET
+    150          }
+    151          
+    152          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    153          void Kernel_Sleep(unsigned short time)
+    154          {
+    155          	if(taskQueue[currentTaskIndex].timer < time)
+   \   __nearfunc void Kernel_Sleep(unsigned short);
+   \                     Kernel_Sleep:
+   \   00000000   ....                       LDI     R30,LOW(taskQueue)
+   \   00000002   ....                       LDI     R31,(taskQueue) >> 8
+   \   00000004   9140....                   LDS     R20,currentTaskIndex
+   \   00000008   E050                       LDI     R21,0
+   \   0000000A   E02D                       LDI     R18,13
+   \   0000000C   E030                       LDI     R19,0
+   \   0000000E   9F34                       MUL     R19,R20
+   \   00000010   2D30                       MOV     R19,R0
+   \   00000012   9F25                       MUL     R18,R21
+   \   00000014   0D30                       ADD     R19,R0
+   \   00000016   9F24                       MUL     R18,R20
+   \   00000018   0D31                       ADD     R19,R1
+   \   0000001A   0DE0                       ADD     R30,R0
+   \   0000001C   1FF3                       ADC     R31,R19
+   \   0000001E   8127                       LDD     R18,Z+7
+   \   00000020   8530                       LDD     R19,Z+8
+   \   00000022   1720                       CP      R18,R16
+   \   00000024   0731                       CPC     R19,R17
+   \   00000026   F410                       BRCC    ??Kernel_Sleep_0
+    156          	{
+    157          		taskQueue[currentTaskIndex].timer = time;
+   \   00000028   8307                       STD     Z+7,R16
+   \   0000002A   8710                       STD     Z+8,R17
+    158          	}
+    159          
+    160          #if TASKER_DEBUG_LEVEL > 0
+    161          	Kernel_DebuggerEvent(DEBUG_EVENT_SLEEPTASK, CurrentTask(), DEBUG_STATUS_OK, 0);
+    162          #endif
+    163          }
+   \                     ??Kernel_Sleep_0:
+   \   0000002C   9508                       RET
+    164          
+    165          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    166          bool Kernel_WakeTask(task t)
+    167          {
+    168          unsigned char index;
+    169          
+    170          	for(index=0; index < MAX_NUMBER_OF_TASKS; index++)
+   \   __nearfunc unsigned char Kernel_WakeTask(task);
+   \                     Kernel_WakeTask:
+   \   00000000   E020                       LDI     R18,0
+    171          	{
+    172          		if(taskQueue[index].theTask == t)
+   \                     ??Kernel_WakeTask_0:
+   \   00000002   ....                       LDI     R30,LOW(taskQueue)
+   \   00000004   ....                       LDI     R31,(taskQueue) >> 8
+   \   00000006   E030                       LDI     R19,0
+   \   00000008   E04D                       LDI     R20,13
+   \   0000000A   E050                       LDI     R21,0
+   \   0000000C   9F52                       MUL     R21,R18
+   \   0000000E   2D50                       MOV     R21,R0
+   \   00000010   9F43                       MUL     R20,R19
+   \   00000012   0D50                       ADD     R21,R0
+   \   00000014   9F42                       MUL     R20,R18
+   \   00000016   0D51                       ADD     R21,R1
+   \   00000018   0DE0                       ADD     R30,R0
+   \   0000001A   1FF5                       ADC     R31,R21
+   \   0000001C   8140                       LD      R20,Z
+   \   0000001E   8151                       LDD     R21,Z+1
+   \   00000020   1740                       CP      R20,R16
+   \   00000022   0751                       CPC     R21,R17
+   \   00000024   F421                       BRNE    ??Kernel_WakeTask_1
+    173          		{
+    174          			taskQueue[index].timer = 0;
+   \   00000026   8337                       STD     Z+7,R19
+   \   00000028   8730                       STD     Z+8,R19
+    175          #if TASKER_DEBUG_LEVEL > 0
+    176          			Kernel_DebuggerEvent(DEBUG_EVENT_WAKETASK, t, DEBUG_STATUS_OK, 0);
+    177          #endif
+    178          			return true;
+   \   0000002A   E001                       LDI     R16,1
+   \   0000002C   9508                       RET
+   \                     ??Kernel_WakeTask_1:
+   \   0000002E   9523                       INC     R18
+   \   00000030   3028                       CPI     R18,8
+   \   00000032   F338                       BRCS    ??Kernel_WakeTask_0
+    179          		}
+    180          	}
+    181          	
+    182          #if TASKER_DEBUG_LEVEL > 0
+    183          	Kernel_DebuggerEvent(DEBUG_EVENT_WAKETASK, t, DEBUG_STATUS_NO_TASK, 0);
+    184          #endif
+    185          	return false;
+   \   00000034   E000                       LDI     R16,0
+   \   00000036   9508                       RET
+    186          }
+
+   Maximum stack usage in bytes:
+
+     Function            CSTACK  RSTACK
+     --------            ------  ------
+     Kernel_CreateTask       2       2 
+       -> TaskToIndex        2       2 
+     Kernel_DeleteTask       0       2 
+     Kernel_ResumeTask       0       2 
+       -> TaskToIndex        0       2 
+     Kernel_Sleep            0       0 
+     Kernel_SleepTask        0       0 
+     Kernel_Suspend          0       0 
+     Kernel_SuspendTask      0       2 
+       -> TaskToIndex        0       2 
+     Kernel_WakeTask         0       0 
+
+ 
+    596 bytes in segment CODE
+ 
+    596 bytes of CODE memory
+
+Errors: none
+Warnings: none

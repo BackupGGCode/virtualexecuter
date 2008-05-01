@@ -1,0 +1,1006 @@
+        NAME main
+
+        RTMODEL "__64bit_doubles", "disabled"
+        RTMODEL "__cpu", "3"
+        RTMODEL "__cpu_name", "AT90Mega32"
+        RTMODEL "__enhanced_core", "enabled"
+        RTMODEL "__has_elpm", "false"
+        RTMODEL "__memory_model", "2"
+        RTMODEL "__rt_version", "2.30"
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+        EXTERN Kernel_Sleep
+        FUNCTION Kernel_Sleep,0202H
+        EXTERN Kernel_CreateTask
+        FUNCTION Kernel_CreateTask,0202H
+        EXTERN Kernel_DeleteTask
+        FUNCTION Kernel_DeleteTask,0202H
+        EXTERN Kernel_SuspendTask
+        FUNCTION Kernel_SuspendTask,0202H
+        EXTERN Kernel_ResumeTask
+        FUNCTION Kernel_ResumeTask,0202H
+        EXTERN Kernel_PostMessage
+        FUNCTION Kernel_PostMessage,0202H
+        EXTERN Kernel_GetMessage
+        FUNCTION Kernel_GetMessage,0202H
+        EXTERN Kernel_SemaphoreWait
+        FUNCTION Kernel_SemaphoreWait,0202H
+        EXTERN Kernel_SemaphoreSignal
+        FUNCTION Kernel_SemaphoreSignal,0202H
+        EXTERN UART_Init
+        FUNCTION UART_Init,0202H
+        EXTERN Kernel_Init
+        FUNCTION Kernel_Init,0202H
+        EXTERN UART_WriteString_P
+        FUNCTION UART_WriteString_P,0202H
+        EXTERN Kernel_Allocate
+        FUNCTION Kernel_Allocate,0202H
+        EXTERN UART_WritePointer
+        FUNCTION UART_WritePointer,0202H
+        EXTERN Kernel_Deallocate
+        FUNCTION Kernel_Deallocate,0202H
+        EXTERN Kernel_Run
+        FUNCTION Kernel_Run,0202H
+
+        PUBWEAK `?<Segment init: NEAR_Z>`
+        PUBLIC AlternativeLedController
+        FUNCTION AlternativeLedController,021601H
+        LOCFRAME CSTACK, 3, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC AlternativeLedFlipper
+        FUNCTION AlternativeLedFlipper,021601H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC AlternativeSwitchFlipper
+        FUNCTION AlternativeSwitchFlipper,021601H
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC LEDControl1
+        FUNCTION LEDControl1,0603H
+        PUBLIC LEDControl2
+        FUNCTION LEDControl2,0603H
+        PUBLIC SwitchFlipper
+        FUNCTION SwitchFlipper,021201H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC UserInput
+        FUNCTION UserInput,021603H
+        LOCFRAME RSTACK, 2, STACK
+        PUBWEAK _A_DDRA
+        PUBWEAK _A_DDRB
+        PUBWEAK _A_PINA
+        PUBWEAK _A_PORTB
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC blink
+        FUNCTION blink,021601H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC ledFlipper
+        FUNCTION ledFlipper,021201H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC ledcontroller
+        FUNCTION ledcontroller,021201H
+        LOCFRAME CSTACK, 1, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC ledmsgs
+        PUBLIC ledposter
+        FUNCTION ledposter,021601H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC main
+        FUNCTION main,021a03H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC newline
+        PUBLIC semaFlip
+        PUBLIC workhard
+        FUNCTION workhard,0601H
+;     1 #include <Globals.h>
+
+        ASEGN ABSOLUTE:DATA:NOROOT,037H
+; union <unnamed> volatile __io _A_DDRB;
+_A_DDRB:
+	DS 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,038H
+; union <unnamed> volatile __io _A_PORTB;
+_A_PORTB:
+	DS 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,039H
+; union <unnamed> volatile __io _A_PINA;
+_A_PINA:
+	DS 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,03aH
+; union <unnamed> volatile __io _A_DDRA;
+_A_DDRA:
+	DS 1
+;     2 #include "Config.h"
+;     3 #include <Kernel/Kernel.h>
+;     4 #include <Peripherals/UART.h>
+;     5 
+;     6 
+;     7 #define led0																		PORTB_Bit0
+;     8 #define led1																		PORTB_Bit1
+;     9 #define led2																		PORTB_Bit2
+;    10 #define led3																		PORTB_Bit3
+;    11 #define led4																		PORTB_Bit4
+;    12 #define led5																		PORTB_Bit5
+;    13 #define led6																		PORTB_Bit6
+;    14 #define led7																		PORTB_Bit7
+;    15 #define sw0																			PINA_Bit0
+;    16 #define sw1																			PINA_Bit1
+;    17 #define sw2																			PINA_Bit2
+;    18 #define sw3																			PINA_Bit3
+;    19 #define sw4																			PINA_Bit4
+;    20 #define sw5																			PINA_Bit5
+;    21 #define sw6																			PINA_Bit6
+;    22 #define sw7																			PINA_Bit7
+;    23 
+;    24 #define ON																			0             // for LED control
+;    25 #define OFF																			1             // for LED control
+;    26 
+;    27 // Button states
+;    28 #define UP		1
+;    29 #define DOWN	0
+;    30 
+;    31 // Application specific messages for turning on and of the LEDS
+;    32 #define TURN_LED_ON															1
+;    33 #define TURN_LED_OFF														2
+;    34 
+;    35 
+;    36 messageQueue ledmsgs;
+;    37 
+;    38 semaphore semaFlip=0;
+;    39 
+;    40 
+;    41 /*
+;    42 	A task that takes up a lot of time
+;    43 */
+;    44 void workhard()
+;    45 {
+;    46 /*
+;    47 double d=0;
+;    48 
+;    49 	while(d<250)
+;    50 		d+=0.1;
+;    51 	led5=!led5;
+;    52 */
+;    53 }
+;    54 
+;    55 
+;    56 /*
+;    57 	A task demonstrating Kernel_Sleep() (alternativly Kernel_Delay())
+;    58 */
+;    59 void blink()
+;    60 {
+;    61 	led4=!led4;
+;    62 	Kernel_Sleep(777);
+;    63 //	Kernel_Delay(1000);
+;    64 }
+;    65 
+;    66 
+;    67 void LEDControl1(void)
+;    68 {
+;    69 	if(sw6==DOWN)
+;    70 		led6=ON;
+;    71 	else
+;    72 		led6=OFF;
+;    73 }
+;    74 
+;    75 
+;    76 void LEDControl2(void)
+;    77 {
+;    78 	if(sw7==DOWN)
+;    79 		led7=ON;
+;    80 	else
+;    81 		led7=OFF;
+;    82 }
+;    83 
+;    84 
+;    85 /*
+;    86 	Demonstation of task creation and deletion.
+;    87 	Also demonstrates task suspension and resumption.
+;    88 */
+;    89 void UserInput(void)
+;    90 {
+;    91 	if(sw0==DOWN)											//if sw0 pressed
+;    92 	{
+;    93 		Kernel_CreateTask(LEDControl1);
+;    94 		Kernel_DeleteTask(LEDControl2);
+;    95 		Kernel_SuspendTask(blink);
+;    96 		led0=ON;
+;    97 		led1=OFF;
+;    98 	}
+;    99 	else if(sw1==DOWN)									//if sw1 pressed
+;   100 	{
+;   101 		Kernel_DeleteTask(LEDControl1);
+;   102 		Kernel_CreateTask(LEDControl2);
+;   103 		Kernel_ResumeTask(blink);
+;   104 		led0=OFF;
+;   105 		led1=ON;
+;   106 	}
+;   107 
+;   108 	if(sw5==DOWN)
+;   109 		Kernel_CreateTask(workhard);
+;   110 }
+;   111 
+;   112 
+;   113 /*
+;   114 	Demonstrates posting messages to message queues
+;   115 */
+;   116 void ledposter()
+;   117 {
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+	REQUIRE `?<Segment init: NEAR_Z>`
+;   118 static bool state=false;
+; bool __near state;
+??state:
+	DS 1
+	DS 1
+; messageQueue __near ledmsgs;
+ledmsgs:
+	DS 11
+;   119 
+;   120 	if(state==false)
+;   121 	{
+;   122 		if(sw7==DOWN)
+;   123 		{
+;   124 			state=true;
+;   125 			Kernel_PostMessage(TURN_LED_ON, &ledmsgs);
+;   126 		}
+;   127 	}
+;   128 	else
+;   129 	{
+;   130 		if(sw6==DOWN)
+;   131 		{
+;   132 			state=false;
+;   133 			Kernel_PostMessage(TURN_LED_OFF, &ledmsgs);
+;   134 		}
+;   135 	}
+;   136 }
+;   137 
+;   138 
+;   139 /*
+;   140 	Demonstates getting messages from message queues
+;   141 */
+;   142 void ledcontroller()
+;   143 {
+;   144 unsigned char data;
+;   145 
+;   146 	if(Kernel_GetMessage(&data, &ledmsgs))
+;   147 	{
+;   148 		switch(data)
+;   149 		{
+;   150 			case TURN_LED_ON:		led5=ON;
+;   151 													break;
+;   152 			case TURN_LED_OFF:	led5=OFF;
+;   153 													break;
+;   154 		}
+;   155 	}
+;   156 }
+;   157 
+;   158 void AlternativeLedController()
+;   159 {
+;   160 unsigned char data;
+;   161 
+;   162 	YieldBegin
+;   163 	YieldUntil(Kernel_GetMessage(&data, &ledmsgs))
+;   164 	switch(data)
+;   165 	{
+;   166 		case TURN_LED_ON:		led5=ON;
+;   167 												break;
+;   168 		case TURN_LED_OFF:	led5=OFF;
+;   169 												break;
+;   170 	}
+;   171 	YieldEnd
+;   172 }
+;   173 
+;   174 
+;   175 
+;   176 /*
+;   177 	Demonstrates how semaphores can be used to signal from task to task
+;   178 */
+;   179 
+;   180 void ledFlipper()
+;   181 {
+;   182 	if(Kernel_SemaphoreWait(&semaFlip))
+;   183 	{
+;   184 		led3=!led3;
+;   185 	}
+;   186 }
+;   187 
+;   188 
+;   189 void AlternativeLedFlipper()
+;   190 {
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+	REQUIRE `?<Segment init: NEAR_Z>`
+;   191 	YieldBegin
+; unsigned char __near __state;
+??__state_1:
+	DS 1
+	DS 1
+	DS 1
+; semaphore __near semaFlip;
+semaFlip:
+	DS 1
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void workhard();
+workhard:
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void blink();
+blink:
+        FUNCALL blink, Kernel_Sleep
+        LOCFRAME RSTACK, 2, STACK
+	IN	R17,0x18
+	SBRS	R17,4
+	SBI	0x18,0x04
+	SBRC	R17,4
+	CBI	0x18,0x04
+	LDI	R16,9
+	LDI	R17,3
+	JMP	Kernel_Sleep
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void LEDControl1();
+LEDControl1:
+	SBIC	0x19,0x06
+	RJMP	??LEDControl1_0
+	CBI	0x18,0x06
+	RET
+??LEDControl1_0:
+	SBI	0x18,0x06
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void LEDControl2();
+LEDControl2:
+	SBIC	0x19,0x07
+	RJMP	??LEDControl2_0
+	CBI	0x18,0x07
+	RET
+??LEDControl2_0:
+	SBI	0x18,0x07
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void UserInput();
+UserInput:
+        FUNCALL UserInput, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL UserInput, Kernel_DeleteTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL UserInput, Kernel_SuspendTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL UserInput, Kernel_DeleteTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL UserInput, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL UserInput, Kernel_ResumeTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL UserInput, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+	SBIC	0x19,0x00
+	RJMP	??UserInput_0
+	LDI	R16,LOW(LEDControl1/2)
+	LDI	R17,(LEDControl1/2) >> 8
+	CALL	Kernel_CreateTask
+	LDI	R16,LOW(LEDControl2/2)
+	LDI	R17,(LEDControl2/2) >> 8
+	CALL	Kernel_DeleteTask
+	LDI	R16,LOW(blink/2)
+	LDI	R17,(blink/2) >> 8
+	CALL	Kernel_SuspendTask
+	CBI	0x18,0x00
+	SBI	0x18,0x01
+	RJMP	??UserInput_1
+??UserInput_0:
+	SBIC	0x19,0x01
+	RJMP	??UserInput_1
+	LDI	R16,LOW(LEDControl1/2)
+	LDI	R17,(LEDControl1/2) >> 8
+	CALL	Kernel_DeleteTask
+	LDI	R16,LOW(LEDControl2/2)
+	LDI	R17,(LEDControl2/2) >> 8
+	CALL	Kernel_CreateTask
+	LDI	R16,LOW(blink/2)
+	LDI	R17,(blink/2) >> 8
+	CALL	Kernel_ResumeTask
+	SBI	0x18,0x00
+	CBI	0x18,0x01
+??UserInput_1:
+	SBIC	0x19,0x05
+	RJMP	??UserInput_2
+	LDI	R16,LOW(workhard/2)
+	LDI	R17,(workhard/2) >> 8
+	CALL	Kernel_CreateTask
+??UserInput_2:
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void ledposter();
+ledposter:
+        FUNCALL ledposter, Kernel_PostMessage
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL ledposter, Kernel_PostMessage
+        LOCFRAME RSTACK, 2, STACK
+	LDS	R16,??state
+	TST	R16
+	BRNE	??ledposter_0
+	SBIC	0x19,0x07
+	RJMP	??ledposter_1
+	LDI	R16,1
+	STS	??state,R16
+	LDI	R18,LOW(ledmsgs)
+	LDI	R19,(ledmsgs) >> 8
+	JMP	Kernel_PostMessage
+??ledposter_0:
+	SBIC	0x19,0x06
+	RJMP	??ledposter_1
+	LDI	R16,0
+	STS	??state,R16
+	LDI	R18,LOW(ledmsgs)
+	LDI	R19,(ledmsgs) >> 8
+	LDI	R16,2
+	CALL	Kernel_PostMessage
+??ledposter_1:
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void ledcontroller();
+ledcontroller:
+        FUNCALL ledcontroller, Kernel_GetMessage
+        LOCFRAME CSTACK, 1, STACK
+        LOCFRAME RSTACK, 2, STACK
+	SBIW	R29 : R28,1
+	LDI	R18,LOW(ledmsgs)
+	LDI	R19,(ledmsgs) >> 8
+	MOVW	R17 : R16,R29 : R28
+	CALL	Kernel_GetMessage
+	TST	R16
+	BREQ	??ledcontroller_0
+	LD	R16,Y
+	DEC	R16
+	BREQ	??ledcontroller_1
+	DEC	R16
+	BREQ	??ledcontroller_2
+	RJMP	??ledcontroller_0
+??ledcontroller_1:
+	CBI	0x18,0x05
+	RJMP	??ledcontroller_0
+??ledcontroller_2:
+	SBI	0x18,0x05
+??ledcontroller_0:
+	ADIW	R29 : R28,1
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void AlternativeLedController();
+AlternativeLedController:
+        FUNCALL AlternativeLedController, Kernel_GetMessage
+        LOCFRAME CSTACK, 3, STACK
+        LOCFRAME RSTACK, 2, STACK
+	ST	-Y,R27
+	ST	-Y,R26
+	SBIW	R29 : R28,1
+	LDI	R26,LOW(??state)
+	LDI	R27,(??state) >> 8
+	ADIW	R27 : R26,1
+	LD	R16,X
+	SBIW	R27 : R26,1
+	TST	R16
+	BRNE	??AlternativeLedController_0
+	MOVW	R19 : R18,R27 : R26
+	SUBI	R18,254
+	SBCI	R19,255
+	MOVW	R17 : R16,R29 : R28
+	CALL	Kernel_GetMessage
+	TST	R16
+	BREQ	??AlternativeLedController_1
+	ADIW	R27 : R26,1
+	LD	R16,X
+	INC	R16
+	ST	X,R16
+	SBIW	R27 : R26,1
+??AlternativeLedController_0:
+	ADIW	R27 : R26,1
+	LD	R16,X
+	SBIW	R27 : R26,1
+	CPI	R16,1
+	BRNE	??AlternativeLedController_1
+	LD	R16,Y
+	DEC	R16
+	BREQ	??AlternativeLedController_2
+	DEC	R16
+	BREQ	??AlternativeLedController_3
+	RJMP	??AlternativeLedController_4
+??AlternativeLedController_2:
+	CBI	0x18,0x05
+	RJMP	??AlternativeLedController_4
+??AlternativeLedController_3:
+	SBI	0x18,0x05
+??AlternativeLedController_4:
+	LDI	R16,0
+	ADIW	R27 : R26,1
+	ST	X,R16
+??AlternativeLedController_1:
+	ADIW	R29 : R28,1
+	LD	R26,Y+
+	LD	R27,Y+
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void ledFlipper();
+ledFlipper:
+        FUNCALL ledFlipper, Kernel_SemaphoreWait
+        LOCFRAME RSTACK, 2, STACK
+	LDI	R16,LOW(semaFlip)
+	LDI	R17,(semaFlip) >> 8
+	CALL	Kernel_SemaphoreWait
+	TST	R16
+	BREQ	??ledFlipper_0
+	IN	R17,0x18
+	SBRS	R17,3
+	SBI	0x18,0x03
+	SBRC	R17,3
+	CBI	0x18,0x03
+??ledFlipper_0:
+	RET
+
+        RSEG CODE:CODE:NOROOT(1)
+; __nearfunc void AlternativeLedFlipper();
+AlternativeLedFlipper:
+        FUNCALL AlternativeLedFlipper, Kernel_SemaphoreWait
+        LOCFRAME RSTACK, 2, STACK
+	LDS	R16,??__state_1
+	TST	R16
+	BRNE	??AlternativeLedFlipper_0
+;   192 	YieldUntil(Kernel_SemaphoreWait(&semaFlip))
+	LDI	R16,LOW(semaFlip)
+	LDI	R17,(semaFlip) >> 8
+	CALL	Kernel_SemaphoreWait
+	TST	R16
+	BREQ	??AlternativeLedFlipper_1
+	LDI	R30,LOW(??__state_1)
+	LDI	R31,(??__state_1) >> 8
+	LD	R16,Z
+	INC	R16
+	ST	Z,R16
+??AlternativeLedFlipper_0:
+	CPI	R16,1
+	BRNE	??AlternativeLedFlipper_1
+;   193 	led3=!led3;
+	IN	R17,0x18
+	SBRS	R17,3
+	SBI	0x18,0x03
+	SBRC	R17,3
+	CBI	0x18,0x03
+;   194 	YieldEnd
+	LDI	R16,0
+	STS	??__state_1,R16
+??AlternativeLedFlipper_1:
+	RET
+;   195 }
+;   196 
+;   197 
+
+        RSEG CODE:CODE:NOROOT(1)
+;   198 void SwitchFlipper()
+;   199 {
+;   200 static bool state=false;
+;   201 
+;   202 	if(state)
+; __nearfunc void SwitchFlipper();
+SwitchFlipper:
+        FUNCALL SwitchFlipper, Kernel_Sleep
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL SwitchFlipper, Kernel_SemaphoreSignal
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL SwitchFlipper, Kernel_Sleep
+        LOCFRAME RSTACK, 2, STACK
+	LDI	R30,LOW(??__state_1)
+	LDI	R31,(??__state_1) >> 8
+	LDD	R16,Z+1
+	TST	R16
+	BREQ	??SwitchFlipper_0
+;   203 	{
+;   204 		if(sw3==UP)
+	SBIS	0x19,0x03
+	RJMP	??SwitchFlipper_1
+;   205 		{
+;   206 			state=false;
+	LDI	R16,0
+	STD	Z+1,R16
+;   207 			Kernel_Sleep(20);
+	LDI	R16,20
+	LDI	R17,0
+	JMP	Kernel_Sleep
+;   208 		}
+;   209 	}
+;   210 	else
+;   211 	{
+;   212 		if(sw3==DOWN)
+??SwitchFlipper_0:
+	SBIC	0x19,0x03
+	RJMP	??SwitchFlipper_1
+;   213 		{
+;   214 			state=true;
+	LDI	R16,1
+	STD	Z+1,R16
+;   215 			Kernel_SemaphoreSignal(&semaFlip);
+	ADIW	R31 : R30,3
+	MOVW	R17 : R16,R31 : R30
+	CALL	Kernel_SemaphoreSignal
+;   216 			Kernel_Sleep(20);
+	LDI	R16,20
+	LDI	R17,0
+	CALL	Kernel_Sleep
+;   217 		}
+;   218 	}
+;   219 }
+??SwitchFlipper_1:
+	RET
+;   220 
+
+        RSEG CODE:CODE:NOROOT(1)
+;   221 void AlternativeSwitchFlipper()
+;   222 {
+; __nearfunc void AlternativeSwitchFlipper();
+AlternativeSwitchFlipper:
+        FUNCALL AlternativeSwitchFlipper, Kernel_SemaphoreSignal
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL AlternativeSwitchFlipper, Kernel_Sleep
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL AlternativeSwitchFlipper, Kernel_Sleep
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+	ST	-Y,R27
+	ST	-Y,R26
+;   223 	YieldBegin
+	LDI	R26,LOW(??__state_1)
+	LDI	R27,(??__state_1) >> 8
+	ADIW	R27 : R26,2
+	LD	R16,X
+	SBIW	R27 : R26,2
+	TST	R16
+	BRNE	??AlternativeSwitchFlipper_0
+;   224 	YieldUntil(sw3==DOWN)																																	// wait until key is pressed
+	SBIC	0x19,0x03
+	RJMP	??AlternativeSwitchFlipper_1
+	LDI	R16,1
+	ADIW	R27 : R26,2
+	ST	X,R16
+	SBIW	R27 : R26,2
+	RJMP	??AlternativeSwitchFlipper_2
+??AlternativeSwitchFlipper_0:
+	ADIW	R27 : R26,2
+	LD	R16,X
+	SBIW	R27 : R26,2
+	CPI	R16,1
+	BRNE	??AlternativeSwitchFlipper_3
+;   225 	Kernel_SemaphoreSignal(&semaFlip);																											// send signal
+??AlternativeSwitchFlipper_2:
+	MOVW	R17 : R16,R27 : R26
+	SUBI	R16,253
+	SBCI	R17,255
+	CALL	Kernel_SemaphoreSignal
+;   226 	YieldWait(20)
+??AlternativeSwitchFlipper_4:
+	LDI	R16,20
+	LDI	R17,0
+	CALL	Kernel_Sleep
+	ADIW	R27 : R26,2
+	LD	R16,X
+	INC	R16
+	RJMP	??AlternativeSwitchFlipper_5
+??AlternativeSwitchFlipper_3:
+	ADIW	R27 : R26,2
+	LD	R16,X
+	SBIW	R27 : R26,2
+	CPI	R16,2
+	BRNE	??AlternativeSwitchFlipper_6
+;   227 	YieldWhile(sw3==DOWN)																																	// wait while key is pressed
+	SBIS	0x19,0x03
+	RJMP	??AlternativeSwitchFlipper_1
+	LDI	R16,3
+	ADIW	R27 : R26,2
+	ST	X,R16
+	SBIW	R27 : R26,2
+	RJMP	??AlternativeSwitchFlipper_4
+??AlternativeSwitchFlipper_6:
+	ADIW	R27 : R26,2
+	LD	R16,X
+	SBIW	R27 : R26,2
+	CPI	R16,3
+	BREQ	??AlternativeSwitchFlipper_4
+;   228 	YieldWait(20)
+	ADIW	R27 : R26,2
+	LD	R16,X
+	SBIW	R27 : R26,2
+	CPI	R16,4
+	BRNE	??AlternativeSwitchFlipper_1
+;   229 	YieldEnd
+	LDI	R16,0
+	ADIW	R27 : R26,2
+??AlternativeSwitchFlipper_5:
+	ST	X,R16
+??AlternativeSwitchFlipper_1:
+	LD	R26,Y+
+	LD	R27,Y+
+	RET
+;   230 }
+;   231 
+;   232 
+
+        RSEG NEAR_F:CODE:NOROOT(0)
+;   233 string newline[]="\r\n";
+; char const __flash newline[3];
+newline:
+	DB "\015\012"
+;   234 
+;   235 
+
+        RSEG CODE:CODE:NOROOT(1)
+;   236 __C_task void main(void)
+;   237 {
+;   238 unsigned char* p1;
+;   239 unsigned short* p2;
+;   240 double* p3;
+;   241 char* p4;
+;   242 
+;   243 	DDRB=0xff;                  // PORT B is outputs
+; __nearfunc __C_task void main();
+main:
+        FUNCALL main, UART_Init
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Init
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Allocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WritePointer
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Allocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WritePointer
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Allocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WritePointer
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Allocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WritePointer
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Deallocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Allocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WritePointer
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Deallocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Allocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WritePointer
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, UART_WriteString_P
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_CreateTask
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Deallocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Deallocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Deallocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Deallocate
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL main, Kernel_Run
+        LOCFRAME RSTACK, 2, STACK
+	LDI	R16,255
+	OUT	0x17,R16
+;   244 	DDRA=0x00;                  // PORT A is inputs
+	LDI	R16,0
+	OUT	0x1A,R16
+;   245 	PORTB=0xff;                 // all LEDs off
+	LDI	R16,255
+	OUT	0x18,R16
+;   246 
+;   247 	UART_Init(__BAUDRATE__(115200));
+	LDI	R16,11
+	LDI	R17,0
+	CALL	UART_Init
+;   248 
+;   249 	Kernel_Init();
+	CALL	Kernel_Init
+;   250 
+;   251 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   252 	p1 = Kernel_Allocate(200);
+	LDI	R16,200
+	LDI	R17,0
+	CALL	Kernel_Allocate
+	MOVW	R25 : R24,R17 : R16
+;   253 	UART_WritePointer(p1);
+	CALL	UART_WritePointer
+;   254 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   255 	p2 = Kernel_Allocate(200);
+	LDI	R16,200
+	LDI	R17,0
+	CALL	Kernel_Allocate
+	MOVW	R27 : R26,R17 : R16
+;   256 	UART_WritePointer(p2);
+	CALL	UART_WritePointer
+;   257 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   258 	p3 = Kernel_Allocate(200);
+	LDI	R16,200
+	LDI	R17,0
+	CALL	Kernel_Allocate
+	MOVW	R5 : R4,R17 : R16
+;   259 	UART_WritePointer(p3);
+	CALL	UART_WritePointer
+;   260 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   261 	p4 = Kernel_Allocate(200);
+	LDI	R16,200
+	LDI	R17,0
+	CALL	Kernel_Allocate
+	MOVW	R7 : R6,R17 : R16
+;   262 	UART_WritePointer(p4);
+	CALL	UART_WritePointer
+;   263 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   264 
+;   265 	Kernel_Deallocate(p3);
+	MOVW	R17 : R16,R5 : R4
+	CALL	Kernel_Deallocate
+;   266 	p3 = Kernel_Allocate(50);
+	LDI	R16,50
+	LDI	R17,0
+	CALL	Kernel_Allocate
+	MOVW	R5 : R4,R17 : R16
+;   267 	UART_WritePointer(p3);
+	CALL	UART_WritePointer
+;   268 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   269 
+;   270 	Kernel_Deallocate(p4);
+	MOVW	R17 : R16,R7 : R6
+	CALL	Kernel_Deallocate
+;   271 	p4 = Kernel_Allocate(300);
+	LDI	R16,44
+	LDI	R17,1
+	CALL	Kernel_Allocate
+	MOVW	R7 : R6,R17 : R16
+;   272 	UART_WritePointer(p4);
+	CALL	UART_WritePointer
+;   273 	UART_WriteString_P(newline);
+	LDI	R16,LOW(newline)
+	LDI	R17,(newline) >> 8
+	CALL	UART_WriteString_P
+;   274 	
+;   275 	Kernel_CreateTask(UserInput);				// Add a task to queue (must have at least one task obviously)
+	LDI	R16,LOW(UserInput/2)
+	LDI	R17,(UserInput/2) >> 8
+	CALL	Kernel_CreateTask
+;   276 	Kernel_CreateTask(blink);
+	LDI	R16,LOW(blink/2)
+	LDI	R17,(blink/2) >> 8
+	CALL	Kernel_CreateTask
+;   277 
+;   278 	Kernel_CreateTask(ledposter);
+	LDI	R16,LOW(ledposter/2)
+	LDI	R17,(ledposter/2) >> 8
+	CALL	Kernel_CreateTask
+;   279 //	Kernel_CreateTask(ledcontroller);
+;   280 	Kernel_CreateTask(AlternativeLedController);
+	LDI	R16,LOW(AlternativeLedController/2)
+	LDI	R17,(AlternativeLedController/2) >> 8
+	CALL	Kernel_CreateTask
+;   281 
+;   282 //	Kernel_CreateTask(ledFlipper);
+;   283 	Kernel_CreateTask(AlternativeLedFlipper);
+	LDI	R16,LOW(AlternativeLedFlipper/2)
+	LDI	R17,(AlternativeLedFlipper/2) >> 8
+	CALL	Kernel_CreateTask
+;   284 //	Kernel_CreateTask(SwitchFlipper);
+;   285 	Kernel_CreateTask(AlternativeSwitchFlipper);
+	LDI	R16,LOW(AlternativeSwitchFlipper/2)
+	LDI	R17,(AlternativeSwitchFlipper/2) >> 8
+	CALL	Kernel_CreateTask
+;   286 
+;   287 	Kernel_Deallocate(p1);
+	MOVW	R17 : R16,R25 : R24
+	CALL	Kernel_Deallocate
+;   288 	Kernel_Deallocate(p2);
+	MOVW	R17 : R16,R27 : R26
+	CALL	Kernel_Deallocate
+;   289 	Kernel_Deallocate(p3);
+	MOVW	R17 : R16,R5 : R4
+	CALL	Kernel_Deallocate
+;   290 	Kernel_Deallocate(p4);
+	MOVW	R17 : R16,R7 : R6
+	CALL	Kernel_Deallocate
+;   291 
+;   292 	Kernel_Run();
+	JMP	Kernel_Run
+;   293 }
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_Z>`:
+	DW	SFE(NEAR_Z) - SFB(NEAR_Z)
+	DW	SFB(NEAR_Z)
+	DW	0
+	REQUIRE ?need_segment_init
+
+        END
+; 
+;      4 bytes in segment ABSOLUTE
+;    802 bytes in segment CODE
+;      6 bytes in segment INITTAB
+;      3 bytes in segment NEAR_F
+;     17 bytes in segment NEAR_Z
+; 
+;    805 bytes of CODE memory (+ 6 bytes shared)
+;     17 bytes of DATA memory (+ 4 bytes shared)
+;
+;Errors: none
+;Warnings: none

@@ -1,0 +1,135 @@
+##############################################################################
+#                                                                            #
+#                                                      09/Mar/2008  16:57:11 #
+# IAR Atmel AVR C/C++ Compiler V4.21A/W32, Evaluation Version                #
+# Copyright 1996-2006 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\m #
+#                    ain.c                                                   #
+#    Command line =  --string_literals_in_flash                              #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\m #
+#                    ain.c --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\Tes #
+#                    tApps\CommanderTester\Release\Obj\ -D NDEBUG -lC        #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\R #
+#                    elease\List\ -lA f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    CommanderTester\Release\List\ --initializers_in_flash   #
+#                    -s9 -DENABLE_BIT_DEFINITIONS -e -I                      #
+#                    f:\Projects\[Drivers]\C\mros\TestApps\CommanderTester\  #
+#                    -I f:\Projects\[Drivers]\C\mros\ -I "C:\Program         #
+#                    Files\IAR Systems\Embedded Workbench 4.0                #
+#                    Evaluation\avr\INC\" -I "C:\Program Files\IAR           #
+#                    Systems\Embedded Workbench 4.0                          #
+#                    Evaluation\avr\INC\CLIB\" --eeprom_size 1024            #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\R #
+#                    elease\List\main.lst                                    #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\R #
+#                    elease\Obj\main.r90                                     #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\main.c
+      1          #include <Globals.h>
+
+   \                                 In segment ABSOLUTE, at 0x37
+   \   union <unnamed> volatile __io _A_DDRB
+   \                     _A_DDRB:
+   \   00000000                      DS 1
+
+   \                                 In segment ABSOLUTE, at 0x38
+   \   union <unnamed> volatile __io _A_PORTB
+   \                     _A_PORTB:
+   \   00000000                      DS 1
+      2          #include "Config.h"
+      3          #include <Kernel/Kernel.h>
+      4          #include <Peripherals/UART.h>
+      5          #include <FileStore/FileStore.h>
+      6          #include <FileStore/InternalEEPROM.h>
+      7          #include <Terminal/Terminal.h>
+      8          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      9          void blink()
+   \                     blink:
+     10          {
+     11          	PORTB^=(1<<7);
+   \   00000000   E800               LDI     R16, 128
+   \   00000002   B318               IN      R17, 0x18
+   \   00000004   2710               EOR     R17, R16
+   \   00000006   BB18               OUT     0x18, R17
+     12          	Kernel_Sleep(500);
+   \   00000008   EF04               LDI     R16, 244
+   \   0000000A   E011               LDI     R17, 1
+   \   0000000C   ........           JMP     Kernel_Sleep
+     13          }
+     14          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     15          void main()
+   \                     main:
+     16          {
+     17          	DDRB=0xff;
+   \   00000000   EF0F               LDI     R16, 255
+   \   00000002   BB07               OUT     0x17, R16
+     18          	PORTB=0xff;
+   \   00000004   BB08               OUT     0x18, R16
+     19          	
+     20          	Kernel_Init();
+   \   00000006   ........           CALL    Kernel_Init
+     21          
+     22          	UART_Init(__BAUDRATE__(115200));
+   \   0000000A   E00B               LDI     R16, 11
+   \   0000000C   E010               LDI     R17, 0
+   \   0000000E   ........           CALL    UART_Init
+     23          	FileStore_Init(InternalEEPROM_ReadByte, InternalEEPROM_ReadBytes, InternalEEPROM_ReadLong);
+   \   00000012   ....               LDI     R20, LOW(InternalEEPROM_ReadLong/2)
+   \   00000014   ....               LDI     R21, (InternalEEPROM_ReadLong/2) >> 8
+   \   00000016   ....               LDI     R18, LOW(InternalEEPROM_ReadBytes/2)
+   \   00000018   ....               LDI     R19, (InternalEEPROM_ReadBytes/2) >> 8
+   \   0000001A   ....               LDI     R16, LOW(InternalEEPROM_ReadByte/2)
+   \   0000001C   ....               LDI     R17, (InternalEEPROM_ReadByte/2) >> 8
+   \   0000001E   ........           CALL    FileStore_Init
+     24          	Terminal_Init();	
+   \   00000022   ........           CALL    Terminal_Init
+     25          	Kernel_CreateTask(blink);
+   \   00000026   ....               LDI     R16, LOW(blink/2)
+   \   00000028   ....               LDI     R17, (blink/2) >> 8
+   \   0000002A   ........           CALL    Kernel_CreateTask
+     26          	
+     27          	Kernel_Run();
+   \   0000002E   ........           JMP     Kernel_Run
+     28          }
+
+   Maximum stack usage in bytes:
+
+     Function               CSTACK RSTACK
+     --------               ------ ------
+     blink                      0      2
+       -> Kernel_Sleep          0      2
+     main                       0      2
+       -> Kernel_Init           0      2
+       -> UART_Init             0      2
+       -> FileStore_Init        0      2
+       -> Terminal_Init         0      2
+       -> Kernel_CreateTask     0      2
+       -> Kernel_Run            0      2
+
+
+   Segment part sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     _A_DDRB           1
+     _A_PORTB          1
+     blink            16
+     main             50
+
+ 
+  2 bytes in segment ABSOLUTE
+ 66 bytes in segment CODE
+ 
+ 66 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

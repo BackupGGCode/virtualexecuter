@@ -1,0 +1,874 @@
+##############################################################################
+#                                                                            #
+# IAR Atmel AVR C/EC++ Compiler V2.28A/WIN, Evaluation Version04/Dec/2007  21:44:24 #
+# Copyright 1996-2002 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\Network\NIC_ENC28J60.c     #
+#    Command line =  --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    NetworkTester\Release\Obj\ -I "C:\Program Files\IAR     #
+#                    Systems\Ew23 Evaluation version\avr\SRC\CLIB\INC\" -I   #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\    #
+#                    -I f:\Projects\[Drivers]\C\MROS\ -I                     #
+#                    f:\Projects\[Drivers]\C\MROS\Network\ -lC               #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\Rel #
+#                    ease\List\ -e --initializers_in_flash -s9 --debug       #
+#                    -DENABLE_BIT_DEFINITIONS f:\Projects\[Drivers]\C\MROS\N #
+#                    etwork\NIC_ENC28J60.c                                   #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\Rel #
+#                    ease\List\NIC_ENC28J60.lst                              #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\NetworkTester\Rel #
+#                    ease\Obj\NIC_ENC28J60.r90                               #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+      1          #include "NIC_ENC28J60.h"
+
+   \                                 In segment ABSOLUTE, at 0x38
+   \   union <unnamed> volatile __io _A_PORTB;
+   \                     _A_PORTB:
+   \   00000000                              DS 1
+      2          #include <Kernel/Kernel.h>
+      3          #include <Peripherals/SPI.h>
+      4          
+      5          
+      6          #define NIC_CS																	PORTB_Bit4
+      7          
+      8          
+
+   \                                 In segment NEAR_I, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_I>`
+      9          static unsigned char selectedBank = 0xff;
+   \   static unsigned char __near selectedBank;
+   \                     selectedBank:
+   \   00000000                              DS 1
+   \   00000001                              REQUIRE `?<Initializer for selectedBank>`
+     10          
+
+   \                                 In segment NEAR_I, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_I>`
+     11          unsigned char mac[6]={0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
+   \   unsigned char __near mac[6];
+   \                     mac:
+   \   00000000                              DS 6
+   \   00000006                              REQUIRE `?<Initializer for mac>`
+     12          
+     13          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     14          unsigned char GetVersion()
+     15          {
+     16          	return ReadRegister(EREVID);
+   \   __nearfunc unsigned char GetVersion();
+   \                     GetVersion:
+   \   00000000   E702                       LDI     R16,114
+   \   00000002   ....                       RJMP    ReadRegister
+     17          }
+     18          
+     19          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     20          bool NIC_Init(unsigned char* userMac)
+     21          {
+   \   __nearfunc unsigned char NIC_Init(unsigned char *);
+   \                     NIC_Init:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+   \   00000004   939A                       ST      -Y,R25
+   \   00000006   938A                       ST      -Y,R24
+   \   00000008   01C8                       MOVW    R25 : R24,R17 : R16
+     22          	// Wait for OST oscillator start up
+     23          	Kernel_Delay(3);
+   \   0000000A   E003                       LDI     R16,3
+   \   0000000C   E010                       LDI     R17,0
+   \   0000000E   ........                   CALL    Kernel_Delay
+     24          	// Configure Rx buffer
+     25          	WriteWideRegister(ERXSTL, 0);
+   \   00000012   E020                       LDI     R18,0
+   \   00000014   E030                       LDI     R19,0
+   \   00000016   E008                       LDI     R16,8
+   \   00000018   ....                       RCALL   WriteWideRegister
+     26          	WriteWideRegister(ERXNDL, 6000);
+   \   0000001A   E720                       LDI     R18,112
+   \   0000001C   E137                       LDI     R19,23
+   \   0000001E   E00A                       LDI     R16,10
+   \   00000020   ....                       RCALL   WriteWideRegister
+     27          	WriteWideRegister(ERXRDPTL, 0);
+   \   00000022   E020                       LDI     R18,0
+   \   00000024   E030                       LDI     R19,0
+   \   00000026   E00C                       LDI     R16,12
+   \   00000028   ....                       RCALL   WriteWideRegister
+     28          	// Configure Tx buffer
+     29          	// none needed
+     30          	
+     31          	// Set receive filters => ERXFCON
+     32          		// Default seems fine - uni and broad cast are accepted
+     33          	
+     34          // MAC setup
+     35          	// MACON1.MARXEN = 1
+     36          		// if full duplex also set TXPAUS and RXPAUS
+     37          	WriteRegister(MACON1, (1 << _TXPAUS) | (1 << _RXPAUS) | (1 << _MARXEN));
+   \   0000002A   E01D                       LDI     R17,13
+   \   0000002C   E400                       LDI     R16,64
+   \   0000002E   ....                       RCALL   WriteRegister
+     38          	
+     39          	// MACON3.PADCFG
+     40          	// MACON3.TXCRCEN
+     41          	// MACON3.FULDPX = 1
+     42          	// FRMLNEN
+     43          	WriteRegister(MACON3, 0xe0 | (1 << _TXCRCEN) | (1 << _FULDPX));
+   \   00000030   EF11                       LDI     R17,241
+   \   00000032   E402                       LDI     R16,66
+   \   00000034   ....                       RCALL   WriteRegister
+     44          	
+     45          	// MACON4
+     46          		// DEFER - only if HalfDuplex
+     47          	
+     48          	// MAMXFL 1518 bytes or less
+     49          	WriteWideRegister(MAMXFLL, 1516);
+   \   00000036   EE2C                       LDI     R18,236
+   \   00000038   E035                       LDI     R19,5
+   \   0000003A   E40A                       LDI     R16,74
+   \   0000003C   ....                       RCALL   WriteWideRegister
+     50          	
+     51          	// MABBIPG FullDuplex=0x15 / HalfDuplex=0x12
+     52          	WriteRegister(MABBIPG, 0x15);
+   \   0000003E   E115                       LDI     R17,21
+   \   00000040   E404                       LDI     R16,68
+   \   00000042   ....                       RCALL   WriteRegister
+     53          	
+     54          	// MAIPGL = 0x12
+     55          	WriteRegister(MAIPGL, 0x12);
+   \   00000044   E112                       LDI     R17,18
+   \   00000046   E406                       LDI     R16,70
+   \   00000048   ....                       RCALL   WriteRegister
+     56          	// if HalfDuplex => MAIPGH = 0x0c
+     57          	
+     58          	// MAC ADR => MAADR1-6
+     59          	if(userMac != null)
+   \   0000004A   2F08                       MOV     R16,R24
+   \   0000004C   2B09                       OR      R16,R25
+   \   0000004E   F0E9                       BREQ    ??NIC_Init_0
+     60          	{
+     61          		mac[0]=userMac[0];
+   \   00000050   ....                       LDI     R26,LOW(mac)
+   \   00000052   ....                       LDI     R27,(mac) >> 8
+   \   00000054   01FC                       MOVW    R31 : R30,R25 : R24
+   \   00000056   8100                       LD      R16,Z
+   \   00000058   930C                       ST      X,R16
+     62          		mac[1]=userMac[1];
+   \   0000005A   8101                       LDD     R16,Z+1
+   \   0000005C   ....                       LDI     R30,LOW(mac)
+   \   0000005E   ....                       LDI     R31,(mac) >> 8
+   \   00000060   8301                       STD     Z+1,R16
+     63          		mac[2]=userMac[2];
+   \   00000062   01FC                       MOVW    R31 : R30,R25 : R24
+   \   00000064   8102                       LDD     R16,Z+2
+   \   00000066   ....                       LDI     R30,LOW(mac)
+   \   00000068   ....                       LDI     R31,(mac) >> 8
+   \   0000006A   8302                       STD     Z+2,R16
+     64          		mac[3]=userMac[3];
+   \   0000006C   01FC                       MOVW    R31 : R30,R25 : R24
+   \   0000006E   8103                       LDD     R16,Z+3
+   \   00000070   ....                       LDI     R30,LOW(mac)
+   \   00000072   ....                       LDI     R31,(mac) >> 8
+   \   00000074   8303                       STD     Z+3,R16
+     65          		mac[4]=userMac[4];
+   \   00000076   01FC                       MOVW    R31 : R30,R25 : R24
+   \   00000078   8104                       LDD     R16,Z+4
+   \   0000007A   ....                       LDI     R30,LOW(mac)
+   \   0000007C   ....                       LDI     R31,(mac) >> 8
+   \   0000007E   8304                       STD     Z+4,R16
+     66          		mac[5]=userMac[5];
+   \   00000080   01FC                       MOVW    R31 : R30,R25 : R24
+   \   00000082   8105                       LDD     R16,Z+5
+   \   00000084   ....                       LDI     R30,LOW(mac)
+   \   00000086   ....                       LDI     R31,(mac) >> 8
+   \   00000088   8305                       STD     Z+5,R16
+     67          	}
+     68          	
+     69          	WriteRegister(MAADR1, mac[0]);
+   \                     ??NIC_Init_0:
+   \   0000008A   ....                       LDI     R26,LOW(mac)
+   \   0000008C   ....                       LDI     R27,(mac) >> 8
+   \   0000008E   911C                       LD      R17,X
+   \   00000090   E604                       LDI     R16,100
+   \   00000092   ....                       RCALL   WriteRegister
+     70          	WriteRegister(MAADR2, mac[1]);
+   \   00000094   ....                       LDI     R30,LOW(mac)
+   \   00000096   ....                       LDI     R31,(mac) >> 8
+   \   00000098   8111                       LDD     R17,Z+1
+   \   0000009A   E605                       LDI     R16,101
+   \   0000009C   ....                       RCALL   WriteRegister
+     71          	WriteRegister(MAADR3, mac[2]);
+   \   0000009E   ....                       LDI     R30,LOW(mac)
+   \   000000A0   ....                       LDI     R31,(mac) >> 8
+   \   000000A2   8112                       LDD     R17,Z+2
+   \   000000A4   E602                       LDI     R16,98
+   \   000000A6   ....                       RCALL   WriteRegister
+     72          	WriteRegister(MAADR4, mac[3]);
+   \   000000A8   ....                       LDI     R30,LOW(mac)
+   \   000000AA   ....                       LDI     R31,(mac) >> 8
+   \   000000AC   8113                       LDD     R17,Z+3
+   \   000000AE   E603                       LDI     R16,99
+   \   000000B0   ....                       RCALL   WriteRegister
+     73          	WriteRegister(MAADR5, mac[4]);
+   \   000000B2   ....                       LDI     R30,LOW(mac)
+   \   000000B4   ....                       LDI     R31,(mac) >> 8
+   \   000000B6   8114                       LDD     R17,Z+4
+   \   000000B8   E600                       LDI     R16,96
+   \   000000BA   ....                       RCALL   WriteRegister
+     74          	WriteRegister(MAADR6, mac[5]);
+   \   000000BC   ....                       LDI     R30,LOW(mac)
+   \   000000BE   ....                       LDI     R31,(mac) >> 8
+   \   000000C0   8115                       LDD     R17,Z+5
+   \   000000C2   E601                       LDI     R16,97
+   \   000000C4   ....                       RCALL   WriteRegister
+     75          	
+     76          	return true;
+   \   000000C6   E001                       LDI     R16,1
+   \   000000C8   9189                       LD      R24,Y+
+   \   000000CA   9199                       LD      R25,Y+
+   \   000000CC   91A9                       LD      R26,Y+
+   \   000000CE   91B9                       LD      R27,Y+
+   \   000000D0   9508                       RET
+     77          }
+     78          
+     79          
+     80          
+     81          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     82          signed short NIC_Get(unsigned char *buffer, const unsigned short maxLength)
+     83          {
+     84          	return 0;
+   \   __nearfunc signed short NIC_Get(unsigned char *, unsigned short const);
+   \                     NIC_Get:
+   \   00000000   E000                       LDI     R16,0
+   \   00000002   E010                       LDI     R17,0
+   \   00000004   9508                       RET
+     85          }
+     86          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     87          signed char NIC_SendBlocking(const unsigned char *buffer, const unsigned short length)
+     88          {
+     89          	return 0;
+   \   __nearfunc signed char NIC_SendBlocking(unsigned char const *, unsigned short const);
+   \                     NIC_SendBlocking:
+   \   00000000   E000                       LDI     R16,0
+   \   00000002   9508                       RET
+     90          }
+     91          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     92          signed char NIC_Send(const unsigned char *buffer, const unsigned short length)
+     93          {
+     94          	return 0;
+   \   __nearfunc signed char NIC_Send(unsigned char const *, unsigned short const);
+   \                     NIC_Send:
+   \   00000000   E000                       LDI     R16,0
+   \   00000002   9508                       RET
+     95          }
+     96          
+     97          unsigned char mac[6];
+
+   \                                 In segment NEAR_Z, align 1, keep-with-next
+   \   00000000                              REQUIRE `?<Segment init: NEAR_Z>`
+     98          unsigned char globalBuffer[GLOBAL_BUFFER_SIZE];
+   \   unsigned char __near globalBuffer[300];
+   \                     globalBuffer:
+   \   00000000                              DS 300
+     99          
+    100          
+    101          
+    102          
+    103          /**
+    104          
+    105          INTERNAL FUNCTIONS
+    106          
+    107          **/
+    108          
+    109          
+    110          
+    111          
+    112          
+    113          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    114          unsigned char ReadRegister(unsigned char address)
+    115          {
+   \   __nearfunc unsigned char ReadRegister(unsigned char);
+   \                     ReadRegister:
+   \   00000000   938A                       ST      -Y,R24
+   \   00000002   2F80                       MOV     R24,R16
+    116          unsigned char data;
+    117          
+    118          	SelectBank(address);
+   \   00000004   ....                       RCALL   SelectBank
+    119          
+    120          	NIC_CS = 0;
+   \   00000006   98C4                       CBI     0x18,0x04
+    121          	
+    122          	SPI_Transfer(OPCODE_RCR | (address & 0x1f));
+   \   00000008   2F08                       MOV     R16,R24
+   \   0000000A   710F                       ANDI    R16,0x1F
+   \   0000000C   ........                   CALL    SPI_Transfer
+    123          	if((MACON1 <= address) && (address <= MISTAT))																				// Dummy read for MAC and MII registers
+                 	           ^
+Warning[Pe186]: pointless comparison of unsigned integer with zero
+   \   00000010   3681                       CPI     R24,97
+   \   00000012   F410                       BRCC    ??ReadRegister_0
+   \   00000014   E001                       LDI     R16,1
+   \   00000016   C001                       RJMP    ??ReadRegister_1
+   \                     ??ReadRegister_0:
+   \   00000018   E000                       LDI     R16,0
+   \                     ??ReadRegister_1:
+   \   0000001A   E02A                       LDI     R18,10
+   \   0000001C   2B20                       OR      R18,R16
+   \   0000001E   F019                       BREQ    ??ReadRegister_2
+    124          		SPI_Transfer(0x00);
+   \   00000020   E000                       LDI     R16,0
+   \   00000022   ........                   CALL    SPI_Transfer
+    125          	data = SPI_Transfer(0x00);
+   \                     ??ReadRegister_2:
+   \   00000026   E000                       LDI     R16,0
+   \   00000028   ........                   CALL    SPI_Transfer
+    126          	
+    127          	NIC_CS = 1;
+   \   0000002C   9AC4                       SBI     0x18,0x04
+    128          	
+    129          	return data;
+   \   0000002E   9189                       LD      R24,Y+
+   \   00000030   9508                       RET
+    130          }
+    131          
+    132          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    133          void WriteRegister(unsigned char address, unsigned char data)
+    134          {
+   \   __nearfunc void WriteRegister(unsigned char, unsigned char);
+   \                     WriteRegister:
+   \   00000000   939A                       ST      -Y,R25
+   \   00000002   938A                       ST      -Y,R24
+   \   00000004   01C8                       MOVW    R25 : R24,R17 : R16
+    135          	SelectBank(address);
+   \   00000006   ....                       RCALL   SelectBank
+    136          
+    137          	NIC_CS = 0;
+   \   00000008   98C4                       CBI     0x18,0x04
+    138          	
+    139          	SPI_Transfer(OPCODE_WCR | (address & 0x1f));
+   \   0000000A   718F                       ANDI    R24,0x1F
+   \   0000000C   6480                       ORI     R24,0x40
+   \   0000000E   2F08                       MOV     R16,R24
+   \   00000010   ........                   CALL    SPI_Transfer
+    140          	SPI_Transfer(data);
+   \   00000014   2F09                       MOV     R16,R25
+   \   00000016   ........                   CALL    SPI_Transfer
+    141          	
+    142          	NIC_CS = 1;
+   \   0000001A   9AC4                       SBI     0x18,0x04
+    143          }
+   \   0000001C   9189                       LD      R24,Y+
+   \   0000001E   9199                       LD      R25,Y+
+   \   00000020   9508                       RET
+    144          
+    145          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    146          unsigned short ReadWideRegister(unsigned char address)
+    147          {
+   \   __nearfunc unsigned short ReadWideRegister(unsigned char);
+   \                     ReadWideRegister:
+   \   00000000   93BA                       ST      -Y,R27
+   \   00000002   93AA                       ST      -Y,R26
+   \   00000004   938A                       ST      -Y,R24
+   \   00000006   2F80                       MOV     R24,R16
+    148          unsigned short data;
+    149          
+    150          	SelectBank(address);
+   \   00000008   ....                       RCALL   SelectBank
+    151          
+    152          	NIC_CS = 0;
+   \   0000000A   98C4                       CBI     0x18,0x04
+    153          	
+    154          	SPI_Transfer(OPCODE_RCR | (address & 0x1f));
+   \   0000000C   2F08                       MOV     R16,R24
+   \   0000000E   710F                       ANDI    R16,0x1F
+   \   00000010   ........                   CALL    SPI_Transfer
+    155          	if((MACON1 <= address) && (address <= MISTAT))																				// Dummy read for MAC and MII registers
+                 	           ^
+Warning[Pe186]: pointless comparison of unsigned integer with zero
+   \   00000014   3681                       CPI     R24,97
+   \   00000016   F410                       BRCC    ??ReadWideRegister_0
+   \   00000018   E001                       LDI     R16,1
+   \   0000001A   C001                       RJMP    ??ReadWideRegister_1
+   \                     ??ReadWideRegister_0:
+   \   0000001C   E000                       LDI     R16,0
+   \                     ??ReadWideRegister_1:
+   \   0000001E   E02A                       LDI     R18,10
+   \   00000020   2B20                       OR      R18,R16
+   \   00000022   F019                       BREQ    ??ReadWideRegister_2
+    156          		SPI_Transfer(0x00);
+   \   00000024   E000                       LDI     R16,0
+   \   00000026   ........                   CALL    SPI_Transfer
+    157          	data = SPI_Transfer(0x00);
+   \                     ??ReadWideRegister_2:
+   \   0000002A   E000                       LDI     R16,0
+   \   0000002C   ........                   CALL    SPI_Transfer
+   \   00000030   2FA0                       MOV     R26,R16
+   \   00000032   E0B0                       LDI     R27,0
+    158          	
+    159          	NIC_CS = 1;
+   \   00000034   9AC4                       SBI     0x18,0x04
+    160          	NIC_CS = 1;
+   \   00000036   9AC4                       SBI     0x18,0x04
+    161          	NIC_CS = 1;
+   \   00000038   9AC4                       SBI     0x18,0x04
+    162          	NIC_CS = 1;
+   \   0000003A   9AC4                       SBI     0x18,0x04
+    163          	NIC_CS = 1;
+   \   0000003C   9AC4                       SBI     0x18,0x04
+    164          	NIC_CS = 1;
+   \   0000003E   9AC4                       SBI     0x18,0x04
+    165          	NIC_CS = 1;
+   \   00000040   9AC4                       SBI     0x18,0x04
+    166          	
+    167          	address++;
+   \   00000042   9583                       INC     R24
+    168          	
+    169          	NIC_CS = 0;
+   \   00000044   98C4                       CBI     0x18,0x04
+    170          	
+    171          	SPI_Transfer(OPCODE_RCR | (address & 0x1f));
+   \   00000046   2F08                       MOV     R16,R24
+   \   00000048   710F                       ANDI    R16,0x1F
+   \   0000004A   ........                   CALL    SPI_Transfer
+    172          	if((MACON1 <= address) && (address <= MISTAT))																				// Dummy read for MAC and MII registers
+                 	           ^
+Warning[Pe186]: pointless comparison of unsigned integer with zero
+   \   0000004E   3681                       CPI     R24,97
+   \   00000050   F410                       BRCC    ??ReadWideRegister_3
+   \   00000052   E001                       LDI     R16,1
+   \   00000054   C001                       RJMP    ??ReadWideRegister_4
+   \                     ??ReadWideRegister_3:
+   \   00000056   E000                       LDI     R16,0
+   \                     ??ReadWideRegister_4:
+   \   00000058   E02A                       LDI     R18,10
+   \   0000005A   2B20                       OR      R18,R16
+   \   0000005C   F019                       BREQ    ??ReadWideRegister_5
+    173          		SPI_Transfer(0x00);
+   \   0000005E   E000                       LDI     R16,0
+   \   00000060   ........                   CALL    SPI_Transfer
+    174          	data |= (SPI_Transfer(0x00) << 8);
+   \                     ??ReadWideRegister_5:
+   \   00000064   E000                       LDI     R16,0
+   \   00000066   ........                   CALL    SPI_Transfer
+   \   0000006A   2BB0                       OR      R27,R16
+    175          	
+    176          	NIC_CS = 1;
+   \   0000006C   9AC4                       SBI     0x18,0x04
+    177          	
+    178          	return data;
+   \   0000006E   018D                       MOVW    R17 : R16,R27 : R26
+   \   00000070   9189                       LD      R24,Y+
+   \   00000072   91A9                       LD      R26,Y+
+   \   00000074   91B9                       LD      R27,Y+
+   \   00000076   9508                       RET
+    179          }
+    180          
+    181          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    182          void WriteWideRegister(unsigned char address, unsigned short data)
+    183          {
+   \   __nearfunc void WriteWideRegister(unsigned char, unsigned short);
+   \                     WriteWideRegister:
+   \   00000000   93AA                       ST      -Y,R26
+   \   00000002   939A                       ST      -Y,R25
+   \   00000004   938A                       ST      -Y,R24
+   \   00000006   2FA0                       MOV     R26,R16
+   \   00000008   01C9                       MOVW    R25 : R24,R19 : R18
+    184          	SelectBank(address);
+   \   0000000A   ....                       RCALL   SelectBank
+    185          
+    186          	NIC_CS = 0;
+   \   0000000C   98C4                       CBI     0x18,0x04
+    187          	
+    188          	SPI_Transfer(OPCODE_WCR | (address & 0x1f));
+   \   0000000E   2F0A                       MOV     R16,R26
+   \   00000010   710F                       ANDI    R16,0x1F
+   \   00000012   6400                       ORI     R16,0x40
+   \   00000014   ........                   CALL    SPI_Transfer
+    189          	SPI_Transfer(data & 0xff);
+   \   00000018   2F08                       MOV     R16,R24
+   \   0000001A   ........                   CALL    SPI_Transfer
+    190          	
+    191          	NIC_CS = 1;
+   \   0000001E   9AC4                       SBI     0x18,0x04
+    192          	NIC_CS = 1;
+   \   00000020   9AC4                       SBI     0x18,0x04
+    193          	NIC_CS = 1;
+   \   00000022   9AC4                       SBI     0x18,0x04
+    194          	NIC_CS = 1;
+   \   00000024   9AC4                       SBI     0x18,0x04
+    195          	NIC_CS = 1;
+   \   00000026   9AC4                       SBI     0x18,0x04
+    196          	NIC_CS = 1;
+   \   00000028   9AC4                       SBI     0x18,0x04
+    197          	NIC_CS = 1;
+   \   0000002A   9AC4                       SBI     0x18,0x04
+    198          	
+    199          	address++;
+    200          	
+    201          	NIC_CS = 0;
+   \   0000002C   98C4                       CBI     0x18,0x04
+    202          	
+    203          	SPI_Transfer(OPCODE_WCR | (address & 0x1f));
+   \   0000002E   95A3                       INC     R26
+   \   00000030   71AF                       ANDI    R26,0x1F
+   \   00000032   64A0                       ORI     R26,0x40
+   \   00000034   2F0A                       MOV     R16,R26
+   \   00000036   ........                   CALL    SPI_Transfer
+    204          	SPI_Transfer(data >> 8);
+   \   0000003A   2F09                       MOV     R16,R25
+   \   0000003C   ........                   CALL    SPI_Transfer
+    205          	
+    206          	NIC_CS = 1;
+   \   00000040   9AC4                       SBI     0x18,0x04
+    207          }
+   \   00000042   9189                       LD      R24,Y+
+   \   00000044   9199                       LD      R25,Y+
+   \   00000046   91A9                       LD      R26,Y+
+   \   00000048   9508                       RET
+    208          
+    209          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    210          void SetBits(unsigned char address, unsigned char bits)
+    211          {
+   \   __nearfunc void SetBits(unsigned char, unsigned char);
+   \                     SetBits:
+   \   00000000   939A                       ST      -Y,R25
+   \   00000002   938A                       ST      -Y,R24
+   \   00000004   01C8                       MOVW    R25 : R24,R17 : R16
+    212          	SelectBank(address);
+   \   00000006   ....                       RCALL   SelectBank
+    213          
+    214          	NIC_CS = 0;
+   \   00000008   98C4                       CBI     0x18,0x04
+    215          	
+    216          	SPI_Transfer(OPCODE_BFS | (address & 0x1f));
+   \   0000000A   718F                       ANDI    R24,0x1F
+   \   0000000C   6880                       ORI     R24,0x80
+   \   0000000E   2F08                       MOV     R16,R24
+   \   00000010   ........                   CALL    SPI_Transfer
+    217          	SPI_Transfer(bits);
+   \   00000014   2F09                       MOV     R16,R25
+   \   00000016   ........                   CALL    SPI_Transfer
+    218          	
+    219          	NIC_CS = 1;
+   \   0000001A   9AC4                       SBI     0x18,0x04
+    220          }
+   \   0000001C   9189                       LD      R24,Y+
+   \   0000001E   9199                       LD      R25,Y+
+   \   00000020   9508                       RET
+    221          
+    222          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    223          void ClearBits(unsigned char address, unsigned char bits)
+    224          {
+   \   __nearfunc void ClearBits(unsigned char, unsigned char);
+   \                     ClearBits:
+   \   00000000   939A                       ST      -Y,R25
+   \   00000002   938A                       ST      -Y,R24
+   \   00000004   01C8                       MOVW    R25 : R24,R17 : R16
+    225          	SelectBank(address);
+   \   00000006   ....                       RCALL   SelectBank
+    226          
+    227          	NIC_CS = 0;
+   \   00000008   98C4                       CBI     0x18,0x04
+    228          	
+    229          	SPI_Transfer(OPCODE_BFC | (address & 0x1f));
+   \   0000000A   718F                       ANDI    R24,0x1F
+   \   0000000C   6A80                       ORI     R24,0xA0
+   \   0000000E   2F08                       MOV     R16,R24
+   \   00000010   ........                   CALL    SPI_Transfer
+    230          	SPI_Transfer(bits);
+   \   00000014   2F09                       MOV     R16,R25
+   \   00000016   ........                   CALL    SPI_Transfer
+    231          	
+    232          	NIC_CS = 1;
+   \   0000001A   9AC4                       SBI     0x18,0x04
+    233          }
+   \   0000001C   9189                       LD      R24,Y+
+   \   0000001E   9199                       LD      R25,Y+
+   \   00000020   9508                       RET
+    234          
+    235          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    236          unsigned short ReadPhyRegister(unsigned char address)
+    237          {
+   \   __nearfunc unsigned short ReadPhyRegister(unsigned char);
+   \                     ReadPhyRegister:
+   \   00000000   939A                       ST      -Y,R25
+   \   00000002   938A                       ST      -Y,R24
+    238          unsigned short data;
+    239          
+    240          	WriteRegister(MIREGADR, address);
+   \   00000004   2F10                       MOV     R17,R16
+   \   00000006   E504                       LDI     R16,84
+   \   00000008   ....                       RCALL   WriteRegister
+    241          	SetBits(MICMD, (1 << _MIIRD));
+   \   0000000A   E011                       LDI     R17,1
+   \   0000000C   E502                       LDI     R16,82
+   \   0000000E   ....                       RCALL   SetBits
+    242          	while(IsPhyBusy());
+   \                     ??ReadPhyRegister_0:
+   \   00000010   ....                       RCALL   IsPhyBusy
+   \   00000012   2300                       TST     R16
+   \   00000014   F7E9                       BRNE    ??ReadPhyRegister_0
+    243          	ClearBits(MICMD, (1 << _MIIRD));
+   \   00000016   E011                       LDI     R17,1
+   \   00000018   E502                       LDI     R16,82
+   \   0000001A   ....                       RCALL   ClearBits
+    244          	data = ReadRegister(MIRDH);
+   \   0000001C   E509                       LDI     R16,89
+   \   0000001E   ....                       RCALL   ReadRegister
+    245          	data <<= 8;
+    246          	data |= ReadRegister(MIRDL);
+   \   00000020   2F10                       MOV     R17,R16
+   \   00000022   E000                       LDI     R16,0
+   \   00000024   01C8                       MOVW    R25 : R24,R17 : R16
+   \   00000026   E508                       LDI     R16,88
+   \   00000028   ....                       RCALL   ReadRegister
+   \   0000002A   2B08                       OR      R16,R24
+   \   0000002C   2F19                       MOV     R17,R25
+    247          	
+    248          	return data;
+   \   0000002E   9189                       LD      R24,Y+
+   \   00000030   9199                       LD      R25,Y+
+   \   00000032   9508                       RET
+    249          }
+    250          
+    251          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    252          void WritePhyRegister(unsigned char address, unsigned short data)
+    253          {
+   \   __nearfunc void WritePhyRegister(unsigned char, unsigned short);
+   \                     WritePhyRegister:
+   \   00000000   939A                       ST      -Y,R25
+   \   00000002   938A                       ST      -Y,R24
+   \   00000004   01C9                       MOVW    R25 : R24,R19 : R18
+    254          	WriteRegister(MIREGADR, address);
+   \   00000006   2F10                       MOV     R17,R16
+   \   00000008   E504                       LDI     R16,84
+   \   0000000A   ....                       RCALL   WriteRegister
+    255          	WriteRegister(MIWRL, (data & 0xff));
+   \   0000000C   2F18                       MOV     R17,R24
+   \   0000000E   E506                       LDI     R16,86
+   \   00000010   ....                       RCALL   WriteRegister
+    256          	WriteRegister(MIWRH, (data >> 8));
+   \   00000012   2F19                       MOV     R17,R25
+   \   00000014   E507                       LDI     R16,87
+   \   00000016   ....                       RCALL   WriteRegister
+    257          	while(IsPhyBusy());
+   \                     ??WritePhyRegister_0:
+   \   00000018   ....                       RCALL   IsPhyBusy
+   \   0000001A   2300                       TST     R16
+   \   0000001C   F7E9                       BRNE    ??WritePhyRegister_0
+    258          }
+   \   0000001E   9189                       LD      R24,Y+
+   \   00000020   9199                       LD      R25,Y+
+   \   00000022   9508                       RET
+    259          
+    260          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    261          void ReadBuffer(unsigned short address, unsigned char* buffer, unsigned short length)
+    262          {
+    263          
+    264          }
+   \   __nearfunc void ReadBuffer(unsigned short, unsigned char *, unsigned short);
+   \                     ReadBuffer:
+   \   00000000   9508                       RET
+    265          
+    266          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    267          void WriteBuffer(unsigned short address, unsigned char* buffer, unsigned short length)
+    268          {
+    269          
+    270          }
+   \   __nearfunc void WriteBuffer(unsigned short, unsigned char *, unsigned short);
+   \                     WriteBuffer:
+   \   00000000   9508                       RET
+    271          
+    272          
+    273          
+    274          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    275          void SelectBank(unsigned char address)
+    276          {
+   \   __nearfunc void SelectBank(unsigned char);
+   \                     SelectBank:
+   \   00000000   938A                       ST      -Y,R24
+   \   00000002   2F80                       MOV     R24,R16
+    277          	if(address < COMMON_BANK && selectedBank != (address & 0xe0))
+   \   00000004   3E80                       CPI     R24,224
+   \   00000006   F490                       BRCC    ??SelectBank_0
+   \   00000008   9110....                   LDS     R17,selectedBank
+   \   0000000C   7E00                       ANDI    R16,0xE0
+   \   0000000E   1710                       CP      R17,R16
+   \   00000010   F069                       BREQ    ??SelectBank_0
+    278          	{
+    279          		ClearBits(ECON1, (1 << _BSEL1) | (1 << _BSEL0));
+   \   00000012   E013                       LDI     R17,3
+   \   00000014   EF0F                       LDI     R16,255
+   \   00000016   ....                       RCALL   ClearBits
+    280          		SetBits(ECON1, ((address >> 5) & 0x03));
+   \   00000018   2F18                       MOV     R17,R24
+   \   0000001A   9512                       SWAP    R17
+   \   0000001C   701F                       ANDI    R17,0x0F
+   \   0000001E   9516                       LSR     R17
+   \   00000020   7013                       ANDI    R17,0x03
+   \   00000022   EF0F                       LDI     R16,255
+   \   00000024   ....                       RCALL   SetBits
+    281          		selectedBank = address & 0x60;
+   \   00000026   7680                       ANDI    R24,0x60
+   \   00000028   9380....                   STS     selectedBank,R24
+    282          	}
+    283          }
+   \                     ??SelectBank_0:
+   \   0000002C   9189                       LD      R24,Y+
+   \   0000002E   9508                       RET
+    284          
+
+   \                                 In segment CODE, align 2, keep-with-next
+    285          bool IsPhyBusy()
+    286          {
+    287          	if(ReadRegister(MISTAT) & (1 << _BUSY))
+   \   __nearfunc unsigned char IsPhyBusy();
+   \                     IsPhyBusy:
+   \   00000000   E60A                       LDI     R16,106
+   \   00000002   ....                       RCALL   ReadRegister
+   \   00000004   7001                       ANDI    R16,0x01
+   \   00000006   F011                       BREQ    ??IsPhyBusy_0
+    288          		return true;
+   \   00000008   E001                       LDI     R16,1
+   \   0000000A   9508                       RET
+    289          	else
+    290          		return false;
+   \                     ??IsPhyBusy_0:
+   \   0000000C   E000                       LDI     R16,0
+   \   0000000E   9508                       RET
+    291          }
+
+   \                                 In segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for selectedBank>`:
+   \   00000000   FF                         DB 255
+
+   \                                 In segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for mac>`:
+   \   00000000   AA                         DB 170
+   \   00000001   BB                         DB 187
+   \   00000002   CC                         DB 204
+   \   00000003   DD                         DB 221
+   \   00000004   EE                         DB 238
+   \   00000005   FF                         DB 255
+
+   Maximum stack usage in bytes:
+
+     Function                CSTACK  RSTACK
+     --------                ------  ------
+     ClearBits                   2       2 
+       -> SelectBank             2       2 
+       -> SPI_Transfer           2       2 
+       -> SPI_Transfer           2       2 
+     GetVersion                  0       2 
+       -> ReadRegister           0       2 
+     IsPhyBusy                   0       2 
+       -> ReadRegister           0       2 
+     NIC_Get                     0       0 
+     NIC_Init                    4       2 
+       -> Kernel_Delay           4       2 
+       -> WriteWideRegister      4       2 
+       -> WriteWideRegister      4       2 
+       -> WriteWideRegister      4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteWideRegister      4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+       -> WriteRegister          4       2 
+     NIC_Send                    0       0 
+     NIC_SendBlocking            0       0 
+     ReadBuffer                  0       0 
+     ReadPhyRegister             2       2 
+       -> WriteRegister          2       2 
+       -> SetBits                2       2 
+       -> IsPhyBusy              2       2 
+       -> ClearBits              2       2 
+       -> ReadRegister           2       2 
+       -> ReadRegister           2       2 
+     ReadRegister                1       2 
+       -> SelectBank             1       2 
+       -> SPI_Transfer           1       2 
+       -> SPI_Transfer           1       2 
+       -> SPI_Transfer           1       2 
+     ReadWideRegister            3       2 
+       -> SelectBank             3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+     SelectBank                  1       2 
+       -> ClearBits              1       2 
+       -> SetBits                1       2 
+     SetBits                     2       2 
+       -> SelectBank             2       2 
+       -> SPI_Transfer           2       2 
+       -> SPI_Transfer           2       2 
+     WriteBuffer                 0       0 
+     WritePhyRegister            2       2 
+       -> WriteRegister          2       2 
+       -> WriteRegister          2       2 
+       -> WriteRegister          2       2 
+       -> IsPhyBusy              2       2 
+     WriteRegister               2       2 
+       -> SelectBank             2       2 
+       -> SPI_Transfer           2       2 
+       -> SPI_Transfer           2       2 
+     WriteWideRegister           3       2 
+       -> SelectBank             3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+       -> SPI_Transfer           3       2 
+
+ 
+      1 byte  in segment ABSOLUTE
+    730 bytes in segment CODE
+     12 bytes in segment INITTAB
+      7 bytes in segment NEAR_I
+      7 bytes in segment NEAR_ID
+    300 bytes in segment NEAR_Z
+ 
+    737 bytes of CODE memory (+ 12 bytes shared)
+    307 bytes of DATA memory (+ 1 byte shared)
+
+Errors: none
+Warnings: 3

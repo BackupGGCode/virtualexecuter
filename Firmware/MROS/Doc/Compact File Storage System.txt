@@ -1,0 +1,15 @@
+File Description Area
+File Contents Area
+
+
++-----+---------+
+| FDA |   FCA   |
++-----+---------+
+
+
+
+
+filename, size, location
+
+
+BAMFS

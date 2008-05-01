@@ -1,0 +1,161 @@
+##############################################################################
+#                                                                            #
+# IAR Atmel AVR C/EC++ Compiler V2.28A/WIN, Evaluation Version26/Feb/2008  21:09:00 #
+# Copyright 1996-2002 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\FileStore\InternalEEPROM.c #
+#    Command line =  --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    FileStoreTester\Release\Obj\ -I "C:\Program Files\IAR   #
+#                    Systems\Ew23 Evaluation version\avr\SRC\CLIB\INC\" -I   #
+#                    f:\Projects\[Drivers]\C\MROS\ -lCN                      #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\FileStoreTester\R #
+#                    elease\List\ -e --initializers_in_flash -s9             #
+#                    -DENABLE_BIT_DEFINITIONS f:\Projects\[Drivers]\C\MROS\F #
+#                    ileStore\InternalEEPROM.c                               #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\FileStoreTester\R #
+#                    elease\List\InternalEEPROM.lst                          #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\FileStoreTester\R #
+#                    elease\Obj\InternalEEPROM.r90                           #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+      1          #include <Globals.h>
+
+   \                                 In segment ABSOLUTE, at 0x3c
+   \   union <unnamed> volatile __io _A_EECR;
+   \                     _A_EECR:
+   \   00000000                              DS 1
+
+   \                                 In segment ABSOLUTE, at 0x3d
+   \   union <unnamed> volatile __io _A_EEDR;
+   \                     _A_EEDR:
+   \   00000000                              DS 1
+
+   \                                 In segment ABSOLUTE, at 0x3e
+   \   union <unnamed> volatile __io _A_EEAR;
+   \                     _A_EEAR:
+   \   00000000                              DS 2
+      2          
+      3          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      4          unsigned char InternalEEPROM_ReadByte(unsigned long address)
+      5          {
+      6          	while(EECR & (1<<EEWE));
+   \   __nearfunc unsigned char InternalEEPROM_ReadByte(unsigned long);
+   \                     InternalEEPROM_ReadByte:
+   \                     ??InternalEEPROM_ReadByte_0:
+   \   00000000   99E1                       SBIC    0x1C,0x01
+   \   00000002   CFFE                       RJMP    ??InternalEEPROM_ReadByte_0
+      7          	EEAR = address;
+   \   00000004   BB1F                       OUT     0x1F,R17
+   \   00000006   BB0E                       OUT     0x1E,R16
+      8          	EECR |= (1 << EERE);
+   \   00000008   9AE0                       SBI     0x1C,0x00
+      9          	return EEDR;
+   \   0000000A   B30D                       IN      R16,0x1D
+   \   0000000C   9508                       RET
+     10          }
+     11          
+     12          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     13          void InternalEEPROM_ReadBytes(unsigned long address, unsigned char* data, unsigned short length)
+     14          {
+   \   __nearfunc void InternalEEPROM_ReadBytes(unsigned long, unsigned char *, unsigned short);
+   \                     InternalEEPROM_ReadBytes:
+   \   00000000   927A                       ST      -Y,R7
+   \   00000002   926A                       ST      -Y,R6
+   \   00000004   925A                       ST      -Y,R5
+   \   00000006   924A                       ST      -Y,R4
+   \   00000008   93BA                       ST      -Y,R27
+   \   0000000A   93AA                       ST      -Y,R26
+   \   0000000C   939A                       ST      -Y,R25
+   \   0000000E   938A                       ST      -Y,R24
+   \   00000010                              REQUIRE ?Register_R4_is_cg_reg
+   \   00000010                              REQUIRE ?Register_R5_is_cg_reg
+   \   00000010                              REQUIRE ?Register_R6_is_cg_reg
+   \   00000010                              REQUIRE ?Register_R7_is_cg_reg
+   \   00000010   01C8                       MOVW    R25 : R24,R17 : R16
+   \   00000012   01D9                       MOVW    R27 : R26,R19 : R18
+   \   00000014   012A                       MOVW    R5 : R4,R21 : R20
+   \   00000016   013B                       MOVW    R7 : R6,R23 : R22
+   \   00000018   C00A                       RJMP    ??InternalEEPROM_ReadBytes_0
+     15          	while(length--)
+     16          	{
+     17          		*data++ = InternalEEPROM_ReadByte(address++);
+   \                     ??InternalEEPROM_ReadBytes_1:
+   \   0000001A   018C                       MOVW    R17 : R16,R25 : R24
+   \   0000001C   019D                       MOVW    R19 : R18,R27 : R26
+   \   0000001E   ....                       RCALL   InternalEEPROM_ReadByte
+   \   00000020   5F8F                       SUBI    R24,255
+   \   00000022   4F9F                       SBCI    R25,255
+   \   00000024   4FAF                       SBCI    R26,255
+   \   00000026   4FBF                       SBCI    R27,255
+   \   00000028   01F2                       MOVW    R31 : R30,R5 : R4
+   \   0000002A   9301                       ST      Z+,R16
+   \   0000002C   012F                       MOVW    R5 : R4,R31 : R30
+   \                     ??InternalEEPROM_ReadBytes_0:
+   \   0000002E   0183                       MOVW    R17 : R16,R7 : R6
+   \   00000030   EF2F                       LDI     R18,255
+   \   00000032   0E62                       ADD     R6,R18
+   \   00000034   1E72                       ADC     R7,R18
+   \   00000036   2B01                       OR      R16,R17
+   \   00000038   F781                       BRNE    ??InternalEEPROM_ReadBytes_1
+     18          	}
+     19          }
+   \   0000003A   9189                       LD      R24,Y+
+   \   0000003C   9199                       LD      R25,Y+
+   \   0000003E   91A9                       LD      R26,Y+
+   \   00000040   91B9                       LD      R27,Y+
+   \   00000042   9049                       LD      R4,Y+
+   \   00000044   9059                       LD      R5,Y+
+   \   00000046   9069                       LD      R6,Y+
+   \   00000048   9079                       LD      R7,Y+
+   \   0000004A   9508                       RET
+     20          
+     21          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     22          unsigned long InternalEEPROM_ReadLong(unsigned long address)
+     23          {
+   \   __nearfunc unsigned long InternalEEPROM_ReadLong(unsigned long);
+   \                     InternalEEPROM_ReadLong:
+   \   00000000   9724                       SBIW    R29 : R28,4
+     24          unsigned long t;
+     25          	
+     26          	InternalEEPROM_ReadBytes(address, (unsigned char*)&t, 4);
+   \   00000002   E064                       LDI     R22,4
+   \   00000004   E070                       LDI     R23,0
+   \   00000006   01AE                       MOVW    R21 : R20,R29 : R28
+   \   00000008   ....                       RCALL   InternalEEPROM_ReadBytes
+     27          	
+     28          	return t;
+   \   0000000A   8108                       LD      R16,Y
+   \   0000000C   8119                       LDD     R17,Y+1
+   \   0000000E   812A                       LDD     R18,Y+2
+   \   00000010   813B                       LDD     R19,Y+3
+   \   00000012   9624                       ADIW    R29 : R28,4
+   \   00000014   9508                       RET
+     29          }
+
+   Maximum stack usage in bytes:
+
+     Function                       CSTACK  RSTACK
+     --------                       ------  ------
+     InternalEEPROM_ReadByte            0       0 
+     InternalEEPROM_ReadBytes           8       2 
+       -> InternalEEPROM_ReadByte       8       2 
+     InternalEEPROM_ReadLong            4       2 
+       -> InternalEEPROM_ReadBytes      4       2 
+
+ 
+      4 bytes in segment ABSOLUTE
+    112 bytes in segment CODE
+ 
+    112 bytes of CODE memory
+      0 bytes of DATA memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

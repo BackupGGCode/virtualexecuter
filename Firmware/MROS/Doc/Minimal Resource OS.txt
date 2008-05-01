@@ -1,0 +1,8 @@
+
+
+
+S T O R A G E
+
+  BAMFS - Byte Addressable Media File System
+
+    For storing files in internal and external EEPROM, data flash and RAM

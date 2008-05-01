@@ -1,0 +1,413 @@
+        NAME MemoryManagementLinkedList
+
+        RTMODEL "__64bit_doubles", "disabled"
+        RTMODEL "__cpu", "3"
+        RTMODEL "__cpu_name", "AT90Mega32"
+        RTMODEL "__enhanced_core", "enabled"
+        RTMODEL "__has_elpm", "false"
+        RTMODEL "__memory_model", "2"
+        RTMODEL "__rt_version", "2.30"
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG NEAR_I:DATA:NOROOT(0)
+        RSEG NEAR_ID:CODE:NOROOT(0)
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+        EXTERN UART_WriteString_P
+        FUNCTION UART_WriteString_P,0202H
+        EXTERN UART_WritePointer
+        FUNCTION UART_WritePointer,0202H
+        EXTERN UART_WriteString
+        FUNCTION UART_WriteString,0202H
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBWEAK `?<Segment init: NEAR_Z>`
+        PUBLIC Allocate
+        FUNCTION Allocate,0203H
+        PUBLIC Deallocate
+        FUNCTION Deallocate,021203H
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC HeapInit
+        FUNCTION HeapInit,021201H
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC txtHeapStart
+;     1 #include <Globals.h>
+;     2 #include <Config.h>
+;     3 #include "MemoryManagementLinkedList.h"
+;     4 #include "Kernel.h"
+;     5 #include "KernelInternals.h"
+;     6 #include <Peripherals/UART.h>
+;     7 
+;     8 
+;     9 typedef struct
+;    10 {
+;    11 	bool free;
+;    12 	unsigned short size;
+;    13 	void* next;
+;    14 } block;
+;    15 
+;    16 
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+	REQUIRE `?<Segment init: NEAR_Z>`
+;    17 static unsigned char heap[HEAP_SIZE];
+; static unsigned char __near heap[1000];
+heap:
+	DS 1000
+;    18 
+;    19 
+;    20 static void JoinFreeAdjacentBlocks();
+;    21 
+;    22 
+
+        RSEG NEAR_F:CODE:NOROOT(0)
+;    23 string txtHeapStart[]="Start of heap: ";
+; char const __flash txtHeapStart[16];
+txtHeapStart:
+	DB "Start of heap: "
+;    24 
+;    25 
+
+        RSEG CODE:CODE:NOROOT(1)
+;    26 void HeapInit()
+;    27 {
+; __nearfunc void HeapInit();
+HeapInit:
+        FUNCALL HeapInit, UART_WriteString_P
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+        FUNCALL HeapInit, UART_WritePointer
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+	ST	-Y,R27
+	ST	-Y,R26
+;    28 block* b = (block*)heap;
+;    29 
+;    30 	b->free = true;
+	LDI	R26,LOW(heap)
+	LDI	R27,(heap) >> 8
+	LDI	R16,1
+	ST	X,R16
+;    31 	b->size = HEAP_SIZE - sizeof(block);
+	LDI	R16,227
+	LDI	R17,3
+	ADIW	R27 : R26,1
+	ST	X+,R16
+	ST	X,R17
+	SBIW	R27 : R26,2
+;    32 	b->next = null;
+	LDI	R16,0
+	ADIW	R27 : R26,3
+	ST	X+,R16
+	ST	X,R16
+	SBIW	R27 : R26,4
+;    33 	
+;    34 	UART_WriteString_P(txtHeapStart);
+	LDI	R16,LOW(txtHeapStart)
+	LDI	R17,(txtHeapStart) >> 8
+	CALL	UART_WriteString_P
+;    35 	UART_WritePointer(heap);
+	MOVW	R17 : R16,R27 : R26
+	CALL	UART_WritePointer
+;    36 }
+	LD	R26,Y+
+	LD	R27,Y+
+	RET
+;    37 
+;    38 
+
+        RSEG CODE:CODE:NOROOT(1)
+;    39 void* Allocate(unsigned short size)
+;    40 {
+; __nearfunc void *Allocate(unsigned short);
+Allocate:
+	MOV	R1,R27
+	MOV	R0,R26
+	MOV	R23,R25
+	MOV	R22,R24
+	MOVW	R19 : R18,R17 : R16
+;    41 block* b = (block*)heap;
+	LDI	R30,LOW(heap)
+	LDI	R31,(heap) >> 8
+	RJMP	??Allocate_0
+;    42 block* split;
+;    43 
+;    44 	while((b->free != true || b->size < size) && b->next != null)
+;    45 	{
+;    46 		b = (block*)b->next;
+??Allocate_1:
+	MOVW	R31 : R30,R17 : R16
+??Allocate_0:
+	LD	R16,Z
+	CPI	R16,1
+	BRNE	??Allocate_2
+	LDD	R16,Z+1
+	LDD	R17,Z+2
+	CP	R16,R18
+	CPC	R17,R19
+	BRCC	??Allocate_3
+??Allocate_2:
+	LDD	R16,Z+3
+	LDD	R17,Z+4
+	MOV	R20,R16
+	OR	R20,R17
+	BRNE	??Allocate_1
+;    47 	}
+;    48 	
+;    49 	if(b->free != true || b->size < size)																									// Found a valid block?
+??Allocate_3:
+	LD	R16,Z
+	CPI	R16,1
+	BRNE	??Allocate_4
+	LDD	R24,Z+1
+	LDD	R25,Z+2
+	CP	R24,R18
+	CPC	R25,R19
+	BRCC	??Allocate_5
+;    50 	{
+;    51 		return null;																																					// No
+??Allocate_4:
+	LDI	R16,0
+	LDI	R17,0
+	RJMP	??Allocate_6
+;    52 	}
+;    53 	
+;    54 	if(b->size > (size + sizeof(block)))																									// Split block, return first part and mark last part as free
+??Allocate_5:
+	MOVW	R17 : R16,R31 : R30
+	SUBI	R16,251
+	SBCI	R17,255
+	MOVW	R27 : R26,R19 : R18
+	ADIW	R27 : R26,5
+	CP	R26,R24
+	CPC	R27,R25
+	BRCC	??Allocate_7
+;    55 	{
+;    56 		split = (block*)((unsigned char*)b + sizeof(block) + size);
+	MOVW	R27 : R26,R31 : R30
+	ADIW	R27 : R26,5
+	ADD	R26,R18
+	ADC	R27,R19
+;    57 		split->free = true;
+	LDI	R20,1
+	ST	X,R20
+;    58 		split->size = b->size - size - sizeof(block);
+	SUB	R24,R18
+	SBC	R25,R19
+	SBIW	R25 : R24,5
+	ADIW	R27 : R26,1
+	ST	X+,R24
+	ST	X,R25
+	SBIW	R27 : R26,2
+;    59 		split->next = b->next;
+	LDD	R20,Z+3
+	LDD	R21,Z+4
+	ADIW	R27 : R26,3
+	ST	X+,R20
+	ST	X,R21
+	SBIW	R27 : R26,4
+;    60 		
+;    61 		b->free = false;
+	LDI	R20,0
+	ST	Z,R20
+;    62 		b->size = size;
+	STD	Z+1,R18
+	STD	Z+2,R19
+;    63 		b->next = split;
+	STD	Z+3,R26
+	STD	Z+4,R27
+;    64 		
+;    65 		return (void*)((unsigned short)b + sizeof(block));
+	RJMP	??Allocate_6
+;    66 	}
+;    67 	else																																									// Block is too small to split - return all
+;    68 	{
+;    69 		b->free = false;
+??Allocate_7:
+	LDI	R18,0
+	ST	Z,R18
+;    70 		return (void*)((unsigned short)b + sizeof(block));
+??Allocate_6:
+	MOV	R24,R22
+	MOV	R25,R23
+	MOV	R26,R0
+	MOV	R27,R1
+	RET
+;    71 	}
+;    72 }
+;    73 
+;    74 
+
+        RSEG CODE:CODE:NOROOT(1)
+;    75 void Deallocate(void* pointer)
+;    76 {
+; __nearfunc void Deallocate(void *);
+Deallocate:
+        FUNCALL Deallocate, UART_WriteString
+        LOCFRAME CSTACK, 2, STACK
+        LOCFRAME RSTACK, 2, STACK
+	ST	-Y,R27
+	ST	-Y,R26
+;    77 block* b = (block*)heap;
+	LDI	R26,LOW(heap)
+	LDI	R27,(heap) >> 8
+;    78 block* p = (block*)((unsigned short)pointer - sizeof(block));
+	SUBI	R16,5
+	SBCI	R17,0
+	RJMP	??Deallocate_0
+??Deallocate_1:
+	ADIW	R27 : R26,3
+	LD	R18,X+
+	LD	R19,X
+	MOV	R20,R18
+	OR	R20,R19
+	BREQ	??Deallocate_2
+;    79 	
+;    80 	while(b != p && b->next != null)
+;    81 	{
+;    82 		b = (block*)b->next;
+	MOVW	R27 : R26,R19 : R18
+??Deallocate_0:
+	CP	R26,R16
+	CPC	R27,R17
+	BRNE	??Deallocate_1
+;    83 	}
+;    84 	
+;    85 	if(b != p)
+;    86 	{
+;    87 		return;																																								// Invalid pointer
+;    88 	}
+;    89 
+;    90 	UART_WriteString("FREE\r\n");
+	LDI	R16,LOW(`?<Constant "FREE\\r\\n">`)
+	LDI	R17,(`?<Constant "FREE\\r\\n">`) >> 8
+	CALL	UART_WriteString
+;    91 	
+;    92 	b->free = true;
+	LDI	R16,1
+	ST	X,R16
+;    93 
+;    94 	JoinFreeAdjacentBlocks();
+	LDI	R30,LOW(heap)
+	LDI	R31,(heap) >> 8
+	RJMP	??Deallocate_3
+??Deallocate_4:
+	ADIW	R27 : R26,1
+	LD	R16,X+
+	LD	R17,X
+	SBIW	R27 : R26,2
+	SUBI	R16,251
+	SBCI	R17,255
+	LDD	R18,Z+1
+	LDD	R19,Z+2
+	ADD	R18,R16
+	ADC	R19,R17
+	STD	Z+1,R18
+	STD	Z+2,R19
+	ADIW	R27 : R26,3
+	LD	R16,X+
+	LD	R17,X
+	STD	Z+3,R16
+	STD	Z+4,R17
+??Deallocate_3:
+	LDD	R16,Z+3
+	LDD	R17,Z+4
+	MOV	R18,R16
+	OR	R18,R17
+	BREQ	??Deallocate_2
+	MOVW	R27 : R26,R17 : R16
+	LD	R18,Z
+	CPI	R18,1
+	BRNE	??Deallocate_5
+	LD	R18,X
+	CPI	R18,1
+	BREQ	??Deallocate_4
+??Deallocate_5:
+	MOVW	R31 : R30,R17 : R16
+	RJMP	??Deallocate_3
+??Deallocate_2:
+	LD	R26,Y+
+	LD	R27,Y+
+	RET
+;    95 }
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+	REQUIRE `?<Segment init: NEAR_I>`
+; char __near <Constant "FREE\r\n">[7];
+`?<Constant "FREE\\r\\n">`:
+	DS 7
+	REQUIRE `?<Initializer for <Constant "FREE\\r\\n">>`
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "FREE\\r\\n">>`:
+	DB "FREE\015\012"
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+	DW	SFE(NEAR_I) - SFB(NEAR_I)
+	DW	SFB(NEAR_I)
+	DW	SFB(NEAR_ID)
+	REQUIRE ?need_segment_init
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_Z>`:
+	DW	SFE(NEAR_Z) - SFB(NEAR_Z)
+	DW	SFB(NEAR_Z)
+	DW	0
+	REQUIRE ?need_segment_init
+
+        END
+;    96 
+;    97 
+;    98 static void JoinFreeAdjacentBlocks()
+;    99 {
+;   100 block* b = (block*)heap;
+;   101 block* next;
+;   102 
+;   103 	while(b->next != null)
+;   104 	{
+;   105 		next = (block*)b->next;
+;   106 		if(b->free == true && next->free == true)
+;   107 		{
+;   108 			b->size += next->size + sizeof(block);
+;   109 			b->next = next->next;
+;   110 		}
+;   111 		else
+;   112 		{
+;   113 			b = (block*)b->next;
+;   114 		}
+;   115 	}
+;   116 }
+; 
+;    322 bytes in segment CODE
+;     12 bytes in segment INITTAB
+;     16 bytes in segment NEAR_F
+;      7 bytes in segment NEAR_I
+;      7 bytes in segment NEAR_ID
+;   1000 bytes in segment NEAR_Z
+; 
+;    345 bytes of CODE memory (+ 12 bytes shared)
+;   1007 bytes of DATA memory
+;
+;Errors: none
+;Warnings: none

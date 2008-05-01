@@ -1,0 +1,303 @@
+//////////////////////////////////////////////////////////////////////////////
+//                                                                           /
+//                                                     09/Mar/2008  16:57:10 /
+// IAR Atmel AVR C/C++ Compiler V4.21A/W32, Evaluation Version               /
+// Copyright 1996-2006 IAR Systems. All rights reserved.                     /
+//                                                                           /
+//    Source file  =  f:\Projects\[Drivers]\C\MROS\Kernel\MessageQueue.c     /
+//    Command line =  --string_literals_in_flash                             /
+//                    f:\Projects\[Drivers]\C\MROS\Kernel\MessageQueue.c     /
+//                    --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps /
+//                    \CommanderTester\Release\Obj\ -D NDEBUG -lC            /
+//                    f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\ /
+//                    Release\List\ -lA f:\Projects\[Drivers]\C\MROS\TestApp /
+//                    s\CommanderTester\Release\List\                        /
+//                    --initializers_in_flash -s9 -DENABLE_BIT_DEFINITIONS   /
+//                    -e -I f:\Projects\[Drivers]\C\mros\TestApps\CommanderT /
+//                    ester\ -I f:\Projects\[Drivers]\C\mros\ -I             /
+//                    "C:\Program Files\IAR Systems\Embedded Workbench 4.0   /
+//                    Evaluation\avr\INC\" -I "C:\Program Files\IAR          /
+//                    Systems\Embedded Workbench 4.0                         /
+//                    Evaluation\avr\INC\CLIB\" --eeprom_size 1024           /
+//    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\CommanderTester\ /
+//                    Release\List\MessageQueue.s90                          /
+//                                                                           /
+//                                                                           /
+//////////////////////////////////////////////////////////////////////////////
+
+        NAME MessageQueue
+
+        RTMODEL "__64bit_doubles", "disabled"
+        RTMODEL "__cpu", "3"
+        RTMODEL "__cpu_name", "ATmega32"
+        RTMODEL "__enhanced_core", "enabled"
+        RTMODEL "__has_elpm", "false"
+        RTMODEL "__memory_model", "2"
+        RTMODEL "__rt_version", "3"
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        PUBLIC Kernel_GetMessage
+        FUNCTION Kernel_GetMessage,0203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBLIC Kernel_PostMessage
+        FUNCTION Kernel_PostMessage,0203H
+        LOCFRAME RSTACK, 2, STACK
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        
+        CFI Names cfiNames0
+        CFI StackFrame CFA_Y Y DATA
+        CFI StackFrame CFA_SP SP DATA
+        CFI VirtualResource ?RetPad:1, ?RetHigh:8, ?RetLow:8, ?Ret:17
+        CFI Resource R0:8, R1:8, R2:8, R3:8, R4:8, R5:8, R6:8, R7:8, R8:8, R9:8
+        CFI Resource R10:8, R11:8, R12:8, R13:8, R14:8, R15:8, R16:8, R17:8
+        CFI Resource R18:8, R19:8, R20:8, R21:8, R22:8, R23:8, R24:8, R25:8
+        CFI Resource R26:8, R27:8, R28:8, R29:8, R30:8, R31:8
+        CFI Resource ?RetHighByteMask:8, SP:16, SPH:8, SPL:8, Y:16
+        CFI ResourceParts ?Ret ?RetHigh, ?RetLow, ?RetPad
+        CFI ResourceParts SP SPH, SPL
+        CFI ResourceParts Y R29, R28
+        CFI EndNames cfiNames0
+        
+        CFI Common cfiCommon0 Using cfiNames0
+        CFI CodeAlign 1
+        CFI DataAlign 1
+        CFI ReturnAddress ?Ret CODE
+        CFI CFA_Y Y+0
+        CFI CFA_SP SP+2
+        CFI ?RetPad 0
+        CFI ?RetHigh and(load(1, DATA, sub(CFA_SP, 1)), ?RetHighByteMask)
+        CFI ?RetLow Frame(CFA_SP, 0)
+        CFI ?Ret Concat
+        CFI R0 Undefined
+        CFI R1 Undefined
+        CFI R2 Undefined
+        CFI R3 Undefined
+        CFI R4 SameValue
+        CFI R5 SameValue
+        CFI R6 SameValue
+        CFI R7 SameValue
+        CFI R8 SameValue
+        CFI R9 SameValue
+        CFI R10 SameValue
+        CFI R11 SameValue
+        CFI R12 SameValue
+        CFI R13 SameValue
+        CFI R14 SameValue
+        CFI R15 SameValue
+        CFI R16 Undefined
+        CFI R17 Undefined
+        CFI R18 Undefined
+        CFI R19 Undefined
+        CFI R20 Undefined
+        CFI R21 Undefined
+        CFI R22 Undefined
+        CFI R23 Undefined
+        CFI R24 SameValue
+        CFI R25 SameValue
+        CFI R26 SameValue
+        CFI R27 SameValue
+        CFI R28 Undefined
+        CFI R29 Undefined
+        CFI R30 Undefined
+        CFI R31 Undefined
+        CFI ?RetHighByteMask SameValue
+        CFI SPH Undefined
+        CFI SPL Undefined
+        CFI EndCommon cfiCommon0
+        
+        EXTERN currentTaskIndex
+        EXTERN taskQueue
+
+// f:\Projects\[Drivers]\C\MROS\Kernel\MessageQueue.c
+//    1 #include <Globals.h>
+//    2 #include "Kernel.h"
+//    3 #include "KernelInternals.h"
+//    4 
+//    5 
+
+        RSEG CODE:CODE:NOROOT(1)
+//    6 bool Kernel_PostMessage(unsigned char msg, messageQueue* mq)
+Kernel_PostMessage:
+        CFI Block cfiBlock0 Using cfiCommon0
+        CFI Function Kernel_PostMessage
+//    7 {
+        MOVW    R3:R2, R27:R26
+//    8 unsigned char index;
+//    9 
+//   10 	if(mq->full)
+        MOVW    R31:R30, R19:R18
+        LDD     R17, Z+2
+        TST     R17
+        BREQ    ??Kernel_PostMessage_0
+//   11 	{
+//   12 #if TASKER_DEBUG_LEVEL > 0
+//   13 		Kernel_DebuggerEvent(DEBUG_EVENT_POSTMESSAGE, null, DEBUG_STATUS_NO_ROOM, (unsigned long)mq);
+//   14 #endif
+//   15 		return false;
+        LDI     R16, 0
+        RJMP    ??Kernel_PostMessage_1
+//   16 	}
+//   17 	
+//   18 	mq->data[mq->head] = msg;
+??Kernel_PostMessage_0:
+        LD      R20, Z
+        LDI     R21, 0
+        ADD     R30, R20
+        ADC     R31, R21
+        STD     Z+3, R16
+//   19 	
+//   20 	if(++mq->head >= MESSAGE_QUEUE_SIZE)
+        MOVW    R31:R30, R19:R18
+        LD      R16, Z
+        INC     R16
+        ST      Z, R16
+        CPI     R16, 8
+        BRCS    ??Kernel_PostMessage_2
+//   21 	{
+//   22 		mq->head = 0;
+        ST      Z, R21
+//   23 	}
+//   24 	
+//   25 	for(index = 0; index < MAX_NUMBER_OF_TASKS; index++)
+??Kernel_PostMessage_2:
+        LDI     R20, 0
+        LDI     R30, LOW(taskQueue)
+        LDI     R31, (taskQueue) >> 8
+//   26 	{
+//   27 		if(taskQueue[index].blockingMessageQueue == mq)
+??Kernel_PostMessage_3:
+        LDI     R16, 13
+        MUL     R16, R20
+        MOVW    R27:R26, R31:R30
+        ADIW    R27:R26, 9
+        ADD     R26, R0
+        ADC     R27, R1
+        LD      R22, X+
+        LD      R23, X
+        CP      R22, R18
+        CPC     R23, R19
+        BRNE    ??Kernel_PostMessage_4
+//   28 		{
+//   29 			taskQueue[index].blockingMessageQueue = null;
+        ADD     R30, R0
+        ADC     R31, R1
+        STD     Z+9, R21
+        STD     Z+10, R21
+//   30 #if TASKER_DEBUG_LEVEL > 0
+//   31 			Kernel_DebuggerEvent(DEBUG_EVENT_POSTMESSAGE, null, DEBUG_STATUS_OK, (unsigned long)mq);
+//   32 #endif
+//   33 			return true;
+        RJMP    ??Kernel_PostMessage_5
+//   34 		}
+//   35 	}
+??Kernel_PostMessage_4:
+        INC     R20
+        CPI     R20, 10
+        BRCS    ??Kernel_PostMessage_3
+//   36 	
+//   37 #if TASKER_DEBUG_LEVEL > 0
+//   38 	Kernel_DebuggerEvent(DEBUG_EVENT_POSTMESSAGE, null, DEBUG_STATUS_OK, (unsigned long)mq);
+//   39 #endif
+//   40 	return true;
+??Kernel_PostMessage_5:
+        LDI     R16, 1
+??Kernel_PostMessage_1:
+        MOVW    R27:R26, R3:R2
+        RET
+        CFI EndBlock cfiBlock0
+//   41 }
+//   42 
+//   43 
+
+        RSEG CODE:CODE:NOROOT(1)
+//   44 bool Kernel_GetMessage(unsigned char* msg, messageQueue* mq)
+Kernel_GetMessage:
+        CFI Block cfiBlock1 Using cfiCommon0
+        CFI Function Kernel_GetMessage
+//   45 {
+//   46 	if(mq->full == false && mq->head == mq->tail)
+        MOVW    R31:R30, R19:R18
+        LDD     R20, Z+2
+        TST     R20
+        BRNE    ??Kernel_GetMessage_0
+        LD      R20, Z
+        LDD     R21, Z+1
+        CP      R20, R21
+        BRNE    ??Kernel_GetMessage_0
+//   47 	{
+//   48 		taskQueue[currentTaskIndex].blockingMessageQueue = mq;
+        LDS     R20, currentTaskIndex
+        LDI     R16, 13
+        MUL     R16, R20
+        MOVW    R31:R30, R1:R0
+        SUBI    R30, LOW((-(taskQueue) & 0xFFFF))
+        SBCI    R31, (-(taskQueue) & 0xFFFF) >> 8
+        STD     Z+9, R18
+        STD     Z+10, R19
+//   49 #if TASKER_DEBUG_LEVEL > 0
+//   50 		Kernel_DebuggerEvent(DEBUG_EVENT_GETMESSAGE, null, DEBUG_STATUS_NO_MESSAGE, (unsigned long)mq);
+//   51 #endif
+//   52 		return false;
+        LDI     R16, 0
+        RET
+//   53 	}
+//   54 	
+//   55 	*msg = mq->data[mq->tail];
+??Kernel_GetMessage_0:
+        LDD     R20, Z+1
+        LDI     R21, 0
+        ADD     R30, R20
+        ADC     R31, R21
+        LDD     R20, Z+3
+        MOVW    R31:R30, R17:R16
+        ST      Z, R20
+//   56 	
+//   57 	if(++mq->tail >= MESSAGE_QUEUE_SIZE)
+        MOVW    R31:R30, R19:R18
+        LDD     R16, Z+1
+        INC     R16
+        STD     Z+1, R16
+        CPI     R16, 8
+        BRCS    ??Kernel_GetMessage_1
+//   58 	{
+//   59 		mq->tail = 0;
+        STD     Z+1, R21
+//   60 	}
+//   61 	mq->full = false;
+??Kernel_GetMessage_1:
+        STD     Z+2, R21
+//   62 	
+//   63 #if TASKER_DEBUG_LEVEL > 0
+//   64 	Kernel_DebuggerEvent(DEBUG_EVENT_GETMESSAGE, null, DEBUG_STATUS_OK, (unsigned long)mq);
+//   65 #endif
+//   66 	return true;
+        LDI     R16, 1
+        RET
+        CFI EndBlock cfiBlock1
+//   67 }
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        END
+// 
+// 160 bytes in segment CODE
+// 
+// 160 bytes of CODE memory
+//
+//Errors: none
+//Warnings: none

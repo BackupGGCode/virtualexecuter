@@ -1,0 +1,225 @@
+##############################################################################
+#                                                                            #
+# IAR Atmel AVR C/EC++ Compiler V2.28A/WIN, Evaluation Version21/Dec/2007  23:42:53 #
+# Copyright 1996-2002 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Source file  =  f:\Projects\[Drivers]\C\MROS\Kernel\MessageQueue.c      #
+#    Command line =  --cpu=m32 -ms -o f:\Projects\[Drivers]\C\MROS\TestApps\ #
+#                    KernelTester\Release\Obj\ -I                            #
+#                    C:\PROGRA~1\IARSYS~1\EW23EV~1\avr\SRC\CLIB\INC\ -I      #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\KernelTester\ -I  #
+#                    f:\Projects\[Drivers]\C\MROS\ -lC                       #
+#                    f:\Projects\[Drivers]\C\MROS\TestApps\KernelTester\Rele #
+#                    ase\List\ -lA f:\Projects\[Drivers]\C\MROS\TestApps\Ker #
+#                    nelTester\Release\List\ -e --initializers_in_flash -s9  #
+#                    -DENABLE_BIT_DEFINITIONS f:\Projects\[Drivers]\C\MROS\K #
+#                    ernel\MessageQueue.c                                    #
+#    List file    =  f:\Projects\[Drivers]\C\MROS\TestApps\KernelTester\Rele #
+#                    ase\List\MessageQueue.lst                               #
+#    Object file  =  f:\Projects\[Drivers]\C\MROS\TestApps\KernelTester\Rele #
+#                    ase\Obj\MessageQueue.r90                                #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+      1          #include <Globals.h>
+      2          #include "Kernel.h"
+      3          #include "KernelInternals.h"
+      4          
+      5          
+
+   \                                 In segment CODE, align 2, keep-with-next
+      6          bool Kernel_PostMessage(unsigned char msg, messageQueue* mq)
+      7          {
+   \   __nearfunc unsigned char Kernel_PostMessage(unsigned char, messageQueue *);
+   \                     Kernel_PostMessage:
+   \   00000000   2F7B                       MOV     R23,R27
+   \   00000002   2F6A                       MOV     R22,R26
+      8          unsigned char index;
+      9          
+     10          	if(mq->full)
+   \   00000004   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000006   8112                       LDD     R17,Z+2
+   \   00000008   2311                       TST     R17
+   \   0000000A   F011                       BREQ    ??Kernel_PostMessage_0
+     11          	{
+     12          #if TASKER_DEBUG_LEVEL > 0
+     13          		Kernel_DebuggerEvent(DEBUG_EVENT_POSTMESSAGE, null, DEBUG_STATUS_NO_ROOM, (unsigned long)mq);
+     14          #endif
+     15          		return false;
+   \   0000000C   E000                       LDI     R16,0
+   \   0000000E   C028                       RJMP    ??Kernel_PostMessage_1
+     16          	}
+     17          	
+     18          	mq->data[mq->head] = msg;
+   \                     ??Kernel_PostMessage_0:
+   \   00000010   01D9                       MOVW    R27 : R26,R19 : R18
+   \   00000012   9613                       ADIW    R27 : R26,3
+   \   00000014   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000016   8140                       LD      R20,Z
+   \   00000018   E050                       LDI     R21,0
+   \   0000001A   0FA4                       ADD     R26,R20
+   \   0000001C   1FB5                       ADC     R27,R21
+   \   0000001E   930C                       ST      X,R16
+     19          	
+     20          	if(++mq->head >= MESSAGE_QUEUE_SIZE)
+   \   00000020   8100                       LD      R16,Z
+   \   00000022   9503                       INC     R16
+   \   00000024   8300                       ST      Z,R16
+   \   00000026   3008                       CPI     R16,8
+   \   00000028   F008                       BRCS    ??Kernel_PostMessage_2
+     21          	{
+     22          		mq->head = 0;
+   \   0000002A   8350                       ST      Z,R21
+     23          	}
+     24          	
+     25          	for(index = 0; index < MAX_NUMBER_OF_TASKS; index++)
+   \                     ??Kernel_PostMessage_2:
+   \   0000002C   E040                       LDI     R20,0
+     26          	{
+     27          		if(taskQueue[index].blockingMessageQueue == mq)
+   \                     ??Kernel_PostMessage_3:
+   \   0000002E   ....                       LDI     R30,LOW(taskQueue)
+   \   00000030   ....                       LDI     R31,(taskQueue) >> 8
+   \   00000032   E00D                       LDI     R16,13
+   \   00000034   E010                       LDI     R17,0
+   \   00000036   9F14                       MUL     R17,R20
+   \   00000038   2D10                       MOV     R17,R0
+   \   0000003A   9F05                       MUL     R16,R21
+   \   0000003C   0D10                       ADD     R17,R0
+   \   0000003E   9F04                       MUL     R16,R20
+   \   00000040   0D11                       ADD     R17,R1
+   \   00000042   0DE0                       ADD     R30,R0
+   \   00000044   1FF1                       ADC     R31,R17
+   \   00000046   8501                       LDD     R16,Z+9
+   \   00000048   8512                       LDD     R17,Z+10
+   \   0000004A   1702                       CP      R16,R18
+   \   0000004C   0713                       CPC     R17,R19
+   \   0000004E   F421                       BRNE    ??Kernel_PostMessage_4
+     28          		{
+     29          			taskQueue[index].blockingMessageQueue = null;
+   \   00000050   E000                       LDI     R16,0
+   \   00000052   8701                       STD     Z+9,R16
+   \   00000054   8702                       STD     Z+10,R16
+     30          #if TASKER_DEBUG_LEVEL > 0
+     31          			Kernel_DebuggerEvent(DEBUG_EVENT_POSTMESSAGE, null, DEBUG_STATUS_OK, (unsigned long)mq);
+     32          #endif
+     33          			return true;
+   \   00000056   C003                       RJMP    ??Kernel_PostMessage_5
+   \                     ??Kernel_PostMessage_4:
+   \   00000058   9543                       INC     R20
+   \   0000005A   3048                       CPI     R20,8
+   \   0000005C   F340                       BRCS    ??Kernel_PostMessage_3
+     34          		}
+     35          	}
+     36          	
+     37          #if TASKER_DEBUG_LEVEL > 0
+     38          	Kernel_DebuggerEvent(DEBUG_EVENT_POSTMESSAGE, null, DEBUG_STATUS_OK, (unsigned long)mq);
+     39          #endif
+     40          	return true;
+   \                     ??Kernel_PostMessage_5:
+   \   0000005E   E001                       LDI     R16,1
+   \                     ??Kernel_PostMessage_1:
+   \   00000060   2FA6                       MOV     R26,R22
+   \   00000062   2FB7                       MOV     R27,R23
+   \   00000064   9508                       RET
+     41          }
+     42          
+     43          
+
+   \                                 In segment CODE, align 2, keep-with-next
+     44          bool Kernel_GetMessage(unsigned char* msg, messageQueue* mq)
+     45          {
+   \   __nearfunc unsigned char Kernel_GetMessage(unsigned char *, messageQueue *);
+   \                     Kernel_GetMessage:
+   \   00000000   2F7B                       MOV     R23,R27
+   \   00000002   2F6A                       MOV     R22,R26
+     46          	if(mq->full == false && mq->head == mq->tail)
+   \   00000004   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000006   8142                       LDD     R20,Z+2
+   \   00000008   2344                       TST     R20
+   \   0000000A   F4B9                       BRNE    ??Kernel_GetMessage_0
+   \   0000000C   8140                       LD      R20,Z
+   \   0000000E   8151                       LDD     R21,Z+1
+   \   00000010   1745                       CP      R20,R21
+   \   00000012   F499                       BRNE    ??Kernel_GetMessage_0
+     47          	{
+     48          		taskQueue[currentTaskIndex].blockingMessageQueue = mq;
+   \   00000014   9140....                   LDS     R20,currentTaskIndex
+   \   00000018   E050                       LDI     R21,0
+   \   0000001A   E00D                       LDI     R16,13
+   \   0000001C   E010                       LDI     R17,0
+   \   0000001E   9F14                       MUL     R17,R20
+   \   00000020   2D10                       MOV     R17,R0
+   \   00000022   9F05                       MUL     R16,R21
+   \   00000024   0D10                       ADD     R17,R0
+   \   00000026   9F04                       MUL     R16,R20
+   \   00000028   2D00                       MOV     R16,R0
+   \   0000002A   0D11                       ADD     R17,R1
+   \   0000002C   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000002E   ....                       SUBI    R30,LOW((-(taskQueue) & 0xFFFF))
+   \   00000030   ....                       SBCI    R31,(-(taskQueue) & 0xFFFF) >> 8
+   \   00000032   8721                       STD     Z+9,R18
+   \   00000034   8732                       STD     Z+10,R19
+     49          #if TASKER_DEBUG_LEVEL > 0
+     50          		Kernel_DebuggerEvent(DEBUG_EVENT_GETMESSAGE, null, DEBUG_STATUS_NO_MESSAGE, (unsigned long)mq);
+     51          #endif
+     52          		return false;
+   \   00000036   E000                       LDI     R16,0
+   \   00000038   C014                       RJMP    ??Kernel_GetMessage_1
+     53          	}
+     54          	
+     55          	*msg = mq->data[mq->tail];
+   \                     ??Kernel_GetMessage_0:
+   \   0000003A   01D9                       MOVW    R27 : R26,R19 : R18
+   \   0000003C   9613                       ADIW    R27 : R26,3
+   \   0000003E   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000040   8141                       LDD     R20,Z+1
+   \   00000042   E050                       LDI     R21,0
+   \   00000044   0FA4                       ADD     R26,R20
+   \   00000046   1FB5                       ADC     R27,R21
+   \   00000048   914C                       LD      R20,X
+   \   0000004A   01F8                       MOVW    R31 : R30,R17 : R16
+   \   0000004C   8340                       ST      Z,R20
+     56          	
+     57          	if(++mq->tail >= MESSAGE_QUEUE_SIZE)
+   \   0000004E   01F9                       MOVW    R31 : R30,R19 : R18
+   \   00000050   8101                       LDD     R16,Z+1
+   \   00000052   9503                       INC     R16
+   \   00000054   8301                       STD     Z+1,R16
+   \   00000056   3008                       CPI     R16,8
+   \   00000058   F008                       BRCS    ??Kernel_GetMessage_2
+     58          	{
+     59          		mq->tail = 0;
+   \   0000005A   8351                       STD     Z+1,R21
+     60          	}
+     61          	mq->full = false;
+   \                     ??Kernel_GetMessage_2:
+   \   0000005C   E000                       LDI     R16,0
+   \   0000005E   8302                       STD     Z+2,R16
+     62          	
+     63          #if TASKER_DEBUG_LEVEL > 0
+     64          	Kernel_DebuggerEvent(DEBUG_EVENT_GETMESSAGE, null, DEBUG_STATUS_OK, (unsigned long)mq);
+     65          #endif
+     66          	return true;
+   \   00000060   E001                       LDI     R16,1
+   \                     ??Kernel_GetMessage_1:
+   \   00000062   2FA6                       MOV     R26,R22
+   \   00000064   2FB7                       MOV     R27,R23
+   \   00000066   9508                       RET
+     67          }
+
+   Maximum stack usage in bytes:
+
+     Function            CSTACK  RSTACK
+     --------            ------  ------
+     Kernel_GetMessage       0       0 
+     Kernel_PostMessage      0       0 
+
+ 
+    206 bytes in segment CODE
+ 
+    206 bytes of CODE memory
+
+Errors: none
+Warnings: none
