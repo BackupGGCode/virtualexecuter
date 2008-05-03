@@ -8,8 +8,9 @@
 #define ReadProcess(address, proc)							DRAM_ReadBytes(address, (unsigned char*)proc, sizeof(process))
 #define UpdateProcess(proc)											DRAM_WriteBytes(proc.id + 53, (unsigned char*)(&(proc.state)), 22)
 
-#define FLAG_ZERO																0
-#define FLAG_NEGATIVE														1
+#define FLAG_ZERO																(1 << 0)
+#define FLAG_NEGATIVE														(1 << 1)
+#define FLAG_POSITIVE														(FLAG_NEGATIVE | FLAG_ZERO)
 
 
 extern dram processList;

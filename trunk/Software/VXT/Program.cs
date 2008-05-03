@@ -70,7 +70,7 @@ namespace VXT
 			int length;
 			while (current < data.Length && Console.KeyAvailable == false)
 			{
-				if ((current + blockSize) >= data.Length)
+				if ((current + blockSize) > data.Length)
 				{
 					length = data.Length - current;
 				}
@@ -82,7 +82,7 @@ namespace VXT
 				for (int aaa = 0; aaa < length; aaa++)
 				{
 					com.Write(data, current++, 1);
-					//					Thread.Sleep(1);
+										Thread.Sleep(1);
 				}
 				//current += length;
 				Console.Write((char)com.ReadChar());

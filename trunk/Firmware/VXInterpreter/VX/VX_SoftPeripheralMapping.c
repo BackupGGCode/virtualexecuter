@@ -2,13 +2,15 @@
 
 #include "VX/Peripherals/SP_IO.h"
 #include "VX/Peripherals/SP_SystemLEDs.h"
+#include "VX/Peripherals/SP_Console.h"
 
 __flash softPeripheral peripherals[256] = {
+  {0, SP_Console_Read, SP_Console_Write},
   {SP_SystemLEDs_Init, SP_SystemLEDs_Read, SP_SystemLEDs_Write},
   {SP_IO_Init, SP_IO_ReadDirection, SP_IO_WriteDirection},
   {0, SP_IO_ReadPort, SP_IO_WritePort},
   {0, SP_IO_ReadPin, SP_IO_WritePin},
-  {0,0,0}, {0,0,0}, {0,0,0},
+	{0,0,0}, {0,0,0},
 	{0,0,0}, {0,0,0}, {0,0,0},
 	{0,0,0}, {0,0,0},	{0,0,0},
 	{0,0,0}, {0,0,0}, {0,0,0},

@@ -13,7 +13,7 @@
 
 void HelpScreen(char* line);
 void ListFiles(char* line);
-void PrintFile(char* line);
+void ViewFile(char* line);
 void RunProgram(char* line);
 void StepProgram(char* line);
 void StopProgram(char* line);
@@ -24,7 +24,7 @@ void KillProcess(char* line);
 __flash command commands[] = {
 	{"help", HelpScreen, "This help screen."},
 	{"list", ListFiles, "List files on disk."},
-	{"print", PrintFile, "Print specified file."},
+	{"view", ViewFile, "Print specified file to the console."},
 	{"run", RunProgram, "Set process state to running."},
 	{"step", StepProgram, "Perform one instruction of the process."},
 	{"stop", StopProgram, "Stop the process."},
@@ -95,7 +95,7 @@ unsigned short totalFiles=0;
 	UART_WriteString_P(" bytes\n");
 }
 
-void PrintFile(char* line)
+void ViewFile(char* line)
 {
 fsFile f;
 unsigned char bytes;
@@ -170,30 +170,28 @@ vx_pid id = Strings_ReadValueUnsigned(Strings_GetNextWord(line));
 }
 
 
-//#define BLOCK_SIZE 200
-//#define DISC_SIZE (500*1024)
-//const unsigned long DISC_SIZE = 512000;
-/*
-void DRAM_LoadFileToDisc(char* line)
+void LoadFileToDisc(char* line)
 {
 unsigned char* buffer;
-unsigned char length;
-unsigned long blockSize, size, current=0;
+//unsigned char length;
+unsigned long current;
+unsigned long size;
+unsigned short blockSize;
 char* word;
 
-	word = GetNextWord(line);
-	size = ReadValueUnsigned(word);
-	word = GetNextWord(word);
-	blockSize = ReadValueUnsigned(word);
+	word = Strings_GetNextWord(line);
+	size = Strings_ReadValueUnsigned(word);
+	word = Strings_GetNextWord(word);
+	blockSize = Strings_ReadValueUnsigned(word);
 	
-	if(blockSize > BLOCK_SIZE)
+	if(blockSize > IMAGE_LOAD_BLOCK_SIZE)
 	{
-		blockSize = BLOCK_SIZE;
+		blockSize = IMAGE_LOAD_BLOCK_SIZE;
 	}
 	
 	buffer = Kernel_Allocate(blockSize);
 	
-	if(size > DISC_SIZE || buffer == null)
+	if(size > FileStore_GetDiscSize() || buffer == null)
 	{
 		UART_WriteString_P("N 0\n");
 		return;
@@ -201,32 +199,31 @@ char* word;
 	else
 	{
 		UART_WriteString_P("A ");
-		UART_WriteValueUnsigned(blockSize,0,0);
+		UART_WriteValueUnsigned(blockSize, 0, 0);
 		UART_WriteString_P("\n");
 	}
 	
+	current = 0;
 	while(current < size)
 	{
-		if((current + blockSize) >= size)
+		if((current + blockSize) > size)
 		{
-			length = size - current;
+			blockSize = size - current;
 		}
-		else
-		{
-			length = blockSize;
-		}
-		UART_ReadBytes(buffer, length);
-		DRAM_WriteBytes(current, buffer, length);
+
+		UART_ReadBytes(buffer, blockSize);
+		FileStore_WriteBytes(current, buffer, blockSize);
 		UART_WriteByte('*');
-		current += length;
+		current += blockSize;
 	}
 	
 	UART_WriteByte('!');
 	
 	Kernel_Deallocate(buffer);
 }
-*/
 
+
+/*
 #define BLOCK_SIZE 16
 #define DISC_SIZE (E2END + 1)																														// Reserve the entire EEPROM for the disc
 void LoadFileToDisc(char* line)
@@ -269,13 +266,14 @@ char* word;
 			length = blockSize;
 		}
 		UART_ReadBytes(buf, length);
-		InternalEEPROM_WriteBytes(current, buf, length);
+		//InternalEEPROM_WriteBytes(current, buf, length);
+		FileStore_WriteBytes(current, buf, length);
 		UART_WriteByte('*');
 		current += length;
 	}
 	UART_WriteByte('!');
 }
-
+*/
 
 void TestDRAM(char* line)
 {
