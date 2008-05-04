@@ -64,10 +64,11 @@ unsigned char i;
 
 void ListFiles(char* line)
 {
+unsigned char maxNameLength = 50;
 fsFile f;
-char name[50];
-unsigned long totalBytes=0;
-unsigned short totalFiles=0;
+char* name;
+unsigned long totalBytes = 0;
+unsigned short totalFiles = 0;
 	
 	if(FileStore_GetNextFileEntry(&f, true) == false)
 	{
@@ -75,10 +76,16 @@ unsigned short totalFiles=0;
 	}
 	else
 	{
+		name = Kernel_Allocate(maxNameLength);
+		if(name == null)
+		{
+			UART_WriteString_P("Insufficient internal heap!\n");
+			return;
+		}
 		UART_WriteString_P("Size...... Name\n");
 		do
 		{
-			FileStore_GetFileName(&f, name, 50);
+			FileStore_GetFileName(&f, name, maxNameLength);
 			UART_WriteValueUnsigned(f.size, 10, ' ');
 			UART_WriteByte(' ');
 			UART_WriteString(name);
@@ -87,6 +94,8 @@ unsigned short totalFiles=0;
 			totalFiles++;
 		}	while(FileStore_GetNextFileEntry(&f, false));
 	}
+	
+	Kernel_Deallocate(name);
 	
 	UART_WriteString_P("\n");
 	UART_WriteValueUnsigned(totalFiles,0,0);
@@ -97,21 +106,33 @@ unsigned short totalFiles=0;
 
 void ViewFile(char* line)
 {
+unsigned char blockSize = 20;
 fsFile f;
-unsigned char bytes;
-unsigned char buf[20];
-	
+unsigned char count;
+unsigned char* buffer;
+
 	if(FileStore_OpenFile(Strings_GetNextWord(line), &f) == false)
 	{
-		UART_WriteString_P("File not found");
+		UART_WriteString_P("File not found\n");
 		return;
 	}
-	
+
+	buffer = Kernel_Allocate(blockSize);
+	if(buffer == null)
+	{
+		UART_WriteString_P("Insufficient internal heap!\n");
+		return;
+	}
+
 	do
 	{
-		bytes = FileStore_ReadBytes(&f, buf, 20);
-		UART_WriteBytes(buf, bytes);
-	} while(bytes == 20);
+		count = FileStore_ReadBytes(&f, buffer, 20);
+		UART_WriteBytes(buffer, count);
+	} while(count == 20);
+
+	Kernel_Deallocate(buffer);
+	
+	UART_WriteString_P("\n");
 }
 
 void RunProgram(char* line)
