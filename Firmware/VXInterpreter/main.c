@@ -46,11 +46,11 @@ unsigned long eepromDiscSize = EEPROM_DISC_SIZE;
 	Kernel_Init();
 
 //	UART_Init(__BAUDRATE__(115200));
-	UART_Init(__BAUDRATE__(230400));
-//	UART_Init(__BAUDRATE__(460800));
+//	UART_Init(__BAUDRATE__(230400));
+	UART_Init(__BAUDRATE__(460800));
 	
 	UART_WriteString_P("\n\n\n---::: V I R T U A L   E X E C U T E R :::---\n\n");
-	
+
 	UART_WriteString_P("IO ports initialized.\n");
 
 	UART_WriteString_P("MROS kernel initialized.\n");

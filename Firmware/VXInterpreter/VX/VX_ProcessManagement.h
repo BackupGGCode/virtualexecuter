@@ -6,7 +6,8 @@
 
 #define WriteProcess(address, proc)							DRAM_WriteBytes(address, (unsigned char*)proc, sizeof(process))
 #define ReadProcess(address, proc)							DRAM_ReadBytes(address, (unsigned char*)proc, sizeof(process))
-#define UpdateProcess(proc)											DRAM_WriteBytes(proc.id + 53, (unsigned char*)(&(proc.state)), 22)
+//#define UpdateProcess(proc)											DRAM_WriteBytes(proc.id + 53, (unsigned char*)(&(proc.state)), 22)
+#define UpdateProcess(proc)											DRAM_WriteBytes(proc.id + ((unsigned short)&proc.state - (unsigned short)&proc.id), (unsigned char*)&proc.state, sizeof(process) - ((unsigned short)&proc.state - (unsigned short)&proc.id))
 
 #define FLAG_ZERO																(1 << 0)
 #define FLAG_NEGATIVE														(1 << 1)
@@ -17,24 +18,27 @@ extern dram processList;
 typedef enum {Stop, Run, Step, Crash} vx_pstate;
 typedef unsigned long vx_pid;
 
+/*
+	New static fields must be inserted before 'state'. New dynamic fields must be inserted after 'state'.
+*/
 typedef struct
 {
-	vx_pid id;
-	unsigned long options;
-	char name[PROCES_NAME_LENGTH + 1];
-	dram codeStart;
-	dram dataStart;
-	dram stackStart;
-	unsigned long codeSize;
-	unsigned long dataSize;
-	unsigned long stackSize;
-	vx_pstate state;
-	dram next;
-	unsigned long ticks;
-	unsigned char flags;
-	dram ip;
-	dram sp;
-	dram sfp;
+	vx_pid id;//0
+	unsigned long options;//4
+	char name[PROCES_NAME_LENGTH + 1];//8
+	dram codeStart;//29
+	dram dataStart;//33
+	dram stackStart;//37
+	unsigned long codeSize;//41
+	unsigned long dataSize;//45
+	unsigned long stackSize;//49
+	vx_pstate state;//53
+	dram next;//54
+	unsigned long ticks;//58
+	unsigned char flags;//62
+	dram ip;//63
+	dram sp;//67
+	dram sfp;//71
 } process;
 
 

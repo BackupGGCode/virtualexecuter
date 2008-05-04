@@ -16,15 +16,15 @@
 
 #define HEAP_SIZE																500
 
-#define LED_GREEN_ON														{PORTB|=(1<<6);}
-#define LED_GREEN_OFF														{PORTB&=~(1<<6);}
-#define LED_GREEN_TOGGLE												{PORTB^=(1<<6);}
-#define LED_YELLOW_ON														{PORTB|=(1<<7);}
-#define LED_YELLOW_OFF													{PORTB&=~(1<<7);}
-#define LED_YELLOW_TOGGLE												{PORTB^=(1<<7);}
-#define LED_RED_ON															{PORTG|=(1<<3);}
-#define LED_RED_OFF															{PORTG&=~(1<<3);}
-#define LED_RED_TOGGLE													{PORTG^=(1<<3);}
+#define LED_GREEN_ON														{PORTB |= (1 << 6);}
+#define LED_GREEN_OFF														{PORTB &= ~(1 << 6);}
+#define LED_GREEN_TOGGLE												{PORTB ^= (1 << 6);}
+#define LED_YELLOW_ON														{PORTB |= (1 << 7);}
+#define LED_YELLOW_OFF													{PORTB &= ~(1 << 7);}
+#define LED_YELLOW_TOGGLE												{PORTB ^= (1 << 7);}
+#define LED_RED_ON															{PORTG |= (1 << 3);}
+#define LED_RED_OFF															{PORTG &= ~(1 << 3);}
+#define LED_RED_TOGGLE													{PORTG ^= (1 << 3);}
 
 // Disc
 #define USE_EEPROM_FOR_DISC											0
