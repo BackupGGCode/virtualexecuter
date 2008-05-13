@@ -103,7 +103,6 @@ namespace VXT
 
 		static void Main(string[] args)
 		{
-
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
 			Console.WriteLine("Version: 1.11 - April 29th 2008");
 
