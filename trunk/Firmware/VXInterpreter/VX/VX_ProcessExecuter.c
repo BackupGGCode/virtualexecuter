@@ -1141,4 +1141,3 @@ bool PopFloat(float* pValue)
 
 	return true;
 }
-
