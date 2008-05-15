@@ -107,9 +107,9 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 0 1 -1 -1 -4 -30 66 1144 87 688")
-        (Scroll "0 0")
-        (Zoom "71")
+        (Placement "44 2 3 -1 -1 -4 -30 66 1144 87 688")
+        (Scroll "3438 2478")
+        (Zoom "284")
         (Occurrence "/"))
       (Path
          "F:\PROJECTS\VIRTUAL EXECUTER\CODE.GOOGLE\HARDWARE\VXTESTBENCH\VXTESTBENCH.DSN")
