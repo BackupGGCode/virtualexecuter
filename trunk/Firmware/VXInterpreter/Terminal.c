@@ -29,7 +29,7 @@ __flash command commands[] = {
 	{"step", StepProgram, "Perform one instruction of the process."},
 	{"stop", StopProgram, "Stop the process."},
 	{"load", LoadFileToDisc, "Load image to disc."},
-	{"testdram", TestDRAM, 0},
+	{"testdram", TestDRAM, "Test the DRAM. System must be reset after test to restore memory structures."},
 	{"mem", PrintHeaps, "Print internal and external heap usage."},
 	{"pros", VX_ListProcesses, "List all processes."},
 	{"kill", KillProcess, "Kills the process specified by its ID."} };
@@ -53,9 +53,13 @@ unsigned char i;
 	for(i = 0; i < NumberOfCommands; i++)
 	{
 		UART_WriteString_P(commands[i].name);
-		if(commands[i].helpText != null)
+		if(commands[i].helpText == null)
 		{
-			UART_WriteString_P(" - ");
+			UART_WriteString_P("\n");
+		}
+		else
+		{
+			UART_WriteString_P("\n  ");
 			UART_WriteString_P(commands[i].helpText);
 		}
 		UART_WriteString_P("\n");
