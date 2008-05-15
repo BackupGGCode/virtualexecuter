@@ -1,0 +1,5 @@
+1. Implement an interface module (use 'Communication module template.asm' as a template).
+2. Setup an appropriate config file (use 'Configuration template.inc' as a template), make a copy of the config file and name it config.inc.
+   The config file must include the interface module created in step 1.
+3. Run build.bat.
+4. Program FirmwareUpdater.hex to target.
