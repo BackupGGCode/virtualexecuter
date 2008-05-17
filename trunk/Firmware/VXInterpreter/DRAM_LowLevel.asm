@@ -2,7 +2,7 @@
 #include "DRAM.h"
 
 
-NAME SlicerKernel
+NAME DRAM_LowLevel
 
 RSEG CODE :CODE
 

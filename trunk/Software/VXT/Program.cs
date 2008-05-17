@@ -15,7 +15,7 @@ namespace VXT
 		static string baudrate = "115200";
 		static bool localEcho = false;
 		static bool sendNewLineAsCarriageReturnPlusLineFeed = true;
-		static bool appendLineFeedToCarriageReturnOnIncoming = false;
+		static bool appendLineFeedToCarriageReturnOnIncoming = true;
 		static bool encodeAll = false;
 		static bool encodeControlCharacters = false;
 		static bool saveToFile = false;
@@ -23,88 +23,10 @@ namespace VXT
 		static StreamWriter logFile = null;
 		static bool waitWhenExiting = true;
 
-		static void LoadDiscImage(string[] args)
-		{
-			if (args.Length != 2)
-			{
-				Console.WriteLine("Please just type the command and the file name mkay.");
-				return;
-			}
-
-			if (File.Exists(args[1]) == false)
-			{
-				Console.WriteLine("I simply could not find that file.");
-				return;
-			}
-
-			byte[] data = File.ReadAllBytes(args[1]);
-			int blockSize = 1024;
-			if (data.Length < blockSize)
-			{
-				blockSize = data.Length;
-			}
-
-			com.DiscardInBuffer();
-			com.WriteLine("load " + data.Length + " " + blockSize + " ");
-			com.ReadLine();
-			string[] reply = com.ReadLine().Split(' ');
-
-			if (reply.Length != 2)
-			{
-				Console.WriteLine("Invalid reply.");
-				return;
-			}
-			if (reply[0] != "A")
-			{
-				Console.WriteLine("Come on that image is larger than the disc. I can't do that.");
-				return;
-			}
-
-			blockSize = int.Parse(reply[1]);
-
-			Console.WriteLine("Image size: " + data.Length + " bytes. Block size: " + blockSize + " bytes.");
-
-			DateTime start = DateTime.Now;
-
-			int current = 0;
-			int length;
-			while (current < data.Length && Console.KeyAvailable == false)
-			{
-				if ((current + blockSize) > data.Length)
-				{
-					length = data.Length - current;
-				}
-				else
-				{
-					length = blockSize;
-				}
-				//com.Write(data, current, length);
-				for (int aaa = 0; aaa < length; aaa++)
-				{
-					com.Write(data, current++, 1);
-										Thread.Sleep(1);
-				}
-				//current += length;
-				Console.Write((char)com.ReadChar());
-			}
-
-			Console.WriteLine((char)com.ReadChar());
-
-			TimeSpan time = DateTime.Now.Subtract(start);
-			if (time.Seconds == 0)
-			{
-				Console.WriteLine("Transfer time: " + time.ToString() + " @ > " + data.Length + " B/S.");
-			}
-			else
-			{
-				Console.WriteLine("Transfer time: " + time.ToString() + " @ " + (data.Length / time.Seconds) + " B/S.");
-			}
-		}
-
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
-			Console.WriteLine("Version: 1.11 - April 29th 2008");
+			Console.WriteLine("Version: 1.12 - May 17th 2008");
 
 			try
 			{
@@ -159,7 +81,7 @@ namespace VXT
 				}
 				if (options.ContainsKey("i"))
 				{
-					appendLineFeedToCarriageReturnOnIncoming = true;
+					appendLineFeedToCarriageReturnOnIncoming = false;
 				}
 				#endregion
 
@@ -174,7 +96,7 @@ namespace VXT
 					Quit();
 					return;
 				}
-
+				
 				if (port == null || port == "")
 				{
 					Console.WriteLine("No port specified");
@@ -189,6 +111,7 @@ namespace VXT
 				}
 
 				com = new SerialPort(port, int.Parse(baudrate));
+				System.Diagnostics.Debug.WriteLine("New line is: [" + com.NewLine.Length + "] '" + com.NewLine + "'");
 				com.NewLine = ((char)10).ToString();
 				com.Open();
 
@@ -278,7 +201,20 @@ namespace VXT
 							}
 						}
 
-						Console.Write(outBuffer, 0, j);
+						//Console.Write(outBuffer, 0, j);
+						for (int k = 0; k < j; k++)
+						{
+							if (outBuffer[k] == 12)
+							{
+								Console.Clear();
+							}
+							else
+							{
+								Console.Write(outBuffer[k]);
+
+							}
+						}
+
 						if (saveToFile)
 						{
 							logFile.Write(outBuffer, 0, j);
@@ -375,22 +311,103 @@ namespace VXT
 		static void Help()
 		{
 			Console.WriteLine("Available options:");
-			Console.WriteLine("  p - Set port name.\n      'vxt -p com1'");
-			Console.WriteLine("  b - Set baudrate (default is 115200 bps).\n      'vxt -p com1 -b 9600'");
-			Console.WriteLine("  l - Enable local echo of all typed characters.\n      'vxt -p com1 -l'");
-			Console.WriteLine("  e - Enable partial encoding. Control characters will be shown as hex values.\n      'vxt -p com1 -e'");
-			Console.WriteLine("  E - Enable full encoding. All characters will be shown as hex values.\n      'vxt -p com1 -E'");
-			Console.WriteLine("  f - Enable logging. If no file name is specified the default name will be used.\n      'vxt -p com1 -f logfile.txt'");
-			Console.WriteLine("  o - Don't send full new line (cr + lf) on 'Enter'. Just send cr.\n      'vxt -p com1 -o'");
-			Console.WriteLine("  i - Append lf to cr when a cr is recevied.\n      'vxt -p com1 -i'");
-			Console.WriteLine("  w - Wait for a key press when exiting (use if run directly from Windows).\n      'vxt -p com1 -w'");
+			Console.WriteLine("  p - Set port name.");
+			Console.WriteLine("  b - Set baudrate (default is 115200 bps).");
+			Console.WriteLine("  l - Enable local echo of all typed characters.");
+			Console.WriteLine("  e - Enable partial encoding. Control characters will be shown as hex values.");
+			Console.WriteLine("  E - Enable full encoding. All characters will be shown as hex values.");
+			Console.WriteLine("  f - Enable logging. If no file name is specified '" + logFileName + "' is used.");
+			Console.WriteLine("  o - Don't send full new line (cr + lf) on 'Enter'. Just send cr.");
+			Console.WriteLine("  i - Don't append lf to cr when a cr is recevied.");
+			Console.WriteLine("  w - Wait for a key press when exiting (use if run directly from Windows).");
+			Console.WriteLine("");
+			Console.WriteLine("Usage:");
+			Console.WriteLine("  vxt -p com1 -i -b 9600");
 			Console.WriteLine("");
 			Console.WriteLine("To run special functions hit ESC and enter function name and arguments.");
 			Console.WriteLine("  load - Load a disc image to a VX machine.");
 			Console.WriteLine("  quit - Quit VXT.");
 			Console.WriteLine("");
-			Console.WriteLine("To close the terminal either hit Ctrl + C or use the special function 'quit'.");
+			Console.WriteLine("Pressing Ctrl + C has the same effect as running the quit command.");
 			Console.WriteLine("");
+		}
+
+		static void LoadDiscImage(string[] args)
+		{
+			if (args.Length != 2)
+			{
+				Console.WriteLine("Please just type the command and the file name mkay.");
+				return;
+			}
+
+			if (File.Exists(args[1]) == false)
+			{
+				Console.WriteLine("I simply could not find that file.");
+				return;
+			}
+
+			byte[] data = File.ReadAllBytes(args[1]);
+			int blockSize = 1024;
+			if (data.Length < blockSize)
+			{
+				blockSize = data.Length;
+			}
+
+			com.DiscardInBuffer();
+			com.WriteLine("load " + data.Length + " " + blockSize + " ");
+			com.ReadLine();
+			string[] reply = com.ReadLine().Split(' ');
+
+			if (reply.Length != 2)
+			{
+				Console.WriteLine("Invalid reply.");
+				return;
+			}
+			if (reply[0] != "A")
+			{
+				Console.WriteLine("Come on that image is larger than the disc. I can't do that.");
+				return;
+			}
+
+			blockSize = int.Parse(reply[1]);
+
+			Console.WriteLine("Image size: " + data.Length + " bytes. Block size: " + blockSize + " bytes.");
+
+			DateTime start = DateTime.Now;
+
+			int current = 0;
+			int length;
+			while (current < data.Length && Console.KeyAvailable == false)
+			{
+				if ((current + blockSize) > data.Length)
+				{
+					length = data.Length - current;
+				}
+				else
+				{
+					length = blockSize;
+				}
+				//com.Write(data, current, length);
+				for (int aaa = 0; aaa < length; aaa++)
+				{
+					com.Write(data, current++, 1);
+					Thread.Sleep(1);
+				}
+				//current += length;
+				Console.Write((char)com.ReadChar());
+			}
+
+			Console.WriteLine((char)com.ReadChar());
+
+			TimeSpan time = DateTime.Now.Subtract(start);
+			if (time.Seconds == 0)
+			{
+				Console.WriteLine("Transfer time: " + time.ToString() + " @ > " + data.Length + " B/S.");
+			}
+			else
+			{
+				Console.WriteLine("Transfer time: " + time.ToString() + " @ " + (data.Length / time.Seconds) + " B/S.");
+			}
 		}
 	}
 }
