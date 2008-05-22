@@ -1,0 +1,10 @@
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\bin\Debug\VXA.exe
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\bin\Debug\VXA.pdb
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\obj\Debug\ResolveAssemblyReference.cache
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\obj\Debug\VXA.exe
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\obj\Debug\VXA.pdb
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\bin\Release\VXA.exe
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\bin\Release\VXA.pdb
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\obj\Release\ResolveAssemblyReference.cache
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\obj\Release\VXA.exe
+F:\Projects\Virtual eXecuter\code.google\Software\new VXA\VXA\obj\Release\VXA.pdb
