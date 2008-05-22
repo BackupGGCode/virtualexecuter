@@ -43,15 +43,11 @@ dram currentProcess = processList;
 	{
 		ReadProcess(currentProcess, &p);
 		
-		if(p.state == Run || p.state == Step)
+		if(p.state == Run)
 		{
 			if(VX_ExecuteInstruction())
 			{
 				p.ticks++;
-				if(p.state == Step)
-				{
-					p.state = Stop;
-				}
 			}
 			else
 			{
@@ -59,6 +55,20 @@ dram currentProcess = processList;
 			}
 			UpdateProcess(p);
 		}
+		else if(p.state == Step)
+		{
+			if(VX_ExecuteInstruction())
+			{
+				p.ticks++;
+				p.state = Stop;
+			}
+			else
+			{
+				p.state = Crash;
+			}
+			UpdateProcess(p);
+		}
+		
 		currentProcess = p.next;
 	}
 }
@@ -825,6 +835,36 @@ float f1, f2;
 							}
 							break;
 
+// Methods
+
+		case  73:	// call - 0x49
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							if(PushQuad(p.ip) == false)
+							{
+								return false;
+							}
+							if(ul1 >= p.codeSize)
+							{
+								return false;
+							}
+							p.ip = ul1;
+							break;
+
+		case  74:	// return - 0x4a
+							if(PopQuad(&ul1) == false)
+							{
+								return false;
+							}
+							if(ul1 >= p.codeSize)
+							{
+								return false;
+							}
+							p.ip = ul1;
+							break;
+
 // IO
 
 		case  75:	// input - 0x4b
@@ -833,7 +873,10 @@ float f1, f2;
 								return false;
 							}
               uc1 = VX_SoftPeripherals_Read(uc1);
-              PushSingle(uc1);
+							if(PushSingle(uc1) == false)
+							{
+								return false;
+							}
 							break;
 
 		case  76:	// output - 0x4c
@@ -842,6 +885,20 @@ float f1, f2;
 								return false;
 							}
               VX_SoftPeripherals_Write(uc1, uc2);
+							break;
+							
+// Misc
+							
+		case  77:	// wait - 0x4d
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+							// wait us1 milliseconds
+							break;
+							
+		case  78:	// exit - 0x4e
+							p.state = Done;
 							break;
               
 // Unknown instructions
@@ -1107,7 +1164,7 @@ bool PushFloat(float value)
 
 	p.sp += 4;
 	
-	if(value == 0)
+	if(value == 0.0)
 	{
 		p.flags |= (1 << FLAG_ZERO);
 	}
@@ -1116,7 +1173,7 @@ bool PushFloat(float value)
 		p.flags &= ~(1 << FLAG_ZERO);
 	}
 	
-	if(value < 0)
+	if(value < 0.0)
 	{
 		p.flags |= (1 << FLAG_NEGATIVE);
 	}

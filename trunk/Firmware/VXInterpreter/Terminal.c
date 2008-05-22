@@ -396,6 +396,7 @@ bool ExecuteProgram(char* line)
 {
 vx_pid id;
 unsigned char i = 0;
+char* argument = Strings_GetNextWord(line);
 
 	while(line[i] != 0 && line[i] != ' ')
 	{
@@ -403,17 +404,35 @@ unsigned char i = 0;
 	}
 	line[i] = 0;
 
-	if(VX_CreateProcessFromFile(line, &id) == false)
+	if(Strings_EndsWith_P(line, ".vxx"))
 	{
-		UART_WriteString_P("Unknown command\n");
+		if(VX_CreateProcessFromFile(line, &id) == false)
+		{
+			UART_WriteString_P("Unable to load executable\n");
+			return false;
+		}
+		if(Strings_Compare_P(argument, "stop"))
+		{
+			VX_SetProcessState(id, Stop);
+		}
+		else
+		{
+			VX_SetProcessState(id, Run);
+		}
+		
+		UART_WriteString_P("Process created with ID ");
+		UART_WriteValueUnsigned(id, 0, 0);
+		UART_WriteString_P("\n");
 		return true;
 	}
-	
-	VX_SetProcessState(id, Stop);
-	
-	UART_WriteString_P("Process created with ID ");
-	UART_WriteValueUnsigned(id, 0, 0);
-	UART_WriteString_P("\n");
-	
-	return true;
+	else if(Strings_EndsWith_P(line, ".vxs"))
+	{
+		UART_WriteString_P("Sorry I can't do scripts yet :( SOMEONE IMPLEMENT ME!\n");
+		return false;
+	}
+	else
+	{
+		UART_WriteString_P("What?\n");
+		return false;
+	}
 }

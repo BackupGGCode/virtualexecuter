@@ -15,7 +15,7 @@
 
 
 extern dram processList;
-typedef enum {Stop, Run, Step, Crash} vx_pstate;
+typedef enum {Stop, Run, Step, Crash, Done} vx_pstate;
 typedef unsigned long vx_pid;
 
 /*

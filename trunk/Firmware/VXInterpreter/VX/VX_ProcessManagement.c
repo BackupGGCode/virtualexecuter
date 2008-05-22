@@ -12,7 +12,7 @@
 
 dram processList = null;
 
-string* vxPStateText[] ={" Stop", " Run ", " Step", "Crash"};
+string* vxPStateText[] ={" Stop", " Run ", " Step", "Crash", " Done"};
 
 
 #define BLOCK_SIZE															32
@@ -36,7 +36,8 @@ unsigned char length;
 	buffer = Kernel_Allocate(21);
 	FileStore_ReadBytes(&file, buffer, 21);
 	
-	if(buffer[0] != 'V' || buffer[1] != 'X' || buffer[2] != 'E' || buffer[3] != 'X' || buffer[4] != 'E')
+	if(Strings_StartsWith_P(buffer, "VXEXE") == false)
+//	if(buffer[0] != 'V' || buffer[1] != 'X' || buffer[2] != 'E' || buffer[3] != 'X' || buffer[4] != 'E')
 	{
 		Kernel_Deallocate(buffer);
 		return false;
@@ -189,7 +190,7 @@ dram current = processList;
 		ReadProcess(current, proc);
 		if(proc->id == id)
 		{
-			if(proc->state != Crash)
+			if(proc->state != Crash && proc->state != Done)
 			{
 				proc->state = state;
 				WriteProcess(id, proc);
