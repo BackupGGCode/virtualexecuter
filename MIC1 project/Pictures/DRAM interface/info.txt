@@ -1,1 +1,0 @@
-pictures 0-22: Yellow=CAS, Blue=RAS, Purple=WE

@@ -37,7 +37,6 @@ unsigned char length;
 	FileStore_ReadBytes(&file, buffer, 21);
 	
 	if(Strings_StartsWith_P(buffer, "VXEXE") == false)
-//	if(buffer[0] != 'V' || buffer[1] != 'X' || buffer[2] != 'E' || buffer[3] != 'X' || buffer[4] != 'E')
 	{
 		Kernel_Deallocate(buffer);
 		return false;
@@ -224,7 +223,8 @@ dram address = processList;
 	
 	p = (process*)Kernel_Allocate(sizeof(process));
 	
-	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... SFP.... Size... Name\n");
+	//UART_WriteString_P("PID.... State Ticks..... IP..... SP..... SFP.... Size... Name\n");
+	UART_WriteString_P("PID.... State Ticks..... IP..... SP..... Size... Name\n");
 	
 	do
 	{
@@ -238,8 +238,8 @@ dram address = processList;
 		UART_WriteValueUnsigned(p->ip, 7, ' ');
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(p->sp, 7, ' ');
-		UART_WriteByte(' ');
-		UART_WriteValueUnsigned(p->sfp, 7, ' ');
+//		UART_WriteByte(' ');
+//		UART_WriteValueUnsigned(p->sfp, 7, ' ');
 		UART_WriteByte(' ');
 		UART_WriteValueUnsigned(sizeof(process) + p->codeSize + p->dataSize + p->stackSize, 7, ' ');
 		UART_WriteByte(' ');

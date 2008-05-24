@@ -53,10 +53,73 @@ namespace VXA
 
 		int options = 0;
 
+		public StreamReader Preprocessor(string sourceFileName)
+		{
+			StreamReader sourceFile = new StreamReader(sourceFileName);
+
+			MemoryStream ms = new MemoryStream(10000);
+			StreamWriter sw = new StreamWriter(ms);
+			sw.AutoFlush = true;
+
+			string line = sourceFile.ReadLine();
+
+			while (line != null)
+			{
+				if (line.Contains("//"))
+				{
+					line = line.Remove(line.IndexOf("//"));
+				}
+
+				if (line.Contains(";"))
+				{
+					line = line.Remove(line.IndexOf(";"));
+				}
+
+				line = line.Trim();
+
+				if (line.StartsWith("#"))
+				{
+					string includeFileName = "";
+					try
+					{
+						includeFileName = line.Substring(line.IndexOf("\"") + 1);
+						includeFileName = includeFileName.Remove(includeFileName.IndexOf("\""));
+						//						Console.WriteLine("include '" + includeFileName + "'");
+					}
+					catch
+					{
+						Informer.Instance.Error("Malformed include directive");
+					}
+
+					try
+					{
+						//sw.Write(Preprocessor(includeFileName));
+						StreamReader sr = Preprocessor(includeFileName);
+						sw.Write(sr.ReadToEnd());
+						//ms.WriteTo(Preprocessor(includeFileName).BaseStream);
+					}
+					catch
+					{
+						Informer.Instance.Error("Unable to find include file '" + includeFileName + "'");
+					}
+				}
+				else
+				{
+					sw.WriteLine(line);
+					//ms.Write(Encoding.Default.GetBytes(line), 0, line.Length);
+				}
+
+				line = sourceFile.ReadLine();
+			}
+
+			ms.Seek(0, SeekOrigin.Begin);
+
+			return new StreamReader(ms);
+		}
+
 		public void FindLabels(StreamReader source)
 		{
 			string line = source.ReadLine();
-			int lineNumber = 1;
 			string segment = "";
 			int stackAddress = 0;
 			int codeAddress = 0;
@@ -68,6 +131,8 @@ namespace VXA
 
 			while (line != null)
 			{
+				line = line.Trim();
+
 				if (line.Contains("."))
 				{
 					segment = line.Substring(line.IndexOf(".") + 1);
@@ -79,6 +144,7 @@ namespace VXA
 					if (segment == "code")
 					{
 						codeLabels.Add(label, codeAddress);
+						Informer.Instance.Map("code", label, codeAddress);
 					}
 					else if (segment == "data")
 					{
@@ -89,6 +155,7 @@ namespace VXA
 							size = int.Parse(sizeString);
 						}
 						dataLabels.Add(label, dataAddress);
+						Informer.Instance.Map("data", label, dataAddress);
 						dataAddress += size;
 					}
 					else if (segment == "stack")
@@ -100,11 +167,12 @@ namespace VXA
 							size = int.Parse(sizeString);
 						}
 						stackLabels.Add(label, stackAddress);
+						Informer.Instance.Map("stack", label, stackAddress);
 						stackAddress += size;
 					}
 					else
 					{
-						Informer.Instance.Warning("Label in unknown segment '" + segment + "' ignored (line " + lineNumber + ")");
+						Informer.Instance.Warning("Label in unknown segment '" + segment + "' ignored");
 					}
 				}
 				else if (line != "")
@@ -118,23 +186,12 @@ namespace VXA
 
 				line = source.ReadLine();
 			}
+
 			source.BaseStream.Seek(0, SeekOrigin.Begin);
 
 			stackSize = stackAddress;
 			dataSize = dataAddress;
 			codeSize = codeAddress;
-
-			Console.WriteLine("Found the following data segment labels:");
-			foreach (string s in dataLabels.Keys)
-			{
-				Console.WriteLine("  " + s + " @ " + dataLabels[s]);
-			}
-
-			Console.WriteLine("\nFound the following code segment labels:");
-			foreach (string s in codeLabels.Keys)
-			{
-				Console.WriteLine("  " + s + " @ " + codeLabels[s]);
-			}
 		}
 
 		public void GenerateCode(StreamReader source)
@@ -151,33 +208,59 @@ namespace VXA
 				{
 					segment = line.Substring(line.IndexOf(".") + 1);
 				}
-				else if (line != "" && line.Contains(":") == false)
+				else if (line.Contains(":"))
 				{
 					if (segment == "code")
 					{
-						string[] parts = line.Split(' ');
-
-						code.Add((byte)instructionSet.GetOpcode(parts[0]));
-
-						if (instructionSet.GetSize(parts[0].Trim()) > 1)
+						string label = line.Remove(line.IndexOf(":")).Trim();
+						Informer.Instance.List(label);
+					}
+				}
+				else if (line != "")
+				{
+					if (segment == "code")
+					{
+						string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+						for (int iii = 0; iii < parts.Length; iii++)
 						{
-							int constant;
+							parts[iii] = parts[iii].Trim();
+						}
+
+						List<byte> bytes = new List<byte>(8);
+
+						bytes.Add((byte)instructionSet.GetOpcode(parts[0]));
+
+						int size = instructionSet.GetSize(parts[0]);
+						if (size > 1)
+						{
+							int constant = 0;
 							try
 							{
 								constant = int.Parse(parts[1]);
 							}
 							catch
 							{
-								constant = TranslateLabel(parts[1]);
+								try
+								{
+									constant = TranslateLabel(parts[1]);
+								}
+								catch
+								{
+									Informer.Instance.Error("Missing constant in line '" + line + "'");
+								}
 							}
-							byte[] bytes = BitConverter.GetBytes(constant);
-							for (int byteCount = 0; byteCount < instructionSet.GetSize(parts[0].Trim()) - 1; byteCount++)
+							byte[] bs = BitConverter.GetBytes(constant);
+							for (int byteCount = 0; byteCount < (size - 1); byteCount++)
 							{
-								code.Add(bytes[byteCount]);
+								bytes.Add(bs[byteCount]);
 							}
 						}
 
-						codeAddress += instructionSet.GetSize(parts[0].Trim());
+						Informer.Instance.List(codeAddress, bytes.ToArray(), line);
+
+						code.AddRange(bytes.ToArray());
+
+						codeAddress += size;
 					}
 				}
 
@@ -186,37 +269,36 @@ namespace VXA
 			source.BaseStream.Seek(0, SeekOrigin.Begin);
 
 			codeSegment = code.ToArray();
-
-			foreach (byte b in code)
-			{
-				Console.WriteLine(b);
-			}
 		}
 
-		public void GenerateExecutable(StreamWriter file)
+		public void GenerateExecutable(FileStream file)
 		{
-			file.Write("VXEXE");
-			file.Write(ConvertIntToCharArray(options));
-			file.Write(ConvertIntToCharArray(codeSize));
-			file.Write(ConvertIntToCharArray(dataSize));
-			file.Write(ConvertIntToCharArray(stackSize));
-			file.Write(ConvertByteArrayToCharArray(codeSegment));
+			file.Write(ConvertStringToByteArray("VXEXE"), 0, 5);
+			file.Write(ConvertIntToByteArray(options), 0, 4);
+			file.Write(ConvertIntToByteArray(codeSize), 0, 4);
+			file.Write(ConvertIntToByteArray(dataSize), 0, 4);
+			file.Write(ConvertIntToByteArray(stackSize), 0, 4);
+			file.Write(codeSegment, 0, CodeSegment.Length);
+
+			Informer.Instance.Message("Code size: " + codeSize);
+			Informer.Instance.Message("Data size: " + dataSize);
+			Informer.Instance.Message("Stack size: " + StackSize);
 		}
 
-		private char[] ConvertIntToCharArray(int value)
+		private byte[] ConvertStringToByteArray(string value)
 		{
-			return ConvertByteArrayToCharArray(BitConverter.GetBytes(value));
-		}
-
-		private char[] ConvertByteArrayToCharArray(byte[] bytes)
-		{
-			char[] chars = new char[bytes.Length];
+			byte[] bytes = new byte[value.Length];
 			int i = 0;
-			foreach (byte b in bytes)
+			foreach (char c in value)
 			{
-				chars[i++] = (char)b;
+				bytes[i++] = (byte)c;
 			}
-			return chars;
+			return bytes;
+		}
+
+		private byte[] ConvertIntToByteArray(int value)
+		{
+			return BitConverter.GetBytes(value);
 		}
 
 		private int TranslateLabel(string name)
@@ -234,6 +316,7 @@ namespace VXA
 				throw new Exception("Label '" + name + "' not found");
 			}
 		}
+		/*
 		private int TranslateDataLabel(string name)
 		{
 			if (dataLabels.ContainsKey(name))
@@ -256,5 +339,6 @@ namespace VXA
 				throw new Exception("Code label '" + name + "' not found");
 			}
 		}
+	 */
 	}
 }
