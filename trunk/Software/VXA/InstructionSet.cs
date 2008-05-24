@@ -26,7 +26,12 @@ namespace VXA
 		{
 			instructions = new List<Instruction>(256);
 			XmlSerializer serializer = new XmlSerializer(typeof(List<Instruction>));
-			FileStream file = new FileStream("InstructionSet.xml", FileMode.Open);
+			string exeDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+			if (exeDir.StartsWith("file"))
+			{
+				exeDir = exeDir.Substring(6);
+			}
+			FileStream file = new FileStream(exeDir + "/InstructionSet.xml", FileMode.Open);
 			instructions = (List<Instruction>)serializer.Deserialize(file);
 			//serializer.Serialize(file, instructions);
 			file.Close();

@@ -265,7 +265,9 @@ void DRAM_ReadBytes(dram address, unsigned char* data, unsigned short length)
 {
 	while(length--)
 	{
-		*data++ = DRAM_ReadByte(address++);
+		*data = DRAM_ReadByte(address);
+		data++;
+		address++;
 	}
 }
 
@@ -273,7 +275,9 @@ void DRAM_WriteBytes(dram address, unsigned char* data, unsigned short length)
 {
 	while(length--)
 	{
-		DRAM_WriteByte(address++, *data++);
+		DRAM_WriteByte(address, *data);
+		data++;
+		address++;
 	}
 }
 

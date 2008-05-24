@@ -2,7 +2,6 @@
 #include "Config.h"
 #include <Kernel/Kernel.h>
 #include <Kernel/MemoryManagement.h>
-#include <Peripherals/UART.h>
 #include <FileStore/FileStore.h>
 #include "VX_ProcessManagement.h"
 #include "VX.h"
@@ -38,37 +37,58 @@ process p;
 void VX_ProcessExecuter_Tick()
 {
 dram currentProcess = processList;	
+unsigned char i;
+bool modified;
 
 	while(currentProcess != null)
 	{
 		ReadProcess(currentProcess, &p);
+
+		modified = false;
+		i = 10;
 		
-		if(p.state == Run)
-		{
-			if(VX_ExecuteInstruction())
+		while(i > 0)
+		{				
+			if(p.state == Run)
 			{
-				p.ticks++;
+				if(VX_ExecuteInstruction())
+				{
+					p.ticks++;
+				}
+				else
+				{
+					p.state = Crash;
+				}
+				//UpdateProcess(p);
+				modified = true;
+				i--;
+			}
+			else if(p.state == Step)
+			{
+				if(VX_ExecuteInstruction())
+				{
+					p.ticks++;
+					p.state = Stop;
+				}
+				else
+				{
+					p.state = Crash;
+				}
+				//UpdateProcess(p);
+				modified = true;
+				i--;
 			}
 			else
 			{
-				p.state = Crash;
+				i = 0;
 			}
-			UpdateProcess(p);
 		}
-		else if(p.state == Step)
+
+		if(modified)
 		{
-			if(VX_ExecuteInstruction())
-			{
-				p.ticks++;
-				p.state = Stop;
-			}
-			else
-			{
-				p.state = Crash;
-			}
 			UpdateProcess(p);
 		}
-		
+
 		currentProcess = p.next;
 	}
 }
@@ -684,14 +704,24 @@ float f1, f2;
 								return false;
 							}
 							break;
-
 							
+/*
+			PUSH LOCALS
+*/							
 							
 		case  54:	// pushs - 0x36
 							if(GetQuad(&ul1) == false)
 							{
 								return false;
 							}
+							
+							if(ul1 >= p.dataSize)
+							{
+								return false;
+							}
+							
+							uc1 = DRAM_ReadByte(p.dataStart + ul1);
+	
 							if(PushSingle(uc1) == false)
 							{
 								return false;
@@ -703,6 +733,14 @@ float f1, f2;
 							{
 								return false;
 							}
+							
+							if((ul1 + 1) >= p.dataSize)
+							{
+								return false;
+							}
+							
+							DRAM_ReadBytes(p.dataStart + ul1, (unsigned char*)&us1, 2);
+	
 							if(PushDouble(us1) == false)
 							{
 								return false;
@@ -714,7 +752,15 @@ float f1, f2;
 							{
 								return false;
 							}
-							if(PushQuad(ul1) == false)
+							
+							if((ul1 + 3) >= p.dataSize)
+							{
+								return false;
+							}
+							
+							DRAM_ReadBytes(p.dataStart + ul1, (unsigned char*)&ul2, 4);
+	
+							if(PushQuad(ul2) == false)
 							{
 								return false;
 							}
@@ -725,10 +771,100 @@ float f1, f2;
 							{
 								return false;
 							}
+							
+							if((ul1 + 3) >= p.dataSize)
+							{
+								return false;
+							}
+							
+							DRAM_ReadBytes(p.dataStart + ul1, (unsigned char*)&f1, 4);
+	
 							if(PushFloat(f1) == false)
 							{
 								return false;
 							}
+							break;
+
+/*
+		POP LOCAL
+*/
+
+		case  62:	// pops - 0x3e
+							if(GetQuad(&ul1) == false)
+							{
+								return false;
+							}
+							
+							//if(p.dataSize <= ul1)
+							if(ul1 >= p.dataSize)
+							{
+								return false;
+							}
+							
+							if(PopSingle(&uc1) == false)
+							{
+								return false;
+							}
+
+							DRAM_WriteByte(p.dataStart + ul1, uc1);
+							
+							break;
+							
+		case  63:	// popd - 0x3f
+							if(GetQuad(&ul1) == false)
+							{
+								return false;
+							}
+							
+							if((ul1 + 1) >= p.dataSize)
+							{
+								return false;
+							}
+							
+							if(PopDouble(&us1) == false)
+							{
+								return false;
+							}
+
+							DRAM_WriteBytes(p.dataStart + ul1, (unsigned char*)&us1, 2);
+							break;
+							
+		case  64:	// popq - 0x40
+							if(GetQuad(&ul1) == false)
+							{
+								return false;
+							}
+							
+							if((ul1 + 3) >= p.dataSize)
+							{
+								return false;
+							}
+							
+							if(PopQuad(&ul2) == false)
+							{
+								return false;
+							}
+
+							DRAM_WriteBytes(p.dataStart + ul1, (unsigned char*)&ul2, 4);
+							break;
+							
+		case  65:	// popf - 0x41
+							if(GetQuad(&ul1) == false)
+							{
+								return false;
+							}
+							
+							if((ul1 + 3) >= p.dataSize)
+							{
+								return false;
+							}
+							
+							if(PopFloat(&f1) == false)
+							{
+								return false;
+							}
+
+							DRAM_WriteBytes(p.dataStart + ul1, (unsigned char*)&f1, 4);
 							break;
 
 // Branches
@@ -838,15 +974,15 @@ float f1, f2;
 // Methods
 
 		case  73:	// call - 0x49
-							if(PopQuad(&ul1) == false)
-							{
-								return false;
-							}
-							if(PushQuad(p.ip) == false)
+							if(GetQuad(&ul1) == false)
 							{
 								return false;
 							}
 							if(ul1 >= p.codeSize)
+							{
+								return false;
+							}
+							if(PushQuad(p.ip) == false)
 							{
 								return false;
 							}
@@ -1028,20 +1164,20 @@ bool PushSingle(unsigned char value)
 	
 	if(value == 0)
 	{
-		p.flags |= (1 << FLAG_ZERO);
+		p.flags |= FLAG_ZERO;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_ZERO);
+		p.flags &= ~FLAG_ZERO;
 	}
 	
 	if(value & 0x80)
 	{
-		p.flags |= (1 << FLAG_NEGATIVE);
+		p.flags |= FLAG_NEGATIVE;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_NEGATIVE);
+		p.flags &= ~FLAG_NEGATIVE;
 	}
 	
 	return true;
@@ -1074,20 +1210,20 @@ bool PushDouble(unsigned short value)
 	
 	if(value == 0)
 	{
-		p.flags |= (1 << FLAG_ZERO);
+		p.flags |= FLAG_ZERO;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_ZERO);
+		p.flags &= ~FLAG_ZERO;
 	}
 	
 	if(value & 0x8000)
 	{
-		p.flags |= (1 << FLAG_NEGATIVE);
+		p.flags |= FLAG_NEGATIVE;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_NEGATIVE);
+		p.flags &= ~FLAG_NEGATIVE;
 	}
 	
 	return true;
@@ -1120,20 +1256,20 @@ bool PushQuad(unsigned long value)
 	
 	if(value == 0)
 	{
-		p.flags |= (1 << FLAG_ZERO);
+		p.flags |= FLAG_ZERO;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_ZERO);
+		p.flags &= ~FLAG_ZERO;
 	}
 	
 	if(value & 0x80000000)
 	{
-		p.flags |= (1 << FLAG_NEGATIVE);
+		p.flags |= FLAG_NEGATIVE;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_NEGATIVE);
+		p.flags &= ~FLAG_NEGATIVE;
 	}
 	
 	return true;
@@ -1166,20 +1302,20 @@ bool PushFloat(float value)
 	
 	if(value == 0.0)
 	{
-		p.flags |= (1 << FLAG_ZERO);
+		p.flags |= FLAG_ZERO;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_ZERO);
+		p.flags &= ~FLAG_ZERO;
 	}
 	
 	if(value < 0.0)
 	{
-		p.flags |= (1 << FLAG_NEGATIVE);
+		p.flags |= FLAG_NEGATIVE;
 	}
 	else
 	{
-		p.flags &= ~(1 << FLAG_NEGATIVE);
+		p.flags &= ~FLAG_NEGATIVE;
 	}
 	
 	return true;
