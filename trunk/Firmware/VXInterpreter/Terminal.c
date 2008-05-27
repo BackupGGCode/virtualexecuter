@@ -198,7 +198,6 @@ vx_pid id = Strings_ReadValueUnsigned(Strings_GetNextWord(line));
 void LoadFileToDisc(char* line)
 {
 unsigned char* buffer;
-//unsigned char length;
 unsigned long current;
 unsigned long size;
 unsigned short blockSize;
@@ -246,59 +245,6 @@ char* word;
 	
 	Kernel_Deallocate(buffer);
 }
-
-
-/*
-#define BLOCK_SIZE 16
-#define DISC_SIZE (E2END + 1)																														// Reserve the entire EEPROM for the disc
-void LoadFileToDisc(char* line)
-{
-unsigned char buf[BLOCK_SIZE];
-unsigned char length;
-unsigned long blockSize, size, current=0;
-char* word;
-
-	word = Strings_GetNextWord(line);
-	size = Strings_ReadValueUnsigned(word);
-	word = Strings_GetNextWord(word);
-	blockSize = Strings_ReadValueUnsigned(word);
-	
-	if(blockSize > BLOCK_SIZE)
-	{
-		blockSize = BLOCK_SIZE;
-	}
-	
-	if(size > DISC_SIZE)
-	{
-		UART_WriteString_P("N 0\n");
-		return;
-	}
-	else
-	{
-		UART_WriteString_P("A ");
-		UART_WriteValueUnsigned(blockSize,0,0);
-		UART_WriteString_P("\n");
-	}
-	
-	while(current < size)
-	{
-		if((current + blockSize) >= size)
-		{
-			length = size - current;
-		}
-		else
-		{
-			length = blockSize;
-		}
-		UART_ReadBytes(buf, length);
-		//InternalEEPROM_WriteBytes(current, buf, length);
-		FileStore_WriteBytes(current, buf, length);
-		UART_WriteByte('*');
-		current += length;
-	}
-	UART_WriteByte('!');
-}
-*/
 
 void TestDRAM(char* line)
 {
@@ -392,11 +338,14 @@ void KillProcess(char* line)
 	}
 }
 
+#define MAX_SCRIPT_LINE_LENGTH	100
 bool ExecuteProgram(char* line)
 {
 vx_pid id;
 unsigned char i = 0;
 char* argument = Strings_GetNextWord(line);
+char* buffer;
+fsFile file;
 
 	while(line[i] != 0 && line[i] != ' ')
 	{
@@ -427,8 +376,31 @@ char* argument = Strings_GetNextWord(line);
 	}
 	else if(Strings_EndsWith_P(line, ".vxs"))
 	{
-		UART_WriteString_P("Sorry I can't do scripts yet :( SOMEONE IMPLEMENT ME!\n");
-		return false;
+		if(FileStore_OpenFile(line, &file))
+		{
+			buffer = Kernel_Allocate(MAX_SCRIPT_LINE_LENGTH);
+			
+			while(FileStore_ReadLine(&file, buffer, MAX_SCRIPT_LINE_LENGTH) > 0)
+			{
+				Strings_Cut_P(buffer, "//");
+				if(Strings_IsEmpty(buffer) == false)
+				{
+					if(Strings_StartsWith_P(buffer, "echo "))
+					{
+						UART_WriteString(buffer + 5);
+						UART_WriteString_P("\n");
+					}
+					else
+					{
+						Commander_RunCommand(buffer);
+					}
+				}
+			}
+			
+			Kernel_Deallocate(buffer);
+		}
+	
+		return true;
 	}
 	else
 	{

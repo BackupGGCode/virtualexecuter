@@ -38,7 +38,7 @@ namespace VXIC
 			}
 			#endregion
 
-			if (File.Exists(sourceDirectory) == false)
+			if (Directory.Exists(sourceDirectory) == false)
 			{
 				Console.WriteLine("Specified source directory was not found.");
 				return;
@@ -55,7 +55,14 @@ namespace VXIC
 
 			if (bam.DirectoriesFound > 0)
 			{
-				Console.WriteLine(bam.DirectoriesFound + " directories were found but not included in the image.");
+				if (bam.DirectoriesFound == 1)
+				{
+					Console.WriteLine("A directory was found but not included in the image.");
+				}
+				else
+				{
+					Console.WriteLine(bam.DirectoriesFound + " directories were found but not included in the image.");
+				}
 			}
 
 			Console.Write("Reading file data...");

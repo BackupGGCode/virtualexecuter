@@ -18,7 +18,7 @@ namespace VXA
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Virtual eXecuter Assembler by Claus Andersen");
-			Console.WriteLine("Version: 0.01 - May 21th 2008");
+			Console.WriteLine("Version: 0.02 - May 27th 2008");
 			Console.WriteLine("");
 
 			try
