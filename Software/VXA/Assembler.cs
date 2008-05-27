@@ -53,8 +53,11 @@ namespace VXA
 
 		int options = 0;
 
+		static string sourceFileDirectory = "";
+
 		public StreamReader Preprocessor(string sourceFileName)
 		{
+			sourceFileDirectory = Path.GetDirectoryName(sourceFileName);
 			StreamReader sourceFile = new StreamReader(sourceFileName);
 
 			MemoryStream ms = new MemoryStream(10000);
@@ -98,7 +101,7 @@ namespace VXA
 
 							try
 							{
-								StreamReader sr = Preprocessor(includeFileName);
+								StreamReader sr = Preprocessor(sourceFileDirectory + "/" + includeFileName);
 								sw.Write(sr.ReadToEnd());
 							}
 							catch
