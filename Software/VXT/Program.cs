@@ -21,12 +21,12 @@ namespace VXT
 		static bool saveToFile = false;
 		static string logFileName = "log.txt";
 		static StreamWriter logFile = null;
-		static bool waitWhenExiting = true;
+		static bool waitWhenExiting = false ;
 
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
-			Console.WriteLine("Version: 1.12 - May 17th 2008");
+			Console.WriteLine("Version: 1.12 - May 27th 2008");
 
 			try
 			{
@@ -96,7 +96,7 @@ namespace VXT
 					Quit();
 					return;
 				}
-				
+
 				if (port == null || port == "")
 				{
 					Console.WriteLine("No port specified");
@@ -243,6 +243,8 @@ namespace VXT
 									break;
 								case "load":
 									LoadDiscImage(cmds);
+									break;
+								case "":
 									break;
 								default:
 									Console.WriteLine("Unknown command");

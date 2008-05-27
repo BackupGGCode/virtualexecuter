@@ -59,7 +59,6 @@ bool modified;
 				{
 					p.state = Crash;
 				}
-				//UpdateProcess(p);
 				modified = true;
 				i--;
 			}
@@ -74,7 +73,6 @@ bool modified;
 				{
 					p.state = Crash;
 				}
-				//UpdateProcess(p);
 				modified = true;
 				i--;
 			}
@@ -795,7 +793,6 @@ float f1, f2;
 								return false;
 							}
 							
-							//if(p.dataSize <= ul1)
 							if(ul1 >= p.dataSize)
 							{
 								return false;

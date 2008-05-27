@@ -79,34 +79,42 @@ namespace VXA
 
 				if (line.StartsWith("#"))
 				{
-					string includeFileName = "";
-					try
-					{
-						includeFileName = line.Substring(line.IndexOf("\"") + 1);
-						includeFileName = includeFileName.Remove(includeFileName.IndexOf("\""));
-						//						Console.WriteLine("include '" + includeFileName + "'");
-					}
-					catch
-					{
-						Informer.Instance.Error("Malformed include directive");
-					}
+					string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+					string directive = parts[0].Substring(1);
 
-					try
+					switch (directive)
 					{
-						//sw.Write(Preprocessor(includeFileName));
-						StreamReader sr = Preprocessor(includeFileName);
-						sw.Write(sr.ReadToEnd());
-						//ms.WriteTo(Preprocessor(includeFileName).BaseStream);
-					}
-					catch
-					{
-						Informer.Instance.Error("Unable to find include file '" + includeFileName + "'");
+						case "include":
+							string includeFileName = "";
+							try
+							{
+								includeFileName = line.Substring(line.IndexOf("\"") + 1);
+								includeFileName = includeFileName.Remove(includeFileName.IndexOf("\""));
+							}
+							catch
+							{
+								Informer.Instance.Error("Malformed include directive");
+							}
+
+							try
+							{
+								StreamReader sr = Preprocessor(includeFileName);
+								sw.Write(sr.ReadToEnd());
+							}
+							catch
+							{
+								Informer.Instance.Error("Unable to find include file '" + includeFileName + "'");
+							}
+							break;
+
+						default:
+							Informer.Instance.Error("Invalid directive '" + directive + "'");
+							break;
 					}
 				}
 				else
 				{
 					sw.WriteLine(line);
-					//ms.Write(Encoding.Default.GetBytes(line), 0, line.Length);
 				}
 
 				line = sourceFile.ReadLine();
@@ -179,7 +187,7 @@ namespace VXA
 				{
 					if (segment == "code")
 					{
-						string[] parts = line.Split(' ');
+						string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 						codeAddress += instructionSet.GetSize(parts[0].Trim());
 					}
 				}
@@ -269,6 +277,12 @@ namespace VXA
 			source.BaseStream.Seek(0, SeekOrigin.Begin);
 
 			codeSegment = code.ToArray();
+
+			Informer.Instance.List();
+			Informer.Instance.List();
+			Informer.Instance.List("stack", stackSize);
+			Informer.Instance.List("data", dataSize);
+			Informer.Instance.List("code", codeSize);
 		}
 
 		public void GenerateExecutable(FileStream file)
@@ -280,9 +294,9 @@ namespace VXA
 			file.Write(ConvertIntToByteArray(stackSize), 0, 4);
 			file.Write(codeSegment, 0, CodeSegment.Length);
 
-			Informer.Instance.Message("Code size: " + codeSize);
-			Informer.Instance.Message("Data size: " + dataSize);
 			Informer.Instance.Message("Stack size: " + StackSize);
+			Informer.Instance.Message("Data size: " + dataSize);
+			Informer.Instance.Message("Code size: " + codeSize);
 		}
 
 		private byte[] ConvertStringToByteArray(string value)

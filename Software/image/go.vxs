@@ -1,2 +1,5 @@
-/ this is a simple script
-/
+// This is a simple script
+echo Test script :)
+list
+help
+flashn.vxx

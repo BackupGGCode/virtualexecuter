@@ -127,6 +127,29 @@ namespace VXA
 			}
 		}
 
+		public void List(string segmentName, int size)
+		{
+			if (listFile != null)
+			{
+				StringBuilder sb = new StringBuilder(80);
+
+				string s = "Totalt size of " + segmentName + " segment: ";
+				sb.Append(s.PadRight(31, ' '));
+				sb.Append(size.ToString().PadLeft(10, ' '));
+				sb.Append(" bytes");
+
+				listFile.WriteLine(sb.ToString());
+			}
+		}
+
+		public void List()
+		{
+			if (listFile != null)
+			{
+				listFile.WriteLine("");
+			}
+		}
+
 		public void Map(string segment, string labelName, int address)
 		{
 			if (mapFile != null)
