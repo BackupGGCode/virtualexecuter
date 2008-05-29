@@ -1,0 +1,9 @@
+.code
+LED_BothOff:
+	loads 0
+	loads 1
+	out
+	ret
+
+#include "ledred.vxa"
+#include "ledyellow.vxa"

@@ -1,0 +1,52 @@
+// Define stack size by declaring one or more
+// variables in the stack segment.
+// Total stack size is the sum of all
+// stack segment variables.
+.stack
+stack: 50
+
+// As with stack labels data labels must have a size specified eg. 4 if the variable is a quad
+.data
+counter: 4
+target: 4
+temp: 4
+
+// Only put mnemonics in the code segment
+.code
+
+start:
+	call LED_BothOff
+	loadq 1
+	popq counter
+	loadq 0
+	popq target
+
+	loop:
+//	loads 1
+//	loads 1
+//	out
+//	loads 2
+//	loads 1
+//	out
+	call LED_RedOn
+	loadq 300
+	popq delayTime
+	call delay
+	call LED_YellowOn
+	loadq 300
+	popq delayTime
+	call delay
+	pushq counter
+	decq
+	popq counter
+	pushq counter
+	pushq target
+	subq
+	popq temp
+	jmpnz loop
+
+ExitProgram:
+	exit
+
+#include "ledcontrol.vxa"
+#include "delay.vxa"

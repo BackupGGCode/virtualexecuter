@@ -1,0 +1,9 @@
+00000000  .stack  stack
+00000000  .data   pins
+00000000  .code   Start
+0000000a  .code   ReadLoop
+0000001a  .code   AllNotHigh
+00000024  .code   AllHigh
+0000002e  .code   LED_BothOff
+00000034  .code   LED_RedOn
+0000003a  .code   LED_YellowOn

@@ -115,6 +115,8 @@ unsigned char length;
 	*id = newProcess;
 	processList = newProcess;
 	
+	PORTF |= (1 << 6);
+	
 	return true;
 }
 
@@ -122,7 +124,12 @@ bool VX_KillProcess(vx_pid id)
 {
 process* proc1;
 process* proc2;
-dram current = processList;
+dram current;
+
+	if(processList == null)
+	{
+		return false;
+	}
 
 	proc1 = Kernel_Allocate(sizeof(process));
 	if(proc1 == null)

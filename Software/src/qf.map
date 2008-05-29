@@ -1,0 +1,12 @@
+00000000  .stack  stack
+00000000  .data   counter
+00000004  .data   target
+00000008  .data   temp
+00000000  .code   start
+00000019  .code   loop
+00000061  .code   ExitProgram
+00000062  .code   LED_BothOff
+00000068  .code   LED_RedOn
+0000006e  .code   LED_YellowOn
+0000000c  .data   delayTime
+00000074  .code   delay

@@ -1,0 +1,33 @@
+.stack
+stack: 50
+
+.data
+pins:
+
+.code
+Start:
+	loads 0		// set all pins as inputs
+	loads 2
+	out
+	loads 255		// ...with pull up
+	loads 3
+	out
+
+ReadLoop:
+	loads 4
+	in
+	loads 255
+	subs
+	pops pins
+	jmpz AllHigh
+
+AllNotHigh:
+	call	 	LED_RedOn
+	jmp	ReadLoop
+	
+AllHigh:
+	call LED_YellowOn
+	jmp ReadLoop
+
+
+#include "ledcontrol.vxa"

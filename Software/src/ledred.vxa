@@ -1,0 +1,6 @@
+.code
+LED_RedOn:
+	loads 1
+	loads 1
+	out
+	ret

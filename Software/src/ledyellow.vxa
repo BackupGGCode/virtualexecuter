@@ -1,0 +1,6 @@
+.code
+LED_YellowOn:
+	loads 2
+	loads 1
+	out
+	ret

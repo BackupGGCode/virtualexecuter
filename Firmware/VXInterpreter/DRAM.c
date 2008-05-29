@@ -4,6 +4,7 @@
 #include <Kernel/Kernel.h>
 #include <Kernel/KernelInternals.h>
 #include <Peripherals/UART.h>
+#include <VX/VX.h>
 
 
 typedef struct
@@ -79,6 +80,11 @@ unsigned char i;
 	else
 	{
 		prescaler--;
+	}
+	
+	if(processTimer < 0xffffffff)
+	{
+		processTimer++;
 	}
 }
 
