@@ -6,12 +6,18 @@
 #include "VX_ProcessManagement.h"
 #include "VX.h"
 #include "VX_SoftPeripherals.h"
+#include <Peripherals/UART.h>
+
+unsigned long processTimer = 0xffffffff;
 
 
 //--force_switch_type 1 => jump table
 
 bool VX_ExecuteInstruction();
 
+#define GetAddress(pValue) 	do{DRAM_ReadBytes(p.codeStart + p.ip, (unsigned char*)pValue, 4);	p.ip += 4;}while(0)
+
+//bool GetAddress(unsigned long* pValue);
 bool GetSingle(unsigned char* pValue);
 bool GetDouble(unsigned short* pValue);
 bool GetQuad(unsigned long* pValue);
@@ -30,7 +36,7 @@ bool PushFloat(float value);
 bool PopFloat(float* pValue);
 
 
-process p;
+static process p;
 
 
 // Give all started processes a tick
@@ -708,15 +714,7 @@ float f1, f2;
 */							
 							
 		case  54:	// pushs - 0x36
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if(ul1 >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							uc1 = DRAM_ReadByte(p.dataStart + ul1);
 	
@@ -727,15 +725,7 @@ float f1, f2;
 							break;
 							
 		case  55:	// pushd - 0x37
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if((ul1 + 1) >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							DRAM_ReadBytes(p.dataStart + ul1, (unsigned char*)&us1, 2);
 	
@@ -746,15 +736,7 @@ float f1, f2;
 							break;
 
 		case  56:	// pushq - 0x38
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if((ul1 + 3) >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							DRAM_ReadBytes(p.dataStart + ul1, (unsigned char*)&ul2, 4);
 	
@@ -765,15 +747,7 @@ float f1, f2;
 							break;
 
 		case  57:	// pushf - 0x39
-							if(GetFloat(&f1) == false)
-							{
-								return false;
-							}
-							
-							if((ul1 + 3) >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							DRAM_ReadBytes(p.dataStart + ul1, (unsigned char*)&f1, 4);
 	
@@ -788,15 +762,7 @@ float f1, f2;
 */
 
 		case  62:	// pops - 0x3e
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if(ul1 >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							if(PopSingle(&uc1) == false)
 							{
@@ -808,15 +774,7 @@ float f1, f2;
 							break;
 							
 		case  63:	// popd - 0x3f
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if((ul1 + 1) >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							if(PopDouble(&us1) == false)
 							{
@@ -827,15 +785,7 @@ float f1, f2;
 							break;
 							
 		case  64:	// popq - 0x40
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if((ul1 + 3) >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							if(PopQuad(&ul2) == false)
 							{
@@ -846,15 +796,7 @@ float f1, f2;
 							break;
 							
 		case  65:	// popf - 0x41
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							
-							if((ul1 + 3) >= p.dataSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							
 							if(PopFloat(&f1) == false)
 							{
@@ -867,118 +809,86 @@ float f1, f2;
 // Branches
 
 		case  66:	// jmp - 0x42
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							if(ul1 >= p.codeSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							p.ip = ul1;
 							break;
 							
 		case  67:	// jmpz - 0x43
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
 							if((p.flags & FLAG_ZERO) == FLAG_ZERO)
 							{
-								if(ul1 >= p.codeSize)
-								{
-									return false;
-								}
+								GetAddress(&ul1);
 								p.ip = ul1;
+							}
+							else
+							{
+								p.ip += 4;
 							}
 							break;
 
 		case  68:	// jmpnz - 0x44
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
 							if((p.flags & FLAG_ZERO) != FLAG_ZERO)
 							{
-								if(ul1 >= p.codeSize)
-								{
-									return false;
-								}
+								GetAddress(&ul1);
 								p.ip = ul1;
+							}
+							else
+							{
+								p.ip += 4;
 							}
 							break;
 
 		case  69:	// jmpn - 0x45
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
 							if((p.flags & FLAG_NEGATIVE) == FLAG_NEGATIVE)
 							{
-								if(ul1 >= p.codeSize)
-								{
-									return false;
-								}
+								GetAddress(&ul1);
 								p.ip = ul1;
+							}
+							else
+							{
+								p.ip += 4;
 							}
 							break;
 
 		case  70:	// jmpnn - 0x46
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
 							if((p.flags & FLAG_NEGATIVE) != FLAG_NEGATIVE)
 							{
-								if(ul1 >= p.codeSize)
-								{
-									return false;
-								}
+								GetAddress(&ul1);
 								p.ip = ul1;
+							}
+							else
+							{
+								p.ip += 4;
 							}
 							break;
 
 		case  71:	// jmpp - 0x47
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
 							if((p.flags & FLAG_POSITIVE) == FLAG_POSITIVE)
 							{
-								if(ul1 >= p.codeSize)
-								{
-									return false;
-								}
+								GetAddress(&ul1);
 								p.ip = ul1;
+							}
+							else
+							{
+								p.ip += 4;
 							}
 							break;
 
 		case  72:	// jmpnp - 0x48
 							if((p.flags & FLAG_POSITIVE) != FLAG_POSITIVE)
 							{
-								if(GetQuad(&ul1) == false)
-								{
-									return false;
-								}
-								if(ul1 >= p.codeSize)
-								{
-									return false;
-								}
+								GetAddress(&ul1);
 								p.ip = ul1;
+							}
+							else
+							{
+								p.ip += 4;
 							}
 							break;
 
 // Methods
 
 		case  73:	// call - 0x49
-							if(GetQuad(&ul1) == false)
-							{
-								return false;
-							}
-							if(ul1 >= p.codeSize)
-							{
-								return false;
-							}
+							GetAddress(&ul1);
 							if(PushQuad(p.ip) == false)
 							{
 								return false;
@@ -1005,7 +915,7 @@ float f1, f2;
 							{
 								return false;
 							}
-              uc1 = VX_SoftPeripherals_Read(uc1);
+							uc1 = VX_SoftPeripherals_Read(uc1);
 							if(PushSingle(uc1) == false)
 							{
 								return false;
@@ -1017,7 +927,7 @@ float f1, f2;
 							{
 								return false;
 							}
-              VX_SoftPeripherals_Write(uc1, uc2);
+							VX_SoftPeripherals_Write(uc1, uc2);
 							break;
 							
 // Misc
@@ -1032,6 +942,13 @@ float f1, f2;
 							
 		case  78:	// exit - 0x4e
 							p.state = Done;
+							PORTF &= ~(1 << 6);
+							if(processTimer < 0xffffffff)
+							{
+								UART_WriteString_P("Process finished in ");
+								UART_WriteValueUnsigned(processTimer, 0, 0);
+								UART_WriteString_P(" ms.\n");
+							}
 							break;
               
 // Unknown instructions

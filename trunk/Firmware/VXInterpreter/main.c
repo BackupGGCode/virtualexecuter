@@ -9,7 +9,6 @@
 #include "VX/VX.h"
 #include "Commander/Commander.h"
 
-
 extern unsigned char DRAM_ReadByte(dram address);
 extern void DRAM_WriteByte(dram address, unsigned char value);
 extern unsigned long DRAM_ReadLong(dram address);
@@ -17,6 +16,16 @@ extern void DRAM_WriteLong(dram address, unsigned long value);
 extern void DRAM_ReadBytes(dram address, unsigned char* data, unsigned short length);
 extern void DRAM_WriteBytes(dram address, unsigned char* data, unsigned short length);
 
+/*
+void ProcessTimerTask()
+{
+	if(processTimer < 0xffffffff)
+	{
+		processTimer++;
+	}
+	Kernel_Sleep(1);
+}
+*/
 
 void main()
 {
@@ -35,8 +44,8 @@ unsigned long eepromDiscSize = EEPROM_DISC_SIZE;
 	PORTD=0x00;
 	DDRE=0x02;
 	PORTE=0xff;
-	DDRF=0x00;
-	PORTF=0xff;
+	DDRF=0x40;
+	PORTF=0xbf;
 	DDRG=0x08;
 	PORTG=0x17;
 	
@@ -49,7 +58,7 @@ unsigned long eepromDiscSize = EEPROM_DISC_SIZE;
 //	UART_Init(__BAUDRATE__(230400));
 	UART_Init(__BAUDRATE__(460800));
 	
-	UART_WriteString_P("\n\n\n---::: V I R T U A L   E X E C U T E R :::---\n\n");
+	UART_WriteString_P("\f\n---::: V I R T U A L   E X E C U T E R :::---\n\n");
 
 	UART_WriteString_P("IO ports initialized.\n");
 
@@ -98,6 +107,8 @@ unsigned long eepromDiscSize = EEPROM_DISC_SIZE;
 	UART_WriteString_P("System initialized - now running. yay.\n\n");
 	
 	UART_WriteString(prompt);
+	
+//	Kernel_CreateTask(ProcessTimerTask);
 	
 	Kernel_Run();
 }

@@ -1,0 +1,10 @@
+.data
+delayTime: 4
+
+.code
+delay:
+	pushq delayTime
+	decq
+	popq delayTime
+	jmpnz delay
+	ret

@@ -12,6 +12,7 @@
 
 
 void HelpScreen(char* line);
+void Restart(char* line);
 void ListFiles(char* line);
 void ViewFile(char* line);
 void RunProgram(char* line);
@@ -21,8 +22,12 @@ void LoadFileToDisc(char* line);
 void TestDRAM(char* line);
 void PrintHeaps(char* line);
 void KillProcess(char* line);
+void TimeProcess(char* line);
+void ClearScreen(char* line);
+
 __flash command commands[] = {
 	{"help", HelpScreen, "This help screen."},
+	{"restart", Restart, "Restarts the system."},
 	{"list", ListFiles, "List files on disk."},
 	{"view", ViewFile, "Print specified file to the console."},
 	{"run", RunProgram, "Set process state to running."},
@@ -32,7 +37,10 @@ __flash command commands[] = {
 	{"testdram", TestDRAM, "Test the DRAM. System must be reset after test to restore memory structures."},
 	{"mem", PrintHeaps, "Print internal and external heap usage."},
 	{"pros", VX_ListProcesses, "List all processes."},
-	{"kill", KillProcess, "Kills the process specified by its ID."} };
+	{"kill", KillProcess, "Kills the process specified by its ID."},
+	{"time", TimeProcess, "Measures the execution time of the specified task."},
+	{"cls", ClearScreen, "Clears the screen."} };
+
 
 unsigned short NumberOfCommands;
 
@@ -64,6 +72,11 @@ unsigned char i;
 		}
 		UART_WriteString_P("\n");
 	}
+}
+
+void Restart(char* line)
+{
+	__indirect_jump_to(0);
 }
 
 void ListFiles(char* line)
@@ -338,6 +351,18 @@ void KillProcess(char* line)
 	}
 }
 
+void TimeProcess(char* line)
+{
+	processTimer = 0;
+	ExecuteProgram(Strings_GetNextWord(line));
+}
+
+void ClearScreen(char* line)
+{
+	UART_WriteString_P("\f\n");
+}
+
+
 #define MAX_SCRIPT_LINE_LENGTH	100
 bool ExecuteProgram(char* line)
 {
@@ -372,6 +397,7 @@ fsFile file;
 		UART_WriteString_P("Process created with ID ");
 		UART_WriteValueUnsigned(id, 0, 0);
 		UART_WriteString_P("\n");
+		PORTF |= (1 << 6);
 		return true;
 	}
 	else if(Strings_EndsWith_P(line, ".vxs"))

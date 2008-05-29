@@ -1,0 +1,19 @@
+// Define stack size by declaring one or more
+// variables in the stack segment.
+// Total stack size is the added size of all
+// stack segment variables.
+.stack
+stack: 50
+
+
+; Only put mnemonics in the code segment
+.code
+
+loop:
+	loads 1
+	loads 1
+	out
+	loads 2
+	loads 1
+	out
+	jmp loop
