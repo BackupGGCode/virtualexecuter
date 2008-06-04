@@ -3,7 +3,7 @@
 // Total stack size is the sum of all
 // stack segment variables.
 .stack
-stack: 50
+stack: 200000
 
 // As with stack labels data labels must have a size specified eg. 4 if the variable is a quad
 .data
@@ -16,7 +16,7 @@ temp: 4
 
 start:
 	call LED_BothOff
-	loadq 1000010
+	loadq 1000015
 	popq counter
 	loadq 1000000
 	popq target
@@ -29,11 +29,11 @@ start:
 //	loads 1
 //	out
 	call LED_RedOn
-	loadq 300
+	loadq 200
 	popq delayTime
 	call delay
 	call LED_YellowOn
-	loadq 300
+	loadq 200
 	popq delayTime
 	call delay
 	pushq counter
