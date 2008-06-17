@@ -397,7 +397,6 @@ fsFile file;
 		UART_WriteString_P("Process created with ID ");
 		UART_WriteValueUnsigned(id, 0, 0);
 		UART_WriteString_P("\n");
-		PORTF |= (1 << 6);
 		return true;
 	}
 	else if(Strings_EndsWith_P(line, ".vxs"))
