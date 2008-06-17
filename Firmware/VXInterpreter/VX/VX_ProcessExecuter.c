@@ -8,7 +8,11 @@
 #include "VX_SoftPeripherals.h"
 #include <Peripherals/UART.h>
 
-unsigned long processTimer = 0xffffffff;
+
+#define DISABLE_PROCESS_TIMER										0xffffffff
+
+
+unsigned long processTimer = DISABLE_PROCESS_TIMER;
 
 
 //--force_switch_type 1 => jump table
@@ -39,11 +43,11 @@ bool PopFloat(float* pValue);
 static process p;
 
 
-// Give all started processes a tick
+// Give all started processes their ticks
 void VX_ProcessExecuter_Tick()
 {
 dram currentProcess = processList;	
-unsigned char i;
+unsigned char processTicks;
 bool modified;
 
 	while(currentProcess != null)
@@ -51,9 +55,9 @@ bool modified;
 		ReadProcess(currentProcess, &p);
 
 		modified = false;
-		i = 10;
+		processTicks = MAX_TICKS_PER_PROCESS;
 		
-		while(i > 0)
+		while(processTicks > 0)
 		{				
 			if(p.state == Run)
 			{
@@ -66,7 +70,7 @@ bool modified;
 					p.state = Crash;
 				}
 				modified = true;
-				i--;
+				processTicks--;
 			}
 			else if(p.state == Step)
 			{
@@ -80,11 +84,11 @@ bool modified;
 					p.state = Crash;
 				}
 				modified = true;
-				i--;
+				processTicks--;
 			}
 			else
 			{
-				i = 0;
+				processTicks = 0;
 			}
 		}
 
@@ -942,12 +946,12 @@ float f1, f2;
 							
 		case  78:	// exit - 0x4e
 							p.state = Done;
-							PORTF &= ~(1 << 6);
 							if(processTimer < 0xffffffff)
 							{
 								UART_WriteString_P("Process finished in ");
 								UART_WriteValueUnsigned(processTimer, 0, 0);
 								UART_WriteString_P(" ms.\n");
+								processTimer = DISABLE_PROCESS_TIMER;
 							}
 							break;
               
