@@ -8,7 +8,7 @@ namespace VXA
 {
 	class Program
 	{
-		static bool waitWhenExiting = false;
+		static bool waitWhenExiting = true;
 		static string sourceFileName = "";
 		static string outputFileName = "";
 		static FileStream outputFile = null;
