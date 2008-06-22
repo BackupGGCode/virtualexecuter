@@ -354,7 +354,7 @@ void DRAM_PrintBlockList()
 block b;
 dram a = 0;
 
-	UART_WriteString_P("F Size    Next    This\n");
+	UART_WriteString_P("F Size... Next... This...\n");
 	
 	do
 	{
