@@ -22,9 +22,6 @@ namespace VXA
 			{
 				List<string> sourceFiles;
 				string outputDirectory = Directory.GetCurrentDirectory();
-				string preprocessorOutputDirectory = Directory.GetCurrentDirectory();
-				string mapOutputDirectory = Directory.GetCurrentDirectory();
-				string listOutputDirectory = Directory.GetCurrentDirectory();
 				bool generatePreprocessorFiles = false;
 				bool generateMapFiles = false;
 				bool generateListFiles = false;
@@ -45,42 +42,21 @@ namespace VXA
 				{
 					outputDirectory = options["o"][0];
 					Directory.CreateDirectory(outputDirectory);
-					preprocessorOutputDirectory = options["o"][0];
-					mapOutputDirectory = options["o"][0];
-					listOutputDirectory = options["o"][0];
 				}
 
 				if (options.ContainsKey("p"))
 				{
 					generatePreprocessorFiles = true;
-
-					if (options["p"] != null && options["p"].Count == 1)
-					{
-						preprocessorOutputDirectory = options["p"][0];
-					}
-					Directory.CreateDirectory(preprocessorOutputDirectory);
 				}
 
 				if (options.ContainsKey("m"))
 				{
 					generateMapFiles = true;
-
-					if (options["m"] != null && options["m"].Count == 1)
-					{
-						mapOutputDirectory = options["m"][0];
-					}
-					Directory.CreateDirectory(mapOutputDirectory);
 				}
 
 				if (options.ContainsKey("l"))
 				{
 					generateListFiles = true;
-
-					if (options["l"] != null && options["l"].Count == 1)
-					{
-						listOutputDirectory = options["l"][0];
-					}
-					Directory.CreateDirectory(listOutputDirectory);
 				}
 
 				if (sourceFiles == null || sourceFiles.Count == 0)
@@ -98,24 +74,26 @@ namespace VXA
 
 				foreach (string sourceFile in sourceFiles)
 				{
-					string sourceFileName = Path.GetFileNameWithoutExtension(sourceFile);
-					int index = sourceFile.LastIndexOf("\\");
-					string sourceFileDirectory = "";
-					if (index > -1)
-					{
-						sourceFileDirectory = sourceFile.Remove(index);
-					}
+					string sourceFileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFile);
+					string sourceFileDirectory = Path.GetFullPath(sourceFile).Remove(sourceFile.LastIndexOf("\\"));
+					string partFile = outputDirectory + "\\" + sourceFileNameWithoutExtension + ".part";
+					string preprocessorFile = outputDirectory + "\\" + sourceFileNameWithoutExtension + ".pre";
+					string mapFile = outputDirectory + "\\" + sourceFileNameWithoutExtension + ".map";
+					string listFile = outputDirectory + "\\" + sourceFileNameWithoutExtension + ".list";
 
 					StreamReader sourceFileReader = new StreamReader(sourceFile);
-					FileStream partFile = File.Create(sourceFileName + ".part");
+					FileStream partFileWriter = File.Create(partFile);
+					StreamWriter preprocessorFileWriter = new StreamWriter(preprocessorFile);
+					preprocessorFileWriter.AutoFlush = true;
+					StreamWriter mapFileWriter = new StreamWriter(mapFile);
+					mapFileWriter.AutoFlush = true;
+					StreamWriter listFileWriter = new StreamWriter(listFile);
+					listFileWriter.AutoFlush = true;
 
-					Console.WriteLine("sf: " + sourceFileName);
-					Console.WriteLine("sfd: " + sourceFileDirectory);
+					Preprocessor pre = new Preprocessor();
 
-					Preprocessor preprocessor = new Preprocessor();
-					Assembler asm = new Assembler();
+					StreamReader preprocessorReader = pre.Run(sourceFileReader, sourceFileDirectory);
 
-					sourceFileReader = preprocessor.Run(sourceFileReader, sourceFileDirectory);
 					/*
 										if (generateListFiles)
 										{
@@ -128,15 +106,21 @@ namespace VXA
 										}
 					*/
 
-					asm.FindLabels(sourceFileReader);
-					asm.GenerateCode(sourceFileReader);
+					Assembler asm = new Assembler();
+
+					asm.FindLabels(preprocessorReader);
+					asm.GenerateCode(preprocessorReader);
 					XmlSerializer serializer = new XmlSerializer(typeof(Assembler));
-					serializer.Serialize(partFile, asm);
-					
+					serializer.Serialize(partFileWriter, asm);
+
 					//					asm.GenerateExecutable(outputFile);
 
+
 					sourceFileReader.Close();
-					partFile.Close();
+					partFileWriter.Close();
+					preprocessorFileWriter.Close();
+					mapFileWriter.Close();
+					listFileWriter.Close();
 				}
 			}
 			catch (Exception ex)
