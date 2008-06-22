@@ -33,9 +33,9 @@ namespace VXA
 					return;
 				}
 
-				if (options.ContainsKey("f"))
+				if (options.ContainsKey("default"))
 				{
-					sourceFileName = options["f"][0];
+					sourceFileName = options["default"][0];
 					if (File.Exists(sourceFileName) == false)
 					{
 						Console.WriteLine("The specified source file does not exist");

@@ -1,4 +1,5 @@
-vxa -f src/flashn.vxa -l -m -o img/flashn.vxx
-vxa -f src/qf.vxa -l -m -o img/qf.vxx
-vxa -f src/readpins.vxa -l -m -o img/readpins.vxx
+vxa src/flashn.vxa -l -m -o img/flashn.vxx
+vxa src/qf.vxa -o img/qf.vxx
+vxa src/readpins.vxa -o img/readpins.vxx
+vxa src/flash.vxa -o img/flash.vxx
 vxic -d img
