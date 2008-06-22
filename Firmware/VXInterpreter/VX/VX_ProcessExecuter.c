@@ -946,7 +946,7 @@ float f1, f2;
 							
 		case  78:	// exit - 0x4e
 							p.state = Done;
-							if(processTimer < 0xffffffff)
+							if(processTimer < DISABLE_PROCESS_TIMER)
 							{
 								UART_WriteString_P("Process finished in ");
 								UART_WriteValueUnsigned(processTimer, 0, 0);
