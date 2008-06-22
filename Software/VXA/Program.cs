@@ -8,7 +8,7 @@ namespace VXA
 {
 	class Program
 	{
-		static bool waitWhenExiting = true;
+		static bool waitWhenExiting = false;
 		static string sourceFileName = "";
 		static string outputFileName = "";
 		static FileStream outputFile = null;
@@ -18,7 +18,7 @@ namespace VXA
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Virtual eXecuter Assembler by Claus Andersen");
-			Console.WriteLine("Version: 0.02 - May 27th 2008");
+			Console.WriteLine("Version: 0.03 - June 22nd 2008");
 			Console.WriteLine("");
 
 			try
@@ -91,10 +91,6 @@ namespace VXA
 
 				if (options.ContainsKey("w"))
 				{
-					waitWhenExiting = false;
-				}
-				if (options.ContainsKey("W"))
-				{
 					waitWhenExiting = true;
 				}
 				#endregion
@@ -141,10 +137,13 @@ namespace VXA
 		static void Help()
 		{
 			Console.WriteLine("Available options:");
-			Console.WriteLine("  f - Source file.");
+			Console.WriteLine("  o - Specify an output directory.");
+			Console.WriteLine("  l - Generate .list file.");
+			Console.WriteLine("  m - Generate .map file.");
+			Console.WriteLine("  w - Wait for a key press on completion.");
 			Console.WriteLine("");
 			Console.WriteLine("Usage:");
-			Console.WriteLine("  vxa -f test.vxa");
+			Console.WriteLine("  vxa test.vxa -l");
 			Console.WriteLine("");
 		}
 	}
