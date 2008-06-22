@@ -21,12 +21,12 @@ namespace VXIC
 			#region Parse command line options
 			Dictionary<string, List<string>> options = CommandLineParser.Run(args);
 
-			if (options.ContainsKey("d") == false)
+			if (options.ContainsKey("default") == false)
 			{
 				Console.WriteLine("No source directory specified.");
 				return;
 			}
-			sourceDirectory = options["d"][0];
+			sourceDirectory = options["default"][0];
 
 			if (options.ContainsKey("o"))
 			{

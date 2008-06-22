@@ -265,7 +265,7 @@ unsigned long current;
 unsigned long max = DRAM_SIZE;
 unsigned long step = 1;
 unsigned char value = 123;
-unsigned short sent;
+unsigned long sent;
 
 	UART_WriteString_P("Clearing memory...\n");
 
@@ -274,11 +274,11 @@ unsigned short sent;
 	{
 		DRAM_WriteByte(current, 0);
 		sent+=step;
-		if(sent>=1024)
+		if(sent >= (1024L * 64L))
 		{
 			UART_WriteValueUnsigned(current / 1024, 0, 0);
 			UART_WriteString_P(" kB\r");
-			sent-=1024;
+			sent -= (1024L * 64L);
 		}
 		value += 234;
 	}
@@ -301,11 +301,11 @@ unsigned short sent;
 			break;
 		}
 		sent+=step;
-		if(sent>=1024)
+		if(sent >= (1024L * 64L))
 		{
 			UART_WriteValueUnsigned(current / 1024, 0, 0);
 			UART_WriteString_P(" kB\r");
-			sent-=1024;
+			sent -= (1024L * 64L);
 		}
 		value += 234;
 	}
