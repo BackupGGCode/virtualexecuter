@@ -1,3 +1,4 @@
+@echo off
 del *.vxx
 del *.vxi
 del src\*.vxx
