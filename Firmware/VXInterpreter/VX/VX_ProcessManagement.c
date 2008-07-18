@@ -36,7 +36,7 @@ unsigned char length;
 	buffer = Kernel_Allocate(21);
 	FileStore_ReadBytes(&file, buffer, 21);
 	
-	if(Strings_StartsWith_P(buffer, "VXEXE") == false)
+	if(Strings_StartsWith_P((char*)buffer, "VXEXE") == false)
 	{
 		Kernel_Deallocate(buffer);
 		return false;
