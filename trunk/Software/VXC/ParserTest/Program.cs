@@ -25,7 +25,7 @@ namespace VxCompiler
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                StreamReader sr = new StreamReader(arg1);
+                StreamReader sr = new StreamReader(filename);
                 Lexer l = new Lexer(sr);
                 Parser p = new Parser(l);
                 Start start = p.Parse();
