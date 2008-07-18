@@ -14,28 +14,31 @@ namespace VxCompiler
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            string arg1 = "../../../Grammar/program.vxc";
-            string outputName = Path.ChangeExtension(arg1, ".vxa");
+            //string arg1 = "../../../Grammar/program.vxc";
+            if (args.Length == 1)
+            {
+                string filename = args[0];
+                string outputName = Path.ChangeExtension(filename, ".vxa");
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            StreamReader sr = new StreamReader(arg1);
-            Lexer l = new Lexer(sr);
-            Parser p = new Parser(l);
-            Start start = p.Parse();
-        
-            ASTDisplay disp = new ASTDisplay();
-            start.Apply(disp);
-            ASTDisplayForm form = new ASTDisplayForm();
-            form.treeView1.Nodes.Add(disp.result);       
+                StreamReader sr = new StreamReader(arg1);
+                Lexer l = new Lexer(sr);
+                Parser p = new Parser(l);
+                Start start = p.Parse();
 
-            CodeEmissionPhase emission = new CodeEmissionPhase();
-            start.Apply(emission);
-            emission.Emit(outputName);
+                ASTDisplay disp = new ASTDisplay();
+                start.Apply(disp);
+                ASTDisplayForm form = new ASTDisplayForm();
+                form.treeView1.Nodes.Add(disp.result);
 
+                CodeEmissionPhase emission = new CodeEmissionPhase();
+                start.Apply(emission);
+                emission.Emit(outputName);
+            }
             //Application.Run(form);
         }
     }
