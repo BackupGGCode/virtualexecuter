@@ -1,4 +1,4 @@
-namespace ParserTest
+namespace VxCompiler
 {
     partial class ASTDisplayForm
     {

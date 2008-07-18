@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ParserTest
+namespace VxCompiler
 {
     public partial class ASTDisplayForm : Form
     {

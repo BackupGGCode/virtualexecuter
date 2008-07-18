@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using VXC.analysis;
 using VXC.node;
 
-namespace ParserTest
+namespace VxCompiler
 {
     class ASTDisplay : DepthFirstAdapter
     {

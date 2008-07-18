@@ -1,0 +1,7 @@
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\ResolveAssemblyReference.cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.csproj.GenerateResource.Cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\bin\Debug\VxCompiler.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\bin\Debug\VxCompiler.pdb
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.pdb
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.ASTDisplayForm.resources
