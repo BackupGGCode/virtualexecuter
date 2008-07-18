@@ -4,8 +4,9 @@ using System.Windows.Forms;
 using VXC.lexer;
 using VXC.node;
 using VXC.parser;
+using VxCompiler.CodeEmission;
 
-namespace ParserTest
+namespace VxCompiler
 {
     static class Program
     {
@@ -14,11 +15,14 @@ namespace ParserTest
         /// </summary>
         [STAThread]
         static void Main()
-        {            
+        {
+            string arg1 = "../../../Grammar/program.vxc";
+            string outputName = Path.ChangeExtension(arg1, ".vxa");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            StreamReader sr = new StreamReader("../../../Grammar/program.vxc");
+            StreamReader sr = new StreamReader(arg1);
             Lexer l = new Lexer(sr);
             Parser p = new Parser(l);
             Start start = p.Parse();
@@ -26,9 +30,13 @@ namespace ParserTest
             ASTDisplay disp = new ASTDisplay();
             start.Apply(disp);
             ASTDisplayForm form = new ASTDisplayForm();
-            form.treeView1.Nodes.Add(disp.result);
+            form.treeView1.Nodes.Add(disp.result);       
 
-            Application.Run(form);
+            CodeEmissionPhase emission = new CodeEmissionPhase();
+            start.Apply(emission);
+            emission.Emit(outputName);
+
+            //Application.Run(form);
         }
     }
 }

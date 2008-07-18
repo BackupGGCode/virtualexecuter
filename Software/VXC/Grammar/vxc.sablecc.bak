@@ -139,8 +139,9 @@ Productions
 	  ;
 
 	formal_parameter {-> formal_parameter} =
-	    {param} type_specifier identifier 
-		   {-> New formal_parameter(type_specifier.type_specifier, 							  
+	    {param} type_specifier identifier variable_initializer?
+		   {-> New formal_parameter(type_specifier.type_specifier, 
+							  variable_initializer.expression,
 							  identifier)}
 	  ;
 	

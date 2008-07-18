@@ -1,5 +1,5 @@
 // variable declaration
-ssingle variable1 = 10;
+ssingle variable1 = 0;
 
 // constant declaration
 const squad variable2;

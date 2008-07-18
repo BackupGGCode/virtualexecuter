@@ -20,7 +20,7 @@ public abstract class PFunctionDefinition : Node
 {
 }
 
-public abstract class PLocalDecl : Node
+public abstract class PFormalParameter : Node
 {
 }
 
@@ -561,39 +561,35 @@ public sealed class AFunctionDefinition : PFunctionDefinition
     }
 
 }
-public sealed class ALocalDecl : PLocalDecl
+public sealed class AFormalParameter : PFormalParameter
 {
     private PTypeSpecifier _type_;
-    private PExpression _init_;
     private TIdentifier _name_;
 
-    public ALocalDecl ()
+    public AFormalParameter ()
     {
     }
 
-    public ALocalDecl (
+    public AFormalParameter (
             PTypeSpecifier _type_,
-            PExpression _init_,
             TIdentifier _name_
     )
     {
         SetType (_type_);
-        SetInit (_init_);
         SetName (_name_);
     }
 
     public override Object Clone()
     {
-        return new ALocalDecl (
+        return new AFormalParameter (
             (PTypeSpecifier)CloneNode (_type_),
-            (PExpression)CloneNode (_init_),
             (TIdentifier)CloneNode (_name_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseALocalDecl(this);
+        ((Analysis) sw).CaseAFormalParameter(this);
     }
 
     public PTypeSpecifier GetType ()
@@ -619,30 +615,6 @@ public sealed class ALocalDecl : PLocalDecl
         }
 
         _type_ = node;
-    }
-    public PExpression GetInit ()
-    {
-        return _init_;
-    }
-
-    public void SetInit (PExpression node)
-    {
-        if(_init_ != null)
-        {
-            _init_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _init_ = node;
     }
     public TIdentifier GetName ()
     {
@@ -673,7 +645,6 @@ public sealed class ALocalDecl : PLocalDecl
     {
         return ""
             + ToString (_type_)
-            + ToString (_init_)
             + ToString (_name_)
         ;
     }
@@ -683,11 +654,6 @@ public sealed class ALocalDecl : PLocalDecl
         if ( _type_ == child )
         {
             _type_ = null;
-            return;
-        }
-        if ( _init_ == child )
-        {
-            _init_ = null;
             return;
         }
         if ( _name_ == child )
@@ -702,11 +668,6 @@ public sealed class ALocalDecl : PLocalDecl
         if ( _type_ == oldChild )
         {
             SetType ((PTypeSpecifier) newChild);
-            return;
-        }
-        if ( _init_ == oldChild )
-        {
-            SetInit ((PExpression) newChild);
             return;
         }
         if ( _name_ == oldChild )
@@ -914,7 +875,6 @@ public sealed class AVariableDefinition : PVariableDefinition
 }
 public sealed class APortDefinition : PPortDefinition
 {
-    private PTypeSpecifier _type_specifier_;
     private TIdentifier _name_;
 
     public APortDefinition ()
@@ -922,18 +882,15 @@ public sealed class APortDefinition : PPortDefinition
     }
 
     public APortDefinition (
-            PTypeSpecifier _type_specifier_,
             TIdentifier _name_
     )
     {
-        SetTypeSpecifier (_type_specifier_);
         SetName (_name_);
     }
 
     public override Object Clone()
     {
         return new APortDefinition (
-            (PTypeSpecifier)CloneNode (_type_specifier_),
             (TIdentifier)CloneNode (_name_)
         );
     }
@@ -943,30 +900,6 @@ public sealed class APortDefinition : PPortDefinition
         ((Analysis) sw).CaseAPortDefinition(this);
     }
 
-    public PTypeSpecifier GetTypeSpecifier ()
-    {
-        return _type_specifier_;
-    }
-
-    public void SetTypeSpecifier (PTypeSpecifier node)
-    {
-        if(_type_specifier_ != null)
-        {
-            _type_specifier_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _type_specifier_ = node;
-    }
     public TIdentifier GetName ()
     {
         return _name_;
@@ -995,18 +928,12 @@ public sealed class APortDefinition : PPortDefinition
     public override string ToString()
     {
         return ""
-            + ToString (_type_specifier_)
             + ToString (_name_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _type_specifier_ == child )
-        {
-            _type_specifier_ = null;
-            return;
-        }
         if ( _name_ == child )
         {
             _name_ = null;
@@ -1016,11 +943,6 @@ public sealed class APortDefinition : PPortDefinition
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _type_specifier_ == oldChild )
-        {
-            SetTypeSpecifier ((PTypeSpecifier) newChild);
-            return;
-        }
         if ( _name_ == oldChild )
         {
             SetName ((TIdentifier) newChild);
@@ -1747,7 +1669,7 @@ public sealed class AFormalsAndBody : PFormalsAndBody
 
         public Object Cast(Object o)
         {
-            PLocalDecl node = (PLocalDecl) o;
+            PFormalParameter node = (PFormalParameter) o;
 
             if((node.Parent() != null) &&
                 (node.Parent() != obj))
@@ -1766,7 +1688,7 @@ public sealed class AFormalsAndBody : PFormalsAndBody
 
         public Object UnCast(Object o)
         {
-            PLocalDecl node = (PLocalDecl) o;
+            PFormalParameter node = (PFormalParameter) o;
             node.Parent(null);
             return node;
         }

@@ -20,7 +20,7 @@ public interface Analysis : Switch
     void CaseAFunctionDeclaration(AFunctionDeclaration node);
     void CaseAPortDeclaration(APortDeclaration node);
     void CaseAFunctionDefinition(AFunctionDefinition node);
-    void CaseALocalDecl(ALocalDecl node);
+    void CaseAFormalParameter(AFormalParameter node);
     void CaseAVariableDefinition(AVariableDefinition node);
     void CaseAPortDefinition(APortDefinition node);
     void CaseAConstTypeQualifier(AConstTypeQualifier node);
@@ -151,7 +151,7 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
-    public virtual void CaseALocalDecl(ALocalDecl node)
+    public virtual void CaseAFormalParameter(AFormalParameter node)
     {
         DefaultCase(node);
     }
@@ -475,32 +475,28 @@ public class DepthFirstAdapter : AnalysisAdapter
         }
         OutAFunctionDefinition(node);
     }
-    public virtual void InALocalDecl(ALocalDecl node)
+    public virtual void InAFormalParameter(AFormalParameter node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutALocalDecl(ALocalDecl node)
+    public virtual void OutAFormalParameter(AFormalParameter node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseALocalDecl(ALocalDecl node)
+    public override void CaseAFormalParameter(AFormalParameter node)
     {
-        InALocalDecl(node);
+        InAFormalParameter(node);
         if(node.GetType() != null)
         {
             node.GetType().Apply(this);
-        }
-        if(node.GetInit() != null)
-        {
-            node.GetInit().Apply(this);
         }
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
         }
-        OutALocalDecl(node);
+        OutAFormalParameter(node);
     }
     public virtual void InAVariableDefinition(AVariableDefinition node)
     {
@@ -546,10 +542,6 @@ public class DepthFirstAdapter : AnalysisAdapter
     public override void CaseAPortDefinition(APortDefinition node)
     {
         InAPortDefinition(node);
-        if(node.GetTypeSpecifier() != null)
-        {
-            node.GetTypeSpecifier().Apply(this);
-        }
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
@@ -773,7 +765,7 @@ public class DepthFirstAdapter : AnalysisAdapter
             node.GetFormals().CopyTo(temp, 0);
             for(int i = 0; i < temp.Length; i++)
             {
-                ((PLocalDecl) temp[i]).Apply(this);
+                ((PFormalParameter) temp[i]).Apply(this);
             }
         }
         {
@@ -959,32 +951,28 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         }
         OutAFunctionDefinition(node);
     }
-    public virtual void InALocalDecl(ALocalDecl node)
+    public virtual void InAFormalParameter(AFormalParameter node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutALocalDecl(ALocalDecl node)
+    public virtual void OutAFormalParameter(AFormalParameter node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseALocalDecl(ALocalDecl node)
+    public override void CaseAFormalParameter(AFormalParameter node)
     {
-        InALocalDecl(node);
+        InAFormalParameter(node);
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
-        }
-        if(node.GetInit() != null)
-        {
-            node.GetInit().Apply(this);
         }
         if(node.GetType() != null)
         {
             node.GetType().Apply(this);
         }
-        OutALocalDecl(node);
+        OutAFormalParameter(node);
     }
     public virtual void InAVariableDefinition(AVariableDefinition node)
     {
@@ -1033,10 +1021,6 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
-        }
-        if(node.GetTypeSpecifier() != null)
-        {
-            node.GetTypeSpecifier().Apply(this);
         }
         OutAPortDefinition(node);
     }
@@ -1277,7 +1261,7 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
             node.GetFormals().CopyTo(temp, 0);
             for(int i = temp.Length - 1; i >= 0; i--)
             {
-                ((PLocalDecl) temp[i]).Apply(this);
+                ((PFormalParameter) temp[i]).Apply(this);
             }
         }
         OutAFormalsAndBody(node);
