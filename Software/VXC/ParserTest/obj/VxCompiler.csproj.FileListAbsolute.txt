@@ -5,3 +5,10 @@ c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\bin\Debug\V
 c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.exe
 c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.pdb
 c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Debug\VxCompiler.ASTDisplayForm.resources
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Release\ResolveAssemblyReference.cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Release\VxCompiler.ASTDisplayForm.resources
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Release\VxCompiler.csproj.GenerateResource.Cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\bin\Release\VxCompiler.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\bin\Release\VxCompiler.pdb
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Release\VxCompiler.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\ParserTest\obj\Release\VxCompiler.pdb
