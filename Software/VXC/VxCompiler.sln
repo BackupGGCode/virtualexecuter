@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VxCompiler", "ParserTest\VxCompiler.csproj", "{A4A8FEC6-1947-479B-B64F-01B2BE13AD36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VxCompiler", "VxCompiler\VxCompiler.csproj", "{A4A8FEC6-1947-479B-B64F-01B2BE13AD36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
