@@ -1,2 +1,2 @@
-java -jar sablecc.jar -t csharp VXC.sablecc -d ..\ParserTest\generated
+java -jar sablecc.jar -t csharp VXC.sablecc -d ..\VxCompiler\generated
 pause

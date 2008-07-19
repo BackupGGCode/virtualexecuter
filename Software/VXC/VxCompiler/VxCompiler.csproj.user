@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>../../../Grammar/program.vxc</StartArguments>
+    <StartArguments>../../../../src/program.vxc</StartArguments>
     <StartAction>Project</StartAction>
     <StartProgram>
     </StartProgram>

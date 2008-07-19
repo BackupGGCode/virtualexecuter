@@ -16,7 +16,7 @@ namespace VxCompiler
         [STAThread]
         static void Main(string[] args)
         {
-            //string arg1 = "../../../Grammar/program.vxc";
+            bool showAST = true;
             if (args.Length == 1)
             {
                 string filename = args[0];
@@ -30,16 +30,19 @@ namespace VxCompiler
                 Parser p = new Parser(l);
                 Start start = p.Parse();
 
-                ASTDisplay disp = new ASTDisplay();
-                start.Apply(disp);
-                ASTDisplayForm form = new ASTDisplayForm();
-                form.treeView1.Nodes.Add(disp.result);
-
                 CodeEmissionPhase emission = new CodeEmissionPhase();
                 start.Apply(emission);
                 emission.Emit(outputName);
-            }
-            //Application.Run(form);
+
+                if (showAST)
+                {
+                    ASTDisplay disp = new ASTDisplay();
+                    start.Apply(disp);
+                    ASTDisplayForm form = new ASTDisplayForm();
+                    form.treeView1.Nodes.Add(disp.result);
+                    Application.Run(form);
+                }
+            }            
         }
     }
 }
