@@ -49,6 +49,7 @@
     <Compile Include="CodeEmission\Conmmands.cs" />
     <Compile Include="CodeEmission\DataSegmentElement.cs" />
     <Compile Include="CodeEmission\CodeSegmentElement.cs" />
+    <Compile Include="Environment\StackSegment.cs" />
     <Compile Include="Environment\TypeEnvironment.cs" />
     <Compile Include="generated\analysis.cs">
       <SubType>Code</SubType>

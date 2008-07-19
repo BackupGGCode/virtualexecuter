@@ -4,10 +4,14 @@ using System.Text;
 using VxCompiler.Environment;
 
 namespace VxCompiler.CodeEmission
-{
-    public interface CodeSegmentElement
+{    
+    public abstract class CodeSegmentElement
     {
-        string Generate();
+        public static string GetCodeSegmentKeyword()
+        {
+            return ".code";
+        }   
+        public abstract string Generate();
     }
 
     public class VariableInitializerExpression : CodeSegmentElement
@@ -23,7 +27,7 @@ namespace VxCompiler.CodeEmission
             mName = name;
         }
 
-        public string Generate()
+        public override string Generate()
         {
             StringBuilder template = new StringBuilder();
             template.AppendLine(Commands.GetCommand(Command.load, mType, mValue.ToString()));
@@ -44,9 +48,9 @@ namespace VxCompiler.CodeEmission
             mAddress = adress;
             mName = name;
             mValue = value;
-        }
+        }      
 
-        public string Generate()
+        public override string Generate()
         {
             StringBuilder template = new StringBuilder();
             // ports are 8 bit wide !
@@ -54,6 +58,24 @@ namespace VxCompiler.CodeEmission
             template.AppendLine(Commands.GetCommand(Command.load, VxcType.usingle, mValue.ToString()));
             template.AppendLine(Commands.GetCommand(Command.load, VxcType.usingle, mAddress.ToString()));
             template.AppendLine(Commands.GetCommand(Command.@out));
+            return template.ToString();
+        }
+    }
+
+    public class MethodDeclaration : CodeSegmentElement
+    {
+        private string mName;
+
+        public MethodDeclaration(string name)
+        {
+            mName = name;
+        }
+
+        public override string Generate()
+        {
+            StringBuilder template = new StringBuilder();
+            template.AppendLine(mName + ":");
+            template.AppendLine(Commands.GetCommand(Command.ret));
             return template.ToString();
         }
     }

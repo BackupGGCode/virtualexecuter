@@ -21,6 +21,22 @@ namespace VxCompiler.CodeEmission
             get { return mIdentifier; }
             set { mIdentifier = value; }
         }
-	
+
+
+        public DataSegmentElement(string identifier, VxcType type)
+        {
+            mIdentifier = identifier;
+            mType = type;
+        }
+
+        public static string GetDataSegmentKeyword()
+        {
+            return ".data";
+        }
+
+        public string Generate()
+        {
+            return mIdentifier + ": " + TypeEnvironment.GetSizeOf(mType) + "\n";
+        }
     }
 }
