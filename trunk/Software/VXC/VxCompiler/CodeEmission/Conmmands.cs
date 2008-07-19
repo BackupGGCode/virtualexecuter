@@ -5,13 +5,19 @@ using VxCompiler.Environment;
 
 namespace VxCompiler.CodeEmission
 {
+   
     public enum Command 
     {
-        load, pop
+        load, pop, @out, nop
     }   
 
     public class Commands
     {
+        public static string GetCommand(Command cmd)
+        {
+            return cmd.ToString();
+        }
+
         public static string GetCommand(Command cmd, VxcType type, params string[] arg)
         {
             string postFix = "";

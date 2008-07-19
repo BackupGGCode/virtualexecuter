@@ -876,22 +876,30 @@ public sealed class AVariableDefinition : PVariableDefinition
 public sealed class APortDefinition : PPortDefinition
 {
     private TIdentifier _name_;
+    private PExpression _init_;
+    private TIntegerLiteral _adress_;
 
     public APortDefinition ()
     {
     }
 
     public APortDefinition (
-            TIdentifier _name_
+            TIdentifier _name_,
+            PExpression _init_,
+            TIntegerLiteral _adress_
     )
     {
         SetName (_name_);
+        SetInit (_init_);
+        SetAdress (_adress_);
     }
 
     public override Object Clone()
     {
         return new APortDefinition (
-            (TIdentifier)CloneNode (_name_)
+            (TIdentifier)CloneNode (_name_),
+            (PExpression)CloneNode (_init_),
+            (TIntegerLiteral)CloneNode (_adress_)
         );
     }
 
@@ -924,11 +932,61 @@ public sealed class APortDefinition : PPortDefinition
 
         _name_ = node;
     }
+    public PExpression GetInit ()
+    {
+        return _init_;
+    }
+
+    public void SetInit (PExpression node)
+    {
+        if(_init_ != null)
+        {
+            _init_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _init_ = node;
+    }
+    public TIntegerLiteral GetAdress ()
+    {
+        return _adress_;
+    }
+
+    public void SetAdress (TIntegerLiteral node)
+    {
+        if(_adress_ != null)
+        {
+            _adress_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _adress_ = node;
+    }
 
     public override string ToString()
     {
         return ""
             + ToString (_name_)
+            + ToString (_init_)
+            + ToString (_adress_)
         ;
     }
 
@@ -939,6 +997,16 @@ public sealed class APortDefinition : PPortDefinition
             _name_ = null;
             return;
         }
+        if ( _init_ == child )
+        {
+            _init_ = null;
+            return;
+        }
+        if ( _adress_ == child )
+        {
+            _adress_ = null;
+            return;
+        }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
@@ -946,6 +1014,16 @@ public sealed class APortDefinition : PPortDefinition
         if ( _name_ == oldChild )
         {
             SetName ((TIdentifier) newChild);
+            return;
+        }
+        if ( _init_ == oldChild )
+        {
+            SetInit ((PExpression) newChild);
+            return;
+        }
+        if ( _adress_ == oldChild )
+        {
+            SetAdress ((TIntegerLiteral) newChild);
             return;
         }
     }

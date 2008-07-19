@@ -157,8 +157,8 @@ Productions
 	
 	/* port definition */
 	port_definition {-> port_definition} =
-		port identifier at integer_literal semicolon
-			{-> New port_definition(identifier)}
+		port identifier at integer_literal variable_initializer? semicolon
+			{-> New port_definition(identifier, variable_initializer.expression, integer_literal)}
 	;
 	
 	/* variable definition */
@@ -237,7 +237,7 @@ Abstract Syntax Tree
 
 	variable_definition = [type_specifier]:type_specifier [type_qualifier]:type_qualifier? [init]:expression? [name]:identifier;
 
-	port_definition = [name]:identifier;
+	port_definition = [name]:identifier [init]:expression? [adress]:integer_literal;
 	
 	type_qualifier = {const} | {volatile};
 	

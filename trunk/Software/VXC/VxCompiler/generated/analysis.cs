@@ -546,6 +546,14 @@ public class DepthFirstAdapter : AnalysisAdapter
         {
             node.GetName().Apply(this);
         }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
+        if(node.GetAdress() != null)
+        {
+            node.GetAdress().Apply(this);
+        }
         OutAPortDefinition(node);
     }
     public virtual void InAConstTypeQualifier(AConstTypeQualifier node)
@@ -1018,6 +1026,14 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
     public override void CaseAPortDefinition(APortDefinition node)
     {
         InAPortDefinition(node);
+        if(node.GetAdress() != null)
+        {
+            node.GetAdress().Apply(this);
+        }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);

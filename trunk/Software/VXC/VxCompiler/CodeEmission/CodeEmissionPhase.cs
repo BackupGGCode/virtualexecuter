@@ -18,6 +18,13 @@ namespace VxCompiler.CodeEmission
  	        base.CaseASourceFile(node);
         }
 
+        public override void CaseAPortDefinition(APortDefinition node)
+        {
+            CodeSegmentElement port = new PortDeclaration(Convert.ToInt32(node.GetAdress().Text), node.GetName().Text, TypeEnvironment.GetValueOf(node.GetInit()));
+            mOutputFile.mCodeSegment.Add(port);
+            base.CaseAPortDefinition(node);
+        }
+
         public override void CaseAVariableDefinition(AVariableDefinition node)
         {
             // create the variable in the data segment

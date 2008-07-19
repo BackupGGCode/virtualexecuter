@@ -28,6 +28,8 @@ namespace VxCompiler.CodeEmission
             {
                 sb.Append(code.Generate());
             }
+            sb.AppendLine();
+            sb.AppendLine("exit");
             return sb;
         }        
     }
