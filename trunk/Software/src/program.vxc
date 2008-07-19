@@ -1,12 +1,17 @@
 
-// port declarations with initializer
-port port0 @ 0 = 65;
-port port1 @ 1 = 1;
-port port1 @ 1 = 2;
-port port1 @ 1 = 3;
+port console @ 0;
 
-// void function declaration
-void method1()
-{	
+squad var = 29;
+
+void main()
+{
 	return;
 }
+
+void printToConsole()
+{		
+	return;
+}
+
+
+

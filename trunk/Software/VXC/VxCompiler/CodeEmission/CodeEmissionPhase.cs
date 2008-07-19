@@ -20,17 +20,18 @@ namespace VxCompiler.CodeEmission
 
         public override void CaseAPortDefinition(APortDefinition node)
         {
-            CodeSegmentElement port = new PortDeclaration(Convert.ToInt32(node.GetAdress().Text), node.GetName().Text, TypeEnvironment.GetValueOf(node.GetInit()));
-            mOutputFile.mCodeSegment.Add(port);
+            if (node.GetInit() != null)
+            {
+                CodeSegmentElement port = new PortDeclaration(Convert.ToInt32(node.GetAdress().Text), node.GetName().Text, TypeEnvironment.GetValueOf(node.GetInit()));
+                mOutputFile.AddTemplate("init", port);
+            }
             base.CaseAPortDefinition(node);
-        }
+        }
 
         public override void CaseAVariableDefinition(AVariableDefinition node)
         {
             // create the variable in the data segment
-            DataSegmentElement elm = new DataSegmentElement();
-            elm.Identifier = node.GetName().Text;
-            elm.Type = TypeEnvironment.GetVxcTypeOf(node.GetTypeSpecifier().GetType());
+            DataSegmentElement elm = new DataSegmentElement(node.GetName().Text, TypeEnvironment.GetVxcTypeOf(node.GetTypeSpecifier().GetType()));
             mOutputFile.mDataSegment.Add(elm);
 
             // create initializer expression in code segment.
@@ -39,16 +40,23 @@ namespace VxCompiler.CodeEmission
             {
                 long value = TypeEnvironment.GetValueOf(pexp);
                 VariableInitializerExpression exp = new VariableInitializerExpression(value, elm.Type, elm.Identifier);
-                mOutputFile.mCodeSegment.Add(exp);
+                mOutputFile.AddTemplate("init", exp);
             }
             
             base.CaseAVariableDefinition(node);
         }
 
+        public override void CaseAFunctionDefinition(AFunctionDefinition node)
+        {
+            CodeSegmentElement method = new MethodDeclaration(node.GetName().Text);
+            mOutputFile.AddTemplate(node.GetName().Text, method);
+            base.CaseAFunctionDefinition(node);
+        }
+
         public void Emit(string filename)
         {
             StreamWriter sw = new StreamWriter(filename);
-            sw.Write(mOutputFile.Emit().ToString());
+            sw.Write(mOutputFile.Emit());
             sw.Flush();
             sw.Close();            
         }

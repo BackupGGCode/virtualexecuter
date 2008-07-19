@@ -8,7 +8,7 @@ namespace VxCompiler.CodeEmission
    
     public enum Command 
     {
-        load, pop, @out, nop
+        call, load, pop, @out, nop, exit, ret
     }   
 
     public class Commands
@@ -16,6 +16,11 @@ namespace VxCompiler.CodeEmission
         public static string GetCommand(Command cmd)
         {
             return cmd.ToString();
+        }
+
+        public static string GetCommand(Command cmd, string name)
+        {
+            return cmd.ToString() + " " + name;
         }
 
         public static string GetCommand(Command cmd, VxcType type, params string[] arg)
