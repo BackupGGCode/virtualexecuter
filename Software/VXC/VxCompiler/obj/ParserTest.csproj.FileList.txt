@@ -1,7 +1,0 @@
-bin\Debug\ParserTest.exe
-bin\Debug\ParserTest.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\ParserTest.ASTDisplayForm.resources
-obj\Debug\ParserTest.csproj.GenerateResource.Cache
-obj\Debug\ParserTest.exe
-obj\Debug\ParserTest.pdb
