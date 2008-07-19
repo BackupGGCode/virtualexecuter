@@ -30,6 +30,7 @@ namespace VxCompiler.CodeEmission
             }
             sb.AppendLine();
             sb.AppendLine("exit");
+            sb.AppendLine("nop");
             return sb;
         }        
     }
