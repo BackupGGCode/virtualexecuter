@@ -8,43 +8,19 @@ using  VXC.analysis;
 
 namespace VXC.node {
 
-public abstract class PSourceFile : Node
+public abstract class PModule : Node
 {
 }
 
-public abstract class PDeclaration : Node
+public abstract class PDecl : Node
 {
 }
 
-public abstract class PFunctionDefinition : Node
+public abstract class PType : Node
 {
 }
 
-public abstract class PFormalParameter : Node
-{
-}
-
-public abstract class PVariableDefinition : Node
-{
-}
-
-public abstract class PPortDefinition : Node
-{
-}
-
-public abstract class PTypeQualifier : Node
-{
-}
-
-public abstract class PTypeSpecifier : Node
-{
-}
-
-public abstract class PStatement : Node
-{
-}
-
-public abstract class PReturnStatement : Node
+public abstract class PTypeSign : Node
 {
 }
 
@@ -52,101 +28,113 @@ public abstract class PFormalsAndBody : Node
 {
 }
 
-public abstract class PExpression : Node
+public abstract class PStm : Node
+{
+}
+
+public abstract class PExp : Node
+{
+}
+
+public abstract class PBoolean : Node
+{
+}
+
+public abstract class PUnop : Node
 {
 }
 
 
-public sealed class ASourceFile : PSourceFile
+public sealed class AModule : PModule
 {
-    private TypedList _declaration_;
+    private TypedList _decl_;
 
-    public ASourceFile ()
+    public AModule ()
     {
-        this._declaration_ = new TypedList(new Declaration_Cast(this));
+        this._decl_ = new TypedList(new Decl_Cast(this));
     }
 
-    public ASourceFile (
-            IList _declaration_
+    public AModule (
+            IList _decl_
     )
     {
-        this._declaration_ = new TypedList(new Declaration_Cast(this));
-        this._declaration_.Clear();
-        this._declaration_.AddAll(_declaration_);
+        this._decl_ = new TypedList(new Decl_Cast(this));
+        this._decl_.Clear();
+        this._decl_.AddAll(_decl_);
     }
 
     public override Object Clone()
     {
-        return new ASourceFile (
-            CloneList (_declaration_)
+        return new AModule (
+            CloneList (_decl_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseASourceFile(this);
+        ((Analysis) sw).CaseAModule(this);
     }
 
-    public IList GetDeclaration ()
+    public IList GetDecl ()
     {
-        return _declaration_;
+        return _decl_;
     }
 
-    public void setDeclaration (IList list)
+    public void setDecl (IList list)
     {
-        _declaration_.Clear();
-        _declaration_.AddAll(list);
+        _decl_.Clear();
+        _decl_.AddAll(list);
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_declaration_)
+            + ToString (_decl_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _declaration_.Contains(child) )
+        if ( _decl_.Contains(child) )
         {
-            _declaration_.Remove(child);
+            _decl_.Remove(child);
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        for ( int i = 0; i < _declaration_.Count; i++ )
+        for ( int i = 0; i < _decl_.Count; i++ )
         {
-            Node n = (Node)_declaration_[i];
+            Node n = (Node)_decl_[i];
             if(n == oldChild)
             {
                 if(newChild != null)
                 {
-                    _declaration_[i] = newChild;
+                    _decl_[i] = newChild;
                     oldChild.Parent(null);
                     return;
                 }
 
-                _declaration_.RemoveAt(i);
+                _decl_.RemoveAt(i);
                 oldChild.Parent(null);
                 return;
             }
         }
     }
 
-    private class Declaration_Cast : Cast
+    private class Decl_Cast : Cast
     {
-        ASourceFile obj;
+        AModule obj;
 
-        internal Declaration_Cast (ASourceFile obj)
+        internal Decl_Cast (AModule obj)
         {
           this.obj = obj;
         }
 
         public Object Cast(Object o)
         {
-            PDeclaration node = (PDeclaration) o;
+            PDecl node = (PDecl) o;
 
             if((node.Parent() != null) &&
                 (node.Parent() != obj))
@@ -165,49 +153,65 @@ public sealed class ASourceFile : PSourceFile
 
         public Object UnCast(Object o)
         {
-            PDeclaration node = (PDeclaration) o;
+            PDecl node = (PDecl) o;
             node.Parent(null);
             return node;
         }
     }
 }
-public sealed class AVariableDeclaration : PDeclaration
+public sealed class AVarDecl : PDecl
 {
-    private PVariableDefinition _declaration_;
+    private PType _type_;
+    private PExp _buf_;
+    private PTypeSign _type_sign_;
+    private PExp _init_;
+    private TIdentifier _name_;
 
-    public AVariableDeclaration ()
+    public AVarDecl ()
     {
     }
 
-    public AVariableDeclaration (
-            PVariableDefinition _declaration_
+    public AVarDecl (
+            PType _type_,
+            PExp _buf_,
+            PTypeSign _type_sign_,
+            PExp _init_,
+            TIdentifier _name_
     )
     {
-        SetDeclaration (_declaration_);
+        SetType (_type_);
+        SetBuf (_buf_);
+        SetTypeSign (_type_sign_);
+        SetInit (_init_);
+        SetName (_name_);
     }
 
     public override Object Clone()
     {
-        return new AVariableDeclaration (
-            (PVariableDefinition)CloneNode (_declaration_)
+        return new AVarDecl (
+            (PType)CloneNode (_type_),
+            (PExp)CloneNode (_buf_),
+            (PTypeSign)CloneNode (_type_sign_),
+            (PExp)CloneNode (_init_),
+            (TIdentifier)CloneNode (_name_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAVariableDeclaration(this);
+        ((Analysis) sw).CaseAVarDecl(this);
     }
 
-    public PVariableDefinition GetDeclaration ()
+    public PType GetType ()
     {
-        return _declaration_;
+        return _type_;
     }
 
-    public void SetDeclaration (PVariableDefinition node)
+    public void SetType (PType node)
     {
-        if(_declaration_ != null)
+        if(_type_ != null)
         {
-            _declaration_.Parent(null);
+            _type_.Parent(null);
         }
 
         if(node != null)
@@ -220,72 +224,18 @@ public sealed class AVariableDeclaration : PDeclaration
             node.Parent(this);
         }
 
-        _declaration_ = node;
+        _type_ = node;
+    }
+    public PExp GetBuf ()
+    {
+        return _buf_;
     }
 
-    public override string ToString()
+    public void SetBuf (PExp node)
     {
-        return ""
-            + ToString (_declaration_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _declaration_ == child )
+        if(_buf_ != null)
         {
-            _declaration_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _declaration_ == oldChild )
-        {
-            SetDeclaration ((PVariableDefinition) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class AFunctionDeclaration : PDeclaration
-{
-    private PFunctionDefinition _declaration_;
-
-    public AFunctionDeclaration ()
-    {
-    }
-
-    public AFunctionDeclaration (
-            PFunctionDefinition _declaration_
-    )
-    {
-        SetDeclaration (_declaration_);
-    }
-
-    public override Object Clone()
-    {
-        return new AFunctionDeclaration (
-            (PFunctionDefinition)CloneNode (_declaration_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAFunctionDeclaration(this);
-    }
-
-    public PFunctionDefinition GetDeclaration ()
-    {
-        return _declaration_;
-    }
-
-    public void SetDeclaration (PFunctionDefinition node)
-    {
-        if(_declaration_ != null)
-        {
-            _declaration_.Parent(null);
+            _buf_.Parent(null);
         }
 
         if(node != null)
@@ -298,72 +248,18 @@ public sealed class AFunctionDeclaration : PDeclaration
             node.Parent(this);
         }
 
-        _declaration_ = node;
+        _buf_ = node;
+    }
+    public PTypeSign GetTypeSign ()
+    {
+        return _type_sign_;
     }
 
-    public override string ToString()
+    public void SetTypeSign (PTypeSign node)
     {
-        return ""
-            + ToString (_declaration_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _declaration_ == child )
+        if(_type_sign_ != null)
         {
-            _declaration_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _declaration_ == oldChild )
-        {
-            SetDeclaration ((PFunctionDefinition) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class APortDeclaration : PDeclaration
-{
-    private PPortDefinition _declaration_;
-
-    public APortDeclaration ()
-    {
-    }
-
-    public APortDeclaration (
-            PPortDefinition _declaration_
-    )
-    {
-        SetDeclaration (_declaration_);
-    }
-
-    public override Object Clone()
-    {
-        return new APortDeclaration (
-            (PPortDefinition)CloneNode (_declaration_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAPortDeclaration(this);
-    }
-
-    public PPortDefinition GetDeclaration ()
-    {
-        return _declaration_;
-    }
-
-    public void SetDeclaration (PPortDefinition node)
-    {
-        if(_declaration_ != null)
-        {
-            _declaration_.Parent(null);
+            _type_sign_.Parent(null);
         }
 
         if(node != null)
@@ -376,60 +272,152 @@ public sealed class APortDeclaration : PDeclaration
             node.Parent(this);
         }
 
-        _declaration_ = node;
+        _type_sign_ = node;
+    }
+    public PExp GetInit ()
+    {
+        return _init_;
+    }
+
+    public void SetInit (PExp node)
+    {
+        if(_init_ != null)
+        {
+            _init_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _init_ = node;
+    }
+    public TIdentifier GetName ()
+    {
+        return _name_;
+    }
+
+    public void SetName (TIdentifier node)
+    {
+        if(_name_ != null)
+        {
+            _name_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _name_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_declaration_)
+            + ToString (_type_)
+            + ToString (_buf_)
+            + ToString (_type_sign_)
+            + ToString (_init_)
+            + ToString (_name_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _declaration_ == child )
+        if ( _type_ == child )
         {
-            _declaration_ = null;
+            _type_ = null;
+            return;
+        }
+        if ( _buf_ == child )
+        {
+            _buf_ = null;
+            return;
+        }
+        if ( _type_sign_ == child )
+        {
+            _type_sign_ = null;
+            return;
+        }
+        if ( _init_ == child )
+        {
+            _init_ = null;
+            return;
+        }
+        if ( _name_ == child )
+        {
+            _name_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _declaration_ == oldChild )
+        if ( _type_ == oldChild )
         {
-            SetDeclaration ((PPortDefinition) newChild);
+            SetType ((PType) newChild);
+            return;
+        }
+        if ( _buf_ == oldChild )
+        {
+            SetBuf ((PExp) newChild);
+            return;
+        }
+        if ( _type_sign_ == oldChild )
+        {
+            SetTypeSign ((PTypeSign) newChild);
+            return;
+        }
+        if ( _init_ == oldChild )
+        {
+            SetInit ((PExp) newChild);
+            return;
+        }
+        if ( _name_ == oldChild )
+        {
+            SetName ((TIdentifier) newChild);
             return;
         }
     }
 
 }
-public sealed class AFunctionDefinition : PFunctionDefinition
+public sealed class AFuncDecl : PDecl
 {
-    private PTypeSpecifier _type_specifier_;
+    private PType _type_;
     private TIdentifier _name_;
     private PFormalsAndBody _formals_and_body_;
 
-    public AFunctionDefinition ()
+    public AFuncDecl ()
     {
     }
 
-    public AFunctionDefinition (
-            PTypeSpecifier _type_specifier_,
+    public AFuncDecl (
+            PType _type_,
             TIdentifier _name_,
             PFormalsAndBody _formals_and_body_
     )
     {
-        SetTypeSpecifier (_type_specifier_);
+        SetType (_type_);
         SetName (_name_);
         SetFormalsAndBody (_formals_and_body_);
     }
 
     public override Object Clone()
     {
-        return new AFunctionDefinition (
-            (PTypeSpecifier)CloneNode (_type_specifier_),
+        return new AFuncDecl (
+            (PType)CloneNode (_type_),
             (TIdentifier)CloneNode (_name_),
             (PFormalsAndBody)CloneNode (_formals_and_body_)
         );
@@ -437,19 +425,19 @@ public sealed class AFunctionDefinition : PFunctionDefinition
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAFunctionDefinition(this);
+        ((Analysis) sw).CaseAFuncDecl(this);
     }
 
-    public PTypeSpecifier GetTypeSpecifier ()
+    public PType GetType ()
     {
-        return _type_specifier_;
+        return _type_;
     }
 
-    public void SetTypeSpecifier (PTypeSpecifier node)
+    public void SetType (PType node)
     {
-        if(_type_specifier_ != null)
+        if(_type_ != null)
         {
-            _type_specifier_.Parent(null);
+            _type_.Parent(null);
         }
 
         if(node != null)
@@ -462,7 +450,7 @@ public sealed class AFunctionDefinition : PFunctionDefinition
             node.Parent(this);
         }
 
-        _type_specifier_ = node;
+        _type_ = node;
     }
     public TIdentifier GetName ()
     {
@@ -516,7 +504,7 @@ public sealed class AFunctionDefinition : PFunctionDefinition
     public override string ToString()
     {
         return ""
-            + ToString (_type_specifier_)
+            + ToString (_type_)
             + ToString (_name_)
             + ToString (_formals_and_body_)
         ;
@@ -524,9 +512,9 @@ public sealed class AFunctionDefinition : PFunctionDefinition
 
     internal override void RemoveChild(Node child)
     {
-        if ( _type_specifier_ == child )
+        if ( _type_ == child )
         {
-            _type_specifier_ = null;
+            _type_ = null;
             return;
         }
         if ( _name_ == child )
@@ -543,9 +531,9 @@ public sealed class AFunctionDefinition : PFunctionDefinition
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _type_specifier_ == oldChild )
+        if ( _type_ == oldChild )
         {
-            SetTypeSpecifier ((PTypeSpecifier) newChild);
+            SetType ((PType) newChild);
             return;
         }
         if ( _name_ == oldChild )
@@ -561,43 +549,79 @@ public sealed class AFunctionDefinition : PFunctionDefinition
     }
 
 }
-public sealed class AFormalParameter : PFormalParameter
+public sealed class APortDecl : PDecl
 {
-    private PTypeSpecifier _type_;
     private TIdentifier _name_;
+    private PType _type_;
+    private PExp _buf_;
+    private PExp _init_;
+    private PExp _adress_;
 
-    public AFormalParameter ()
+    public APortDecl ()
     {
     }
 
-    public AFormalParameter (
-            PTypeSpecifier _type_,
-            TIdentifier _name_
+    public APortDecl (
+            TIdentifier _name_,
+            PType _type_,
+            PExp _buf_,
+            PExp _init_,
+            PExp _adress_
     )
     {
-        SetType (_type_);
         SetName (_name_);
+        SetType (_type_);
+        SetBuf (_buf_);
+        SetInit (_init_);
+        SetAdress (_adress_);
     }
 
     public override Object Clone()
     {
-        return new AFormalParameter (
-            (PTypeSpecifier)CloneNode (_type_),
-            (TIdentifier)CloneNode (_name_)
+        return new APortDecl (
+            (TIdentifier)CloneNode (_name_),
+            (PType)CloneNode (_type_),
+            (PExp)CloneNode (_buf_),
+            (PExp)CloneNode (_init_),
+            (PExp)CloneNode (_adress_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAFormalParameter(this);
+        ((Analysis) sw).CaseAPortDecl(this);
     }
 
-    public PTypeSpecifier GetType ()
+    public TIdentifier GetName ()
+    {
+        return _name_;
+    }
+
+    public void SetName (TIdentifier node)
+    {
+        if(_name_ != null)
+        {
+            _name_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _name_ = node;
+    }
+    public PType GetType ()
     {
         return _type_;
     }
 
-    public void SetType (PTypeSpecifier node)
+    public void SetType (PType node)
     {
         if(_type_ != null)
         {
@@ -616,16 +640,16 @@ public sealed class AFormalParameter : PFormalParameter
 
         _type_ = node;
     }
-    public TIdentifier GetName ()
+    public PExp GetBuf ()
     {
-        return _name_;
+        return _buf_;
     }
 
-    public void SetName (TIdentifier node)
+    public void SetBuf (PExp node)
     {
-        if(_name_ != null)
+        if(_buf_ != null)
         {
-            _name_.Parent(null);
+            _buf_.Parent(null);
         }
 
         if(node != null)
@@ -638,139 +662,14 @@ public sealed class AFormalParameter : PFormalParameter
             node.Parent(this);
         }
 
-        _name_ = node;
+        _buf_ = node;
     }
-
-    public override string ToString()
-    {
-        return ""
-            + ToString (_type_)
-            + ToString (_name_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _type_ == child )
-        {
-            _type_ = null;
-            return;
-        }
-        if ( _name_ == child )
-        {
-            _name_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _type_ == oldChild )
-        {
-            SetType ((PTypeSpecifier) newChild);
-            return;
-        }
-        if ( _name_ == oldChild )
-        {
-            SetName ((TIdentifier) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class AVariableDefinition : PVariableDefinition
-{
-    private PTypeSpecifier _type_specifier_;
-    private PTypeQualifier _type_qualifier_;
-    private PExpression _init_;
-    private TIdentifier _name_;
-
-    public AVariableDefinition ()
-    {
-    }
-
-    public AVariableDefinition (
-            PTypeSpecifier _type_specifier_,
-            PTypeQualifier _type_qualifier_,
-            PExpression _init_,
-            TIdentifier _name_
-    )
-    {
-        SetTypeSpecifier (_type_specifier_);
-        SetTypeQualifier (_type_qualifier_);
-        SetInit (_init_);
-        SetName (_name_);
-    }
-
-    public override Object Clone()
-    {
-        return new AVariableDefinition (
-            (PTypeSpecifier)CloneNode (_type_specifier_),
-            (PTypeQualifier)CloneNode (_type_qualifier_),
-            (PExpression)CloneNode (_init_),
-            (TIdentifier)CloneNode (_name_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAVariableDefinition(this);
-    }
-
-    public PTypeSpecifier GetTypeSpecifier ()
-    {
-        return _type_specifier_;
-    }
-
-    public void SetTypeSpecifier (PTypeSpecifier node)
-    {
-        if(_type_specifier_ != null)
-        {
-            _type_specifier_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _type_specifier_ = node;
-    }
-    public PTypeQualifier GetTypeQualifier ()
-    {
-        return _type_qualifier_;
-    }
-
-    public void SetTypeQualifier (PTypeQualifier node)
-    {
-        if(_type_qualifier_ != null)
-        {
-            _type_qualifier_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _type_qualifier_ = node;
-    }
-    public PExpression GetInit ()
+    public PExp GetInit ()
     {
         return _init_;
     }
 
-    public void SetInit (PExpression node)
+    public void SetInit (PExp node)
     {
         if(_init_ != null)
         {
@@ -789,179 +688,12 @@ public sealed class AVariableDefinition : PVariableDefinition
 
         _init_ = node;
     }
-    public TIdentifier GetName ()
-    {
-        return _name_;
-    }
-
-    public void SetName (TIdentifier node)
-    {
-        if(_name_ != null)
-        {
-            _name_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _name_ = node;
-    }
-
-    public override string ToString()
-    {
-        return ""
-            + ToString (_type_specifier_)
-            + ToString (_type_qualifier_)
-            + ToString (_init_)
-            + ToString (_name_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _type_specifier_ == child )
-        {
-            _type_specifier_ = null;
-            return;
-        }
-        if ( _type_qualifier_ == child )
-        {
-            _type_qualifier_ = null;
-            return;
-        }
-        if ( _init_ == child )
-        {
-            _init_ = null;
-            return;
-        }
-        if ( _name_ == child )
-        {
-            _name_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _type_specifier_ == oldChild )
-        {
-            SetTypeSpecifier ((PTypeSpecifier) newChild);
-            return;
-        }
-        if ( _type_qualifier_ == oldChild )
-        {
-            SetTypeQualifier ((PTypeQualifier) newChild);
-            return;
-        }
-        if ( _init_ == oldChild )
-        {
-            SetInit ((PExpression) newChild);
-            return;
-        }
-        if ( _name_ == oldChild )
-        {
-            SetName ((TIdentifier) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class APortDefinition : PPortDefinition
-{
-    private TIdentifier _name_;
-    private PExpression _init_;
-    private TIntegerLiteral _adress_;
-
-    public APortDefinition ()
-    {
-    }
-
-    public APortDefinition (
-            TIdentifier _name_,
-            PExpression _init_,
-            TIntegerLiteral _adress_
-    )
-    {
-        SetName (_name_);
-        SetInit (_init_);
-        SetAdress (_adress_);
-    }
-
-    public override Object Clone()
-    {
-        return new APortDefinition (
-            (TIdentifier)CloneNode (_name_),
-            (PExpression)CloneNode (_init_),
-            (TIntegerLiteral)CloneNode (_adress_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAPortDefinition(this);
-    }
-
-    public TIdentifier GetName ()
-    {
-        return _name_;
-    }
-
-    public void SetName (TIdentifier node)
-    {
-        if(_name_ != null)
-        {
-            _name_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _name_ = node;
-    }
-    public PExpression GetInit ()
-    {
-        return _init_;
-    }
-
-    public void SetInit (PExpression node)
-    {
-        if(_init_ != null)
-        {
-            _init_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _init_ = node;
-    }
-    public TIntegerLiteral GetAdress ()
+    public PExp GetAdress ()
     {
         return _adress_;
     }
 
-    public void SetAdress (TIntegerLiteral node)
+    public void SetAdress (PExp node)
     {
         if(_adress_ != null)
         {
@@ -985,6 +717,8 @@ public sealed class APortDefinition : PPortDefinition
     {
         return ""
             + ToString (_name_)
+            + ToString (_type_)
+            + ToString (_buf_)
             + ToString (_init_)
             + ToString (_adress_)
         ;
@@ -995,6 +729,16 @@ public sealed class APortDefinition : PPortDefinition
         if ( _name_ == child )
         {
             _name_ = null;
+            return;
+        }
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _buf_ == child )
+        {
+            _buf_ = null;
             return;
         }
         if ( _init_ == child )
@@ -1016,461 +760,117 @@ public sealed class APortDefinition : PPortDefinition
             SetName ((TIdentifier) newChild);
             return;
         }
+        if ( _type_ == oldChild )
+        {
+            SetType ((PType) newChild);
+            return;
+        }
+        if ( _buf_ == oldChild )
+        {
+            SetBuf ((PExp) newChild);
+            return;
+        }
         if ( _init_ == oldChild )
         {
-            SetInit ((PExpression) newChild);
+            SetInit ((PExp) newChild);
             return;
         }
         if ( _adress_ == oldChild )
         {
-            SetAdress ((TIntegerLiteral) newChild);
+            SetAdress ((PExp) newChild);
             return;
         }
     }
 
 }
-public sealed class AConstTypeQualifier : PTypeQualifier
+public sealed class AEnumDecl : PDecl
 {
+    private TIdentifier _name_;
 
+    public AEnumDecl ()
+    {
+    }
 
-    public AConstTypeQualifier (
+    public AEnumDecl (
+            TIdentifier _name_
     )
     {
+        SetName (_name_);
     }
 
     public override Object Clone()
     {
-        return new AConstTypeQualifier (
+        return new AEnumDecl (
+            (TIdentifier)CloneNode (_name_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAConstTypeQualifier(this);
+        ((Analysis) sw).CaseAEnumDecl(this);
     }
 
+    public TIdentifier GetName ()
+    {
+        return _name_;
+    }
+
+    public void SetName (TIdentifier node)
+    {
+        if(_name_ != null)
+        {
+            _name_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _name_ = node;
+    }
 
     public override string ToString()
     {
         return ""
+            + ToString (_name_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
+        if ( _name_ == child )
+        {
+            _name_ = null;
+            return;
+        }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
+        if ( _name_ == oldChild )
+        {
+            SetName ((TIdentifier) newChild);
+            return;
+        }
     }
 
 }
-public sealed class AVolatileTypeQualifier : PTypeQualifier
+public sealed class AVoidType : PType
 {
+    private TKwVoid _token_;
 
-
-    public AVolatileTypeQualifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AVolatileTypeQualifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAVolatileTypeQualifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AVoidTypeSpecifier : PTypeSpecifier
-{
-
-
-    public AVoidTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AVoidTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAVoidTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class ASsingleTypeSpecifier : PTypeSpecifier
-{
-
-
-    public ASsingleTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new ASsingleTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseASsingleTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AUsingleTypeSpecifier : PTypeSpecifier
-{
-
-
-    public AUsingleTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AUsingleTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAUsingleTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class ASdoubleTypeSpecifier : PTypeSpecifier
-{
-
-
-    public ASdoubleTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new ASdoubleTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseASdoubleTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AUdoubleTypeSpecifier : PTypeSpecifier
-{
-
-
-    public AUdoubleTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AUdoubleTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAUdoubleTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class ASquadTypeSpecifier : PTypeSpecifier
-{
-
-
-    public ASquadTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new ASquadTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseASquadTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AUquadTypeSpecifier : PTypeSpecifier
-{
-
-
-    public AUquadTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AUquadTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAUquadTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AFloatTypeSpecifier : PTypeSpecifier
-{
-
-
-    public AFloatTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AFloatTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAFloatTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AStringTypeSpecifier : PTypeSpecifier
-{
-
-
-    public AStringTypeSpecifier (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AStringTypeSpecifier (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAStringTypeSpecifier(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AEmptyStatement : PStatement
-{
-
-
-    public AEmptyStatement (
-    )
-    {
-    }
-
-    public override Object Clone()
-    {
-        return new AEmptyStatement (
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAEmptyStatement(this);
-    }
-
-
-    public override string ToString()
-    {
-        return ""
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AVoidReturnStatement : PReturnStatement
-{
-    private TReturn _token_;
-
-    public AVoidReturnStatement ()
+    public AVoidType ()
     {
     }
 
-    public AVoidReturnStatement (
-            TReturn _token_
+    public AVoidType (
+            TKwVoid _token_
     )
     {
         SetToken (_token_);
@@ -1478,22 +878,22 @@ public sealed class AVoidReturnStatement : PReturnStatement
 
     public override Object Clone()
     {
-        return new AVoidReturnStatement (
-            (TReturn)CloneNode (_token_)
+        return new AVoidType (
+            (TKwVoid)CloneNode (_token_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAVoidReturnStatement(this);
+        ((Analysis) sw).CaseAVoidType(this);
     }
 
-    public TReturn GetToken ()
+    public TKwVoid GetToken ()
     {
         return _token_;
     }
 
-    public void SetToken (TReturn node)
+    public void SetToken (TKwVoid node)
     {
         if(_token_ != null)
         {
@@ -1533,52 +933,326 @@ public sealed class AVoidReturnStatement : PReturnStatement
     {
         if ( _token_ == oldChild )
         {
-            SetToken ((TReturn) newChild);
+            SetToken ((TKwVoid) newChild);
             return;
         }
+    }
+
+}
+public sealed class ASingleType : PType
+{
+
+
+    public ASingleType (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ASingleType (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASingleType(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ADoubleType : PType
+{
+
+
+    public ADoubleType (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ADoubleType (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseADoubleType(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AQuadType : PType
+{
+
+
+    public AQuadType (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AQuadType (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAQuadType(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AFloatType : PType
+{
+
+
+    public AFloatType (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AFloatType (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFloatType(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ABooleanType : PType
+{
+
+
+    public ABooleanType (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ABooleanType (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABooleanType(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AStringType : PType
+{
+
+
+    public AStringType (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AStringType (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAStringType(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ASignedTypeSign : PTypeSign
+{
+
+
+    public ASignedTypeSign (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ASignedTypeSign (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASignedTypeSign(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AUnsignedTypeSign : PTypeSign
+{
+
+
+    public AUnsignedTypeSign (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AUnsignedTypeSign (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAUnsignedTypeSign(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
     }
 
 }
 public sealed class AFormalsAndBody : PFormalsAndBody
 {
     private TypedList _formals_;
-    private TypedList _locals_;
-    private TypedList _statements_;
-    private PReturnStatement _return_;
+    private PStm _body_;
 
     public AFormalsAndBody ()
     {
         this._formals_ = new TypedList(new Formals_Cast(this));
-        this._locals_ = new TypedList(new Locals_Cast(this));
-        this._statements_ = new TypedList(new Statements_Cast(this));
     }
 
     public AFormalsAndBody (
             IList _formals_,
-            IList _locals_,
-            IList _statements_,
-            PReturnStatement _return_
+            PStm _body_
     )
     {
         this._formals_ = new TypedList(new Formals_Cast(this));
         this._formals_.Clear();
         this._formals_.AddAll(_formals_);
-        this._locals_ = new TypedList(new Locals_Cast(this));
-        this._locals_.Clear();
-        this._locals_.AddAll(_locals_);
-        this._statements_ = new TypedList(new Statements_Cast(this));
-        this._statements_.Clear();
-        this._statements_.AddAll(_statements_);
-        SetReturn (_return_);
+        SetBody (_body_);
     }
 
     public override Object Clone()
     {
         return new AFormalsAndBody (
             CloneList (_formals_),
-            CloneList (_locals_),
-            CloneList (_statements_),
-            (PReturnStatement)CloneNode (_return_)
+            (PStm)CloneNode (_body_)
         );
     }
 
@@ -1597,36 +1271,16 @@ public sealed class AFormalsAndBody : PFormalsAndBody
         _formals_.Clear();
         _formals_.AddAll(list);
     }
-    public IList GetLocals ()
+    public PStm GetBody ()
     {
-        return _locals_;
+        return _body_;
     }
 
-    public void setLocals (IList list)
+    public void SetBody (PStm node)
     {
-        _locals_.Clear();
-        _locals_.AddAll(list);
-    }
-    public IList GetStatements ()
-    {
-        return _statements_;
-    }
-
-    public void setStatements (IList list)
-    {
-        _statements_.Clear();
-        _statements_.AddAll(list);
-    }
-    public PReturnStatement GetReturn ()
-    {
-        return _return_;
-    }
-
-    public void SetReturn (PReturnStatement node)
-    {
-        if(_return_ != null)
+        if(_body_ != null)
         {
-            _return_.Parent(null);
+            _body_.Parent(null);
         }
 
         if(node != null)
@@ -1639,16 +1293,14 @@ public sealed class AFormalsAndBody : PFormalsAndBody
             node.Parent(this);
         }
 
-        _return_ = node;
+        _body_ = node;
     }
 
     public override string ToString()
     {
         return ""
             + ToString (_formals_)
-            + ToString (_locals_)
-            + ToString (_statements_)
-            + ToString (_return_)
+            + ToString (_body_)
         ;
     }
 
@@ -1659,19 +1311,9 @@ public sealed class AFormalsAndBody : PFormalsAndBody
             _formals_.Remove(child);
             return;
         }
-        if ( _locals_.Contains(child) )
+        if ( _body_ == child )
         {
-            _locals_.Remove(child);
-            return;
-        }
-        if ( _statements_.Contains(child) )
-        {
-            _statements_.Remove(child);
-            return;
-        }
-        if ( _return_ == child )
-        {
-            _return_ = null;
+            _body_ = null;
             return;
         }
     }
@@ -1695,43 +1337,9 @@ public sealed class AFormalsAndBody : PFormalsAndBody
                 return;
             }
         }
-        for ( int i = 0; i < _locals_.Count; i++ )
+        if ( _body_ == oldChild )
         {
-            Node n = (Node)_locals_[i];
-            if(n == oldChild)
-            {
-                if(newChild != null)
-                {
-                    _locals_[i] = newChild;
-                    oldChild.Parent(null);
-                    return;
-                }
-
-                _locals_.RemoveAt(i);
-                oldChild.Parent(null);
-                return;
-            }
-        }
-        for ( int i = 0; i < _statements_.Count; i++ )
-        {
-            Node n = (Node)_statements_[i];
-            if(n == oldChild)
-            {
-                if(newChild != null)
-                {
-                    _statements_[i] = newChild;
-                    oldChild.Parent(null);
-                    return;
-                }
-
-                _statements_.RemoveAt(i);
-                oldChild.Parent(null);
-                return;
-            }
-        }
-        if ( _return_ == oldChild )
-        {
-            SetReturn ((PReturnStatement) newChild);
+            SetBody ((PStm) newChild);
             return;
         }
     }
@@ -1747,7 +1355,7 @@ public sealed class AFormalsAndBody : PFormalsAndBody
 
         public Object Cast(Object o)
         {
-            PFormalParameter node = (PFormalParameter) o;
+            PDecl node = (PDecl) o;
 
             if((node.Parent() != null) &&
                 (node.Parent() != obj))
@@ -1766,123 +1374,49 @@ public sealed class AFormalsAndBody : PFormalsAndBody
 
         public Object UnCast(Object o)
         {
-            PFormalParameter node = (PFormalParameter) o;
-            node.Parent(null);
-            return node;
-        }
-    }
-    private class Locals_Cast : Cast
-    {
-        AFormalsAndBody obj;
-
-        internal Locals_Cast (AFormalsAndBody obj)
-        {
-          this.obj = obj;
-        }
-
-        public Object Cast(Object o)
-        {
-            PVariableDefinition node = (PVariableDefinition) o;
-
-            if((node.Parent() != null) &&
-                (node.Parent() != obj))
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            if((node.Parent() == null) ||
-                (node.Parent() != obj))
-            {
-                node.Parent(obj);
-            }
-
-            return node;
-        }
-
-        public Object UnCast(Object o)
-        {
-            PVariableDefinition node = (PVariableDefinition) o;
-            node.Parent(null);
-            return node;
-        }
-    }
-    private class Statements_Cast : Cast
-    {
-        AFormalsAndBody obj;
-
-        internal Statements_Cast (AFormalsAndBody obj)
-        {
-          this.obj = obj;
-        }
-
-        public Object Cast(Object o)
-        {
-            PStatement node = (PStatement) o;
-
-            if((node.Parent() != null) &&
-                (node.Parent() != obj))
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            if((node.Parent() == null) ||
-                (node.Parent() != obj))
-            {
-                node.Parent(obj);
-            }
-
-            return node;
-        }
-
-        public Object UnCast(Object o)
-        {
-            PStatement node = (PStatement) o;
+            PDecl node = (PDecl) o;
             node.Parent(null);
             return node;
         }
     }
 }
-public sealed class AIntegerConstantExpression : PExpression
+public sealed class ADeclStm : PStm
 {
-    private TMinus _sign_;
-    private TIntegerLiteral _integer_literal_;
+    private PDecl _decl_;
 
-    public AIntegerConstantExpression ()
+    public ADeclStm ()
     {
     }
 
-    public AIntegerConstantExpression (
-            TMinus _sign_,
-            TIntegerLiteral _integer_literal_
+    public ADeclStm (
+            PDecl _decl_
     )
     {
-        SetSign (_sign_);
-        SetIntegerLiteral (_integer_literal_);
+        SetDecl (_decl_);
     }
 
     public override Object Clone()
     {
-        return new AIntegerConstantExpression (
-            (TMinus)CloneNode (_sign_),
-            (TIntegerLiteral)CloneNode (_integer_literal_)
+        return new ADeclStm (
+            (PDecl)CloneNode (_decl_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAIntegerConstantExpression(this);
+        ((Analysis) sw).CaseADeclStm(this);
     }
 
-    public TMinus GetSign ()
+    public PDecl GetDecl ()
     {
-        return _sign_;
+        return _decl_;
     }
 
-    public void SetSign (TMinus node)
+    public void SetDecl (PDecl node)
     {
-        if(_sign_ != null)
+        if(_decl_ != null)
         {
-            _sign_.Parent(null);
+            _decl_.Parent(null);
         }
 
         if(node != null)
@@ -1895,74 +1429,4653 @@ public sealed class AIntegerConstantExpression : PExpression
             node.Parent(this);
         }
 
-        _sign_ = node;
-    }
-    public TIntegerLiteral GetIntegerLiteral ()
-    {
-        return _integer_literal_;
-    }
-
-    public void SetIntegerLiteral (TIntegerLiteral node)
-    {
-        if(_integer_literal_ != null)
-        {
-            _integer_literal_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _integer_literal_ = node;
+        _decl_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_sign_)
-            + ToString (_integer_literal_)
+            + ToString (_decl_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _sign_ == child )
+        if ( _decl_ == child )
         {
-            _sign_ = null;
-            return;
-        }
-        if ( _integer_literal_ == child )
-        {
-            _integer_literal_ = null;
+            _decl_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _sign_ == oldChild )
+        if ( _decl_ == oldChild )
         {
-            SetSign ((TMinus) newChild);
+            SetDecl ((PDecl) newChild);
             return;
         }
-        if ( _integer_literal_ == oldChild )
+    }
+
+}
+public sealed class ABlockStm : PStm
+{
+    private TypedList _block_;
+
+    public ABlockStm ()
+    {
+        this._block_ = new TypedList(new Block_Cast(this));
+    }
+
+    public ABlockStm (
+            IList _block_
+    )
+    {
+        this._block_ = new TypedList(new Block_Cast(this));
+        this._block_.Clear();
+        this._block_.AddAll(_block_);
+    }
+
+    public override Object Clone()
+    {
+        return new ABlockStm (
+            CloneList (_block_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABlockStm(this);
+    }
+
+    public IList GetBlock ()
+    {
+        return _block_;
+    }
+
+    public void setBlock (IList list)
+    {
+        _block_.Clear();
+        _block_.AddAll(list);
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_block_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _block_.Contains(child) )
         {
-            SetIntegerLiteral ((TIntegerLiteral) newChild);
+            _block_.Remove(child);
             return;
         }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        for ( int i = 0; i < _block_.Count; i++ )
+        {
+            Node n = (Node)_block_[i];
+            if(n == oldChild)
+            {
+                if(newChild != null)
+                {
+                    _block_[i] = newChild;
+                    oldChild.Parent(null);
+                    return;
+                }
+
+                _block_.RemoveAt(i);
+                oldChild.Parent(null);
+                return;
+            }
+        }
+    }
+
+    private class Block_Cast : Cast
+    {
+        ABlockStm obj;
+
+        internal Block_Cast (ABlockStm obj)
+        {
+          this.obj = obj;
+        }
+
+        public Object Cast(Object o)
+        {
+            PStm node = (PStm) o;
+
+            if((node.Parent() != null) &&
+                (node.Parent() != obj))
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            if((node.Parent() == null) ||
+                (node.Parent() != obj))
+            {
+                node.Parent(obj);
+            }
+
+            return node;
+        }
+
+        public Object UnCast(Object o)
+        {
+            PStm node = (PStm) o;
+            node.Parent(null);
+            return node;
+        }
+    }
+}
+public sealed class AExpStm : PStm
+{
+    private PExp _exp_;
+
+    public AExpStm ()
+    {
+    }
+
+    public AExpStm (
+            PExp _exp_
+    )
+    {
+        SetExp (_exp_);
+    }
+
+    public override Object Clone()
+    {
+        return new AExpStm (
+            (PExp)CloneNode (_exp_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAExpStm(this);
+    }
+
+    public PExp GetExp ()
+    {
+        return _exp_;
+    }
+
+    public void SetExp (PExp node)
+    {
+        if(_exp_ != null)
+        {
+            _exp_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _exp_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_exp_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _exp_ == child )
+        {
+            _exp_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _exp_ == oldChild )
+        {
+            SetExp ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AReturnStm : PStm
+{
+    private PExp _exp_;
+
+    public AReturnStm ()
+    {
+    }
+
+    public AReturnStm (
+            PExp _exp_
+    )
+    {
+        SetExp (_exp_);
+    }
+
+    public override Object Clone()
+    {
+        return new AReturnStm (
+            (PExp)CloneNode (_exp_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAReturnStm(this);
+    }
+
+    public PExp GetExp ()
+    {
+        return _exp_;
+    }
+
+    public void SetExp (PExp node)
+    {
+        if(_exp_ != null)
+        {
+            _exp_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _exp_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_exp_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _exp_ == child )
+        {
+            _exp_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _exp_ == oldChild )
+        {
+            SetExp ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AIfelseStm : PStm
+{
+    private PExp _cond_;
+    private PStm _then_;
+    private PStm _else_;
+
+    public AIfelseStm ()
+    {
+    }
+
+    public AIfelseStm (
+            PExp _cond_,
+            PStm _then_,
+            PStm _else_
+    )
+    {
+        SetCond (_cond_);
+        SetThen (_then_);
+        SetElse (_else_);
+    }
+
+    public override Object Clone()
+    {
+        return new AIfelseStm (
+            (PExp)CloneNode (_cond_),
+            (PStm)CloneNode (_then_),
+            (PStm)CloneNode (_else_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAIfelseStm(this);
+    }
+
+    public PExp GetCond ()
+    {
+        return _cond_;
+    }
+
+    public void SetCond (PExp node)
+    {
+        if(_cond_ != null)
+        {
+            _cond_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _cond_ = node;
+    }
+    public PStm GetThen ()
+    {
+        return _then_;
+    }
+
+    public void SetThen (PStm node)
+    {
+        if(_then_ != null)
+        {
+            _then_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _then_ = node;
+    }
+    public PStm GetElse ()
+    {
+        return _else_;
+    }
+
+    public void SetElse (PStm node)
+    {
+        if(_else_ != null)
+        {
+            _else_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _else_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_cond_)
+            + ToString (_then_)
+            + ToString (_else_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _cond_ == child )
+        {
+            _cond_ = null;
+            return;
+        }
+        if ( _then_ == child )
+        {
+            _then_ = null;
+            return;
+        }
+        if ( _else_ == child )
+        {
+            _else_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _cond_ == oldChild )
+        {
+            SetCond ((PExp) newChild);
+            return;
+        }
+        if ( _then_ == oldChild )
+        {
+            SetThen ((PStm) newChild);
+            return;
+        }
+        if ( _else_ == oldChild )
+        {
+            SetElse ((PStm) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AIfStm : PStm
+{
+    private PExp _cond_;
+    private PStm _then_;
+
+    public AIfStm ()
+    {
+    }
+
+    public AIfStm (
+            PExp _cond_,
+            PStm _then_
+    )
+    {
+        SetCond (_cond_);
+        SetThen (_then_);
+    }
+
+    public override Object Clone()
+    {
+        return new AIfStm (
+            (PExp)CloneNode (_cond_),
+            (PStm)CloneNode (_then_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAIfStm(this);
+    }
+
+    public PExp GetCond ()
+    {
+        return _cond_;
+    }
+
+    public void SetCond (PExp node)
+    {
+        if(_cond_ != null)
+        {
+            _cond_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _cond_ = node;
+    }
+    public PStm GetThen ()
+    {
+        return _then_;
+    }
+
+    public void SetThen (PStm node)
+    {
+        if(_then_ != null)
+        {
+            _then_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _then_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_cond_)
+            + ToString (_then_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _cond_ == child )
+        {
+            _cond_ = null;
+            return;
+        }
+        if ( _then_ == child )
+        {
+            _then_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _cond_ == oldChild )
+        {
+            SetCond ((PExp) newChild);
+            return;
+        }
+        if ( _then_ == oldChild )
+        {
+            SetThen ((PStm) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AForStm : PStm
+{
+    private PDecl _init_;
+    private PExp _cond_;
+    private PExp _update_;
+
+    public AForStm ()
+    {
+    }
+
+    public AForStm (
+            PDecl _init_,
+            PExp _cond_,
+            PExp _update_
+    )
+    {
+        SetInit (_init_);
+        SetCond (_cond_);
+        SetUpdate (_update_);
+    }
+
+    public override Object Clone()
+    {
+        return new AForStm (
+            (PDecl)CloneNode (_init_),
+            (PExp)CloneNode (_cond_),
+            (PExp)CloneNode (_update_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAForStm(this);
+    }
+
+    public PDecl GetInit ()
+    {
+        return _init_;
+    }
+
+    public void SetInit (PDecl node)
+    {
+        if(_init_ != null)
+        {
+            _init_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _init_ = node;
+    }
+    public PExp GetCond ()
+    {
+        return _cond_;
+    }
+
+    public void SetCond (PExp node)
+    {
+        if(_cond_ != null)
+        {
+            _cond_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _cond_ = node;
+    }
+    public PExp GetUpdate ()
+    {
+        return _update_;
+    }
+
+    public void SetUpdate (PExp node)
+    {
+        if(_update_ != null)
+        {
+            _update_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _update_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_init_)
+            + ToString (_cond_)
+            + ToString (_update_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _init_ == child )
+        {
+            _init_ = null;
+            return;
+        }
+        if ( _cond_ == child )
+        {
+            _cond_ = null;
+            return;
+        }
+        if ( _update_ == child )
+        {
+            _update_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _init_ == oldChild )
+        {
+            SetInit ((PDecl) newChild);
+            return;
+        }
+        if ( _cond_ == oldChild )
+        {
+            SetCond ((PExp) newChild);
+            return;
+        }
+        if ( _update_ == oldChild )
+        {
+            SetUpdate ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AForeachStm : PStm
+{
+    private PType _type_;
+    private TIdentifier _id_;
+    private PStm _body_;
+
+    public AForeachStm ()
+    {
+    }
+
+    public AForeachStm (
+            PType _type_,
+            TIdentifier _id_,
+            PStm _body_
+    )
+    {
+        SetType (_type_);
+        SetId (_id_);
+        SetBody (_body_);
+    }
+
+    public override Object Clone()
+    {
+        return new AForeachStm (
+            (PType)CloneNode (_type_),
+            (TIdentifier)CloneNode (_id_),
+            (PStm)CloneNode (_body_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAForeachStm(this);
+    }
+
+    public PType GetType ()
+    {
+        return _type_;
+    }
+
+    public void SetType (PType node)
+    {
+        if(_type_ != null)
+        {
+            _type_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_ = node;
+    }
+    public TIdentifier GetId ()
+    {
+        return _id_;
+    }
+
+    public void SetId (TIdentifier node)
+    {
+        if(_id_ != null)
+        {
+            _id_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _id_ = node;
+    }
+    public PStm GetBody ()
+    {
+        return _body_;
+    }
+
+    public void SetBody (PStm node)
+    {
+        if(_body_ != null)
+        {
+            _body_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _body_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_type_)
+            + ToString (_id_)
+            + ToString (_body_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+        if ( _body_ == child )
+        {
+            _body_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _type_ == oldChild )
+        {
+            SetType ((PType) newChild);
+            return;
+        }
+        if ( _id_ == oldChild )
+        {
+            SetId ((TIdentifier) newChild);
+            return;
+        }
+        if ( _body_ == oldChild )
+        {
+            SetBody ((PStm) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AEmptyStm : PStm
+{
+
+
+    public AEmptyStm (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AEmptyStm (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAEmptyStm(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ABreakStm : PStm
+{
+
+
+    public ABreakStm (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ABreakStm (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABreakStm(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ANamedExp : PExp
+{
+    private TIdentifier _id_;
+
+    public ANamedExp ()
+    {
+    }
+
+    public ANamedExp (
+            TIdentifier _id_
+    )
+    {
+        SetId (_id_);
+    }
+
+    public override Object Clone()
+    {
+        return new ANamedExp (
+            (TIdentifier)CloneNode (_id_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANamedExp(this);
+    }
+
+    public TIdentifier GetId ()
+    {
+        return _id_;
+    }
+
+    public void SetId (TIdentifier node)
+    {
+        if(_id_ != null)
+        {
+            _id_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _id_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_id_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _id_ == oldChild )
+        {
+            SetId ((TIdentifier) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AIntConstExp : PExp
+{
+    private TIntegerLiteral _value_;
+
+    public AIntConstExp ()
+    {
+    }
+
+    public AIntConstExp (
+            TIntegerLiteral _value_
+    )
+    {
+        SetValue (_value_);
+    }
+
+    public override Object Clone()
+    {
+        return new AIntConstExp (
+            (TIntegerLiteral)CloneNode (_value_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAIntConstExp(this);
+    }
+
+    public TIntegerLiteral GetValue ()
+    {
+        return _value_;
+    }
+
+    public void SetValue (TIntegerLiteral node)
+    {
+        if(_value_ != null)
+        {
+            _value_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _value_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_value_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _value_ == child )
+        {
+            _value_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _value_ == oldChild )
+        {
+            SetValue ((TIntegerLiteral) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ABoolConstExp : PExp
+{
+    private PBoolean _value_;
+
+    public ABoolConstExp ()
+    {
+    }
+
+    public ABoolConstExp (
+            PBoolean _value_
+    )
+    {
+        SetValue (_value_);
+    }
+
+    public override Object Clone()
+    {
+        return new ABoolConstExp (
+            (PBoolean)CloneNode (_value_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABoolConstExp(this);
+    }
+
+    public PBoolean GetValue ()
+    {
+        return _value_;
+    }
+
+    public void SetValue (PBoolean node)
+    {
+        if(_value_ != null)
+        {
+            _value_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _value_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_value_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _value_ == child )
+        {
+            _value_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _value_ == oldChild )
+        {
+            SetValue ((PBoolean) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AFloatConstExp : PExp
+{
+    private PBoolean _value_;
+
+    public AFloatConstExp ()
+    {
+    }
+
+    public AFloatConstExp (
+            PBoolean _value_
+    )
+    {
+        SetValue (_value_);
+    }
+
+    public override Object Clone()
+    {
+        return new AFloatConstExp (
+            (PBoolean)CloneNode (_value_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFloatConstExp(this);
+    }
+
+    public PBoolean GetValue ()
+    {
+        return _value_;
+    }
+
+    public void SetValue (PBoolean node)
+    {
+        if(_value_ != null)
+        {
+            _value_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _value_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_value_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _value_ == child )
+        {
+            _value_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _value_ == oldChild )
+        {
+            SetValue ((PBoolean) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AStringConstExp : PExp
+{
+    private PBoolean _value_;
+
+    public AStringConstExp ()
+    {
+    }
+
+    public AStringConstExp (
+            PBoolean _value_
+    )
+    {
+        SetValue (_value_);
+    }
+
+    public override Object Clone()
+    {
+        return new AStringConstExp (
+            (PBoolean)CloneNode (_value_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAStringConstExp(this);
+    }
+
+    public PBoolean GetValue ()
+    {
+        return _value_;
+    }
+
+    public void SetValue (PBoolean node)
+    {
+        if(_value_ != null)
+        {
+            _value_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _value_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_value_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _value_ == child )
+        {
+            _value_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _value_ == oldChild )
+        {
+            SetValue ((PBoolean) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ACastExp : PExp
+{
+    private PType _type_;
+    private PExp _exp_;
+
+    public ACastExp ()
+    {
+    }
+
+    public ACastExp (
+            PType _type_,
+            PExp _exp_
+    )
+    {
+        SetType (_type_);
+        SetExp (_exp_);
+    }
+
+    public override Object Clone()
+    {
+        return new ACastExp (
+            (PType)CloneNode (_type_),
+            (PExp)CloneNode (_exp_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseACastExp(this);
+    }
+
+    public PType GetType ()
+    {
+        return _type_;
+    }
+
+    public void SetType (PType node)
+    {
+        if(_type_ != null)
+        {
+            _type_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_ = node;
+    }
+    public PExp GetExp ()
+    {
+        return _exp_;
+    }
+
+    public void SetExp (PExp node)
+    {
+        if(_exp_ != null)
+        {
+            _exp_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _exp_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_type_)
+            + ToString (_exp_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _exp_ == child )
+        {
+            _exp_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _type_ == oldChild )
+        {
+            SetType ((PType) newChild);
+            return;
+        }
+        if ( _exp_ == oldChild )
+        {
+            SetExp ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AUnaryExp : PExp
+{
+    private PUnop _unop_;
+    private PExp _exp_;
+
+    public AUnaryExp ()
+    {
+    }
+
+    public AUnaryExp (
+            PUnop _unop_,
+            PExp _exp_
+    )
+    {
+        SetUnop (_unop_);
+        SetExp (_exp_);
+    }
+
+    public override Object Clone()
+    {
+        return new AUnaryExp (
+            (PUnop)CloneNode (_unop_),
+            (PExp)CloneNode (_exp_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAUnaryExp(this);
+    }
+
+    public PUnop GetUnop ()
+    {
+        return _unop_;
+    }
+
+    public void SetUnop (PUnop node)
+    {
+        if(_unop_ != null)
+        {
+            _unop_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _unop_ = node;
+    }
+    public PExp GetExp ()
+    {
+        return _exp_;
+    }
+
+    public void SetExp (PExp node)
+    {
+        if(_exp_ != null)
+        {
+            _exp_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _exp_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_unop_)
+            + ToString (_exp_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _unop_ == child )
+        {
+            _unop_ = null;
+            return;
+        }
+        if ( _exp_ == child )
+        {
+            _exp_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _unop_ == oldChild )
+        {
+            SetUnop ((PUnop) newChild);
+            return;
+        }
+        if ( _exp_ == oldChild )
+        {
+            SetExp ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ASizeofExp : PExp
+{
+    private PExp _arg_;
+
+    public ASizeofExp ()
+    {
+    }
+
+    public ASizeofExp (
+            PExp _arg_
+    )
+    {
+        SetArg (_arg_);
+    }
+
+    public override Object Clone()
+    {
+        return new ASizeofExp (
+            (PExp)CloneNode (_arg_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASizeofExp(this);
+    }
+
+    public PExp GetArg ()
+    {
+        return _arg_;
+    }
+
+    public void SetArg (PExp node)
+    {
+        if(_arg_ != null)
+        {
+            _arg_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _arg_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_arg_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _arg_ == child )
+        {
+            _arg_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _arg_ == oldChild )
+        {
+            SetArg ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ASizeofTypeExp : PExp
+{
+    private PType _arg_;
+
+    public ASizeofTypeExp ()
+    {
+    }
+
+    public ASizeofTypeExp (
+            PType _arg_
+    )
+    {
+        SetArg (_arg_);
+    }
+
+    public override Object Clone()
+    {
+        return new ASizeofTypeExp (
+            (PType)CloneNode (_arg_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASizeofTypeExp(this);
+    }
+
+    public PType GetArg ()
+    {
+        return _arg_;
+    }
+
+    public void SetArg (PType node)
+    {
+        if(_arg_ != null)
+        {
+            _arg_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _arg_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_arg_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _arg_ == child )
+        {
+            _arg_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _arg_ == oldChild )
+        {
+            SetArg ((PType) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AIncExp : PExp
+{
+    private PExp _lhs_;
+
+    public AIncExp ()
+    {
+    }
+
+    public AIncExp (
+            PExp _lhs_
+    )
+    {
+        SetLhs (_lhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AIncExp (
+            (PExp)CloneNode (_lhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAIncExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ADecExp : PExp
+{
+    private PExp _lhs_;
+
+    public ADecExp ()
+    {
+    }
+
+    public ADecExp (
+            PExp _lhs_
+    )
+    {
+        SetLhs (_lhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ADecExp (
+            (PExp)CloneNode (_lhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseADecExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AFunctionExp : PExp
+{
+    private PExp _exp_;
+
+    public AFunctionExp ()
+    {
+    }
+
+    public AFunctionExp (
+            PExp _exp_
+    )
+    {
+        SetExp (_exp_);
+    }
+
+    public override Object Clone()
+    {
+        return new AFunctionExp (
+            (PExp)CloneNode (_exp_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFunctionExp(this);
+    }
+
+    public PExp GetExp ()
+    {
+        return _exp_;
+    }
+
+    public void SetExp (PExp node)
+    {
+        if(_exp_ != null)
+        {
+            _exp_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _exp_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_exp_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _exp_ == child )
+        {
+            _exp_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _exp_ == oldChild )
+        {
+            SetExp ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AInitExp : PExp
+{
+    private PExp _exp_;
+
+    public AInitExp ()
+    {
+    }
+
+    public AInitExp (
+            PExp _exp_
+    )
+    {
+        SetExp (_exp_);
+    }
+
+    public override Object Clone()
+    {
+        return new AInitExp (
+            (PExp)CloneNode (_exp_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAInitExp(this);
+    }
+
+    public PExp GetExp ()
+    {
+        return _exp_;
+    }
+
+    public void SetExp (PExp node)
+    {
+        if(_exp_ != null)
+        {
+            _exp_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _exp_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_exp_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _exp_ == child )
+        {
+            _exp_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _exp_ == oldChild )
+        {
+            SetExp ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ARshiftExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ARshiftExp ()
+    {
+    }
+
+    public ARshiftExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ARshiftExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseARshiftExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALshiftExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ALshiftExp ()
+    {
+    }
+
+    public ALshiftExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALshiftExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALshiftExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AMinusExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AMinusExp ()
+    {
+    }
+
+    public AMinusExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AMinusExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAMinusExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APlusExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public APlusExp ()
+    {
+    }
+
+    public APlusExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new APlusExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPlusExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AModExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AModExp ()
+    {
+    }
+
+    public AModExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AModExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAModExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ADivideExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ADivideExp ()
+    {
+    }
+
+    public ADivideExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ADivideExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseADivideExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AMultiplyExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AMultiplyExp ()
+    {
+    }
+
+    public AMultiplyExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AMultiplyExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAMultiplyExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AAssignExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AAssignExp ()
+    {
+    }
+
+    public AAssignExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AAssignExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAAssignExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ABitwiseOrExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ABitwiseOrExp ()
+    {
+    }
+
+    public ABitwiseOrExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ABitwiseOrExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABitwiseOrExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ABitwiseAndExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ABitwiseAndExp ()
+    {
+    }
+
+    public ABitwiseAndExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ABitwiseAndExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABitwiseAndExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ABitwiseXorExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ABitwiseXorExp ()
+    {
+    }
+
+    public ABitwiseXorExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ABitwiseXorExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseABitwiseXorExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALtExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ALtExp ()
+    {
+    }
+
+    public ALtExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALtExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALtExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AGtExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AGtExp ()
+    {
+    }
+
+    public AGtExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AGtExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAGtExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALtEqExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ALtEqExp ()
+    {
+    }
+
+    public ALtEqExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALtEqExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALtEqExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AGtEqExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AGtEqExp ()
+    {
+    }
+
+    public AGtEqExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AGtEqExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAGtEqExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ANotEqExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ANotEqExp ()
+    {
+    }
+
+    public ANotEqExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ANotEqExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANotEqExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AEqEqExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public AEqEqExp ()
+    {
+    }
+
+    public AEqEqExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AEqEqExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAEqEqExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALogicalOrExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ALogicalOrExp ()
+    {
+    }
+
+    public ALogicalOrExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALogicalOrExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALogicalOrExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALogicalAndExp : PExp
+{
+    private PExp _lhs_;
+    private PExp _rhs_;
+
+    public ALogicalAndExp ()
+    {
+    }
+
+    public ALogicalAndExp (
+            PExp _lhs_,
+            PExp _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALogicalAndExp (
+            (PExp)CloneNode (_lhs_),
+            (PExp)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALogicalAndExp(this);
+    }
+
+    public PExp GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PExp node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public PExp GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PExp node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PExp) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ACondExp : PExp
+{
+    private PExp _cond_;
+    private PExp _true_;
+    private PExp _false_;
+
+    public ACondExp ()
+    {
+    }
+
+    public ACondExp (
+            PExp _cond_,
+            PExp _true_,
+            PExp _false_
+    )
+    {
+        SetCond (_cond_);
+        SetTrue (_true_);
+        SetFalse (_false_);
+    }
+
+    public override Object Clone()
+    {
+        return new ACondExp (
+            (PExp)CloneNode (_cond_),
+            (PExp)CloneNode (_true_),
+            (PExp)CloneNode (_false_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseACondExp(this);
+    }
+
+    public PExp GetCond ()
+    {
+        return _cond_;
+    }
+
+    public void SetCond (PExp node)
+    {
+        if(_cond_ != null)
+        {
+            _cond_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _cond_ = node;
+    }
+    public PExp GetTrue ()
+    {
+        return _true_;
+    }
+
+    public void SetTrue (PExp node)
+    {
+        if(_true_ != null)
+        {
+            _true_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _true_ = node;
+    }
+    public PExp GetFalse ()
+    {
+        return _false_;
+    }
+
+    public void SetFalse (PExp node)
+    {
+        if(_false_ != null)
+        {
+            _false_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _false_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_cond_)
+            + ToString (_true_)
+            + ToString (_false_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _cond_ == child )
+        {
+            _cond_ = null;
+            return;
+        }
+        if ( _true_ == child )
+        {
+            _true_ = null;
+            return;
+        }
+        if ( _false_ == child )
+        {
+            _false_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _cond_ == oldChild )
+        {
+            SetCond ((PExp) newChild);
+            return;
+        }
+        if ( _true_ == oldChild )
+        {
+            SetTrue ((PExp) newChild);
+            return;
+        }
+        if ( _false_ == oldChild )
+        {
+            SetFalse ((PExp) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ATrueBoolean : PBoolean
+{
+
+
+    public ATrueBoolean (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ATrueBoolean (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseATrueBoolean(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AFalseBoolean : PBoolean
+{
+
+
+    public AFalseBoolean (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AFalseBoolean (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFalseBoolean(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class APositiveUnop : PUnop
+{
+
+
+    public APositiveUnop (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new APositiveUnop (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPositiveUnop(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ANegativeUnop : PUnop
+{
+
+
+    public ANegativeUnop (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ANegativeUnop (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANegativeUnop(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class AInverseUnop : PUnop
+{
+
+
+    public AInverseUnop (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new AInverseUnop (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAInverseUnop(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+    }
+
+}
+public sealed class ANotUnop : PUnop
+{
+
+
+    public ANotUnop (
+    )
+    {
+    }
+
+    public override Object Clone()
+    {
+        return new ANotUnop (
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANotUnop(this);
+    }
+
+
+    public override string ToString()
+    {
+        return ""
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
     }
 
 }
 
 public sealed class Start : Node
 {
-    private PSourceFile _base_;
+    private PModule _base_;
     private EOF _eof_;
 
     public Start()
@@ -1970,17 +6083,17 @@ public sealed class Start : Node
     }
 
     public Start(
-        PSourceFile _base_,
+        PModule _base_,
         EOF _eof_)
     {
-        SetPSourceFile(_base_);
+        SetPModule(_base_);
         SetEOF(_eof_);
     }
 
     public override Object Clone()
     {
         return new Start(
-            (PSourceFile) CloneNode(_base_),
+            (PModule) CloneNode(_base_),
             (EOF) CloneNode(_eof_));
     }
 
@@ -1989,11 +6102,11 @@ public sealed class Start : Node
         ((Analysis) sw).CaseStart(this);
     }
 
-    public PSourceFile GetPSourceFile()
+    public PModule GetPModule()
     {
         return _base_;
     }
-    public void SetPSourceFile(PSourceFile node)
+    public void SetPModule(PModule node)
     {
         if(_base_ != null)
         {
@@ -2055,7 +6168,7 @@ public sealed class Start : Node
     {
         if(_base_ == oldChild)
         {
-            SetPSourceFile((PSourceFile) newChild);
+            SetPModule((PModule) newChild);
             return;
         }
 

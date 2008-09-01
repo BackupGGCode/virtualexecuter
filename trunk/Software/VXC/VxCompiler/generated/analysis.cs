@@ -15,56 +15,131 @@ public interface Analysis : Switch
     void SetOut(Node node, Object outobj);
 
     void CaseStart(Start node);
-    void CaseASourceFile(ASourceFile node);
-    void CaseAVariableDeclaration(AVariableDeclaration node);
-    void CaseAFunctionDeclaration(AFunctionDeclaration node);
-    void CaseAPortDeclaration(APortDeclaration node);
-    void CaseAFunctionDefinition(AFunctionDefinition node);
-    void CaseAFormalParameter(AFormalParameter node);
-    void CaseAVariableDefinition(AVariableDefinition node);
-    void CaseAPortDefinition(APortDefinition node);
-    void CaseAConstTypeQualifier(AConstTypeQualifier node);
-    void CaseAVolatileTypeQualifier(AVolatileTypeQualifier node);
-    void CaseAVoidTypeSpecifier(AVoidTypeSpecifier node);
-    void CaseASsingleTypeSpecifier(ASsingleTypeSpecifier node);
-    void CaseAUsingleTypeSpecifier(AUsingleTypeSpecifier node);
-    void CaseASdoubleTypeSpecifier(ASdoubleTypeSpecifier node);
-    void CaseAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node);
-    void CaseASquadTypeSpecifier(ASquadTypeSpecifier node);
-    void CaseAUquadTypeSpecifier(AUquadTypeSpecifier node);
-    void CaseAFloatTypeSpecifier(AFloatTypeSpecifier node);
-    void CaseAStringTypeSpecifier(AStringTypeSpecifier node);
-    void CaseAEmptyStatement(AEmptyStatement node);
-    void CaseAVoidReturnStatement(AVoidReturnStatement node);
+    void CaseAModule(AModule node);
+    void CaseAVarDecl(AVarDecl node);
+    void CaseAFuncDecl(AFuncDecl node);
+    void CaseAPortDecl(APortDecl node);
+    void CaseAEnumDecl(AEnumDecl node);
+    void CaseAVoidType(AVoidType node);
+    void CaseASingleType(ASingleType node);
+    void CaseADoubleType(ADoubleType node);
+    void CaseAQuadType(AQuadType node);
+    void CaseAFloatType(AFloatType node);
+    void CaseABooleanType(ABooleanType node);
+    void CaseAStringType(AStringType node);
+    void CaseASignedTypeSign(ASignedTypeSign node);
+    void CaseAUnsignedTypeSign(AUnsignedTypeSign node);
     void CaseAFormalsAndBody(AFormalsAndBody node);
-    void CaseAIntegerConstantExpression(AIntegerConstantExpression node);
+    void CaseADeclStm(ADeclStm node);
+    void CaseABlockStm(ABlockStm node);
+    void CaseAExpStm(AExpStm node);
+    void CaseAReturnStm(AReturnStm node);
+    void CaseAIfelseStm(AIfelseStm node);
+    void CaseAIfStm(AIfStm node);
+    void CaseAForStm(AForStm node);
+    void CaseAForeachStm(AForeachStm node);
+    void CaseAEmptyStm(AEmptyStm node);
+    void CaseABreakStm(ABreakStm node);
+    void CaseANamedExp(ANamedExp node);
+    void CaseAIntConstExp(AIntConstExp node);
+    void CaseABoolConstExp(ABoolConstExp node);
+    void CaseAFloatConstExp(AFloatConstExp node);
+    void CaseAStringConstExp(AStringConstExp node);
+    void CaseACastExp(ACastExp node);
+    void CaseAUnaryExp(AUnaryExp node);
+    void CaseASizeofExp(ASizeofExp node);
+    void CaseASizeofTypeExp(ASizeofTypeExp node);
+    void CaseAIncExp(AIncExp node);
+    void CaseADecExp(ADecExp node);
+    void CaseAFunctionExp(AFunctionExp node);
+    void CaseAInitExp(AInitExp node);
+    void CaseARshiftExp(ARshiftExp node);
+    void CaseALshiftExp(ALshiftExp node);
+    void CaseAMinusExp(AMinusExp node);
+    void CaseAPlusExp(APlusExp node);
+    void CaseAModExp(AModExp node);
+    void CaseADivideExp(ADivideExp node);
+    void CaseAMultiplyExp(AMultiplyExp node);
+    void CaseAAssignExp(AAssignExp node);
+    void CaseABitwiseOrExp(ABitwiseOrExp node);
+    void CaseABitwiseAndExp(ABitwiseAndExp node);
+    void CaseABitwiseXorExp(ABitwiseXorExp node);
+    void CaseALtExp(ALtExp node);
+    void CaseAGtExp(AGtExp node);
+    void CaseALtEqExp(ALtEqExp node);
+    void CaseAGtEqExp(AGtEqExp node);
+    void CaseANotEqExp(ANotEqExp node);
+    void CaseAEqEqExp(AEqEqExp node);
+    void CaseALogicalOrExp(ALogicalOrExp node);
+    void CaseALogicalAndExp(ALogicalAndExp node);
+    void CaseACondExp(ACondExp node);
+    void CaseATrueBoolean(ATrueBoolean node);
+    void CaseAFalseBoolean(AFalseBoolean node);
+    void CaseAPositiveUnop(APositiveUnop node);
+    void CaseANegativeUnop(ANegativeUnop node);
+    void CaseAInverseUnop(AInverseUnop node);
+    void CaseANotUnop(ANotUnop node);
 
-    void CaseTVoid(TVoid node);
-    void CaseTSsingle(TSsingle node);
-    void CaseTUsingle(TUsingle node);
-    void CaseTSdouble(TSdouble node);
-    void CaseTUdouble(TUdouble node);
-    void CaseTSquad(TSquad node);
-    void CaseTUquad(TUquad node);
-    void CaseTFloat(TFloat node);
-    void CaseTString(TString node);
-    void CaseTConst(TConst node);
-    void CaseTVolatile(TVolatile node);
-    void CaseTReturn(TReturn node);
-    void CaseTPort(TPort node);
-    void CaseTComment(TComment node);
+    void CaseTKwReturn(TKwReturn node);
+    void CaseTKwBreak(TKwBreak node);
+    void CaseTKwIf(TKwIf node);
+    void CaseTKwThen(TKwThen node);
+    void CaseTKwElse(TKwElse node);
+    void CaseTKwForeach(TKwForeach node);
+    void CaseTKwFor(TKwFor node);
+    void CaseTKwTrue(TKwTrue node);
+    void CaseTKwFalse(TKwFalse node);
+    void CaseTKwSizeof(TKwSizeof node);
+    void CaseTKwVoid(TKwVoid node);
+    void CaseTKwSingle(TKwSingle node);
+    void CaseTKwDouble(TKwDouble node);
+    void CaseTKwQuad(TKwQuad node);
+    void CaseTKwFloat(TKwFloat node);
+    void CaseTKwString(TKwString node);
+    void CaseTKwSigned(TKwSigned node);
+    void CaseTKwUnsigned(TKwUnsigned node);
+    void CaseTKwPort(TKwPort node);
+    void CaseTTraditionalComment(TTraditionalComment node);
+    void CaseTDocumentationComment(TDocumentationComment node);
+    void CaseTEndOfLineComment(TEndOfLineComment node);
     void CaseTWhitespace(TWhitespace node);
-    void CaseTLPar(TLPar node);
-    void CaseTRPar(TRPar node);
-    void CaseTLCurly(TLCurly node);
-    void CaseTRCurly(TRCurly node);
-    void CaseTSemicolon(TSemicolon node);
-    void CaseTComma(TComma node);
-    void CaseTMinus(TMinus node);
-    void CaseTAt(TAt node);
+    void CaseTTokDot(TTokDot node);
+    void CaseTTokLbracket(TTokLbracket node);
+    void CaseTTokRbracket(TTokRbracket node);
+    void CaseTTokLpar(TTokLpar node);
+    void CaseTTokRpar(TTokRpar node);
+    void CaseTTokLcurly(TTokLcurly node);
+    void CaseTTokRcurly(TTokRcurly node);
+    void CaseTTokSemicolon(TTokSemicolon node);
+    void CaseTTokComma(TTokComma node);
+    void CaseTTokMinus(TTokMinus node);
+    void CaseTTokColon(TTokColon node);
+    void CaseTTokQuestion(TTokQuestion node);
+    void CaseTTokEq(TTokEq node);
+    void CaseTTokBar(TTokBar node);
+    void CaseTTokBarBar(TTokBarBar node);
+    void CaseTTokAmp(TTokAmp node);
+    void CaseTTokAmpAmp(TTokAmpAmp node);
+    void CaseTTokCaret(TTokCaret node);
+    void CaseTTokLshift(TTokLshift node);
+    void CaseTTokRshift(TTokRshift node);
+    void CaseTTokLt(TTokLt node);
+    void CaseTTokGt(TTokGt node);
+    void CaseTTokLtEq(TTokLtEq node);
+    void CaseTTokGtEq(TTokGtEq node);
+    void CaseTTokEqEq(TTokEqEq node);
+    void CaseTTokNotEq(TTokNotEq node);
+    void CaseTTokPlusPlus(TTokPlusPlus node);
+    void CaseTTokMinusMinus(TTokMinusMinus node);
+    void CaseTTokStar(TTokStar node);
+    void CaseTTokPlus(TTokPlus node);
+    void CaseTTokPercent(TTokPercent node);
+    void CaseTTokTilde(TTokTilde node);
+    void CaseTTokExclamation(TTokExclamation node);
+    void CaseTTokSlash(TTokSlash node);
     void CaseTIntegerLiteral(TIntegerLiteral node);
+    void CaseTStringLiteral(TStringLiteral node);
     void CaseTIdentifier(TIdentifier node);
-    void CaseTAssign(TAssign node);
     void CaseEOF(EOF node);
 }
 
@@ -131,87 +206,59 @@ public class AnalysisAdapter : Analysis
         DefaultCase(node);
     }
 
-    public virtual void CaseASourceFile(ASourceFile node)
+    public virtual void CaseAModule(AModule node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAVariableDeclaration(AVariableDeclaration node)
+    public virtual void CaseAVarDecl(AVarDecl node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAFunctionDeclaration(AFunctionDeclaration node)
+    public virtual void CaseAFuncDecl(AFuncDecl node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAPortDeclaration(APortDeclaration node)
+    public virtual void CaseAPortDecl(APortDecl node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAFunctionDefinition(AFunctionDefinition node)
+    public virtual void CaseAEnumDecl(AEnumDecl node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAFormalParameter(AFormalParameter node)
+    public virtual void CaseAVoidType(AVoidType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAVariableDefinition(AVariableDefinition node)
+    public virtual void CaseASingleType(ASingleType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAPortDefinition(APortDefinition node)
+    public virtual void CaseADoubleType(ADoubleType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAConstTypeQualifier(AConstTypeQualifier node)
+    public virtual void CaseAQuadType(AQuadType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public virtual void CaseAFloatType(AFloatType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAVoidTypeSpecifier(AVoidTypeSpecifier node)
+    public virtual void CaseABooleanType(ABooleanType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseASsingleTypeSpecifier(ASsingleTypeSpecifier node)
+    public virtual void CaseAStringType(AStringType node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
+    public virtual void CaseASignedTypeSign(ASignedTypeSign node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseAEmptyStatement(AEmptyStatement node)
-    {
-        DefaultCase(node);
-    }
-    public virtual void CaseAVoidReturnStatement(AVoidReturnStatement node)
+    public virtual void CaseAUnsignedTypeSign(AUnsignedTypeSign node)
     {
         DefaultCase(node);
     }
@@ -219,64 +266,288 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
-    public virtual void CaseAIntegerConstantExpression(AIntegerConstantExpression node)
+    public virtual void CaseADeclStm(ADeclStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseABlockStm(ABlockStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAExpStm(AExpStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAReturnStm(AReturnStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAIfelseStm(AIfelseStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAIfStm(AIfStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAForStm(AForStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAForeachStm(AForeachStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAEmptyStm(AEmptyStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseABreakStm(ABreakStm node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseANamedExp(ANamedExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAIntConstExp(AIntConstExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseABoolConstExp(ABoolConstExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAFloatConstExp(AFloatConstExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAStringConstExp(AStringConstExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseACastExp(ACastExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAUnaryExp(AUnaryExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseASizeofExp(ASizeofExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseASizeofTypeExp(ASizeofTypeExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAIncExp(AIncExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseADecExp(ADecExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAFunctionExp(AFunctionExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAInitExp(AInitExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseARshiftExp(ARshiftExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseALshiftExp(ALshiftExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAMinusExp(AMinusExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAPlusExp(APlusExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAModExp(AModExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseADivideExp(ADivideExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAMultiplyExp(AMultiplyExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAAssignExp(AAssignExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseABitwiseOrExp(ABitwiseOrExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseABitwiseAndExp(ABitwiseAndExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseABitwiseXorExp(ABitwiseXorExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseALtExp(ALtExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAGtExp(AGtExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseALtEqExp(ALtEqExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAGtEqExp(AGtEqExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseANotEqExp(ANotEqExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAEqEqExp(AEqEqExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseALogicalOrExp(ALogicalOrExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseALogicalAndExp(ALogicalAndExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseACondExp(ACondExp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseATrueBoolean(ATrueBoolean node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAFalseBoolean(AFalseBoolean node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAPositiveUnop(APositiveUnop node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseANegativeUnop(ANegativeUnop node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseAInverseUnop(AInverseUnop node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseANotUnop(ANotUnop node)
     {
         DefaultCase(node);
     }
 
-    public virtual void CaseTVoid(TVoid node)
+    public virtual void CaseTKwReturn(TKwReturn node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTSsingle(TSsingle node)
+    public virtual void CaseTKwBreak(TKwBreak node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTUsingle(TUsingle node)
+    public virtual void CaseTKwIf(TKwIf node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTSdouble(TSdouble node)
+    public virtual void CaseTKwThen(TKwThen node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTUdouble(TUdouble node)
+    public virtual void CaseTKwElse(TKwElse node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTSquad(TSquad node)
+    public virtual void CaseTKwForeach(TKwForeach node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTUquad(TUquad node)
+    public virtual void CaseTKwFor(TKwFor node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTFloat(TFloat node)
+    public virtual void CaseTKwTrue(TKwTrue node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTString(TString node)
+    public virtual void CaseTKwFalse(TKwFalse node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTConst(TConst node)
+    public virtual void CaseTKwSizeof(TKwSizeof node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTVolatile(TVolatile node)
+    public virtual void CaseTKwVoid(TKwVoid node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTReturn(TReturn node)
+    public virtual void CaseTKwSingle(TKwSingle node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTPort(TPort node)
+    public virtual void CaseTKwDouble(TKwDouble node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTComment(TComment node)
+    public virtual void CaseTKwQuad(TKwQuad node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTKwFloat(TKwFloat node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTKwString(TKwString node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTKwSigned(TKwSigned node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTKwUnsigned(TKwUnsigned node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTKwPort(TKwPort node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTraditionalComment(TTraditionalComment node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTDocumentationComment(TDocumentationComment node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTEndOfLineComment(TEndOfLineComment node)
     {
         DefaultCase(node);
     }
@@ -284,35 +555,139 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
-    public virtual void CaseTLPar(TLPar node)
+    public virtual void CaseTTokDot(TTokDot node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTRPar(TRPar node)
+    public virtual void CaseTTokLbracket(TTokLbracket node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTLCurly(TLCurly node)
+    public virtual void CaseTTokRbracket(TTokRbracket node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTRCurly(TRCurly node)
+    public virtual void CaseTTokLpar(TTokLpar node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTSemicolon(TSemicolon node)
+    public virtual void CaseTTokRpar(TTokRpar node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTComma(TComma node)
+    public virtual void CaseTTokLcurly(TTokLcurly node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTMinus(TMinus node)
+    public virtual void CaseTTokRcurly(TTokRcurly node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTAt(TAt node)
+    public virtual void CaseTTokSemicolon(TTokSemicolon node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokComma(TTokComma node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokMinus(TTokMinus node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokColon(TTokColon node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokQuestion(TTokQuestion node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokEq(TTokEq node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokBar(TTokBar node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokBarBar(TTokBarBar node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokAmp(TTokAmp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokAmpAmp(TTokAmpAmp node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokCaret(TTokCaret node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokLshift(TTokLshift node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokRshift(TTokRshift node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokLt(TTokLt node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokGt(TTokGt node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokLtEq(TTokLtEq node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokGtEq(TTokGtEq node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokEqEq(TTokEqEq node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokNotEq(TTokNotEq node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokPlusPlus(TTokPlusPlus node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokMinusMinus(TTokMinusMinus node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokStar(TTokStar node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokPlus(TTokPlus node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokPercent(TTokPercent node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokTilde(TTokTilde node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokExclamation(TTokExclamation node)
+    {
+        DefaultCase(node);
+    }
+    public virtual void CaseTTokSlash(TTokSlash node)
     {
         DefaultCase(node);
     }
@@ -320,11 +695,11 @@ public class AnalysisAdapter : Analysis
     {
         DefaultCase(node);
     }
-    public virtual void CaseTIdentifier(TIdentifier node)
+    public virtual void CaseTStringLiteral(TStringLiteral node)
     {
         DefaultCase(node);
     }
-    public virtual void CaseTAssign(TAssign node)
+    public virtual void CaseTIdentifier(TIdentifier node)
     {
         DefaultCase(node);
     }
@@ -363,107 +738,85 @@ public class DepthFirstAdapter : AnalysisAdapter
     public override void CaseStart(Start node)
     {
         InStart(node);
-        node.GetPSourceFile().Apply(this);
+        node.GetPModule().Apply(this);
         node.GetEOF().Apply(this);
         OutStart(node);
     }
 
-    public virtual void InASourceFile(ASourceFile node)
+    public virtual void InAModule(AModule node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutASourceFile(ASourceFile node)
+    public virtual void OutAModule(AModule node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseASourceFile(ASourceFile node)
+    public override void CaseAModule(AModule node)
     {
-        InASourceFile(node);
+        InAModule(node);
         {
-            Object[] temp = new Object[node.GetDeclaration().Count];
-            node.GetDeclaration().CopyTo(temp, 0);
+            Object[] temp = new Object[node.GetDecl().Count];
+            node.GetDecl().CopyTo(temp, 0);
             for(int i = 0; i < temp.Length; i++)
             {
-                ((PDeclaration) temp[i]).Apply(this);
+                ((PDecl) temp[i]).Apply(this);
             }
         }
-        OutASourceFile(node);
+        OutAModule(node);
     }
-    public virtual void InAVariableDeclaration(AVariableDeclaration node)
+    public virtual void InAVarDecl(AVarDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAVariableDeclaration(AVariableDeclaration node)
+    public virtual void OutAVarDecl(AVarDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAVariableDeclaration(AVariableDeclaration node)
+    public override void CaseAVarDecl(AVarDecl node)
     {
-        InAVariableDeclaration(node);
-        if(node.GetDeclaration() != null)
+        InAVarDecl(node);
+        if(node.GetType() != null)
         {
-            node.GetDeclaration().Apply(this);
+            node.GetType().Apply(this);
         }
-        OutAVariableDeclaration(node);
-    }
-    public virtual void InAFunctionDeclaration(AFunctionDeclaration node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAFunctionDeclaration(AFunctionDeclaration node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAFunctionDeclaration(AFunctionDeclaration node)
-    {
-        InAFunctionDeclaration(node);
-        if(node.GetDeclaration() != null)
+        if(node.GetBuf() != null)
         {
-            node.GetDeclaration().Apply(this);
+            node.GetBuf().Apply(this);
         }
-        OutAFunctionDeclaration(node);
-    }
-    public virtual void InAPortDeclaration(APortDeclaration node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAPortDeclaration(APortDeclaration node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAPortDeclaration(APortDeclaration node)
-    {
-        InAPortDeclaration(node);
-        if(node.GetDeclaration() != null)
+        if(node.GetTypeSign() != null)
         {
-            node.GetDeclaration().Apply(this);
+            node.GetTypeSign().Apply(this);
         }
-        OutAPortDeclaration(node);
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
+        if(node.GetName() != null)
+        {
+            node.GetName().Apply(this);
+        }
+        OutAVarDecl(node);
     }
-    public virtual void InAFunctionDefinition(AFunctionDefinition node)
+    public virtual void InAFuncDecl(AFuncDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAFunctionDefinition(AFunctionDefinition node)
+    public virtual void OutAFuncDecl(AFuncDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAFunctionDefinition(AFunctionDefinition node)
+    public override void CaseAFuncDecl(AFuncDecl node)
     {
-        InAFunctionDefinition(node);
-        if(node.GetTypeSpecifier() != null)
+        InAFuncDecl(node);
+        if(node.GetType() != null)
         {
-            node.GetTypeSpecifier().Apply(this);
+            node.GetType().Apply(this);
         }
         if(node.GetName() != null)
         {
@@ -473,78 +826,32 @@ public class DepthFirstAdapter : AnalysisAdapter
         {
             node.GetFormalsAndBody().Apply(this);
         }
-        OutAFunctionDefinition(node);
+        OutAFuncDecl(node);
     }
-    public virtual void InAFormalParameter(AFormalParameter node)
+    public virtual void InAPortDecl(APortDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAFormalParameter(AFormalParameter node)
+    public virtual void OutAPortDecl(APortDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAFormalParameter(AFormalParameter node)
+    public override void CaseAPortDecl(APortDecl node)
     {
-        InAFormalParameter(node);
+        InAPortDecl(node);
+        if(node.GetName() != null)
+        {
+            node.GetName().Apply(this);
+        }
         if(node.GetType() != null)
         {
             node.GetType().Apply(this);
         }
-        if(node.GetName() != null)
+        if(node.GetBuf() != null)
         {
-            node.GetName().Apply(this);
-        }
-        OutAFormalParameter(node);
-    }
-    public virtual void InAVariableDefinition(AVariableDefinition node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAVariableDefinition(AVariableDefinition node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAVariableDefinition(AVariableDefinition node)
-    {
-        InAVariableDefinition(node);
-        if(node.GetTypeSpecifier() != null)
-        {
-            node.GetTypeSpecifier().Apply(this);
-        }
-        if(node.GetTypeQualifier() != null)
-        {
-            node.GetTypeQualifier().Apply(this);
-        }
-        if(node.GetInit() != null)
-        {
-            node.GetInit().Apply(this);
-        }
-        if(node.GetName() != null)
-        {
-            node.GetName().Apply(this);
-        }
-        OutAVariableDefinition(node);
-    }
-    public virtual void InAPortDefinition(APortDefinition node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAPortDefinition(APortDefinition node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAPortDefinition(APortDefinition node)
-    {
-        InAPortDefinition(node);
-        if(node.GetName() != null)
-        {
-            node.GetName().Apply(this);
+            node.GetBuf().Apply(this);
         }
         if(node.GetInit() != null)
         {
@@ -554,206 +861,165 @@ public class DepthFirstAdapter : AnalysisAdapter
         {
             node.GetAdress().Apply(this);
         }
-        OutAPortDefinition(node);
+        OutAPortDecl(node);
     }
-    public virtual void InAConstTypeQualifier(AConstTypeQualifier node)
+    public virtual void InAEnumDecl(AEnumDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAConstTypeQualifier(AConstTypeQualifier node)
+    public virtual void OutAEnumDecl(AEnumDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAConstTypeQualifier(AConstTypeQualifier node)
+    public override void CaseAEnumDecl(AEnumDecl node)
     {
-        InAConstTypeQualifier(node);
-        OutAConstTypeQualifier(node);
+        InAEnumDecl(node);
+        if(node.GetName() != null)
+        {
+            node.GetName().Apply(this);
+        }
+        OutAEnumDecl(node);
     }
-    public virtual void InAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public virtual void InAVoidType(AVoidType node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public virtual void OutAVoidType(AVoidType node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public override void CaseAVoidType(AVoidType node)
     {
-        InAVolatileTypeQualifier(node);
-        OutAVolatileTypeQualifier(node);
-    }
-    public virtual void InAVoidTypeSpecifier(AVoidTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAVoidTypeSpecifier(AVoidTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAVoidTypeSpecifier(AVoidTypeSpecifier node)
-    {
-        InAVoidTypeSpecifier(node);
-        OutAVoidTypeSpecifier(node);
-    }
-    public virtual void InASsingleTypeSpecifier(ASsingleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutASsingleTypeSpecifier(ASsingleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseASsingleTypeSpecifier(ASsingleTypeSpecifier node)
-    {
-        InASsingleTypeSpecifier(node);
-        OutASsingleTypeSpecifier(node);
-    }
-    public virtual void InAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
-    {
-        InAUsingleTypeSpecifier(node);
-        OutAUsingleTypeSpecifier(node);
-    }
-    public virtual void InASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        InASdoubleTypeSpecifier(node);
-        OutASdoubleTypeSpecifier(node);
-    }
-    public virtual void InAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        InAUdoubleTypeSpecifier(node);
-        OutAUdoubleTypeSpecifier(node);
-    }
-    public virtual void InASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        InASquadTypeSpecifier(node);
-        OutASquadTypeSpecifier(node);
-    }
-    public virtual void InAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        InAUquadTypeSpecifier(node);
-        OutAUquadTypeSpecifier(node);
-    }
-    public virtual void InAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        InAFloatTypeSpecifier(node);
-        OutAFloatTypeSpecifier(node);
-    }
-    public virtual void InAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        InAStringTypeSpecifier(node);
-        OutAStringTypeSpecifier(node);
-    }
-    public virtual void InAEmptyStatement(AEmptyStatement node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAEmptyStatement(AEmptyStatement node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAEmptyStatement(AEmptyStatement node)
-    {
-        InAEmptyStatement(node);
-        OutAEmptyStatement(node);
-    }
-    public virtual void InAVoidReturnStatement(AVoidReturnStatement node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAVoidReturnStatement(AVoidReturnStatement node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAVoidReturnStatement(AVoidReturnStatement node)
-    {
-        InAVoidReturnStatement(node);
+        InAVoidType(node);
         if(node.GetToken() != null)
         {
             node.GetToken().Apply(this);
         }
-        OutAVoidReturnStatement(node);
+        OutAVoidType(node);
+    }
+    public virtual void InASingleType(ASingleType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASingleType(ASingleType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASingleType(ASingleType node)
+    {
+        InASingleType(node);
+        OutASingleType(node);
+    }
+    public virtual void InADoubleType(ADoubleType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutADoubleType(ADoubleType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseADoubleType(ADoubleType node)
+    {
+        InADoubleType(node);
+        OutADoubleType(node);
+    }
+    public virtual void InAQuadType(AQuadType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAQuadType(AQuadType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAQuadType(AQuadType node)
+    {
+        InAQuadType(node);
+        OutAQuadType(node);
+    }
+    public virtual void InAFloatType(AFloatType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFloatType(AFloatType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFloatType(AFloatType node)
+    {
+        InAFloatType(node);
+        OutAFloatType(node);
+    }
+    public virtual void InABooleanType(ABooleanType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABooleanType(ABooleanType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABooleanType(ABooleanType node)
+    {
+        InABooleanType(node);
+        OutABooleanType(node);
+    }
+    public virtual void InAStringType(AStringType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAStringType(AStringType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAStringType(AStringType node)
+    {
+        InAStringType(node);
+        OutAStringType(node);
+    }
+    public virtual void InASignedTypeSign(ASignedTypeSign node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASignedTypeSign(ASignedTypeSign node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASignedTypeSign(ASignedTypeSign node)
+    {
+        InASignedTypeSign(node);
+        OutASignedTypeSign(node);
+    }
+    public virtual void InAUnsignedTypeSign(AUnsignedTypeSign node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAUnsignedTypeSign(AUnsignedTypeSign node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAUnsignedTypeSign(AUnsignedTypeSign node)
+    {
+        InAUnsignedTypeSign(node);
+        OutAUnsignedTypeSign(node);
     }
     public virtual void InAFormalsAndBody(AFormalsAndBody node)
     {
@@ -773,53 +1039,1037 @@ public class DepthFirstAdapter : AnalysisAdapter
             node.GetFormals().CopyTo(temp, 0);
             for(int i = 0; i < temp.Length; i++)
             {
-                ((PFormalParameter) temp[i]).Apply(this);
+                ((PDecl) temp[i]).Apply(this);
             }
         }
+        if(node.GetBody() != null)
         {
-            Object[] temp = new Object[node.GetLocals().Count];
-            node.GetLocals().CopyTo(temp, 0);
-            for(int i = 0; i < temp.Length; i++)
-            {
-                ((PVariableDefinition) temp[i]).Apply(this);
-            }
-        }
-        {
-            Object[] temp = new Object[node.GetStatements().Count];
-            node.GetStatements().CopyTo(temp, 0);
-            for(int i = 0; i < temp.Length; i++)
-            {
-                ((PStatement) temp[i]).Apply(this);
-            }
-        }
-        if(node.GetReturn() != null)
-        {
-            node.GetReturn().Apply(this);
+            node.GetBody().Apply(this);
         }
         OutAFormalsAndBody(node);
     }
-    public virtual void InAIntegerConstantExpression(AIntegerConstantExpression node)
+    public virtual void InADeclStm(ADeclStm node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAIntegerConstantExpression(AIntegerConstantExpression node)
+    public virtual void OutADeclStm(ADeclStm node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAIntegerConstantExpression(AIntegerConstantExpression node)
+    public override void CaseADeclStm(ADeclStm node)
     {
-        InAIntegerConstantExpression(node);
-        if(node.GetSign() != null)
+        InADeclStm(node);
+        if(node.GetDecl() != null)
         {
-            node.GetSign().Apply(this);
+            node.GetDecl().Apply(this);
         }
-        if(node.GetIntegerLiteral() != null)
+        OutADeclStm(node);
+    }
+    public virtual void InABlockStm(ABlockStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABlockStm(ABlockStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABlockStm(ABlockStm node)
+    {
+        InABlockStm(node);
         {
-            node.GetIntegerLiteral().Apply(this);
+            Object[] temp = new Object[node.GetBlock().Count];
+            node.GetBlock().CopyTo(temp, 0);
+            for(int i = 0; i < temp.Length; i++)
+            {
+                ((PStm) temp[i]).Apply(this);
+            }
         }
-        OutAIntegerConstantExpression(node);
+        OutABlockStm(node);
+    }
+    public virtual void InAExpStm(AExpStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAExpStm(AExpStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAExpStm(AExpStm node)
+    {
+        InAExpStm(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAExpStm(node);
+    }
+    public virtual void InAReturnStm(AReturnStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAReturnStm(AReturnStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAReturnStm(AReturnStm node)
+    {
+        InAReturnStm(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAReturnStm(node);
+    }
+    public virtual void InAIfelseStm(AIfelseStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIfelseStm(AIfelseStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIfelseStm(AIfelseStm node)
+    {
+        InAIfelseStm(node);
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        if(node.GetThen() != null)
+        {
+            node.GetThen().Apply(this);
+        }
+        if(node.GetElse() != null)
+        {
+            node.GetElse().Apply(this);
+        }
+        OutAIfelseStm(node);
+    }
+    public virtual void InAIfStm(AIfStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIfStm(AIfStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIfStm(AIfStm node)
+    {
+        InAIfStm(node);
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        if(node.GetThen() != null)
+        {
+            node.GetThen().Apply(this);
+        }
+        OutAIfStm(node);
+    }
+    public virtual void InAForStm(AForStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAForStm(AForStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAForStm(AForStm node)
+    {
+        InAForStm(node);
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        if(node.GetUpdate() != null)
+        {
+            node.GetUpdate().Apply(this);
+        }
+        OutAForStm(node);
+    }
+    public virtual void InAForeachStm(AForeachStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAForeachStm(AForeachStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAForeachStm(AForeachStm node)
+    {
+        InAForeachStm(node);
+        if(node.GetType() != null)
+        {
+            node.GetType().Apply(this);
+        }
+        if(node.GetId() != null)
+        {
+            node.GetId().Apply(this);
+        }
+        if(node.GetBody() != null)
+        {
+            node.GetBody().Apply(this);
+        }
+        OutAForeachStm(node);
+    }
+    public virtual void InAEmptyStm(AEmptyStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAEmptyStm(AEmptyStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAEmptyStm(AEmptyStm node)
+    {
+        InAEmptyStm(node);
+        OutAEmptyStm(node);
+    }
+    public virtual void InABreakStm(ABreakStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABreakStm(ABreakStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABreakStm(ABreakStm node)
+    {
+        InABreakStm(node);
+        OutABreakStm(node);
+    }
+    public virtual void InANamedExp(ANamedExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANamedExp(ANamedExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANamedExp(ANamedExp node)
+    {
+        InANamedExp(node);
+        if(node.GetId() != null)
+        {
+            node.GetId().Apply(this);
+        }
+        OutANamedExp(node);
+    }
+    public virtual void InAIntConstExp(AIntConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIntConstExp(AIntConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIntConstExp(AIntConstExp node)
+    {
+        InAIntConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutAIntConstExp(node);
+    }
+    public virtual void InABoolConstExp(ABoolConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABoolConstExp(ABoolConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABoolConstExp(ABoolConstExp node)
+    {
+        InABoolConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutABoolConstExp(node);
+    }
+    public virtual void InAFloatConstExp(AFloatConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFloatConstExp(AFloatConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFloatConstExp(AFloatConstExp node)
+    {
+        InAFloatConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutAFloatConstExp(node);
+    }
+    public virtual void InAStringConstExp(AStringConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAStringConstExp(AStringConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAStringConstExp(AStringConstExp node)
+    {
+        InAStringConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutAStringConstExp(node);
+    }
+    public virtual void InACastExp(ACastExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutACastExp(ACastExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseACastExp(ACastExp node)
+    {
+        InACastExp(node);
+        if(node.GetType() != null)
+        {
+            node.GetType().Apply(this);
+        }
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutACastExp(node);
+    }
+    public virtual void InAUnaryExp(AUnaryExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAUnaryExp(AUnaryExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAUnaryExp(AUnaryExp node)
+    {
+        InAUnaryExp(node);
+        if(node.GetUnop() != null)
+        {
+            node.GetUnop().Apply(this);
+        }
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAUnaryExp(node);
+    }
+    public virtual void InASizeofExp(ASizeofExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASizeofExp(ASizeofExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASizeofExp(ASizeofExp node)
+    {
+        InASizeofExp(node);
+        if(node.GetArg() != null)
+        {
+            node.GetArg().Apply(this);
+        }
+        OutASizeofExp(node);
+    }
+    public virtual void InASizeofTypeExp(ASizeofTypeExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASizeofTypeExp(ASizeofTypeExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASizeofTypeExp(ASizeofTypeExp node)
+    {
+        InASizeofTypeExp(node);
+        if(node.GetArg() != null)
+        {
+            node.GetArg().Apply(this);
+        }
+        OutASizeofTypeExp(node);
+    }
+    public virtual void InAIncExp(AIncExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIncExp(AIncExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIncExp(AIncExp node)
+    {
+        InAIncExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAIncExp(node);
+    }
+    public virtual void InADecExp(ADecExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutADecExp(ADecExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseADecExp(ADecExp node)
+    {
+        InADecExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutADecExp(node);
+    }
+    public virtual void InAFunctionExp(AFunctionExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFunctionExp(AFunctionExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFunctionExp(AFunctionExp node)
+    {
+        InAFunctionExp(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAFunctionExp(node);
+    }
+    public virtual void InAInitExp(AInitExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAInitExp(AInitExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAInitExp(AInitExp node)
+    {
+        InAInitExp(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAInitExp(node);
+    }
+    public virtual void InARshiftExp(ARshiftExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutARshiftExp(ARshiftExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseARshiftExp(ARshiftExp node)
+    {
+        InARshiftExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutARshiftExp(node);
+    }
+    public virtual void InALshiftExp(ALshiftExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALshiftExp(ALshiftExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALshiftExp(ALshiftExp node)
+    {
+        InALshiftExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutALshiftExp(node);
+    }
+    public virtual void InAMinusExp(AMinusExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAMinusExp(AMinusExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAMinusExp(AMinusExp node)
+    {
+        InAMinusExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAMinusExp(node);
+    }
+    public virtual void InAPlusExp(APlusExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPlusExp(APlusExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPlusExp(APlusExp node)
+    {
+        InAPlusExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAPlusExp(node);
+    }
+    public virtual void InAModExp(AModExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAModExp(AModExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAModExp(AModExp node)
+    {
+        InAModExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAModExp(node);
+    }
+    public virtual void InADivideExp(ADivideExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutADivideExp(ADivideExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseADivideExp(ADivideExp node)
+    {
+        InADivideExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutADivideExp(node);
+    }
+    public virtual void InAMultiplyExp(AMultiplyExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAMultiplyExp(AMultiplyExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAMultiplyExp(AMultiplyExp node)
+    {
+        InAMultiplyExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAMultiplyExp(node);
+    }
+    public virtual void InAAssignExp(AAssignExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAAssignExp(AAssignExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAAssignExp(AAssignExp node)
+    {
+        InAAssignExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAAssignExp(node);
+    }
+    public virtual void InABitwiseOrExp(ABitwiseOrExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABitwiseOrExp(ABitwiseOrExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABitwiseOrExp(ABitwiseOrExp node)
+    {
+        InABitwiseOrExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutABitwiseOrExp(node);
+    }
+    public virtual void InABitwiseAndExp(ABitwiseAndExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABitwiseAndExp(ABitwiseAndExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABitwiseAndExp(ABitwiseAndExp node)
+    {
+        InABitwiseAndExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutABitwiseAndExp(node);
+    }
+    public virtual void InABitwiseXorExp(ABitwiseXorExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABitwiseXorExp(ABitwiseXorExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABitwiseXorExp(ABitwiseXorExp node)
+    {
+        InABitwiseXorExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutABitwiseXorExp(node);
+    }
+    public virtual void InALtExp(ALtExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALtExp(ALtExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALtExp(ALtExp node)
+    {
+        InALtExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutALtExp(node);
+    }
+    public virtual void InAGtExp(AGtExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAGtExp(AGtExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAGtExp(AGtExp node)
+    {
+        InAGtExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAGtExp(node);
+    }
+    public virtual void InALtEqExp(ALtEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALtEqExp(ALtEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALtEqExp(ALtEqExp node)
+    {
+        InALtEqExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutALtEqExp(node);
+    }
+    public virtual void InAGtEqExp(AGtEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAGtEqExp(AGtEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAGtEqExp(AGtEqExp node)
+    {
+        InAGtEqExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAGtEqExp(node);
+    }
+    public virtual void InANotEqExp(ANotEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANotEqExp(ANotEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANotEqExp(ANotEqExp node)
+    {
+        InANotEqExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutANotEqExp(node);
+    }
+    public virtual void InAEqEqExp(AEqEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAEqEqExp(AEqEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAEqEqExp(AEqEqExp node)
+    {
+        InAEqEqExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutAEqEqExp(node);
+    }
+    public virtual void InALogicalOrExp(ALogicalOrExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALogicalOrExp(ALogicalOrExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALogicalOrExp(ALogicalOrExp node)
+    {
+        InALogicalOrExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutALogicalOrExp(node);
+    }
+    public virtual void InALogicalAndExp(ALogicalAndExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALogicalAndExp(ALogicalAndExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALogicalAndExp(ALogicalAndExp node)
+    {
+        InALogicalAndExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        OutALogicalAndExp(node);
+    }
+    public virtual void InACondExp(ACondExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutACondExp(ACondExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseACondExp(ACondExp node)
+    {
+        InACondExp(node);
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        if(node.GetTrue() != null)
+        {
+            node.GetTrue().Apply(this);
+        }
+        if(node.GetFalse() != null)
+        {
+            node.GetFalse().Apply(this);
+        }
+        OutACondExp(node);
+    }
+    public virtual void InATrueBoolean(ATrueBoolean node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutATrueBoolean(ATrueBoolean node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseATrueBoolean(ATrueBoolean node)
+    {
+        InATrueBoolean(node);
+        OutATrueBoolean(node);
+    }
+    public virtual void InAFalseBoolean(AFalseBoolean node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFalseBoolean(AFalseBoolean node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFalseBoolean(AFalseBoolean node)
+    {
+        InAFalseBoolean(node);
+        OutAFalseBoolean(node);
+    }
+    public virtual void InAPositiveUnop(APositiveUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPositiveUnop(APositiveUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPositiveUnop(APositiveUnop node)
+    {
+        InAPositiveUnop(node);
+        OutAPositiveUnop(node);
+    }
+    public virtual void InANegativeUnop(ANegativeUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANegativeUnop(ANegativeUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANegativeUnop(ANegativeUnop node)
+    {
+        InANegativeUnop(node);
+        OutANegativeUnop(node);
+    }
+    public virtual void InAInverseUnop(AInverseUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAInverseUnop(AInverseUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAInverseUnop(AInverseUnop node)
+    {
+        InAInverseUnop(node);
+        OutAInverseUnop(node);
+    }
+    public virtual void InANotUnop(ANotUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANotUnop(ANotUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANotUnop(ANotUnop node)
+    {
+        InANotUnop(node);
+        OutANotUnop(node);
     }
 }
 
@@ -848,103 +2098,81 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
     {
         InStart(node);
         node.GetEOF().Apply(this);
-        node.GetPSourceFile().Apply(this);
+        node.GetPModule().Apply(this);
         OutStart(node);
     }
 
-    public virtual void InASourceFile(ASourceFile node)
+    public virtual void InAModule(AModule node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutASourceFile(ASourceFile node)
+    public virtual void OutAModule(AModule node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseASourceFile(ASourceFile node)
+    public override void CaseAModule(AModule node)
     {
-        InASourceFile(node);
+        InAModule(node);
         {
-            Object[] temp = new Object[node.GetDeclaration().Count];
-            node.GetDeclaration().CopyTo(temp, 0);
+            Object[] temp = new Object[node.GetDecl().Count];
+            node.GetDecl().CopyTo(temp, 0);
             for(int i = temp.Length - 1; i >= 0; i--)
             {
-                ((PDeclaration) temp[i]).Apply(this);
+                ((PDecl) temp[i]).Apply(this);
             }
         }
-        OutASourceFile(node);
+        OutAModule(node);
     }
-    public virtual void InAVariableDeclaration(AVariableDeclaration node)
+    public virtual void InAVarDecl(AVarDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAVariableDeclaration(AVariableDeclaration node)
+    public virtual void OutAVarDecl(AVarDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAVariableDeclaration(AVariableDeclaration node)
+    public override void CaseAVarDecl(AVarDecl node)
     {
-        InAVariableDeclaration(node);
-        if(node.GetDeclaration() != null)
+        InAVarDecl(node);
+        if(node.GetName() != null)
         {
-            node.GetDeclaration().Apply(this);
+            node.GetName().Apply(this);
         }
-        OutAVariableDeclaration(node);
-    }
-    public virtual void InAFunctionDeclaration(AFunctionDeclaration node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAFunctionDeclaration(AFunctionDeclaration node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAFunctionDeclaration(AFunctionDeclaration node)
-    {
-        InAFunctionDeclaration(node);
-        if(node.GetDeclaration() != null)
+        if(node.GetInit() != null)
         {
-            node.GetDeclaration().Apply(this);
+            node.GetInit().Apply(this);
         }
-        OutAFunctionDeclaration(node);
-    }
-    public virtual void InAPortDeclaration(APortDeclaration node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAPortDeclaration(APortDeclaration node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAPortDeclaration(APortDeclaration node)
-    {
-        InAPortDeclaration(node);
-        if(node.GetDeclaration() != null)
+        if(node.GetTypeSign() != null)
         {
-            node.GetDeclaration().Apply(this);
+            node.GetTypeSign().Apply(this);
         }
-        OutAPortDeclaration(node);
+        if(node.GetBuf() != null)
+        {
+            node.GetBuf().Apply(this);
+        }
+        if(node.GetType() != null)
+        {
+            node.GetType().Apply(this);
+        }
+        OutAVarDecl(node);
     }
-    public virtual void InAFunctionDefinition(AFunctionDefinition node)
+    public virtual void InAFuncDecl(AFuncDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAFunctionDefinition(AFunctionDefinition node)
+    public virtual void OutAFuncDecl(AFuncDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAFunctionDefinition(AFunctionDefinition node)
+    public override void CaseAFuncDecl(AFuncDecl node)
     {
-        InAFunctionDefinition(node);
+        InAFuncDecl(node);
         if(node.GetFormalsAndBody() != null)
         {
             node.GetFormalsAndBody().Apply(this);
@@ -953,79 +2181,25 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         {
             node.GetName().Apply(this);
         }
-        if(node.GetTypeSpecifier() != null)
-        {
-            node.GetTypeSpecifier().Apply(this);
-        }
-        OutAFunctionDefinition(node);
-    }
-    public virtual void InAFormalParameter(AFormalParameter node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAFormalParameter(AFormalParameter node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAFormalParameter(AFormalParameter node)
-    {
-        InAFormalParameter(node);
-        if(node.GetName() != null)
-        {
-            node.GetName().Apply(this);
-        }
         if(node.GetType() != null)
         {
             node.GetType().Apply(this);
         }
-        OutAFormalParameter(node);
+        OutAFuncDecl(node);
     }
-    public virtual void InAVariableDefinition(AVariableDefinition node)
+    public virtual void InAPortDecl(APortDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAVariableDefinition(AVariableDefinition node)
+    public virtual void OutAPortDecl(APortDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAVariableDefinition(AVariableDefinition node)
+    public override void CaseAPortDecl(APortDecl node)
     {
-        InAVariableDefinition(node);
-        if(node.GetName() != null)
-        {
-            node.GetName().Apply(this);
-        }
-        if(node.GetInit() != null)
-        {
-            node.GetInit().Apply(this);
-        }
-        if(node.GetTypeQualifier() != null)
-        {
-            node.GetTypeQualifier().Apply(this);
-        }
-        if(node.GetTypeSpecifier() != null)
-        {
-            node.GetTypeSpecifier().Apply(this);
-        }
-        OutAVariableDefinition(node);
-    }
-    public virtual void InAPortDefinition(APortDefinition node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAPortDefinition(APortDefinition node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAPortDefinition(APortDefinition node)
-    {
-        InAPortDefinition(node);
+        InAPortDecl(node);
         if(node.GetAdress() != null)
         {
             node.GetAdress().Apply(this);
@@ -1034,210 +2208,177 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
         {
             node.GetInit().Apply(this);
         }
+        if(node.GetBuf() != null)
+        {
+            node.GetBuf().Apply(this);
+        }
+        if(node.GetType() != null)
+        {
+            node.GetType().Apply(this);
+        }
         if(node.GetName() != null)
         {
             node.GetName().Apply(this);
         }
-        OutAPortDefinition(node);
+        OutAPortDecl(node);
     }
-    public virtual void InAConstTypeQualifier(AConstTypeQualifier node)
+    public virtual void InAEnumDecl(AEnumDecl node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAConstTypeQualifier(AConstTypeQualifier node)
+    public virtual void OutAEnumDecl(AEnumDecl node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAConstTypeQualifier(AConstTypeQualifier node)
+    public override void CaseAEnumDecl(AEnumDecl node)
     {
-        InAConstTypeQualifier(node);
-        OutAConstTypeQualifier(node);
+        InAEnumDecl(node);
+        if(node.GetName() != null)
+        {
+            node.GetName().Apply(this);
+        }
+        OutAEnumDecl(node);
     }
-    public virtual void InAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public virtual void InAVoidType(AVoidType node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public virtual void OutAVoidType(AVoidType node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAVolatileTypeQualifier(AVolatileTypeQualifier node)
+    public override void CaseAVoidType(AVoidType node)
     {
-        InAVolatileTypeQualifier(node);
-        OutAVolatileTypeQualifier(node);
-    }
-    public virtual void InAVoidTypeSpecifier(AVoidTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAVoidTypeSpecifier(AVoidTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAVoidTypeSpecifier(AVoidTypeSpecifier node)
-    {
-        InAVoidTypeSpecifier(node);
-        OutAVoidTypeSpecifier(node);
-    }
-    public virtual void InASsingleTypeSpecifier(ASsingleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutASsingleTypeSpecifier(ASsingleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseASsingleTypeSpecifier(ASsingleTypeSpecifier node)
-    {
-        InASsingleTypeSpecifier(node);
-        OutASsingleTypeSpecifier(node);
-    }
-    public virtual void InAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAUsingleTypeSpecifier(AUsingleTypeSpecifier node)
-    {
-        InAUsingleTypeSpecifier(node);
-        OutAUsingleTypeSpecifier(node);
-    }
-    public virtual void InASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseASdoubleTypeSpecifier(ASdoubleTypeSpecifier node)
-    {
-        InASdoubleTypeSpecifier(node);
-        OutASdoubleTypeSpecifier(node);
-    }
-    public virtual void InAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAUdoubleTypeSpecifier(AUdoubleTypeSpecifier node)
-    {
-        InAUdoubleTypeSpecifier(node);
-        OutAUdoubleTypeSpecifier(node);
-    }
-    public virtual void InASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseASquadTypeSpecifier(ASquadTypeSpecifier node)
-    {
-        InASquadTypeSpecifier(node);
-        OutASquadTypeSpecifier(node);
-    }
-    public virtual void InAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAUquadTypeSpecifier(AUquadTypeSpecifier node)
-    {
-        InAUquadTypeSpecifier(node);
-        OutAUquadTypeSpecifier(node);
-    }
-    public virtual void InAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAFloatTypeSpecifier(AFloatTypeSpecifier node)
-    {
-        InAFloatTypeSpecifier(node);
-        OutAFloatTypeSpecifier(node);
-    }
-    public virtual void InAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAStringTypeSpecifier(AStringTypeSpecifier node)
-    {
-        InAStringTypeSpecifier(node);
-        OutAStringTypeSpecifier(node);
-    }
-    public virtual void InAEmptyStatement(AEmptyStatement node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAEmptyStatement(AEmptyStatement node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAEmptyStatement(AEmptyStatement node)
-    {
-        InAEmptyStatement(node);
-        OutAEmptyStatement(node);
-    }
-    public virtual void InAVoidReturnStatement(AVoidReturnStatement node)
-    {
-        DefaultIn(node);
-    }
-
-    public virtual void OutAVoidReturnStatement(AVoidReturnStatement node)
-    {
-        DefaultOut(node);
-    }
-
-    public override void CaseAVoidReturnStatement(AVoidReturnStatement node)
-    {
-        InAVoidReturnStatement(node);
+        InAVoidType(node);
         if(node.GetToken() != null)
         {
             node.GetToken().Apply(this);
         }
-        OutAVoidReturnStatement(node);
+        OutAVoidType(node);
+    }
+    public virtual void InASingleType(ASingleType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASingleType(ASingleType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASingleType(ASingleType node)
+    {
+        InASingleType(node);
+        OutASingleType(node);
+    }
+    public virtual void InADoubleType(ADoubleType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutADoubleType(ADoubleType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseADoubleType(ADoubleType node)
+    {
+        InADoubleType(node);
+        OutADoubleType(node);
+    }
+    public virtual void InAQuadType(AQuadType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAQuadType(AQuadType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAQuadType(AQuadType node)
+    {
+        InAQuadType(node);
+        OutAQuadType(node);
+    }
+    public virtual void InAFloatType(AFloatType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFloatType(AFloatType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFloatType(AFloatType node)
+    {
+        InAFloatType(node);
+        OutAFloatType(node);
+    }
+    public virtual void InABooleanType(ABooleanType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABooleanType(ABooleanType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABooleanType(ABooleanType node)
+    {
+        InABooleanType(node);
+        OutABooleanType(node);
+    }
+    public virtual void InAStringType(AStringType node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAStringType(AStringType node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAStringType(AStringType node)
+    {
+        InAStringType(node);
+        OutAStringType(node);
+    }
+    public virtual void InASignedTypeSign(ASignedTypeSign node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASignedTypeSign(ASignedTypeSign node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASignedTypeSign(ASignedTypeSign node)
+    {
+        InASignedTypeSign(node);
+        OutASignedTypeSign(node);
+    }
+    public virtual void InAUnsignedTypeSign(AUnsignedTypeSign node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAUnsignedTypeSign(AUnsignedTypeSign node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAUnsignedTypeSign(AUnsignedTypeSign node)
+    {
+        InAUnsignedTypeSign(node);
+        OutAUnsignedTypeSign(node);
     }
     public virtual void InAFormalsAndBody(AFormalsAndBody node)
     {
@@ -1252,58 +2393,1042 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
     public override void CaseAFormalsAndBody(AFormalsAndBody node)
     {
         InAFormalsAndBody(node);
-        if(node.GetReturn() != null)
+        if(node.GetBody() != null)
         {
-            node.GetReturn().Apply(this);
-        }
-        {
-            Object[] temp = new Object[node.GetStatements().Count];
-            node.GetStatements().CopyTo(temp, 0);
-            for(int i = temp.Length - 1; i >= 0; i--)
-            {
-                ((PStatement) temp[i]).Apply(this);
-            }
-        }
-        {
-            Object[] temp = new Object[node.GetLocals().Count];
-            node.GetLocals().CopyTo(temp, 0);
-            for(int i = temp.Length - 1; i >= 0; i--)
-            {
-                ((PVariableDefinition) temp[i]).Apply(this);
-            }
+            node.GetBody().Apply(this);
         }
         {
             Object[] temp = new Object[node.GetFormals().Count];
             node.GetFormals().CopyTo(temp, 0);
             for(int i = temp.Length - 1; i >= 0; i--)
             {
-                ((PFormalParameter) temp[i]).Apply(this);
+                ((PDecl) temp[i]).Apply(this);
             }
         }
         OutAFormalsAndBody(node);
     }
-    public virtual void InAIntegerConstantExpression(AIntegerConstantExpression node)
+    public virtual void InADeclStm(ADeclStm node)
     {
         DefaultIn(node);
     }
 
-    public virtual void OutAIntegerConstantExpression(AIntegerConstantExpression node)
+    public virtual void OutADeclStm(ADeclStm node)
     {
         DefaultOut(node);
     }
 
-    public override void CaseAIntegerConstantExpression(AIntegerConstantExpression node)
+    public override void CaseADeclStm(ADeclStm node)
     {
-        InAIntegerConstantExpression(node);
-        if(node.GetIntegerLiteral() != null)
+        InADeclStm(node);
+        if(node.GetDecl() != null)
         {
-            node.GetIntegerLiteral().Apply(this);
+            node.GetDecl().Apply(this);
         }
-        if(node.GetSign() != null)
+        OutADeclStm(node);
+    }
+    public virtual void InABlockStm(ABlockStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABlockStm(ABlockStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABlockStm(ABlockStm node)
+    {
+        InABlockStm(node);
         {
-            node.GetSign().Apply(this);
+            Object[] temp = new Object[node.GetBlock().Count];
+            node.GetBlock().CopyTo(temp, 0);
+            for(int i = temp.Length - 1; i >= 0; i--)
+            {
+                ((PStm) temp[i]).Apply(this);
+            }
         }
-        OutAIntegerConstantExpression(node);
+        OutABlockStm(node);
+    }
+    public virtual void InAExpStm(AExpStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAExpStm(AExpStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAExpStm(AExpStm node)
+    {
+        InAExpStm(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAExpStm(node);
+    }
+    public virtual void InAReturnStm(AReturnStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAReturnStm(AReturnStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAReturnStm(AReturnStm node)
+    {
+        InAReturnStm(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAReturnStm(node);
+    }
+    public virtual void InAIfelseStm(AIfelseStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIfelseStm(AIfelseStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIfelseStm(AIfelseStm node)
+    {
+        InAIfelseStm(node);
+        if(node.GetElse() != null)
+        {
+            node.GetElse().Apply(this);
+        }
+        if(node.GetThen() != null)
+        {
+            node.GetThen().Apply(this);
+        }
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        OutAIfelseStm(node);
+    }
+    public virtual void InAIfStm(AIfStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIfStm(AIfStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIfStm(AIfStm node)
+    {
+        InAIfStm(node);
+        if(node.GetThen() != null)
+        {
+            node.GetThen().Apply(this);
+        }
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        OutAIfStm(node);
+    }
+    public virtual void InAForStm(AForStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAForStm(AForStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAForStm(AForStm node)
+    {
+        InAForStm(node);
+        if(node.GetUpdate() != null)
+        {
+            node.GetUpdate().Apply(this);
+        }
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        if(node.GetInit() != null)
+        {
+            node.GetInit().Apply(this);
+        }
+        OutAForStm(node);
+    }
+    public virtual void InAForeachStm(AForeachStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAForeachStm(AForeachStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAForeachStm(AForeachStm node)
+    {
+        InAForeachStm(node);
+        if(node.GetBody() != null)
+        {
+            node.GetBody().Apply(this);
+        }
+        if(node.GetId() != null)
+        {
+            node.GetId().Apply(this);
+        }
+        if(node.GetType() != null)
+        {
+            node.GetType().Apply(this);
+        }
+        OutAForeachStm(node);
+    }
+    public virtual void InAEmptyStm(AEmptyStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAEmptyStm(AEmptyStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAEmptyStm(AEmptyStm node)
+    {
+        InAEmptyStm(node);
+        OutAEmptyStm(node);
+    }
+    public virtual void InABreakStm(ABreakStm node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABreakStm(ABreakStm node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABreakStm(ABreakStm node)
+    {
+        InABreakStm(node);
+        OutABreakStm(node);
+    }
+    public virtual void InANamedExp(ANamedExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANamedExp(ANamedExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANamedExp(ANamedExp node)
+    {
+        InANamedExp(node);
+        if(node.GetId() != null)
+        {
+            node.GetId().Apply(this);
+        }
+        OutANamedExp(node);
+    }
+    public virtual void InAIntConstExp(AIntConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIntConstExp(AIntConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIntConstExp(AIntConstExp node)
+    {
+        InAIntConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutAIntConstExp(node);
+    }
+    public virtual void InABoolConstExp(ABoolConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABoolConstExp(ABoolConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABoolConstExp(ABoolConstExp node)
+    {
+        InABoolConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutABoolConstExp(node);
+    }
+    public virtual void InAFloatConstExp(AFloatConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFloatConstExp(AFloatConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFloatConstExp(AFloatConstExp node)
+    {
+        InAFloatConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutAFloatConstExp(node);
+    }
+    public virtual void InAStringConstExp(AStringConstExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAStringConstExp(AStringConstExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAStringConstExp(AStringConstExp node)
+    {
+        InAStringConstExp(node);
+        if(node.GetValue() != null)
+        {
+            node.GetValue().Apply(this);
+        }
+        OutAStringConstExp(node);
+    }
+    public virtual void InACastExp(ACastExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutACastExp(ACastExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseACastExp(ACastExp node)
+    {
+        InACastExp(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        if(node.GetType() != null)
+        {
+            node.GetType().Apply(this);
+        }
+        OutACastExp(node);
+    }
+    public virtual void InAUnaryExp(AUnaryExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAUnaryExp(AUnaryExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAUnaryExp(AUnaryExp node)
+    {
+        InAUnaryExp(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        if(node.GetUnop() != null)
+        {
+            node.GetUnop().Apply(this);
+        }
+        OutAUnaryExp(node);
+    }
+    public virtual void InASizeofExp(ASizeofExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASizeofExp(ASizeofExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASizeofExp(ASizeofExp node)
+    {
+        InASizeofExp(node);
+        if(node.GetArg() != null)
+        {
+            node.GetArg().Apply(this);
+        }
+        OutASizeofExp(node);
+    }
+    public virtual void InASizeofTypeExp(ASizeofTypeExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutASizeofTypeExp(ASizeofTypeExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseASizeofTypeExp(ASizeofTypeExp node)
+    {
+        InASizeofTypeExp(node);
+        if(node.GetArg() != null)
+        {
+            node.GetArg().Apply(this);
+        }
+        OutASizeofTypeExp(node);
+    }
+    public virtual void InAIncExp(AIncExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAIncExp(AIncExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAIncExp(AIncExp node)
+    {
+        InAIncExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAIncExp(node);
+    }
+    public virtual void InADecExp(ADecExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutADecExp(ADecExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseADecExp(ADecExp node)
+    {
+        InADecExp(node);
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutADecExp(node);
+    }
+    public virtual void InAFunctionExp(AFunctionExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFunctionExp(AFunctionExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFunctionExp(AFunctionExp node)
+    {
+        InAFunctionExp(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAFunctionExp(node);
+    }
+    public virtual void InAInitExp(AInitExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAInitExp(AInitExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAInitExp(AInitExp node)
+    {
+        InAInitExp(node);
+        if(node.GetExp() != null)
+        {
+            node.GetExp().Apply(this);
+        }
+        OutAInitExp(node);
+    }
+    public virtual void InARshiftExp(ARshiftExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutARshiftExp(ARshiftExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseARshiftExp(ARshiftExp node)
+    {
+        InARshiftExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutARshiftExp(node);
+    }
+    public virtual void InALshiftExp(ALshiftExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALshiftExp(ALshiftExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALshiftExp(ALshiftExp node)
+    {
+        InALshiftExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutALshiftExp(node);
+    }
+    public virtual void InAMinusExp(AMinusExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAMinusExp(AMinusExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAMinusExp(AMinusExp node)
+    {
+        InAMinusExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAMinusExp(node);
+    }
+    public virtual void InAPlusExp(APlusExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPlusExp(APlusExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPlusExp(APlusExp node)
+    {
+        InAPlusExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAPlusExp(node);
+    }
+    public virtual void InAModExp(AModExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAModExp(AModExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAModExp(AModExp node)
+    {
+        InAModExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAModExp(node);
+    }
+    public virtual void InADivideExp(ADivideExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutADivideExp(ADivideExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseADivideExp(ADivideExp node)
+    {
+        InADivideExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutADivideExp(node);
+    }
+    public virtual void InAMultiplyExp(AMultiplyExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAMultiplyExp(AMultiplyExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAMultiplyExp(AMultiplyExp node)
+    {
+        InAMultiplyExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAMultiplyExp(node);
+    }
+    public virtual void InAAssignExp(AAssignExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAAssignExp(AAssignExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAAssignExp(AAssignExp node)
+    {
+        InAAssignExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAAssignExp(node);
+    }
+    public virtual void InABitwiseOrExp(ABitwiseOrExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABitwiseOrExp(ABitwiseOrExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABitwiseOrExp(ABitwiseOrExp node)
+    {
+        InABitwiseOrExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutABitwiseOrExp(node);
+    }
+    public virtual void InABitwiseAndExp(ABitwiseAndExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABitwiseAndExp(ABitwiseAndExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABitwiseAndExp(ABitwiseAndExp node)
+    {
+        InABitwiseAndExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutABitwiseAndExp(node);
+    }
+    public virtual void InABitwiseXorExp(ABitwiseXorExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutABitwiseXorExp(ABitwiseXorExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseABitwiseXorExp(ABitwiseXorExp node)
+    {
+        InABitwiseXorExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutABitwiseXorExp(node);
+    }
+    public virtual void InALtExp(ALtExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALtExp(ALtExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALtExp(ALtExp node)
+    {
+        InALtExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutALtExp(node);
+    }
+    public virtual void InAGtExp(AGtExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAGtExp(AGtExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAGtExp(AGtExp node)
+    {
+        InAGtExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAGtExp(node);
+    }
+    public virtual void InALtEqExp(ALtEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALtEqExp(ALtEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALtEqExp(ALtEqExp node)
+    {
+        InALtEqExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutALtEqExp(node);
+    }
+    public virtual void InAGtEqExp(AGtEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAGtEqExp(AGtEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAGtEqExp(AGtEqExp node)
+    {
+        InAGtEqExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAGtEqExp(node);
+    }
+    public virtual void InANotEqExp(ANotEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANotEqExp(ANotEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANotEqExp(ANotEqExp node)
+    {
+        InANotEqExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutANotEqExp(node);
+    }
+    public virtual void InAEqEqExp(AEqEqExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAEqEqExp(AEqEqExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAEqEqExp(AEqEqExp node)
+    {
+        InAEqEqExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutAEqEqExp(node);
+    }
+    public virtual void InALogicalOrExp(ALogicalOrExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALogicalOrExp(ALogicalOrExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALogicalOrExp(ALogicalOrExp node)
+    {
+        InALogicalOrExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutALogicalOrExp(node);
+    }
+    public virtual void InALogicalAndExp(ALogicalAndExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutALogicalAndExp(ALogicalAndExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseALogicalAndExp(ALogicalAndExp node)
+    {
+        InALogicalAndExp(node);
+        if(node.GetRhs() != null)
+        {
+            node.GetRhs().Apply(this);
+        }
+        if(node.GetLhs() != null)
+        {
+            node.GetLhs().Apply(this);
+        }
+        OutALogicalAndExp(node);
+    }
+    public virtual void InACondExp(ACondExp node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutACondExp(ACondExp node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseACondExp(ACondExp node)
+    {
+        InACondExp(node);
+        if(node.GetFalse() != null)
+        {
+            node.GetFalse().Apply(this);
+        }
+        if(node.GetTrue() != null)
+        {
+            node.GetTrue().Apply(this);
+        }
+        if(node.GetCond() != null)
+        {
+            node.GetCond().Apply(this);
+        }
+        OutACondExp(node);
+    }
+    public virtual void InATrueBoolean(ATrueBoolean node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutATrueBoolean(ATrueBoolean node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseATrueBoolean(ATrueBoolean node)
+    {
+        InATrueBoolean(node);
+        OutATrueBoolean(node);
+    }
+    public virtual void InAFalseBoolean(AFalseBoolean node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAFalseBoolean(AFalseBoolean node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAFalseBoolean(AFalseBoolean node)
+    {
+        InAFalseBoolean(node);
+        OutAFalseBoolean(node);
+    }
+    public virtual void InAPositiveUnop(APositiveUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAPositiveUnop(APositiveUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAPositiveUnop(APositiveUnop node)
+    {
+        InAPositiveUnop(node);
+        OutAPositiveUnop(node);
+    }
+    public virtual void InANegativeUnop(ANegativeUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANegativeUnop(ANegativeUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANegativeUnop(ANegativeUnop node)
+    {
+        InANegativeUnop(node);
+        OutANegativeUnop(node);
+    }
+    public virtual void InAInverseUnop(AInverseUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutAInverseUnop(AInverseUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseAInverseUnop(AInverseUnop node)
+    {
+        InAInverseUnop(node);
+        OutAInverseUnop(node);
+    }
+    public virtual void InANotUnop(ANotUnop node)
+    {
+        DefaultIn(node);
+    }
+
+    public virtual void OutANotUnop(ANotUnop node)
+    {
+        DefaultOut(node);
+    }
+
+    public override void CaseANotUnop(ANotUnop node)
+    {
+        InANotUnop(node);
+        OutANotUnop(node);
     }
 }
 } // namespace VXC.analysis

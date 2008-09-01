@@ -1,0 +1,14 @@
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\bin\Release\vxc.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\bin\Release\vxc.pdb
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Release\ResolveAssemblyReference.cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Release\VxCompiler.ASTDisplayForm.resources
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Release\VxCompiler.csproj.GenerateResource.Cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Release\vxc.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Release\vxc.pdb
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\bin\Debug\vxc.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\bin\Debug\vxc.pdb
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Debug\ResolveAssemblyReference.cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Debug\VxCompiler.ASTDisplayForm.resources
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Debug\VxCompiler.csproj.GenerateResource.Cache
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Debug\vxc.exe
+c:\Partition\Codebase\dotNet\VirtualExecuter\Software\VXC\VxCompiler\obj\Debug\vxc.pdb
