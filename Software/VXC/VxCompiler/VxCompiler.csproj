@@ -37,20 +37,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASTDisplay.cs" />
-    <Compile Include="ASTDisplayForm.cs">
+    <Compile Include="CodeEmission\Instructions\In.cs" />
+    <Compile Include="CodeEmission\Instructions\Instruction.cs" />
+    <Compile Include="CodeEmission\Instructions\Label.cs" />
+    <Compile Include="CodeEmission\Instructions\Load.cs" />
+    <Compile Include="CodeEmission\Instructions\Out.cs" />
+    <Compile Include="CodeEmission\Instructions\Push.cs" />
+    <Compile Include="CodeEmission\Instructions\TypedInstruction.cs" />
+    <Compile Include="Environments\Declaration.cs" />
+    <Compile Include="Environments\Error.cs" />
+    <Compile Include="Environments\ScopeInfo.cs" />
+    <Compile Include="Environments\TypedValue.cs" />
+    <Compile Include="Ide\ASTDisplay.cs" />
+    <Compile Include="Ide\ASTDisplayForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ASTDisplayForm.Designer.cs">
+    <Compile Include="Ide\ASTDisplayForm.Designer.cs">
       <DependentUpon>ASTDisplayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CodeEmission\AssemblerFile.cs" />
-    <Compile Include="CodeEmission\CodeEmissionPhase.cs" />
-    <Compile Include="CodeEmission\Conmmands.cs" />
-    <Compile Include="CodeEmission\DataSegmentElement.cs" />
-    <Compile Include="CodeEmission\CodeSegmentElement.cs" />
-    <Compile Include="Environment\StackSegment.cs" />
-    <Compile Include="Environment\TypeEnvironment.cs" />
+    <Compile Include="Environments\Scope.cs" />
+    <Compile Include="CodeEmission\AssemblyFile.cs" />
+    <Compile Include="Ide\ShellMaker.cs" />
+    <Compile Include="Phases\CodeEmission.cs" />
+    <Compile Include="Phases\Environments.cs" />
+    <Compile Include="Environments\RuntimeEnvironment.cs" />
+    <Compile Include="Environments\TypeEnvironment.cs" />
+    <Compile Include="Phases\Liveness.cs" />
+    <Compile Include="Phases\TypeChecking.cs" />
+    <Compile Include="Phases\Weeding.cs" />
+    <Compile Include="Phases\Wellformedness.cs" />
     <Compile Include="generated\analysis.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -73,7 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ASTDisplayForm.resx">
+    <EmbeddedResource Include="Ide\ASTDisplayForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ASTDisplayForm.cs</DependentUpon>
     </EmbeddedResource>

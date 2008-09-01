@@ -9,14 +9,14 @@ using  VXC.analysis;
 namespace VXC.node {
 
 
-public sealed class TVoid : Token
+public sealed class TKwReturn : Token
 {
-    public TVoid(string text)
+    public TKwReturn(string text)
     {
         Text = text;
     }
 
-    public TVoid(string text, int line, int pos)
+    public TKwReturn(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -25,23 +25,23 @@ public sealed class TVoid : Token
 
     public override Object Clone()
     {
-      return new TVoid(Text, Line, Pos);
+      return new TKwReturn(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTVoid(this);
+        ((Analysis) sw).CaseTKwReturn(this);
     }
 }
 
-public sealed class TSsingle : Token
+public sealed class TKwBreak : Token
 {
-    public TSsingle(string text)
+    public TKwBreak(string text)
     {
         Text = text;
     }
 
-    public TSsingle(string text, int line, int pos)
+    public TKwBreak(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -50,23 +50,23 @@ public sealed class TSsingle : Token
 
     public override Object Clone()
     {
-      return new TSsingle(Text, Line, Pos);
+      return new TKwBreak(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTSsingle(this);
+        ((Analysis) sw).CaseTKwBreak(this);
     }
 }
 
-public sealed class TUsingle : Token
+public sealed class TKwIf : Token
 {
-    public TUsingle(string text)
+    public TKwIf(string text)
     {
         Text = text;
     }
 
-    public TUsingle(string text, int line, int pos)
+    public TKwIf(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -75,23 +75,23 @@ public sealed class TUsingle : Token
 
     public override Object Clone()
     {
-      return new TUsingle(Text, Line, Pos);
+      return new TKwIf(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTUsingle(this);
+        ((Analysis) sw).CaseTKwIf(this);
     }
 }
 
-public sealed class TSdouble : Token
+public sealed class TKwThen : Token
 {
-    public TSdouble(string text)
+    public TKwThen(string text)
     {
         Text = text;
     }
 
-    public TSdouble(string text, int line, int pos)
+    public TKwThen(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -100,23 +100,23 @@ public sealed class TSdouble : Token
 
     public override Object Clone()
     {
-      return new TSdouble(Text, Line, Pos);
+      return new TKwThen(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTSdouble(this);
+        ((Analysis) sw).CaseTKwThen(this);
     }
 }
 
-public sealed class TUdouble : Token
+public sealed class TKwElse : Token
 {
-    public TUdouble(string text)
+    public TKwElse(string text)
     {
         Text = text;
     }
 
-    public TUdouble(string text, int line, int pos)
+    public TKwElse(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -125,23 +125,23 @@ public sealed class TUdouble : Token
 
     public override Object Clone()
     {
-      return new TUdouble(Text, Line, Pos);
+      return new TKwElse(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTUdouble(this);
+        ((Analysis) sw).CaseTKwElse(this);
     }
 }
 
-public sealed class TSquad : Token
+public sealed class TKwForeach : Token
 {
-    public TSquad(string text)
+    public TKwForeach(string text)
     {
         Text = text;
     }
 
-    public TSquad(string text, int line, int pos)
+    public TKwForeach(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -150,23 +150,23 @@ public sealed class TSquad : Token
 
     public override Object Clone()
     {
-      return new TSquad(Text, Line, Pos);
+      return new TKwForeach(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTSquad(this);
+        ((Analysis) sw).CaseTKwForeach(this);
     }
 }
 
-public sealed class TUquad : Token
+public sealed class TKwFor : Token
 {
-    public TUquad(string text)
+    public TKwFor(string text)
     {
         Text = text;
     }
 
-    public TUquad(string text, int line, int pos)
+    public TKwFor(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -175,23 +175,23 @@ public sealed class TUquad : Token
 
     public override Object Clone()
     {
-      return new TUquad(Text, Line, Pos);
+      return new TKwFor(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTUquad(this);
+        ((Analysis) sw).CaseTKwFor(this);
     }
 }
 
-public sealed class TFloat : Token
+public sealed class TKwTrue : Token
 {
-    public TFloat(string text)
+    public TKwTrue(string text)
     {
         Text = text;
     }
 
-    public TFloat(string text, int line, int pos)
+    public TKwTrue(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -200,23 +200,23 @@ public sealed class TFloat : Token
 
     public override Object Clone()
     {
-      return new TFloat(Text, Line, Pos);
+      return new TKwTrue(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTFloat(this);
+        ((Analysis) sw).CaseTKwTrue(this);
     }
 }
 
-public sealed class TString : Token
+public sealed class TKwFalse : Token
 {
-    public TString(string text)
+    public TKwFalse(string text)
     {
         Text = text;
     }
 
-    public TString(string text, int line, int pos)
+    public TKwFalse(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -225,23 +225,23 @@ public sealed class TString : Token
 
     public override Object Clone()
     {
-      return new TString(Text, Line, Pos);
+      return new TKwFalse(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTString(this);
+        ((Analysis) sw).CaseTKwFalse(this);
     }
 }
 
-public sealed class TConst : Token
+public sealed class TKwSizeof : Token
 {
-    public TConst(string text)
+    public TKwSizeof(string text)
     {
         Text = text;
     }
 
-    public TConst(string text, int line, int pos)
+    public TKwSizeof(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -250,23 +250,23 @@ public sealed class TConst : Token
 
     public override Object Clone()
     {
-      return new TConst(Text, Line, Pos);
+      return new TKwSizeof(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTConst(this);
+        ((Analysis) sw).CaseTKwSizeof(this);
     }
 }
 
-public sealed class TVolatile : Token
+public sealed class TKwVoid : Token
 {
-    public TVolatile(string text)
+    public TKwVoid(string text)
     {
         Text = text;
     }
 
-    public TVolatile(string text, int line, int pos)
+    public TKwVoid(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -275,23 +275,23 @@ public sealed class TVolatile : Token
 
     public override Object Clone()
     {
-      return new TVolatile(Text, Line, Pos);
+      return new TKwVoid(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTVolatile(this);
+        ((Analysis) sw).CaseTKwVoid(this);
     }
 }
 
-public sealed class TReturn : Token
+public sealed class TKwSingle : Token
 {
-    public TReturn(string text)
+    public TKwSingle(string text)
     {
         Text = text;
     }
 
-    public TReturn(string text, int line, int pos)
+    public TKwSingle(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -300,23 +300,23 @@ public sealed class TReturn : Token
 
     public override Object Clone()
     {
-      return new TReturn(Text, Line, Pos);
+      return new TKwSingle(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTReturn(this);
+        ((Analysis) sw).CaseTKwSingle(this);
     }
 }
 
-public sealed class TPort : Token
+public sealed class TKwDouble : Token
 {
-    public TPort(string text)
+    public TKwDouble(string text)
     {
         Text = text;
     }
 
-    public TPort(string text, int line, int pos)
+    public TKwDouble(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -325,23 +325,23 @@ public sealed class TPort : Token
 
     public override Object Clone()
     {
-      return new TPort(Text, Line, Pos);
+      return new TKwDouble(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTPort(this);
+        ((Analysis) sw).CaseTKwDouble(this);
     }
 }
 
-public sealed class TComment : Token
+public sealed class TKwQuad : Token
 {
-    public TComment(string text)
+    public TKwQuad(string text)
     {
         Text = text;
     }
 
-    public TComment(string text, int line, int pos)
+    public TKwQuad(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -350,12 +350,212 @@ public sealed class TComment : Token
 
     public override Object Clone()
     {
-      return new TComment(Text, Line, Pos);
+      return new TKwQuad(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTComment(this);
+        ((Analysis) sw).CaseTKwQuad(this);
+    }
+}
+
+public sealed class TKwFloat : Token
+{
+    public TKwFloat(string text)
+    {
+        Text = text;
+    }
+
+    public TKwFloat(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TKwFloat(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTKwFloat(this);
+    }
+}
+
+public sealed class TKwString : Token
+{
+    public TKwString(string text)
+    {
+        Text = text;
+    }
+
+    public TKwString(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TKwString(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTKwString(this);
+    }
+}
+
+public sealed class TKwSigned : Token
+{
+    public TKwSigned(string text)
+    {
+        Text = text;
+    }
+
+    public TKwSigned(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TKwSigned(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTKwSigned(this);
+    }
+}
+
+public sealed class TKwUnsigned : Token
+{
+    public TKwUnsigned(string text)
+    {
+        Text = text;
+    }
+
+    public TKwUnsigned(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TKwUnsigned(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTKwUnsigned(this);
+    }
+}
+
+public sealed class TKwPort : Token
+{
+    public TKwPort(string text)
+    {
+        Text = text;
+    }
+
+    public TKwPort(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TKwPort(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTKwPort(this);
+    }
+}
+
+public sealed class TTraditionalComment : Token
+{
+    public TTraditionalComment(string text)
+    {
+        Text = text;
+    }
+
+    public TTraditionalComment(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTraditionalComment(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTraditionalComment(this);
+    }
+}
+
+public sealed class TDocumentationComment : Token
+{
+    public TDocumentationComment(string text)
+    {
+        Text = text;
+    }
+
+    public TDocumentationComment(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TDocumentationComment(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTDocumentationComment(this);
+    }
+}
+
+public sealed class TEndOfLineComment : Token
+{
+    public TEndOfLineComment(string text)
+    {
+        Text = text;
+    }
+
+    public TEndOfLineComment(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TEndOfLineComment(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTEndOfLineComment(this);
     }
 }
 
@@ -384,14 +584,14 @@ public sealed class TWhitespace : Token
     }
 }
 
-public sealed class TLPar : Token
+public sealed class TTokDot : Token
 {
-    public TLPar(string text)
+    public TTokDot(string text)
     {
         Text = text;
     }
 
-    public TLPar(string text, int line, int pos)
+    public TTokDot(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -400,23 +600,23 @@ public sealed class TLPar : Token
 
     public override Object Clone()
     {
-      return new TLPar(Text, Line, Pos);
+      return new TTokDot(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTLPar(this);
+        ((Analysis) sw).CaseTTokDot(this);
     }
 }
 
-public sealed class TRPar : Token
+public sealed class TTokLbracket : Token
 {
-    public TRPar(string text)
+    public TTokLbracket(string text)
     {
         Text = text;
     }
 
-    public TRPar(string text, int line, int pos)
+    public TTokLbracket(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -425,23 +625,23 @@ public sealed class TRPar : Token
 
     public override Object Clone()
     {
-      return new TRPar(Text, Line, Pos);
+      return new TTokLbracket(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTRPar(this);
+        ((Analysis) sw).CaseTTokLbracket(this);
     }
 }
 
-public sealed class TLCurly : Token
+public sealed class TTokRbracket : Token
 {
-    public TLCurly(string text)
+    public TTokRbracket(string text)
     {
         Text = text;
     }
 
-    public TLCurly(string text, int line, int pos)
+    public TTokRbracket(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -450,23 +650,23 @@ public sealed class TLCurly : Token
 
     public override Object Clone()
     {
-      return new TLCurly(Text, Line, Pos);
+      return new TTokRbracket(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTLCurly(this);
+        ((Analysis) sw).CaseTTokRbracket(this);
     }
 }
 
-public sealed class TRCurly : Token
+public sealed class TTokLpar : Token
 {
-    public TRCurly(string text)
+    public TTokLpar(string text)
     {
         Text = text;
     }
 
-    public TRCurly(string text, int line, int pos)
+    public TTokLpar(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -475,23 +675,23 @@ public sealed class TRCurly : Token
 
     public override Object Clone()
     {
-      return new TRCurly(Text, Line, Pos);
+      return new TTokLpar(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTRCurly(this);
+        ((Analysis) sw).CaseTTokLpar(this);
     }
 }
 
-public sealed class TSemicolon : Token
+public sealed class TTokRpar : Token
 {
-    public TSemicolon(string text)
+    public TTokRpar(string text)
     {
         Text = text;
     }
 
-    public TSemicolon(string text, int line, int pos)
+    public TTokRpar(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -500,23 +700,23 @@ public sealed class TSemicolon : Token
 
     public override Object Clone()
     {
-      return new TSemicolon(Text, Line, Pos);
+      return new TTokRpar(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTSemicolon(this);
+        ((Analysis) sw).CaseTTokRpar(this);
     }
 }
 
-public sealed class TComma : Token
+public sealed class TTokLcurly : Token
 {
-    public TComma(string text)
+    public TTokLcurly(string text)
     {
         Text = text;
     }
 
-    public TComma(string text, int line, int pos)
+    public TTokLcurly(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -525,23 +725,23 @@ public sealed class TComma : Token
 
     public override Object Clone()
     {
-      return new TComma(Text, Line, Pos);
+      return new TTokLcurly(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTComma(this);
+        ((Analysis) sw).CaseTTokLcurly(this);
     }
 }
 
-public sealed class TMinus : Token
+public sealed class TTokRcurly : Token
 {
-    public TMinus(string text)
+    public TTokRcurly(string text)
     {
         Text = text;
     }
 
-    public TMinus(string text, int line, int pos)
+    public TTokRcurly(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -550,23 +750,23 @@ public sealed class TMinus : Token
 
     public override Object Clone()
     {
-      return new TMinus(Text, Line, Pos);
+      return new TTokRcurly(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTMinus(this);
+        ((Analysis) sw).CaseTTokRcurly(this);
     }
 }
 
-public sealed class TAt : Token
+public sealed class TTokSemicolon : Token
 {
-    public TAt(string text)
+    public TTokSemicolon(string text)
     {
         Text = text;
     }
 
-    public TAt(string text, int line, int pos)
+    public TTokSemicolon(string text, int line, int pos)
     {
         Text = text;
         Line = line;
@@ -575,12 +775,662 @@ public sealed class TAt : Token
 
     public override Object Clone()
     {
-      return new TAt(Text, Line, Pos);
+      return new TTokSemicolon(Text, Line, Pos);
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseTAt(this);
+        ((Analysis) sw).CaseTTokSemicolon(this);
+    }
+}
+
+public sealed class TTokComma : Token
+{
+    public TTokComma(string text)
+    {
+        Text = text;
+    }
+
+    public TTokComma(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokComma(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokComma(this);
+    }
+}
+
+public sealed class TTokMinus : Token
+{
+    public TTokMinus(string text)
+    {
+        Text = text;
+    }
+
+    public TTokMinus(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokMinus(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokMinus(this);
+    }
+}
+
+public sealed class TTokColon : Token
+{
+    public TTokColon(string text)
+    {
+        Text = text;
+    }
+
+    public TTokColon(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokColon(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokColon(this);
+    }
+}
+
+public sealed class TTokQuestion : Token
+{
+    public TTokQuestion(string text)
+    {
+        Text = text;
+    }
+
+    public TTokQuestion(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokQuestion(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokQuestion(this);
+    }
+}
+
+public sealed class TTokEq : Token
+{
+    public TTokEq(string text)
+    {
+        Text = text;
+    }
+
+    public TTokEq(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokEq(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokEq(this);
+    }
+}
+
+public sealed class TTokBar : Token
+{
+    public TTokBar(string text)
+    {
+        Text = text;
+    }
+
+    public TTokBar(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokBar(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokBar(this);
+    }
+}
+
+public sealed class TTokBarBar : Token
+{
+    public TTokBarBar(string text)
+    {
+        Text = text;
+    }
+
+    public TTokBarBar(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokBarBar(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokBarBar(this);
+    }
+}
+
+public sealed class TTokAmp : Token
+{
+    public TTokAmp(string text)
+    {
+        Text = text;
+    }
+
+    public TTokAmp(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokAmp(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokAmp(this);
+    }
+}
+
+public sealed class TTokAmpAmp : Token
+{
+    public TTokAmpAmp(string text)
+    {
+        Text = text;
+    }
+
+    public TTokAmpAmp(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokAmpAmp(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokAmpAmp(this);
+    }
+}
+
+public sealed class TTokCaret : Token
+{
+    public TTokCaret(string text)
+    {
+        Text = text;
+    }
+
+    public TTokCaret(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokCaret(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokCaret(this);
+    }
+}
+
+public sealed class TTokLshift : Token
+{
+    public TTokLshift(string text)
+    {
+        Text = text;
+    }
+
+    public TTokLshift(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokLshift(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokLshift(this);
+    }
+}
+
+public sealed class TTokRshift : Token
+{
+    public TTokRshift(string text)
+    {
+        Text = text;
+    }
+
+    public TTokRshift(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokRshift(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokRshift(this);
+    }
+}
+
+public sealed class TTokLt : Token
+{
+    public TTokLt(string text)
+    {
+        Text = text;
+    }
+
+    public TTokLt(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokLt(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokLt(this);
+    }
+}
+
+public sealed class TTokGt : Token
+{
+    public TTokGt(string text)
+    {
+        Text = text;
+    }
+
+    public TTokGt(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokGt(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokGt(this);
+    }
+}
+
+public sealed class TTokLtEq : Token
+{
+    public TTokLtEq(string text)
+    {
+        Text = text;
+    }
+
+    public TTokLtEq(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokLtEq(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokLtEq(this);
+    }
+}
+
+public sealed class TTokGtEq : Token
+{
+    public TTokGtEq(string text)
+    {
+        Text = text;
+    }
+
+    public TTokGtEq(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokGtEq(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokGtEq(this);
+    }
+}
+
+public sealed class TTokEqEq : Token
+{
+    public TTokEqEq(string text)
+    {
+        Text = text;
+    }
+
+    public TTokEqEq(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokEqEq(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokEqEq(this);
+    }
+}
+
+public sealed class TTokNotEq : Token
+{
+    public TTokNotEq(string text)
+    {
+        Text = text;
+    }
+
+    public TTokNotEq(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokNotEq(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokNotEq(this);
+    }
+}
+
+public sealed class TTokPlusPlus : Token
+{
+    public TTokPlusPlus(string text)
+    {
+        Text = text;
+    }
+
+    public TTokPlusPlus(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokPlusPlus(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokPlusPlus(this);
+    }
+}
+
+public sealed class TTokMinusMinus : Token
+{
+    public TTokMinusMinus(string text)
+    {
+        Text = text;
+    }
+
+    public TTokMinusMinus(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokMinusMinus(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokMinusMinus(this);
+    }
+}
+
+public sealed class TTokStar : Token
+{
+    public TTokStar(string text)
+    {
+        Text = text;
+    }
+
+    public TTokStar(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokStar(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokStar(this);
+    }
+}
+
+public sealed class TTokPlus : Token
+{
+    public TTokPlus(string text)
+    {
+        Text = text;
+    }
+
+    public TTokPlus(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokPlus(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokPlus(this);
+    }
+}
+
+public sealed class TTokPercent : Token
+{
+    public TTokPercent(string text)
+    {
+        Text = text;
+    }
+
+    public TTokPercent(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokPercent(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokPercent(this);
+    }
+}
+
+public sealed class TTokTilde : Token
+{
+    public TTokTilde(string text)
+    {
+        Text = text;
+    }
+
+    public TTokTilde(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokTilde(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokTilde(this);
+    }
+}
+
+public sealed class TTokExclamation : Token
+{
+    public TTokExclamation(string text)
+    {
+        Text = text;
+    }
+
+    public TTokExclamation(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokExclamation(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokExclamation(this);
+    }
+}
+
+public sealed class TTokSlash : Token
+{
+    public TTokSlash(string text)
+    {
+        Text = text;
+    }
+
+    public TTokSlash(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TTokSlash(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTTokSlash(this);
     }
 }
 
@@ -609,6 +1459,31 @@ public sealed class TIntegerLiteral : Token
     }
 }
 
+public sealed class TStringLiteral : Token
+{
+    public TStringLiteral(string text)
+    {
+        Text = text;
+    }
+
+    public TStringLiteral(string text, int line, int pos)
+    {
+        Text = text;
+        Line = line;
+        Pos = pos;
+    }
+
+    public override Object Clone()
+    {
+      return new TStringLiteral(Text, Line, Pos);
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseTStringLiteral(this);
+    }
+}
+
 public sealed class TIdentifier : Token
 {
     public TIdentifier(string text)
@@ -631,31 +1506,6 @@ public sealed class TIdentifier : Token
     public override void Apply(Switch sw)
     {
         ((Analysis) sw).CaseTIdentifier(this);
-    }
-}
-
-public sealed class TAssign : Token
-{
-    public TAssign(string text)
-    {
-        Text = text;
-    }
-
-    public TAssign(string text, int line, int pos)
-    {
-        Text = text;
-        Line = line;
-        Pos = pos;
-    }
-
-    public override Object Clone()
-    {
-      return new TAssign(Text, Line, Pos);
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseTAssign(this);
     }
 }
 
