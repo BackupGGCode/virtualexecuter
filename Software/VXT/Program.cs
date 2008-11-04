@@ -21,12 +21,12 @@ namespace VXT
 		static bool saveToFile = false;
 		static string logFileName = "log.txt";
 		static StreamWriter logFile = null;
-		static bool waitWhenExiting = false ;
+		static bool waitWhenExiting = false;
 
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Virtual eXecuter Terminal by Claus Andersen");
-			Console.WriteLine("Version: 1.12 - May 27th 2008");
+			Console.WriteLine("Version: 1.13 - October 11th 2008");
 
 			try
 			{
@@ -111,8 +111,8 @@ namespace VXT
 				}
 
 				com = new SerialPort(port, int.Parse(baudrate));
-				System.Diagnostics.Debug.WriteLine("New line is: [" + com.NewLine.Length + "] '" + com.NewLine + "'");
 				com.NewLine = ((char)10).ToString();
+				com.ReadTimeout = 500;
 				com.Open();
 
 				Console.WriteLine("Connected to " + port + " @ " + baudrate + " bps.");
@@ -226,12 +226,9 @@ namespace VXT
 					#region Console to port
 					if (Console.KeyAvailable)
 					{
-						char key = Console.ReadKey(true).KeyChar;
-						if (key == 3)
-						{
-							run = false;
-						}
-						else if (key == 27)
+						ConsoleKeyInfo ki = Console.ReadKey(true);
+
+						if (ki.Key == ConsoleKey.Escape && ki.Modifiers == ConsoleModifiers.Shift)
 						{
 							Console.Write("\nVXT>");
 							string cmd = Console.ReadLine();
@@ -244,6 +241,9 @@ namespace VXT
 								case "load":
 									LoadDiscImage(cmds);
 									break;
+								case "run":
+									StreamAndRunPvxProgram(cmds);
+									break;
 								case "":
 									break;
 								default:
@@ -253,25 +253,61 @@ namespace VXT
 						}
 						else
 						{
-							if (key == 13)
+							char key;
+							switch (ki.Key)
 							{
-								if (sendNewLineAsCarriageReturnPlusLineFeed)
-								{
-									com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
-								}
-								else
-								{
-									com.Write(new char[1] { (char)13 }, 0, 1);
-								}
+								case ConsoleKey.UpArrow:
+									key = (char)17;
+									break;
+								case ConsoleKey.DownArrow:
+									key = (char)18;
+									break;
+								case ConsoleKey.LeftArrow:
+									key = (char)19;
+									break;
+								case ConsoleKey.RightArrow:
+									key = (char)20;
+									break;
+								case ConsoleKey.Delete:
+									key = (char)127;
+									break;
+								case ConsoleKey.Home:
+									key = (char)2;
+									break;
+								case ConsoleKey.End:
+									key = (char)3;
+									break;
+								default:
+									key = ki.KeyChar;
+									break;
+							}
+
+							if (key == 3)
+							{
+								run = false;
 							}
 							else
 							{
-								com.Write(new char[1] { key }, 0, 1);
-							}
+								if (key == 13)
+								{
+									if (sendNewLineAsCarriageReturnPlusLineFeed)
+									{
+										com.Write(new char[2] { (char)13, (char)10 }, 0, 2);
+									}
+									else
+									{
+										com.Write(new char[1] { (char)13 }, 0, 1);
+									}
+								}
+								else
+								{
+									com.Write(new char[1] { key }, 0, 1);
+								}
 
-							if (localEcho)
-							{
-								Console.Write(key);
+								if (localEcho)
+								{
+									Console.Write(key);
+								}
 							}
 						}
 					}
@@ -326,8 +362,10 @@ namespace VXT
 			Console.WriteLine("Usage:");
 			Console.WriteLine("  vxt -p com1 -i -b 9600");
 			Console.WriteLine("");
-			Console.WriteLine("To run special functions hit ESC and enter function name and arguments.");
+			Console.WriteLine("To run special functions press shift + ESC and enter function name and arguments.");
+			Console.WriteLine("To abort special function mode just press Enter.");
 			Console.WriteLine("  load - Load a disc image to a VX machine.");
+			Console.WriteLine("  run  - Send and run a PVX program.");
 			Console.WriteLine("  quit - Quit VXT.");
 			Console.WriteLine("");
 			Console.WriteLine("Pressing Ctrl + C has the same effect as running the quit command.");
@@ -410,6 +448,93 @@ namespace VXT
 			{
 				Console.WriteLine("Transfer time: " + time.ToString() + " @ " + (data.Length / time.Seconds) + " B/S.");
 			}
+		}
+
+		static void StreamAndRunPvxProgram(string[] args)
+		{
+			char reply;
+
+			if ((args.Length != 2) && (args.Length != 3))
+			{
+				Console.WriteLine("Please just type the command and the file name mkay.");
+				return;
+			}
+
+			if (File.Exists(args[1]) == false)
+			{
+				Console.WriteLine("Program not found.");
+				return;
+			}
+
+			byte[] data = File.ReadAllBytes(args[1]);
+
+			int blockSize = 128;
+			if (data.Length < blockSize)
+			{
+				blockSize = data.Length;
+			}
+
+			if (args.Length == 2)		// Send command line
+			{
+				com.WriteLine("run " + args[1]);
+			}
+			else
+			{
+				com.WriteLine("run " + args[1] + " " + args[2]);
+			}
+			com.ReadLine(); // dump echo
+
+			Console.Write("Transfering program...");
+
+			int headerSize = 6 + (5 * 4);
+			com.Write(data, 0, headerSize);	// Send header
+
+			reply = (char)com.ReadChar();
+
+			//Console.WriteLine("!!!!!" + (int)reply + "!!!!!");
+
+			if (reply == 'H')
+			{
+				Console.WriteLine("error!\nInvalid file tag.");
+				return;
+			}
+			else if (reply == 'S')
+			{
+				Console.WriteLine("error!\nNot enough program memory.");
+				return;
+			}
+			else if (reply == 'I')
+			{
+				Console.WriteLine("error!\nNot enough core memory.");
+				return;
+			}
+			else if (reply != 'A')
+			{
+				Console.WriteLine("error!\nInvalid reply");
+				return;
+			}
+
+			int current = headerSize;
+			int length = 128;
+
+			while (current < data.Length && Console.KeyAvailable == false && reply == 'A')
+			{
+				if ((current + blockSize) > data.Length)
+				{
+					length = data.Length - current;
+				}
+				com.Write(data, current, length);
+				current += length;
+				reply = (char)com.ReadChar();
+			}
+
+			if (current != data.Length)
+			{
+				Console.WriteLine("error!");
+				return;
+			}
+
+			Console.WriteLine("done.");
 		}
 	}
 }
